@@ -1,0 +1,245 @@
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Profil - SIGEP Tchad</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+
+        /* Sidebar & Layout (Identique aux autres pages) */
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border-color); z-index: 1000; display: flex; flex-direction: column; }
+        .sidebar-header { background: var(--accent-gradient); padding: 20px; display: flex; align-items: center; gap: 14px; }
+        .sidebar-logo { width: 56px; height: 56px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); padding: 6px; }
+        .sidebar-brand h1 { font-size: 1.3rem; font-weight: 700; color: white; }
+        .sidebar-brand span { font-size: 0.7rem; color: rgba(255,255,255,0.8); }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 12px; }
+        .nav-section-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; padding-left: 14px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: all 0.2s ease; margin-bottom: 4px; font-weight: 500; font-size: 0.88rem; }
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: var(--gold-gradient); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+        
+        .main-content { margin-left: 280px; min-height: 100vh; }
+        
+        /* Profile Page Specifics */
+        .profile-cover { height: 200px; background: var(--accent-gradient); position: relative; }
+        .profile-container { max-width: 1100px; margin: -60px auto 40px; padding: 0 24px; position: relative; z-index: 10; }
+        
+        .profile-grid { display: grid; grid-template-columns: 350px 1fr; gap: 24px; }
+        
+        /* Profile Card Left */
+        .profile-card { background: var(--bg-secondary); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); text-align: center; padding-bottom: 24px; }
+        .avatar-wrapper { margin-top: -60px; margin-bottom: 16px; display: flex; justify-content: center; }
+        .avatar { width: 120px; height: 120px; border-radius: 50%; border: 4px solid var(--bg-secondary); background: #e0e7ff; color: var(--tchad-blue); display: flex; align-items: center; justify-content: center; font-size: 2.5rem; font-weight: 700; box-shadow: var(--shadow-sm); }
+        
+        .profile-name { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+        .profile-role { color: var(--text-secondary); font-weight: 500; font-size: 0.95rem; margin-bottom: 16px; }
+        .status-badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; background: rgba(16, 185, 129, 0.1); color: var(--success); border-radius: 20px; font-size: 0.8rem; font-weight: 600; }
+        
+        .contact-list { padding: 24px; text-align: left; border-top: 1px solid var(--border-color); margin-top: 20px; }
+        .contact-item { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; color: var(--text-secondary); font-size: 0.9rem; }
+        .contact-item i { color: var(--text-muted); width: 18px; }
+        
+        /* Info Card Right */
+        .info-card { background: var(--bg-secondary); border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid var(--border-color); padding: 30px; margin-bottom: 24px; }
+        .card-title { font-size: 1.1rem; font-weight: 700; color: var(--tchad-blue); margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; }
+        
+        .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .info-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        .info-group div { font-size: 1rem; font-weight: 600; color: var(--text-primary); }
+        
+        /* Timeline */
+        .timeline { margin-top: 10px; }
+        .timeline-item { position: relative; padding-left: 30px; margin-bottom: 24px; border-left: 2px solid var(--bg-tertiary); }
+        .timeline-item::before { content: ''; position: absolute; left: -7px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--tchad-gold); border: 2px solid var(--bg-secondary); }
+        .timeline-date { font-size: 0.8rem; color: var(--text-muted); margin-bottom: 4px; }
+        .timeline-content { font-size: 0.95rem; color: var(--text-primary); }
+        .timeline-meta { font-size: 0.85rem; color: var(--text-secondary); margin-top: 2px; }
+
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px; border-radius: 10px; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+        .btn-gold { background: var(--gold-gradient); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+
+        @media (max-width: 1024px) { 
+            .sidebar { transform: translateX(-100%); } 
+            .main-content { margin-left: 0; }
+            .profile-grid { grid-template-columns: 1fr; } 
+        }
+    </style>
+</head>
+<body x-data="userProfile()">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="#fecb00" stroke="#002664" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+                <span>Administration</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Principal</div>
+            <a class="nav-item" href="sigep-dashboard.html">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Tableau de bord</span>
+            </a>
+            <div class="nav-section-title">Compte</div>
+            <a class="nav-item active">
+                <i data-lucide="user"></i>
+                <span>Mon Profil</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <!-- Cover Image -->
+        <div class="profile-cover">
+            <!-- Top Header integrated lightly -->
+            <div style="padding: 20px 32px; display: flex; justify-content: flex-end;">
+                 <a href="sigep-dashboard.html" style="color: rgba(255,255,255,0.8); display:flex; align-items:center; gap:8px; text-decoration:none; font-weight:500;">
+                    <i data-lucide="home" style="width:18px;"></i> Accueil
+                 </a>
+            </div>
+        </div>
+
+        <div class="profile-container">
+            <div class="profile-grid">
+                
+                <!-- Left Column -->
+                <div class="profile-card">
+                    <div class="avatar-wrapper">
+                        <div class="avatar">AD</div>
+                    </div>
+                    <h2 class="profile-name">Amine Doutoum</h2>
+                    <p class="profile-role">Administrateur Système</p>
+                    <div class="status-badge">
+                        <span style="width:6px; height:6px; background:var(--success); border-radius:50%;"></span>
+                        Compte Actif
+                    </div>
+
+                    <div class="contact-list">
+                        <div class="contact-item">
+                            <i data-lucide="mail"></i>
+                            <span>amine.doutoum@finances.gouv.td</span>
+                        </div>
+                        <div class="contact-item">
+                            <i data-lucide="phone"></i>
+                            <span>+235 66 50 40 30</span>
+                        </div>
+                        <div class="contact-item">
+                            <i data-lucide="map-pin"></i>
+                            <span>N'Djamena, Tchad</span>
+                        </div>
+                        <div class="contact-item">
+                            <i data-lucide="building"></i>
+                            <span>Ministère des Finances</span>
+                        </div>
+                    </div>
+                    
+                    <div style="padding: 0 24px;">
+                        <a href="sigep-profile-edit.html" class="btn btn-gold" style="width: 100%; justify-content: center;">
+                            <i data-lucide="edit-3" style="width: 18px;"></i> Modifier le profil
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <!-- Details Section -->
+                    <div class="info-card">
+                        <div class="card-title">
+                            <span>Informations Professionnelles</span>
+                            <i data-lucide="briefcase" style="color: var(--tchad-blue);"></i>
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-group">
+                                <label>Matricule</label>
+                                <div>MF-2023-8942</div>
+                            </div>
+                            <div class="info-group">
+                                <label>Date d'embauche</label>
+                                <div>12 Janvier 2020</div>
+                            </div>
+                            <div class="info-group">
+                                <label>Département</label>
+                                <div>Direction des Systèmes d'Information</div>
+                            </div>
+                            <div class="info-group">
+                                <label>Niveau d'accès</label>
+                                <div style="color: var(--tchad-blue);">Super Admin</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Activity Log -->
+                    <div class="info-card">
+                        <div class="card-title">
+                            <span>Activité Récente</span>
+                            <i data-lucide="activity" style="color: var(--tchad-blue);"></i>
+                        </div>
+                        <div class="timeline">
+                            <div class="timeline-item">
+                                <div class="timeline-date">Aujourd'hui, 09:30</div>
+                                <div class="timeline-content">Connexion au système réussie</div>
+                                <div class="timeline-meta">IP: 192.168.1.45 • Chrome / Windows</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">Hier, 16:45</div>
+                                <div class="timeline-content">Mise à jour du rôle "Gestionnaire RH"</div>
+                                <div class="timeline-meta">Administration • Rôles & Permissions</div>
+                            </div>
+                            <div class="timeline-item">
+                                <div class="timeline-date">22 Juin 2024</div>
+                                <div class="timeline-content">Exportation du rapport mensuel des institutions</div>
+                                <div class="timeline-meta">Rapports • PDF Généré</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function userProfile() {
+            return {
+                init() {
+                    lucide.createIcons();
+                }
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,236 @@
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter un Partenaire - SIGEP Tchad</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --success: #10b981;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+
+        /* Sidebar simple (placeholder pour cohérence visuelle) */
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border-color); z-index: 1000; }
+        .sidebar-header { background: var(--accent-gradient); padding: 20px; height: 100px; display:flex; align-items:center; gap:10px; color:white; }
+        
+        .main-content { margin-left: 280px; min-height: 100vh; }
+        .top-header { background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+        
+        .back-btn { display: flex; align-items: center; gap: 8px; padding: 10px 16px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 10px; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: all 0.2s; }
+        .back-btn:hover { background: var(--bg-secondary); border-color: var(--tchad-blue); color: var(--tchad-blue); }
+
+        .content-area { padding: 32px; max-width: 1000px; margin: 0 auto; }
+        
+        .form-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; overflow: hidden; margin-bottom: 24px; box-shadow: var(--shadow-md); }
+        .form-card-header { padding: 24px 28px; background: var(--bg-tertiary); border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 14px; }
+        .form-card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; }
+        .form-card-body { padding: 28px; }
+
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group.full { grid-column: span 2; }
+        
+        .form-label { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+        .form-label span { color: #ef4444; }
+        .form-input, .form-select, .form-textarea { padding: 14px 16px; border: 2px solid var(--border-color); border-radius: 12px; background: var(--bg-primary); font-family: inherit; font-size: 0.95rem; width: 100%; transition: border-color 0.2s; }
+        .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--tchad-gold); outline: none; background: white; }
+
+        /* File Upload */
+        .file-upload-area { border: 2px dashed var(--border-color); border-radius: 14px; padding: 32px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg-primary); }
+        .file-upload-area:hover { border-color: var(--tchad-blue); background: rgba(0, 38, 100, 0.02); }
+        .file-icon { width: 48px; height: 48px; background: var(--bg-tertiary); border-radius: 12px; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); }
+
+        .form-actions { display: flex; justify-content: flex-end; gap: 16px; margin-top: 32px; }
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 1rem; border: none; cursor: pointer; transition: all 0.2s; }
+        .btn-secondary { background: white; border: 2px solid var(--border-color); color: var(--text-secondary); }
+        .btn-primary { background: var(--gold-gradient); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+        .btn-primary:hover { transform: translateY(-2px); }
+
+        @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body x-data="partnerAdd()">
+
+    <!-- Sidebar Placeholder -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>SIGEP Tchad</h2>
+        </div>
+        <!-- Menu items hidden for brevity in this specific file -->
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <a href="sigep-partners.html" class="back-btn">
+                <i data-lucide="arrow-left" style="width:18px;"></i>
+                Retour à la liste
+            </a>
+            <h1 style="font-size:1.1rem; font-weight:600;">Enregistrer un Partenaire</h1>
+            <div style="width:40px;"></div> <!-- Spacer -->
+        </header>
+
+        <div class="content-area">
+            <form @submit.prevent="submitForm">
+                
+                <!-- Card 1: Info Générales -->
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <div class="form-card-icon" style="background: var(--accent-gradient);">
+                            <i data-lucide="building-2"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size:1.1rem; font-weight:600;">Informations Générales</h3>
+                            <p style="font-size:0.85rem; color:var(--text-muted);">Identité de l'organisation</p>
+                        </div>
+                    </div>
+                    <div class="form-card-body">
+                        <div class="form-grid">
+                            <div class="form-group full">
+                                <label class="form-label">Logo du partenaire</label>
+                                <div class="file-upload-area" @click="$refs.fileInput.click()">
+                                    <div class="file-icon"><i data-lucide="upload-cloud"></i></div>
+                                    <p style="font-weight:600;">Cliquez pour télécharger</p>
+                                    <p style="font-size:0.8rem; color:var(--text-muted);">PNG, JPG (Max 2MB)</p>
+                                    <input type="file" x-ref="fileInput" style="display:none" @change="handleFile">
+                                </div>
+                                <div x-show="fileName" style="margin-top:8px; font-size:0.9rem; color:var(--success); display:flex; align-items:center; gap:6px;">
+                                    <i data-lucide="check" style="width:16px;"></i> <span x-text="fileName"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Nom de l'organisation <span>*</span></label>
+                                <input type="text" class="form-input" x-model="form.name" placeholder="Ex: Banque Mondiale" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Acronyme <span>*</span></label>
+                                <input type="text" class="form-input" x-model="form.acronym" placeholder="Ex: BM" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Type de partenaire <span>*</span></label>
+                                <select class="form-select" x-model="form.type" required>
+                                    <option value="" disabled selected>Sélectionner...</option>
+                                    <option value="Multilatéral">Multilatéral</option>
+                                    <option value="Bilatéral">Bilatéral</option>
+                                    <option value="ONG">ONG Internationale</option>
+                                    <option value="Privé">Secteur Privé</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Site Web</label>
+                                <input type="url" class="form-input" x-model="form.website" placeholder="https://...">
+                            </div>
+                            <div class="form-group full">
+                                <label class="form-label">Description / Mission</label>
+                                <textarea class="form-textarea" rows="3" x-model="form.description" placeholder="Brève description des axes d'intervention..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Contact -->
+                <div class="form-card">
+                    <div class="form-card-header">
+                        <div class="form-card-icon" style="background: var(--gold-gradient);">
+                            <i data-lucide="user-circle" style="color:var(--tchad-blue);"></i>
+                        </div>
+                        <div>
+                            <h3 style="font-size:1.1rem; font-weight:600;">Point Focal</h3>
+                            <p style="font-size:0.85rem; color:var(--text-muted);">Coordonnées du représentant</p>
+                        </div>
+                    </div>
+                    <div class="form-card-body">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label class="form-label">Nom complet <span>*</span></label>
+                                <input type="text" class="form-input" x-model="form.contactName" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Fonction</label>
+                                <input type="text" class="form-input" x-model="form.contactRole" placeholder="Ex: Représentant Résident">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Email <span>*</span></label>
+                                <input type="email" class="form-input" x-model="form.contactEmail" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Téléphone</label>
+                                <input type="tel" class="form-input" x-model="form.contactPhone">
+                            </div>
+                            <div class="form-group full">
+                                <label class="form-label">Adresse physique (Bureau Tchad)</label>
+                                <input type="text" class="form-input" x-model="form.address">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" @click="window.location.href='sigep-partners.html'">Annuler</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i data-lucide="save"></i> Enregistrer le Partenaire
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </main>
+
+    <script>
+        function partnerAdd() {
+            return {
+                fileName: '',
+                form: {
+                    name: '',
+                    acronym: '',
+                    type: '',
+                    website: '',
+                    description: '',
+                    contactName: '',
+                    contactRole: '',
+                    contactEmail: '',
+                    contactPhone: '',
+                    address: ''
+                },
+                init() {
+                    lucide.createIcons();
+                },
+                handleFile(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.fileName = file.name;
+                    }
+                },
+                submitForm() {
+                    // Simulation d'envoi
+                    alert('Partenaire ' + this.form.name + ' enregistré avec succès !');
+                    window.location.href = 'sigep-partners.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

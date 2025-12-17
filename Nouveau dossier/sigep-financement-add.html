@@ -1,0 +1,1894 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Financement - SIGEP Tchad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            
+            --accent-primary: #002664;
+            --accent-secondary: #1a4a8a;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f1724;
+            --bg-secondary: #1a2535;
+            --bg-tertiary: #243244;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            background: var(--accent-gradient);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            padding: 6px;
+        }
+
+        .sidebar-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .user-info {
+            padding: 16px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .user-role {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            background: rgba(254, 203, 0, 0.2);
+            color: #b8860b;
+            border-radius: 20px;
+            margin-top: 4px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 20px;
+        }
+
+        .nav-section-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 14px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gold-gradient);
+            color: var(--tchad-blue);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--tchad-gold);
+            color: var(--tchad-blue);
+            font-weight: 600;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .theme-toggle {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            padding: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+        }
+
+        .page-header-left h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header-left p {
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .page-header-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gold-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--tchad-blue);
+        }
+
+        /* ========== STEPPER ========== */
+        .stepper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .stepper-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stepper-item:not(:last-child)::after {
+            content: '';
+            width: 80px;
+            height: 2px;
+            background: var(--border-color);
+            margin: 0 16px;
+        }
+
+        .stepper-item.active:not(:last-child)::after {
+            background: var(--tchad-gold);
+        }
+
+        .stepper-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .stepper-item.active .stepper-number {
+            background: var(--gold-gradient);
+            border-color: var(--tchad-gold);
+            color: var(--tchad-blue);
+        }
+
+        .stepper-item.completed .stepper-number {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .stepper-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .stepper-item.active .stepper-label {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .stepper-item.completed .stepper-label {
+            color: var(--success);
+        }
+
+        /* ========== FORM CARD ========== */
+        .form-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .form-card-header {
+            padding: 24px 28px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .form-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .form-card-title h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .form-card-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .form-card-body {
+            padding: 28px;
+        }
+
+        /* ========== FORM STYLES ========== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .form-grid.three-cols {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group.span-3 {
+            grid-column: span 3;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-label .optional {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--tchad-gold);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 4px rgba(254, 203, 0, 0.15);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Input with suffix */
+        .input-with-suffix {
+            position: relative;
+        }
+
+        .input-with-suffix .form-input {
+            padding-right: 90px;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* ========== FUNDER SELECTION ========== */
+        .funder-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .funder-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            padding: 20px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+        }
+
+        .funder-option:hover {
+            border-color: var(--tchad-gold);
+            background: rgba(254, 203, 0, 0.02);
+        }
+
+        .funder-option.selected {
+            border-color: var(--tchad-gold);
+            background: rgba(254, 203, 0, 0.08);
+        }
+
+        .funder-option input {
+            display: none;
+        }
+
+        .funder-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.85rem;
+            transition: transform 0.2s ease;
+        }
+
+        .funder-option:hover .funder-icon {
+            transform: scale(1.05);
+        }
+
+        .funder-option.selected .funder-icon {
+            transform: scale(1.1);
+        }
+
+        .funder-icon.national { background: linear-gradient(135deg, #002664, #1a4a8a); }
+        .funder-icon.bm { background: linear-gradient(135deg, #0066b3, #009cde); }
+        .funder-icon.bad { background: linear-gradient(135deg, #1d4e89, #3a7bd5); }
+        .funder-icon.afd { background: linear-gradient(135deg, #e30613, #ff4444); }
+        .funder-icon.ue { background: linear-gradient(135deg, #003399, #0055cc); }
+        .funder-icon.fida { background: linear-gradient(135deg, #f7941e, #fbb03b); }
+        .funder-icon.oms { background: linear-gradient(135deg, #009cde, #00b4e6); }
+        .funder-icon.pnud { background: linear-gradient(135deg, #0468b1, #45b0e5); }
+
+        .funder-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .funder-type {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-align: center;
+        }
+
+        /* ========== TYPE SELECTION ========== */
+        .type-options {
+            display: flex;
+            gap: 14px;
+        }
+
+        .type-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 16px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+            font-weight: 500;
+        }
+
+        .type-option:hover {
+            border-color: var(--tchad-gold);
+        }
+
+        .type-option.selected {
+            border-color: var(--tchad-gold);
+            background: rgba(254, 203, 0, 0.08);
+            color: var(--tchad-blue);
+        }
+
+        .type-option input {
+            display: none;
+        }
+
+        /* ========== PROJECTS SELECTION ========== */
+        .projects-selection {
+            margin-top: 20px;
+        }
+
+        .project-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 12px;
+        }
+
+        .project-option:hover {
+            border-color: var(--tchad-gold);
+        }
+
+        .project-option.selected {
+            border-color: var(--tchad-gold);
+            background: rgba(254, 203, 0, 0.05);
+        }
+
+        .project-option input {
+            display: none;
+        }
+
+        .project-checkbox {
+            width: 24px;
+            height: 24px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .project-option.selected .project-checkbox {
+            background: var(--tchad-gold);
+            border-color: var(--tchad-gold);
+            color: var(--tchad-blue);
+        }
+
+        .project-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .project-info {
+            flex: 1;
+        }
+
+        .project-info h5 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .project-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .project-amount {
+            text-align: right;
+        }
+
+        .project-amount input {
+            width: 120px;
+            padding: 8px 12px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.88rem;
+            font-family: inherit;
+            text-align: right;
+        }
+
+        .project-amount input:focus {
+            outline: none;
+            border-color: var(--tchad-gold);
+        }
+
+        .project-amount span {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+        }
+
+        /* ========== FILE UPLOAD ========== */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 14px;
+            padding: 40px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--tchad-gold);
+            background: rgba(254, 203, 0, 0.02);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--tchad-gold);
+            background: rgba(254, 203, 0, 0.05);
+        }
+
+        .file-upload-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--text-muted);
+        }
+
+        .file-upload-text h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .file-upload-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .file-upload-text span {
+            color: var(--tchad-gold);
+            font-weight: 600;
+        }
+
+        .uploaded-files {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+
+        .uploaded-file-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .uploaded-file-icon.pdf { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .uploaded-file-icon.doc { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+
+        .uploaded-file-info {
+            flex: 1;
+        }
+
+        .uploaded-file-info h5 {
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .uploaded-file-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .uploaded-file-remove {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .uploaded-file-remove:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* ========== SUMMARY CARD ========== */
+        .summary-card {
+            background: var(--gold-gradient);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .summary-card h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--tchad-blue);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .summary-item {
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .summary-item-label {
+            font-size: 0.8rem;
+            color: var(--tchad-blue);
+            opacity: 0.8;
+            margin-bottom: 6px;
+        }
+
+        .summary-item-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--tchad-blue);
+        }
+
+        /* ========== FORM ACTIONS ========== */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 32px;
+        }
+
+        .form-actions-left {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-actions-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 38, 100, 0.2);
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: var(--tchad-blue);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(254, 203, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--tchad-gold);
+            color: var(--tchad-blue);
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 1rem;
+        }
+
+        /* ========== TOAST ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            min-width: 320px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .toast-content h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1200px) {
+            .funder-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .summary-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .stepper {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+
+            .stepper-item:not(:last-child)::after {
+                display: none;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width,
+            .form-group.span-3 {
+                grid-column: span 1;
+            }
+
+            .type-options {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+
+            .form-card-body {
+                padding: 20px;
+            }
+
+            .funder-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .summary-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .form-actions-left,
+            .form-actions-right {
+                width: 100%;
+            }
+
+            .form-actions-right {
+                flex-direction: column;
+            }
+
+            .form-actions-right .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body x-data="fundingAdd()">
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ 'open': sidebarOpen }">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fecb00"/>
+                            <stop offset="100%" style="stop-color:#e6b800"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="url(#shieldGrad)" stroke="#002664" stroke-width="2"/>
+                    <rect x="15" y="25" width="23" height="45" fill="#002664"/>
+                    <rect x="38" y="25" width="24" height="45" fill="#fecb00"/>
+                    <rect x="62" y="25" width="23" height="45" fill="#c60c30"/>
+                    <polygon points="50,30 53,40 63,40 55,47 58,57 50,51 42,57 45,47 37,40 47,40" fill="#002664"/>
+                    <circle cx="50" cy="15" r="6" fill="#fecb00" stroke="#002664" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+                <span>Gestion des Projets Publics</span>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">FH</div>
+                <div class="user-details">
+                    <h4>Fatima Hassan</h4>
+                    <p>Direction Financière</p>
+                    <span class="user-role">Contrôleur Financier</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a class="nav-item" href="sigep-dashboard.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a class="nav-item" href="sigep-projects.html">
+                    <i data-lucide="briefcase"></i>
+                    <span>Projets</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Finances</div>
+                <a class="nav-item active" href="sigep-financements.html">
+                    <i data-lucide="landmark"></i>
+                    <span>Financements</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="arrow-down-circle"></i>
+                    <span>Décaissements</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="receipt"></i>
+                    <span>Conventions</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Compte</div>
+                <a class="nav-item">
+                    <i data-lucide="user-circle"></i>
+                    <span>Mon profil</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="log-out"></i>
+                    <span>Se déconnecter</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" @click="sidebarOpen = !sidebarOpen">
+                    <i data-lucide="menu"></i>
+                </button>
+                <a href="sigep-financements.html" class="back-btn">
+                    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                    Retour aux financements
+                </a>
+                <span class="header-title">Enregistrer un nouveau financement</span>
+            </div>
+            <div class="header-right">
+                <button class="header-btn theme-toggle" @click="toggleTheme()">
+                    <i data-lucide="sun" x-show="theme === 'dark'"></i>
+                    <i data-lucide="moon" x-show="theme === 'light'"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h2>
+                        <span class="page-header-icon">
+                            <i data-lucide="landmark"></i>
+                        </span>
+                        Nouveau Financement
+                    </h2>
+                    <p>Enregistrez une nouvelle source de financement ou convention</p>
+                </div>
+            </div>
+
+            <!-- Stepper -->
+            <div class="stepper">
+                <div class="stepper-item" :class="{ 'active': currentStep >= 1, 'completed': currentStep > 1 }">
+                    <div class="stepper-number">
+                        <template x-if="currentStep > 1"><i data-lucide="check" style="width: 18px; height: 18px;"></i></template>
+                        <template x-if="currentStep <= 1">1</template>
+                    </div>
+                    <span class="stepper-label">Source</span>
+                </div>
+                <div class="stepper-item" :class="{ 'active': currentStep >= 2, 'completed': currentStep > 2 }">
+                    <div class="stepper-number">
+                        <template x-if="currentStep > 2"><i data-lucide="check" style="width: 18px; height: 18px;"></i></template>
+                        <template x-if="currentStep <= 2">2</template>
+                    </div>
+                    <span class="stepper-label">Montants</span>
+                </div>
+                <div class="stepper-item" :class="{ 'active': currentStep >= 3, 'completed': currentStep > 3 }">
+                    <div class="stepper-number">
+                        <template x-if="currentStep > 3"><i data-lucide="check" style="width: 18px; height: 18px;"></i></template>
+                        <template x-if="currentStep <= 3">3</template>
+                    </div>
+                    <span class="stepper-label">Projets</span>
+                </div>
+                <div class="stepper-item" :class="{ 'active': currentStep >= 4 }">
+                    <div class="stepper-number">4</div>
+                    <span class="stepper-label">Documents</span>
+                </div>
+            </div>
+
+            <form @submit.prevent="submitForm()">
+                <!-- Step 1: Source -->
+                <div x-show="currentStep === 1">
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: var(--gold-gradient);">
+                                <i data-lucide="landmark" style="width: 22px; height: 22px; color: var(--tchad-blue);"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Source de financement</h3>
+                                <p>Sélectionnez le bailleur de fonds</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="funder-grid">
+                                <template x-for="funder in funders" :key="funder.id">
+                                    <label class="funder-option" :class="{ 'selected': form.funder === funder.id }">
+                                        <input type="radio" name="funder" :value="funder.id" x-model="form.funder">
+                                        <div class="funder-icon" :class="funder.id" x-text="funder.shortName"></div>
+                                        <span class="funder-label" x-text="funder.name"></span>
+                                        <span class="funder-type" x-text="funder.type"></span>
+                                    </label>
+                                </template>
+                            </div>
+
+                            <div style="margin-top: 32px;">
+                                <label class="form-label" style="margin-bottom: 16px;">
+                                    Type de financement <span class="required">*</span>
+                                </label>
+                                <div class="type-options">
+                                    <label class="type-option" :class="{ 'selected': form.type === 'don' }">
+                                        <input type="radio" name="type" value="don" x-model="form.type">
+                                        <i data-lucide="gift" style="width: 20px; height: 20px;"></i>
+                                        Don / Subvention
+                                    </label>
+                                    <label class="type-option" :class="{ 'selected': form.type === 'pret' }">
+                                        <input type="radio" name="type" value="pret" x-model="form.type">
+                                        <i data-lucide="banknote" style="width: 20px; height: 20px;"></i>
+                                        Prêt concessionnel
+                                    </label>
+                                    <label class="type-option" :class="{ 'selected': form.type === 'budget' }">
+                                        <input type="radio" name="type" value="budget" x-model="form.type">
+                                        <i data-lucide="landmark" style="width: 20px; height: 20px;"></i>
+                                        Budget national
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+                                <i data-lucide="file-signature" style="width: 22px; height: 22px;"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Convention</h3>
+                                <p>Informations sur l'accord de financement</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        N° Convention <span class="required">*</span>
+                                    </label>
+                                    <input type="text" class="form-input" x-model="form.convention" placeholder="Ex: CONV-BM-2025-001" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Date de signature <span class="required">*</span>
+                                    </label>
+                                    <input type="date" class="form-input" x-model="form.signatureDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Date d'entrée en vigueur
+                                    </label>
+                                    <input type="date" class="form-input" x-model="form.effectiveDate">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Date d'échéance <span class="required">*</span>
+                                    </label>
+                                    <input type="date" class="form-input" x-model="form.deadline" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Amounts -->
+                <div x-show="currentStep === 2">
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: linear-gradient(135deg, #059669, #10b981);">
+                                <i data-lucide="coins" style="width: 22px; height: 22px;"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Montants du financement</h3>
+                                <p>Définissez les montants engagés et les conditions</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="form-grid three-cols">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Montant total engagé <span class="required">*</span>
+                                    </label>
+                                    <div class="input-with-suffix">
+                                        <input type="number" step="0.1" class="form-input" x-model="form.amount" placeholder="0.0" required>
+                                        <span class="input-suffix">Mds FCFA</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Montant déjà décaissé</label>
+                                    <div class="input-with-suffix">
+                                        <input type="number" step="0.1" class="form-input" x-model="form.disbursed" placeholder="0.0">
+                                        <span class="input-suffix">Mds FCFA</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Contrepartie nationale</label>
+                                    <div class="input-with-suffix">
+                                        <input type="number" step="0.1" class="form-input" x-model="form.counterpart" placeholder="0.0">
+                                        <span class="input-suffix">Mds FCFA</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 32px;">
+                                <div class="form-grid three-cols">
+                                    <div class="form-group">
+                                        <label class="form-label">Taux d'intérêt</label>
+                                        <div class="input-with-suffix">
+                                            <input type="text" class="form-input" x-model="form.interestRate" placeholder="0.75">
+                                            <span class="input-suffix">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Durée du financement</label>
+                                        <input type="text" class="form-input" x-model="form.duration" placeholder="Ex: 5 ans">
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">Différé de remboursement</label>
+                                        <input type="text" class="form-input" x-model="form.gracePeriod" placeholder="Ex: 2 ans">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group full-width" style="margin-top: 24px;">
+                                <label class="form-label">Conditions et modalités</label>
+                                <textarea class="form-textarea" x-model="form.conditions" placeholder="Décrivez les conditions spécifiques, les indicateurs de performance, les conditionnalités..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Summary Card -->
+                    <div class="summary-card">
+                        <h4>
+                            <i data-lucide="calculator" style="width: 20px; height: 20px;"></i>
+                            Résumé du financement
+                        </h4>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="summary-item-label">Montant total</div>
+                                <div class="summary-item-value" x-text="(form.amount || 0) + ' Mds FCFA'"></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-item-label">Déjà décaissé</div>
+                                <div class="summary-item-value" x-text="(form.disbursed || 0) + ' Mds FCFA'"></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-item-label">Reste à décaisser</div>
+                                <div class="summary-item-value" x-text="((form.amount || 0) - (form.disbursed || 0)).toFixed(1) + ' Mds FCFA'"></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-item-label">Taux d'exécution</div>
+                                <div class="summary-item-value" x-text="form.amount > 0 ? Math.round((form.disbursed / form.amount) * 100) + '%' : '0%'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Projects -->
+                <div x-show="currentStep === 3">
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: var(--accent-gradient);">
+                                <i data-lucide="briefcase" style="width: 22px; height: 22px;"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Projets financés</h3>
+                                <p>Associez ce financement à un ou plusieurs projets</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <p style="color: var(--text-secondary); margin-bottom: 20px;">
+                                Sélectionnez les projets qui bénéficieront de ce financement et indiquez le montant alloué à chacun.
+                            </p>
+
+                            <div class="projects-selection">
+                                <template x-for="project in availableProjects" :key="project.id">
+                                    <label class="project-option" :class="{ 'selected': form.projects.some(p => p.id === project.id) }">
+                                        <input type="checkbox" @change="toggleProject(project)">
+                                        <span class="project-checkbox">
+                                            <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                                        </span>
+                                        <div class="project-icon" :style="'background: ' + project.color">
+                                            <i :data-lucide="project.icon" style="width: 20px; height: 20px;"></i>
+                                        </div>
+                                        <div class="project-info">
+                                            <h5 x-text="project.name"></h5>
+                                            <p x-text="project.code + ' • ' + project.sector"></p>
+                                        </div>
+                                        <div class="project-amount" x-show="form.projects.some(p => p.id === project.id)" @click.stop>
+                                            <input type="number" step="0.1" placeholder="0.0" 
+                                                   :value="getProjectAmount(project.id)"
+                                                   @input="updateProjectAmount(project.id, $event.target.value)">
+                                            <span>Mds FCFA</span>
+                                        </div>
+                                    </label>
+                                </template>
+                            </div>
+
+                            <div style="margin-top: 24px; padding: 16px; background: var(--bg-tertiary); border-radius: 12px;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <span style="font-size: 0.9rem; color: var(--text-secondary);">
+                                        <strong x-text="form.projects.length"></strong> projet(s) sélectionné(s)
+                                    </span>
+                                    <span style="font-size: 1rem; font-weight: 700; color: var(--text-primary);">
+                                        Total: <span x-text="getTotalAllocated().toFixed(1) + ' Mds FCFA'"></span>
+                                    </span>
+                                </div>
+                                <div style="margin-top: 10px; font-size: 0.85rem;" 
+                                     :style="{ color: getTotalAllocated() > form.amount ? 'var(--danger)' : 'var(--text-muted)' }">
+                                    <template x-if="getTotalAllocated() > form.amount">
+                                        <span><i data-lucide="alert-triangle" style="width: 14px; height: 14px; display: inline;"></i> Attention: Le total alloué dépasse le montant du financement</span>
+                                    </template>
+                                    <template x-if="getTotalAllocated() <= form.amount">
+                                        <span>Reste non alloué: <span x-text="(form.amount - getTotalAllocated()).toFixed(1)"></span> Mds FCFA</span>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Documents -->
+                <div x-show="currentStep === 4">
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
+                                <i data-lucide="file-text" style="width: 22px; height: 22px;"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Documents justificatifs</h3>
+                                <p>Téléchargez les documents relatifs au financement</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="file-upload-area" 
+                                 @dragover.prevent="isDragging = true"
+                                 @dragleave.prevent="isDragging = false"
+                                 @drop.prevent="handleDrop($event)"
+                                 :class="{ 'dragover': isDragging }">
+                                <div class="file-upload-icon">
+                                    <i data-lucide="upload-cloud" style="width: 28px; height: 28px;"></i>
+                                </div>
+                                <div class="file-upload-text">
+                                    <h4>Glissez vos fichiers ici</h4>
+                                    <p>ou <span>parcourir</span> pour sélectionner</p>
+                                    <p style="margin-top: 8px;">Convention signée, accord de projet, plan de décaissement... (PDF, DOC, max. 10 MB)</p>
+                                </div>
+                                <input type="file" multiple style="display: none;" @change="handleFileSelect($event)">
+                            </div>
+
+                            <div class="uploaded-files" x-show="uploadedFiles.length > 0">
+                                <template x-for="(file, index) in uploadedFiles" :key="index">
+                                    <div class="uploaded-file">
+                                        <div class="uploaded-file-icon" :class="getFileType(file.name)">
+                                            <i data-lucide="file-text" style="width: 18px; height: 18px;"></i>
+                                        </div>
+                                        <div class="uploaded-file-info">
+                                            <h5 x-text="file.name"></h5>
+                                            <p x-text="formatFileSize(file.size)"></p>
+                                        </div>
+                                        <button type="button" class="uploaded-file-remove" @click="removeFile(index)">
+                                            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 32px;">
+                                <label class="form-label">Notes et observations <span class="optional">(optionnel)</span></label>
+                                <textarea class="form-textarea" x-model="form.notes" placeholder="Ajoutez des notes, observations ou informations complémentaires..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Final Summary -->
+                    <div class="summary-card">
+                        <h4>
+                            <i data-lucide="check-circle" style="width: 20px; height: 20px;"></i>
+                            Récapitulatif du financement
+                        </h4>
+                        <div class="summary-grid">
+                            <div class="summary-item">
+                                <div class="summary-item-label">Source</div>
+                                <div class="summary-item-value" x-text="getFunderName()"></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-item-label">Convention</div>
+                                <div class="summary-item-value" x-text="form.convention || '-'"></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-item-label">Montant total</div>
+                                <div class="summary-item-value" x-text="(form.amount || 0) + ' Mds FCFA'"></div>
+                            </div>
+                            <div class="summary-item">
+                                <div class="summary-item-label">Projets financés</div>
+                                <div class="summary-item-value" x-text="form.projects.length"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <div class="form-actions-left">
+                        <button type="button" class="btn btn-outline" @click="saveDraft()">
+                            <i data-lucide="save" style="width: 18px; height: 18px;"></i>
+                            Enregistrer brouillon
+                        </button>
+                    </div>
+                    <div class="form-actions-right">
+                        <button type="button" class="btn btn-secondary" x-show="currentStep > 1" @click="prevStep()">
+                            <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                            Précédent
+                        </button>
+                        <button type="button" class="btn btn-gold" x-show="currentStep < 4" @click="nextStep()">
+                            Suivant
+                            <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                        </button>
+                        <button type="submit" class="btn btn-success btn-lg" x-show="currentStep === 4">
+                            <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                            Enregistrer le financement
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div class="toast" :class="toast.type">
+                <div class="toast-icon">
+                    <i :data-lucide="toast.type === 'success' ? 'check-circle' : 'alert-circle'" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="toast-content">
+                    <h5 x-text="toast.title"></h5>
+                    <p x-text="toast.message"></p>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        function fundingAdd() {
+            return {
+                sidebarOpen: false,
+                theme: 'light',
+                currentStep: 1,
+                isDragging: false,
+                
+                // Form data
+                form: {
+                    funder: '',
+                    type: '',
+                    convention: '',
+                    signatureDate: '',
+                    effectiveDate: '',
+                    deadline: '',
+                    amount: '',
+                    disbursed: 0,
+                    counterpart: 0,
+                    interestRate: '',
+                    duration: '',
+                    gracePeriod: '',
+                    conditions: '',
+                    projects: [],
+                    notes: ''
+                },
+                
+                uploadedFiles: [],
+                toasts: [],
+                
+                funders: [
+                    { id: 'national', name: 'Budget National', shortName: 'BN', type: 'National' },
+                    { id: 'bm', name: 'Banque Mondiale', shortName: 'BM', type: 'Multilatéral' },
+                    { id: 'bad', name: 'BAD', shortName: 'BAD', type: 'Multilatéral' },
+                    { id: 'afd', name: 'AFD', shortName: 'AFD', type: 'Bilatéral' },
+                    { id: 'ue', name: 'Union Européenne', shortName: 'UE', type: 'Multilatéral' },
+                    { id: 'fida', name: 'FIDA', shortName: 'FIDA', type: 'Multilatéral' },
+                    { id: 'oms', name: 'OMS', shortName: 'OMS', type: 'Multilatéral' },
+                    { id: 'pnud', name: 'PNUD', shortName: 'PNUD', type: 'Multilatéral' }
+                ],
+                
+                availableProjects: [
+                    { id: 1, name: 'Route Nationale N\'Djamena - Abéché', code: 'PRJ-2024-001', sector: 'Infrastructure', icon: 'road', color: 'linear-gradient(135deg, #002664, #1a4a8a)' },
+                    { id: 2, name: 'Centrale Solaire de Moundou', code: 'PRJ-2024-002', sector: 'Énergie', icon: 'zap', color: 'linear-gradient(135deg, #d97706, #f59e0b)' },
+                    { id: 3, name: 'Hôpital Régional de Sarh', code: 'PRJ-2023-015', sector: 'Santé', icon: 'heart-pulse', color: 'linear-gradient(135deg, #059669, #10b981)' },
+                    { id: 4, name: 'Périmètre Irrigué du Lac Tchad', code: 'PRJ-2024-008', sector: 'Agriculture', icon: 'wheat', color: 'linear-gradient(135deg, #16a34a, #22c55e)' },
+                    { id: 5, name: 'Adduction d\'Eau Potable Abéché', code: 'PRJ-2023-022', sector: 'Eau', icon: 'droplets', color: 'linear-gradient(135deg, #0284c7, #38bdf8)' },
+                    { id: 6, name: 'École Normale Supérieure de Bongor', code: 'PRJ-2024-012', sector: 'Éducation', icon: 'graduation-cap', color: 'linear-gradient(135deg, #7c3aed, #a855f7)' }
+                ],
+                
+                init() {
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                toggleTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', this.theme);
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                nextStep() {
+                    if (this.validateStep()) {
+                        this.currentStep++;
+                        this.$nextTick(() => lucide.createIcons());
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                },
+                
+                prevStep() {
+                    this.currentStep--;
+                    this.$nextTick(() => lucide.createIcons());
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+                
+                validateStep() {
+                    if (this.currentStep === 1) {
+                        if (!this.form.funder || !this.form.type || !this.form.convention) {
+                            this.showToast('error', 'Erreur', 'Veuillez remplir tous les champs obligatoires');
+                            return false;
+                        }
+                    }
+                    if (this.currentStep === 2) {
+                        if (!this.form.amount || this.form.amount <= 0) {
+                            this.showToast('error', 'Erreur', 'Veuillez indiquer le montant du financement');
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+                
+                toggleProject(project) {
+                    const index = this.form.projects.findIndex(p => p.id === project.id);
+                    if (index === -1) {
+                        this.form.projects.push({ id: project.id, amount: 0 });
+                    } else {
+                        this.form.projects.splice(index, 1);
+                    }
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                getProjectAmount(projectId) {
+                    const project = this.form.projects.find(p => p.id === projectId);
+                    return project ? project.amount : 0;
+                },
+                
+                updateProjectAmount(projectId, value) {
+                    const project = this.form.projects.find(p => p.id === projectId);
+                    if (project) {
+                        project.amount = parseFloat(value) || 0;
+                    }
+                },
+                
+                getTotalAllocated() {
+                    return this.form.projects.reduce((sum, p) => sum + (p.amount || 0), 0);
+                },
+                
+                getFunderName() {
+                    const funder = this.funders.find(f => f.id === this.form.funder);
+                    return funder ? funder.name : '-';
+                },
+                
+                handleDrop(event) {
+                    this.isDragging = false;
+                    const files = event.dataTransfer.files;
+                    this.addFiles(files);
+                },
+                
+                handleFileSelect(event) {
+                    const files = event.target.files;
+                    this.addFiles(files);
+                },
+                
+                addFiles(files) {
+                    for (let file of files) {
+                        if (file.size <= 10 * 1024 * 1024) {
+                            this.uploadedFiles.push(file);
+                        } else {
+                            this.showToast('error', 'Erreur', `${file.name} est trop volumineux (max 10 MB)`);
+                        }
+                    }
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                removeFile(index) {
+                    this.uploadedFiles.splice(index, 1);
+                },
+                
+                getFileType(filename) {
+                    const ext = filename.split('.').pop().toLowerCase();
+                    if (['pdf'].includes(ext)) return 'pdf';
+                    if (['doc', 'docx'].includes(ext)) return 'doc';
+                    return 'doc';
+                },
+                
+                formatFileSize(bytes) {
+                    if (bytes < 1024) return bytes + ' B';
+                    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+                },
+                
+                saveDraft() {
+                    this.showToast('success', 'Brouillon enregistré', 'Vous pouvez reprendre plus tard');
+                },
+                
+                submitForm() {
+                    this.showToast('success', 'Financement enregistré!', 'Le financement a été créé avec succès');
+                    setTimeout(() => {
+                        window.location.href = 'sigep-financements.html';
+                    }, 2000);
+                },
+                
+                showToast(type, title, message) {
+                    const id = Date.now();
+                    this.toasts.push({ id, type, title, message });
+                    this.$nextTick(() => lucide.createIcons());
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 4000);
+                }
+            };
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notifications - SIGEP Tchad</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+
+        /* Sidebar & Layout */
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border-color); z-index: 1000; display: flex; flex-direction: column; }
+        .sidebar-header { background: var(--accent-gradient); padding: 20px; display: flex; align-items: center; gap: 14px; }
+        .sidebar-logo { width: 56px; height: 56px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); padding: 6px; }
+        .sidebar-brand h1 { font-size: 1.3rem; font-weight: 700; color: white; }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 12px; }
+        .nav-section-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; padding-left: 14px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: all 0.2s ease; margin-bottom: 4px; font-weight: 500; font-size: 0.88rem; }
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: linear-gradient(135deg, #fecb00 0%, #e6b800 100%); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+        
+        .main-content { margin-left: 280px; min-height: 100vh; }
+        .top-header { background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .search-box { display: flex; align-items: center; gap: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 16px; min-width: 320px; }
+        .search-box input { border: none; background: none; outline: none; flex: 1; font-size: 0.9rem; }
+
+        .content-area { padding: 32px; max-width: 1000px; margin: 0 auto; }
+        
+        /* Notifications Specifics */
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; }
+        .page-title h2 { font-size: 1.75rem; font-weight: 700; color: var(--tchad-blue); }
+
+        .filter-tabs { display: flex; gap: 8px; margin-bottom: 24px; border-bottom: 1px solid var(--border-color); padding-bottom: 1px; }
+        .tab { padding: 8px 16px; font-weight: 600; cursor: pointer; color: var(--text-muted); border-bottom: 2px solid transparent; transition: all 0.2s; }
+        .tab:hover { color: var(--tchad-blue); }
+        .tab.active { color: var(--tchad-blue); border-bottom-color: var(--tchad-gold); }
+        .badge { background: var(--tchad-red); color: white; padding: 2px 6px; border-radius: 10px; font-size: 0.7rem; margin-left: 4px; }
+
+        .notif-list { display: flex; flex-direction: column; gap: 12px; }
+        .notif-item { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 12px; padding: 20px; display: flex; gap: 16px; transition: all 0.2s; position: relative; overflow: hidden; }
+        .notif-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+        .notif-item.unread { background: #fff; border-left: 4px solid var(--tchad-gold); }
+        .notif-item.unread::after { content: ''; position: absolute; right: 20px; top: 20px; width: 8px; height: 8px; background: var(--tchad-red); border-radius: 50%; }
+
+        .notif-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .icon-alert { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+        .icon-info { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+        .icon-success { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .icon-warning { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+
+        .notif-content { flex: 1; }
+        .notif-header { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .notif-title { font-weight: 700; color: var(--text-primary); font-size: 1rem; }
+        .notif-time { font-size: 0.8rem; color: var(--text-muted); }
+        .notif-desc { color: var(--text-secondary); font-size: 0.9rem; line-height: 1.5; margin-bottom: 12px; }
+        
+        .notif-actions { display: flex; gap: 12px; }
+        .action-link { font-size: 0.85rem; font-weight: 600; color: var(--tchad-blue); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+        .action-link:hover { text-decoration: underline; }
+        .btn-icon { background: none; border: none; cursor: pointer; color: var(--text-muted); padding: 4px; border-radius: 4px; }
+        .btn-icon:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+
+        @media (max-width: 1024px) { .sidebar { transform: translateX(-100%); } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body x-data="notifications()">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="#fecb00" stroke="#002664" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Principal</div>
+            <a class="nav-item" href="sigep-dashboard.html">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Tableau de bord</span>
+            </a>
+            <div class="nav-section-title">Communication</div>
+            <a class="nav-item active">
+                <i data-lucide="bell"></i>
+                <span>Notifications</span>
+            </a>
+            <a class="nav-item" href="sigep-chat.html">
+                <i data-lucide="message-square"></i>
+                <span>Messagerie</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <header class="top-header">
+            <div class="search-box">
+                <i data-lucide="search" style="color: var(--text-muted);"></i>
+                <input type="text" placeholder="Rechercher...">
+            </div>
+            <div style="width:40px; height:40px; border-radius:10px; background:var(--bg-tertiary); display:flex; align-items:center; justify-content:center; color:var(--tchad-blue); font-weight:700;">AD</div>
+        </header>
+
+        <div class="content-area">
+            <div class="page-header">
+                <div class="page-title">
+                    <h2>Centre de Notifications</h2>
+                    <p style="color:var(--text-secondary);">Restez informé des activités importantes</p>
+                </div>
+                <button class="btn-icon" @click="markAllRead()" title="Tout marquer comme lu" style="display:flex; align-items:center; gap:6px; font-weight:600; font-size:0.9rem; color:var(--tchad-blue);">
+                    <i data-lucide="check-check"></i> Tout lire
+                </button>
+            </div>
+
+            <div class="filter-tabs">
+                <div class="tab" :class="{'active': filter === 'all'}" @click="filter = 'all'">
+                    Toutes <span class="badge" x-show="unreadCount > 0" x-text="unreadCount"></span>
+                </div>
+                <div class="tab" :class="{'active': filter === 'unread'}" @click="filter = 'unread'">Non lues</div>
+                <div class="tab" :class="{'active': filter === 'archived'}" @click="filter = 'archived'">Archivées</div>
+            </div>
+
+            <div class="notif-list">
+                <template x-for="notif in filteredList" :key="notif.id">
+                    <div class="notif-item" :class="{'unread': !notif.read}">
+                        <div class="notif-icon" :class="'icon-' + notif.type">
+                            <i :data-lucide="getIcon(notif.type)"></i>
+                        </div>
+                        <div class="notif-content">
+                            <div class="notif-header">
+                                <span class="notif-title" x-text="notif.title"></span>
+                                <span class="notif-time" x-text="notif.time"></span>
+                            </div>
+                            <p class="notif-desc" x-text="notif.message"></p>
+                            <div class="notif-actions">
+                                <template x-if="!notif.read">
+                                    <span class="action-link" @click="notif.read = true">Marquer comme lu</span>
+                                </template>
+                                <template x-if="notif.actionUrl">
+                                    <a :href="notif.actionUrl" class="action-link">Voir détails <i data-lucide="arrow-right" style="width:14px;"></i></a>
+                                </template>
+                                <button class="btn-icon" style="margin-left:auto;" @click="archive(notif.id)" title="Archiver">
+                                    <i data-lucide="archive" style="width:16px;"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+                
+                <div x-show="filteredList.length === 0" style="text-align:center; padding:40px; color:var(--text-muted);">
+                    <i data-lucide="bell-off" style="width:48px; height:48px; margin-bottom:10px; opacity:0.5;"></i>
+                    <p>Aucune notification à afficher</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function notifications() {
+            return {
+                filter: 'all',
+                list: [
+                    { id: 1, type: 'alert', title: 'Alerte Budget Critique', message: 'Le Ministère de la Santé a atteint 90% de son budget trimestriel.', time: 'Il y a 10 min', read: false, actionUrl: '#' },
+                    { id: 2, type: 'success', title: 'Nouvelle Institution Créée', message: 'L\'Agence Nationale de Gestion a été ajoutée avec succès par Admin.', time: 'Il y a 2h', read: false, actionUrl: '#' },
+                    { id: 3, type: 'info', title: 'Maintenance Système', message: 'Une maintenance est prévue ce soir à 23h00. Le système sera indisponible pendant 30 min.', time: 'Hier', read: true, actionUrl: null },
+                    { id: 4, type: 'warning', title: 'Validation Requise', message: '3 nouveaux utilisateurs attendent la validation de leur profil.', time: '22 Juin', read: true, actionUrl: 'sigep-users.html' }
+                ],
+                
+                init() {
+                    this.$nextTick(() => lucide.createIcons());
+                    this.$watch('filter', () => {
+                         this.$nextTick(() => lucide.createIcons());
+                    });
+                },
+
+                get filteredList() {
+                    if (this.filter === 'unread') return this.list.filter(n => !n.read);
+                    if (this.filter === 'archived') return []; // Mock logic
+                    return this.list;
+                },
+
+                get unreadCount() {
+                    return this.list.filter(n => !n.read).length;
+                },
+
+                getIcon(type) {
+                    const icons = { 'alert': 'alert-circle', 'success': 'check-circle', 'info': 'info', 'warning': 'alert-triangle' };
+                    return icons[type] || 'bell';
+                },
+
+                markAllRead() {
+                    this.list.forEach(n => n.read = true);
+                },
+
+                archive(id) {
+                    this.list = this.list.filter(n => n.id !== id);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

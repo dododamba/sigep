@@ -1,0 +1,557 @@
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Partenaires - SIGEP Tchad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            
+            --accent-primary: #002664;
+            --accent-secondary: #1a4a8a;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f1724;
+            --bg-secondary: #1a2535;
+            --bg-tertiary: #243244;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; transition: all 0.3s ease; }
+
+        /* Sidebar & Layout (Identique aux autres pages) */
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border-color); z-index: 1000; display: flex; flex-direction: column; transition: transform 0.3s ease; }
+        .sidebar-header { background: var(--accent-gradient); padding: 20px; display: flex; align-items: center; gap: 14px; }
+        .sidebar-logo { width: 56px; height: 56px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); padding: 6px; }
+        .sidebar-brand h1 { font-size: 1.3rem; font-weight: 700; color: white; }
+        .sidebar-brand span { font-size: 0.7rem; color: rgba(255,255,255,0.8); }
+        .user-info { padding: 16px 20px; background: var(--bg-tertiary); border-bottom: 1px solid var(--border-color); }
+        .user-card { display: flex; align-items: center; gap: 12px; }
+        .user-avatar { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-gradient); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; }
+        .user-details h4 { font-size: 0.9rem; font-weight: 600; }
+        .user-details p { font-size: 0.75rem; color: var(--text-muted); }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 12px; }
+        .nav-section-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; padding-left: 14px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: all 0.2s ease; margin-bottom: 4px; font-weight: 500; font-size: 0.88rem; }
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: var(--gold-gradient); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+        
+        .main-content { margin-left: 280px; min-height: 100vh; }
+        .top-header { background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .search-box { display: flex; align-items: center; gap: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 16px; min-width: 320px; }
+        .search-box input { border: none; background: none; outline: none; flex: 1; font-size: 0.9rem; color: var(--text-primary); }
+        
+        /* Content */
+        .content-area { padding: 32px; }
+        .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; }
+        .page-header-left h2 { font-size: 1.75rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+        .page-header-icon { width: 48px; height: 48px; background: var(--gold-gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--tchad-blue); }
+
+        /* Stats Row */
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+        .stat-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); }
+
+        /* Table & Filters */
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; }
+        .card-header { padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-tertiary); }
+        .filters-bar { display: flex; gap: 12px; padding: 20px 24px; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
+        .filter-select { padding: 8px 32px 8px 12px; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-secondary); color: var(--text-primary); cursor: pointer; }
+        
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .data-table th { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); background: var(--bg-tertiary); }
+        .data-table tbody tr:hover { background: var(--bg-tertiary); }
+
+        /* Partner Specific Styles */
+        .partner-cell { display: flex; align-items: center; gap: 14px; }
+        .partner-logo { width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; flex-shrink: 0; background: var(--bg-tertiary); overflow: hidden; }
+        .partner-logo img { width: 100%; height: 100%; object-fit: cover; }
+        .partner-logo-fallback { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; }
+        
+        /* Badges */
+        .badge { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .badge.bilateral { background: rgba(0, 38, 100, 0.1); color: var(--tchad-blue); }
+        .badge.multilateral { background: rgba(254, 203, 0, 0.15); color: #b8860b; }
+        .badge.ong { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        
+        .status-badge { padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
+        .status-badge.actif { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .status-badge.inactif { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+        /* Buttons */
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; border: none; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+        .btn-gold { background: var(--gold-gradient); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .action-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-secondary); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+        .action-btn:hover { border-color: var(--tchad-gold); color: var(--tchad-blue); }
+        .action-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
+
+        /* Modals */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal { background: var(--bg-secondary); width: 100%; max-width: 800px; border-radius: 20px; max-height: 90vh; display: flex; flex-direction: column; transform: scale(0.95); transition: all 0.3s; }
+        .modal-overlay.active .modal { transform: scale(1); }
+        .modal-header { padding: 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-tertiary); }
+        .modal-body { padding: 24px; overflow-y: auto; }
+        .modal-footer { padding: 20px 24px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px; background: var(--bg-tertiary); }
+
+        /* Form Inputs in Modal */
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .form-group.full { grid-column: span 2; }
+        .form-label { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); }
+        .form-input { padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-primary); width: 100%; font-family: inherit; }
+        .form-input:focus { border-color: var(--tchad-gold); outline: none; }
+
+        /* View Modal Styling */
+        .partner-profile-header { display: flex; gap: 20px; align-items: center; margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid var(--border-color); }
+        .large-logo { width: 80px; height: 80px; border-radius: 16px; background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; color: var(--tchad-blue); font-weight: 700; }
+        .info-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+        .info-item { background: var(--bg-tertiary); padding: 16px; border-radius: 12px; }
+        .info-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px; font-weight: 600; }
+        .info-value { font-size: 1rem; color: var(--text-primary); font-weight: 500; }
+
+        /* Toast */
+        .toast-container { position: fixed; bottom: 24px; right: 24px; z-index: 3000; }
+        .toast { display: flex; align-items: center; gap: 12px; padding: 16px 20px; background: var(--bg-secondary); border-radius: 12px; box-shadow: var(--shadow-xl); animation: slideIn 0.3s ease; border-left: 4px solid var(--success); }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
+        @media (max-width: 1024px) { .sidebar { transform: translateX(-100%); } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body x-data="partnersManager()">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="#fecb00" stroke="#002664" stroke-width="2"/>
+                    <rect x="38" y="25" width="24" height="45" fill="#002664"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+                <span>Gestion des Projets</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Principal</div>
+            <a class="nav-item" href="sigep-dashboard.html">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Tableau de bord</span>
+            </a>
+            <a class="nav-item active">
+                <i data-lucide="handshake"></i>
+                <span>Partenaires</span>
+            </a>
+            <!-- Autres liens... -->
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="search-box">
+                <i data-lucide="search" style="color: var(--text-muted);"></i>
+                <input type="text" placeholder="Rechercher..." x-model="searchQuery">
+            </div>
+            <div style="display:flex; gap:12px;">
+                <div class="user-avatar">AD</div>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h2>
+                        <span class="page-header-icon">
+                            <i data-lucide="handshake"></i>
+                        </span>
+                        Partenaires
+                    </h2>
+                    <p>Gestion des bailleurs de fonds et partenaires techniques</p>
+                </div>
+                <!-- Lien vers la page d'ajout séparée -->
+                <a href="sigep-partner-add.html" class="btn btn-gold">
+                    <i data-lucide="plus"></i>
+                    Nouveau Partenaire
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(0, 38, 100, 0.1); color: var(--tchad-blue);">
+                            <i data-lucide="building-2"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" x-text="partners.length"></div>
+                    <div class="stat-label">Total Partenaires</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                            <i data-lucide="check-circle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" x-text="partners.filter(p => p.status === 'Actif').length"></div>
+                    <div class="stat-label">Partenaires Actifs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(254, 203, 0, 0.2); color: #b8860b;">
+                            <i data-lucide="coins"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">245 Mds</div>
+                    <div class="stat-label">Financements Cumulés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(239, 68, 68, 0.1); color: var(--danger);">
+                            <i data-lucide="alert-triangle"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Conventions Expirées</div>
+                </div>
+            </div>
+
+            <!-- Table Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 style="font-size:1.1rem; font-weight:600;">Liste des Partenaires</h3>
+                    <button class="btn" style="background:var(--bg-primary); border:1px solid var(--border-color);" @click="init()">
+                        <i data-lucide="refresh-cw"></i> Actualiser
+                    </button>
+                </div>
+                <div class="filters-bar">
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Type:</span>
+                        <select class="filter-select" x-model="filterType">
+                            <option value="">Tous</option>
+                            <option value="Multilatéral">Multilatéral</option>
+                            <option value="Bilatéral">Bilatéral</option>
+                            <option value="ONG">ONG</option>
+                        </select>
+                    </div>
+                    <div style="display:flex; align-items:center; gap:8px;">
+                        <span style="font-size:0.85rem; font-weight:600; color:var(--text-muted);">Statut:</span>
+                        <select class="filter-select" x-model="filterStatus">
+                            <option value="">Tous</option>
+                            <option value="Actif">Actif</option>
+                            <option value="Inactif">Inactif</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Partenaire</th>
+                                <th>Type</th>
+                                <th>Contact Principal</th>
+                                <th>Projets Financés</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="partner in filteredPartners" :key="partner.id">
+                                <tr>
+                                    <td>
+                                        <div class="partner-cell">
+                                            <div class="partner-logo" :style="'background:' + partner.color">
+                                                <span x-text="partner.acronym" class="partner-logo-fallback"></span>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight:600; color:var(--text-primary);" x-text="partner.name"></div>
+                                                <div style="font-size:0.8rem; color:var(--text-muted);" x-text="partner.website"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="badge" :class="partner.type.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')" x-text="partner.type"></span>
+                                    </td>
+                                    <td>
+                                        <div x-text="partner.contactName" style="font-size:0.9rem; font-weight:500;"></div>
+                                        <div x-text="partner.contactEmail" style="font-size:0.8rem; color:var(--text-muted);"></div>
+                                    </td>
+                                    <td x-text="partner.projectsCount" style="font-weight:600; text-align:center;"></td>
+                                    <td>
+                                        <span class="status-badge" :class="partner.status.toLowerCase()" x-text="partner.status"></span>
+                                    </td>
+                                    <td>
+                                        <div style="display:flex; gap:6px;">
+                                            <button class="action-btn" title="Voir détails" @click="openViewModal(partner)">
+                                                <i data-lucide="eye" style="width:16px;"></i>
+                                            </button>
+                                            <button class="action-btn" title="Modifier" @click="openEditModal(partner)">
+                                                <i data-lucide="pencil" style="width:16px;"></i>
+                                            </button>
+                                            <button class="action-btn delete" title="Supprimer" @click="confirmDelete(partner)">
+                                                <i data-lucide="trash-2" style="width:16px;"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal VIEW (Afficher) -->
+    <div class="modal-overlay" :class="{ 'active': showView }" @click.self="showView = false">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 style="font-size:1.2rem; font-weight:700;">Détails du Partenaire</h3>
+                <button @click="showView = false" class="action-btn" style="border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body" x-show="selectedPartner">
+                <div class="partner-profile-header">
+                    <div class="large-logo" :style="'background:' + selectedPartner?.color + '20; color:' + selectedPartner?.color">
+                        <span x-text="selectedPartner?.acronym"></span>
+                    </div>
+                    <div>
+                        <h2 x-text="selectedPartner?.name" style="font-size:1.5rem; font-weight:700; color:var(--text-primary);"></h2>
+                        <div style="display:flex; gap:8px; margin-top:8px;">
+                            <span class="badge" :class="selectedPartner?.type.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '')" x-text="selectedPartner?.type"></span>
+                            <span class="status-badge" :class="selectedPartner?.status.toLowerCase()" x-text="selectedPartner?.status"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="info-label">Site Web</div>
+                        <div class="info-value" x-text="selectedPartner?.website"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Adresse</div>
+                        <div class="info-value" x-text="selectedPartner?.address || 'Non renseignée'"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Contact Principal</div>
+                        <div class="info-value" x-text="selectedPartner?.contactName"></div>
+                        <div style="font-size:0.85rem; color:var(--text-secondary);" x-text="selectedPartner?.contactEmail"></div>
+                        <div style="font-size:0.85rem; color:var(--text-secondary);" x-text="selectedPartner?.contactPhone"></div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Statistiques</div>
+                        <div class="info-value"><span x-text="selectedPartner?.projectsCount"></span> Projets financés</div>
+                        <div style="font-size:0.85rem; color:var(--text-secondary);">Total: <span x-text="selectedPartner?.totalAmount"></span> Mds FCFA</div>
+                    </div>
+                    <div class="info-item" style="grid-column: span 2;">
+                        <div class="info-label">Description / Notes</div>
+                        <p style="font-size:0.9rem; line-height:1.5; color:var(--text-secondary);" x-text="selectedPartner?.description || 'Aucune description disponible.'"></p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:var(--bg-tertiary); color:var(--text-secondary);" @click="showView = false">Fermer</button>
+                <button class="btn btn-gold" @click="showView = false; openEditModal(selectedPartner)">Modifier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal EDIT (Modifier) -->
+    <div class="modal-overlay" :class="{ 'active': showEdit }" @click.self="showEdit = false">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 style="font-size:1.2rem; font-weight:700;">Modifier le Partenaire</h3>
+                <button @click="showEdit = false" class="action-btn" style="border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <form @submit.prevent="saveEdit">
+                    <div class="form-grid">
+                        <div class="form-group full">
+                            <label class="form-label">Nom de l'organisation</label>
+                            <input type="text" class="form-input" x-model="editForm.name">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Acronyme</label>
+                            <input type="text" class="form-input" x-model="editForm.acronym">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Type</label>
+                            <select class="form-input" x-model="editForm.type">
+                                <option>Multilatéral</option>
+                                <option>Bilatéral</option>
+                                <option>ONG</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Site Web</label>
+                            <input type="text" class="form-input" x-model="editForm.website">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Statut</label>
+                            <select class="form-input" x-model="editForm.status">
+                                <option>Actif</option>
+                                <option>Inactif</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group full" style="border-top:1px solid var(--border-color); padding-top:16px; margin-top:8px;">
+                            <label class="form-label" style="color:var(--tchad-blue);">Point Focal / Contact</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Nom complet</label>
+                            <input type="text" class="form-input" x-model="editForm.contactName">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" x-model="editForm.contactEmail">
+                        </div>
+                        
+                        <div class="form-group full">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-input" rows="3" x-model="editForm.description"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:var(--bg-tertiary); color:var(--text-secondary);" @click="showEdit = false">Annuler</button>
+                <button class="btn btn-gold" @click="saveEdit">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-container" x-show="toast.visible">
+        <div class="toast">
+            <i data-lucide="check-circle" style="color:var(--success);"></i>
+            <div>
+                <h4 style="font-size:0.9rem; font-weight:700;">Succès</h4>
+                <p style="font-size:0.8rem;" x-text="toast.message"></p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function partnersManager() {
+            return {
+                searchQuery: '',
+                filterType: '',
+                filterStatus: '',
+                partners: [
+                    { id: 1, name: 'Banque Mondiale', acronym: 'BM', type: 'Multilatéral', website: 'www.worldbank.org', contactName: 'Jean Dupont', contactEmail: 'jdupont@worldbank.org', contactPhone: '+235 66 77 88 99', projectsCount: 12, totalAmount: 145.5, status: 'Actif', color: '#002664', address: 'Avenue Charles de Gaulle, N\'Djamena', description: 'Partenaire stratégique principal pour les infrastructures.' },
+                    { id: 2, name: 'Agence Française de Développement', acronym: 'AFD', type: 'Bilatéral', website: 'www.afd.fr', contactName: 'Marie Curie', contactEmail: 'curiem@afd.fr', contactPhone: '+235 99 88 77 66', projectsCount: 8, totalAmount: 85.2, status: 'Actif', color: '#ef4444', address: 'Quartier Béguinage, N\'Djamena', description: 'Focalisé sur l\'éducation et la santé.' },
+                    { id: 3, name: 'Union Européenne', acronym: 'UE', type: 'Multilatéral', website: 'europa.eu', contactName: 'Hans Muller', contactEmail: 'hans.m@eeas.europa.eu', contactPhone: '+235 66 00 11 22', projectsCount: 15, totalAmount: 210.0, status: 'Actif', color: '#003399', address: 'Route de Farcha', description: 'Appui budgétaire et projets de développement rural.' },
+                    { id: 4, name: 'Oxfam Intermón', acronym: 'OXFAM', type: 'ONG', website: 'www.oxfam.org', contactName: 'Sarah Conner', contactEmail: 'sarah.c@oxfam.org', contactPhone: '+235 55 44 33 22', projectsCount: 3, totalAmount: 4.5, status: 'Inactif', color: '#16a34a', address: 'Moursal, N\'Djamena', description: 'Projets humanitaires d\'urgence.' }
+                ],
+                
+                showView: false,
+                showEdit: false,
+                selectedPartner: null,
+                editForm: {},
+                toast: { visible: false, message: '' },
+
+                init() {
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                get filteredPartners() {
+                    return this.partners.filter(p => {
+                        const matchesSearch = p.name.toLowerCase().includes(this.searchQuery.toLowerCase()) || 
+                                            p.acronym.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        const matchesType = this.filterType === '' || p.type === this.filterType;
+                        const matchesStatus = this.filterStatus === '' || p.status === this.filterStatus;
+                        return matchesSearch && matchesType && matchesStatus;
+                    });
+                },
+
+                openViewModal(partner) {
+                    this.selectedPartner = partner;
+                    this.showView = true;
+                },
+
+                openEditModal(partner) {
+                    this.selectedPartner = partner;
+                    // Clone pour éviter la modification en direct avant sauvegarde
+                    this.editForm = JSON.parse(JSON.stringify(partner));
+                    this.showEdit = true;
+                },
+
+                saveEdit() {
+                    // Mise à jour locale (simulation backend)
+                    const index = this.partners.findIndex(p => p.id === this.editForm.id);
+                    if (index !== -1) {
+                        this.partners[index] = this.editForm;
+                    }
+                    this.showEdit = false;
+                    this.showToast('Les modifications ont été enregistrées.');
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                confirmDelete(partner) {
+                    if(confirm('Êtes-vous sûr de vouloir supprimer ' + partner.name + ' ?')) {
+                        this.partners = this.partners.filter(p => p.id !== partner.id);
+                        this.showToast('Partenaire supprimé avec succès.');
+                    }
+                },
+
+                showToast(message) {
+                    this.toast.message = message;
+                    this.toast.visible = true;
+                    setTimeout(() => { this.toast.visible = false }, 3000);
+                }
+            }
+        }
+    </script>
+</body>
+</html>

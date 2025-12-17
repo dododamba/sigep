@@ -1,0 +1,2834 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Financements - SIGEP Tchad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            
+            --accent-primary: #002664;
+            --accent-secondary: #1a4a8a;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f1724;
+            --bg-secondary: #1a2535;
+            --bg-tertiary: #243244;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            background: var(--accent-gradient);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            padding: 6px;
+        }
+
+        .sidebar-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .user-info {
+            padding: 16px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .user-role {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            background: rgba(254, 203, 0, 0.2);
+            color: #b8860b;
+            border-radius: 20px;
+            margin-top: 4px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 20px;
+        }
+
+        .nav-section-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 14px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--gold-gradient);
+            color: var(--tchad-blue);
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--tchad-gold);
+            color: var(--tchad-blue);
+            font-weight: 600;
+        }
+
+        .nav-item.active .nav-badge {
+            background: rgba(0,38,100,0.2);
+            color: var(--tchad-blue);
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 16px;
+            min-width: 320px;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 38, 100, 0.1);
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .header-btn .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            background: var(--tchad-red);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            padding: 32px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+        }
+
+        .page-header-left h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header-left p {
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .page-header-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gold-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--tchad-blue);
+        }
+
+        .page-header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* ========== STATS CARDS ========== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: var(--stat-color, var(--accent-primary));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .stat-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 16px;
+        }
+
+        .stat-card-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .stat-card-icon.gold { background: rgba(254, 203, 0, 0.15); color: #b8860b; }
+        .stat-card-icon.blue { background: rgba(0, 38, 100, 0.1); color: var(--tchad-blue); }
+        .stat-card-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .stat-card-icon.red { background: rgba(198, 12, 48, 0.1); color: var(--tchad-red); }
+
+        .stat-card-trend {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .stat-card-trend.up {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .stat-card-trend.down {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .stat-card-value {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 6px;
+        }
+
+        .stat-card-value small {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .stat-card-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== CARD ========== */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--tchad-gold);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 0;
+        }
+
+        /* ========== FILTERS BAR ========== */
+        .filters-bar {
+            display: flex;
+            gap: 12px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .filter-select {
+            padding: 8px 32px 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a8fa3' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .filter-search {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .filter-search input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .filter-search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* ========== DATA TABLE ========== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .data-table th.sortable:hover {
+            color: var(--accent-primary);
+        }
+
+        .data-table td {
+            font-size: 0.9rem;
+        }
+
+        .data-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Funding Cell */
+        .funding-cell {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .funding-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .funding-icon.national { background: linear-gradient(135deg, #002664, #1a4a8a); }
+        .funding-icon.bm { background: linear-gradient(135deg, #0066b3, #009cde); }
+        .funding-icon.bad { background: linear-gradient(135deg, #1d4e89, #3a7bd5); }
+        .funding-icon.afd { background: linear-gradient(135deg, #e30613, #ff4444); }
+        .funding-icon.ue { background: linear-gradient(135deg, #003399, #ffcc00); }
+        .funding-icon.fida { background: linear-gradient(135deg, #f7941e, #fbb03b); }
+        .funding-icon.oms { background: linear-gradient(135deg, #009cde, #00b4e6); }
+        .funding-icon.pnud { background: linear-gradient(135deg, #0468b1, #45b0e5); }
+
+        .funding-info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .funding-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Amount Cell */
+        .amount-cell {
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .amount-cell small {
+            display: block;
+            font-weight: 500;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge.actif {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-badge.en-negociation {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .status-badge.cloture {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+        }
+
+        .status-badge.suspendu {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 140px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.gold { background: var(--gold-gradient); }
+        .progress-fill.green { background: linear-gradient(90deg, #059669, #10b981); }
+        .progress-fill.blue { background: linear-gradient(90deg, #002664, #1a4a8a); }
+        .progress-fill.red { background: linear-gradient(90deg, #dc2626, #ef4444); }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* Actions Cell */
+        .actions-cell {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.05);
+        }
+
+        .action-btn.view:hover {
+            border-color: var(--info);
+            color: var(--info);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .action-btn.edit:hover {
+            border-color: var(--warning);
+            color: var(--warning);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .action-btn.delete:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* ========== PAGINATION ========== */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .table-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .pagination {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pagination-btn {
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 12px;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .pagination-btn.active {
+            background: var(--gold-gradient);
+            color: var(--tchad-blue);
+            border-color: transparent;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 38, 100, 0.2);
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: var(--tchad-blue);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(254, 203, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+        }
+
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+        }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal.xlarge {
+            max-width: 1100px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-title-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .modal-body {
+            padding: 28px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 28px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        /* ========== VIEW FUNDING MODAL ========== */
+        .funding-header {
+            display: flex;
+            gap: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .funding-header-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .funding-header-info {
+            flex: 1;
+        }
+
+        .funding-header-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .funding-header-info > p {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .funding-header-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .funding-header-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+
+        .header-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+
+        .header-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .header-stat-value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--bg-secondary);
+            color: var(--tchad-blue);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .info-card {
+            padding: 18px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+        }
+
+        .info-card-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-card-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .info-card-value.large {
+            font-size: 1.4rem;
+        }
+
+        .info-card.full-width {
+            grid-column: span 3;
+        }
+
+        .info-card.half-width {
+            grid-column: span 2;
+        }
+
+        /* Finance Summary */
+        .finance-summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .finance-box {
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .finance-box.highlight {
+            background: var(--gold-gradient);
+        }
+
+        .finance-box h4 {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .finance-box.highlight h4 {
+            color: var(--tchad-blue);
+            opacity: 0.8;
+        }
+
+        .finance-box .amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .finance-box.highlight .amount {
+            color: var(--tchad-blue);
+        }
+
+        .finance-box .amount small {
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        /* Projects List */
+        .projects-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .project-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 18px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .project-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .project-item-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .project-item-info {
+            flex: 1;
+        }
+
+        .project-item-info h5 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .project-item-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .project-item-amount {
+            text-align: right;
+        }
+
+        .project-item-amount .value {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .project-item-amount .percent {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Disbursements Table */
+        .disbursements-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .disbursements-table th,
+        .disbursements-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .disbursements-table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            background: var(--bg-primary);
+        }
+
+        .disbursements-table td {
+            font-size: 0.88rem;
+        }
+
+        .disbursement-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .disbursement-status.completed {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .disbursement-status.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .disbursement-status.cancelled {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* Documents List */
+        .documents-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .document-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .document-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .document-icon.pdf { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .document-icon.doc { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .document-icon.xls { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+        .document-info {
+            flex: 1;
+        }
+
+        .document-info h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .document-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .document-action {
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .document-item:hover .document-action {
+            color: var(--accent-primary);
+        }
+
+        /* ========== EDIT FORM ========== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 4px rgba(0, 38, 100, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 28px 0;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .section-divider span {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        /* ========== TOAST ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            min-width: 320px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .toast-content h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1400px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .info-card.full-width {
+                grid-column: span 2;
+            }
+
+            .finance-summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-card.full-width,
+            .info-card.half-width {
+                grid-column: span 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .filter-search {
+                min-width: 100%;
+            }
+
+            .funding-header {
+                flex-direction: column;
+            }
+
+            .funding-header-stats {
+                min-width: 100%;
+            }
+
+            .finance-summary {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs-nav {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                flex: none;
+                width: calc(50% - 2px);
+            }
+        }
+    </style>
+</head>
+<body x-data="fundingAdmin()">
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ 'open': sidebarOpen }">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fecb00"/>
+                            <stop offset="100%" style="stop-color:#e6b800"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="url(#shieldGrad)" stroke="#002664" stroke-width="2"/>
+                    <rect x="15" y="25" width="23" height="45" fill="#002664"/>
+                    <rect x="38" y="25" width="24" height="45" fill="#fecb00"/>
+                    <rect x="62" y="25" width="23" height="45" fill="#c60c30"/>
+                    <polygon points="50,30 53,40 63,40 55,47 58,57 50,51 42,57 45,47 37,40 47,40" fill="#002664"/>
+                    <circle cx="50" cy="15" r="6" fill="#fecb00" stroke="#002664" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+                <span>Gestion des Projets Publics</span>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">FH</div>
+                <div class="user-details">
+                    <h4>Fatima Hassan</h4>
+                    <p>Direction Financière</p>
+                    <span class="user-role">Contrôleur Financier</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a class="nav-item" href="sigep-dashboard.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a class="nav-item" href="sigep-projects.html">
+                    <i data-lucide="briefcase"></i>
+                    <span>Projets</span>
+                    <span class="nav-badge">12</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Finances</div>
+                <a class="nav-item active">
+                    <i data-lucide="landmark"></i>
+                    <span>Financements</span>
+                    <span class="nav-badge" x-text="fundings.length"></span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="arrow-down-circle"></i>
+                    <span>Décaissements</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="receipt"></i>
+                    <span>Conventions</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="bar-chart-3"></i>
+                    <span>Rapports financiers</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Administration</div>
+                <a class="nav-item" href="sigep-users.html">
+                    <i data-lucide="users"></i>
+                    <span>Utilisateurs</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="settings"></i>
+                    <span>Paramètres</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Compte</div>
+                <a class="nav-item">
+                    <i data-lucide="user-circle"></i>
+                    <span>Mon profil</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="log-out"></i>
+                    <span>Se déconnecter</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" @click="sidebarOpen = !sidebarOpen">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="search-box">
+                    <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted);"></i>
+                    <input type="text" placeholder="Rechercher un financement..." x-model="searchQuery" @input="filterFundings()">
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-btn">
+                    <i data-lucide="bell"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="header-btn theme-toggle" @click="toggleTheme()">
+                    <i data-lucide="sun" x-show="theme === 'dark'"></i>
+                    <i data-lucide="moon" x-show="theme === 'light'"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h2>
+                        <span class="page-header-icon">
+                            <i data-lucide="landmark"></i>
+                        </span>
+                        Gestion des Financements
+                    </h2>
+                    <p>Suivi des sources de financement et conventions</p>
+                </div>
+                <div class="page-header-actions">
+                    <button class="btn btn-secondary" @click="exportFundings()">
+                        <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                        Exporter
+                    </button>
+                    <a href="sigep-financement-add.html" class="btn btn-gold">
+                        <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+                        Nouveau financement
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="stat-card" style="--stat-color: #fecb00;">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon gold">
+                            <i data-lucide="coins" style="width: 24px; height: 24px;"></i>
+                        </div>
+                        <span class="stat-card-trend up">
+                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                            +12%
+                        </span>
+                    </div>
+                    <div class="stat-card-value">156.8 <small>Mds FCFA</small></div>
+                    <div class="stat-card-label">Total engagements</div>
+                </div>
+                <div class="stat-card" style="--stat-color: #10b981;">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon green">
+                            <i data-lucide="arrow-down-circle" style="width: 24px; height: 24px;"></i>
+                        </div>
+                        <span class="stat-card-trend up">
+                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                            +8%
+                        </span>
+                    </div>
+                    <div class="stat-card-value">98.5 <small>Mds FCFA</small></div>
+                    <div class="stat-card-label">Total décaissé</div>
+                </div>
+                <div class="stat-card" style="--stat-color: #002664;">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon blue">
+                            <i data-lucide="file-signature" style="width: 24px; height: 24px;"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value" x-text="fundings.filter(f => f.status === 'actif').length">0</div>
+                    <div class="stat-card-label">Conventions actives</div>
+                </div>
+                <div class="stat-card" style="--stat-color: #f59e0b;">
+                    <div class="stat-card-header">
+                        <div class="stat-card-icon" style="background: rgba(245, 158, 11, 0.1); color: #f59e0b;">
+                            <i data-lucide="clock" style="width: 24px; height: 24px;"></i>
+                        </div>
+                    </div>
+                    <div class="stat-card-value" x-text="fundings.filter(f => f.status === 'en-negociation').length">0</div>
+                    <div class="stat-card-label">En négociation</div>
+                </div>
+            </div>
+
+            <!-- Fundings Table Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i data-lucide="list"></i>
+                        Liste des financements
+                    </h3>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-sm" @click="refreshFundings()">
+                            <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                            Actualiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <span class="filter-label">Statut:</span>
+                        <select class="filter-select" x-model="filters.status" @change="filterFundings()">
+                            <option value="">Tous</option>
+                            <option value="actif">Actif</option>
+                            <option value="en-negociation">En négociation</option>
+                            <option value="cloture">Clôturé</option>
+                            <option value="suspendu">Suspendu</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Type:</span>
+                        <select class="filter-select" x-model="filters.type" @change="filterFundings()">
+                            <option value="">Tous</option>
+                            <option value="bilateral">Bilatéral</option>
+                            <option value="multilateral">Multilatéral</option>
+                            <option value="national">National</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Bailleur:</span>
+                        <select class="filter-select" x-model="filters.funder" @change="filterFundings()">
+                            <option value="">Tous</option>
+                            <template x-for="funder in funders" :key="funder.id">
+                                <option :value="funder.id" x-text="funder.name"></option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="filter-search">
+                        <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                        <input type="text" placeholder="Filtrer par convention, projet..." x-model="searchQuery" @input="filterFundings()">
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" @click="sortBy('name')">
+                                    Source de financement
+                                    <i data-lucide="chevrons-up-down" style="width: 14px; height: 14px; margin-left: 4px;"></i>
+                                </th>
+                                <th>Convention</th>
+                                <th class="sortable" @click="sortBy('amount')">Montant engagé</th>
+                                <th>Décaissé</th>
+                                <th>Taux</th>
+                                <th>Statut</th>
+                                <th>Échéance</th>
+                                <th style="width: 130px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="funding in filteredFundings" :key="funding.id">
+                                <tr>
+                                    <td>
+                                        <div class="funding-cell">
+                                            <div class="funding-icon" :class="funding.iconClass" x-text="funding.shortName"></div>
+                                            <div class="funding-info">
+                                                <h4 x-text="funding.name"></h4>
+                                                <p x-text="funding.type"></p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td x-text="funding.convention"></td>
+                                    <td>
+                                        <div class="amount-cell">
+                                            <span x-text="funding.amount + ' Mds FCFA'"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="amount-cell">
+                                            <span x-text="funding.disbursed + ' Mds'"></span>
+                                            <small x-text="'Reste: ' + (funding.amount - funding.disbursed).toFixed(1) + ' Mds'"></small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="progress-wrapper">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" :class="getProgressClass(funding.rate)" :style="'width: ' + funding.rate + '%'"></div>
+                                            </div>
+                                            <span class="progress-text" x-text="funding.rate + '%'"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge" :class="funding.status">
+                                            <span class="status-dot"></span>
+                                            <span x-text="getStatusLabel(funding.status)"></span>
+                                        </span>
+                                    </td>
+                                    <td x-text="funding.deadline"></td>
+                                    <td>
+                                        <div class="actions-cell">
+                                            <button class="action-btn view" @click="viewFunding(funding)" title="Voir détails">
+                                                <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <button class="action-btn edit" @click="editFunding(funding)" title="Modifier">
+                                                <i data-lucide="pencil" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <button class="action-btn delete" @click="confirmDelete(funding)" title="Supprimer">
+                                                <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="table-footer">
+                    <div class="table-info">
+                        Affichage de <strong x-text="filteredFundings.length"></strong> sur <strong x-text="fundings.length"></strong> financements
+                    </div>
+                    <div class="pagination">
+                        <button class="pagination-btn" :disabled="currentPage === 1" @click="currentPage--">
+                            <i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <template x-for="page in totalPages" :key="page">
+                            <button class="pagination-btn" :class="{ 'active': currentPage === page }" @click="currentPage = page" x-text="page"></button>
+                        </template>
+                        <button class="pagination-btn" :disabled="currentPage === totalPages" @click="currentPage++">
+                            <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: View Funding -->
+    <div class="modal-overlay" :class="{ 'active': showViewModal }" @click.self="closeViewModal()">
+        <div class="modal xlarge">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon" :class="selectedFunding?.iconClass" :style="'background: ' + getFunderGradient(selectedFunding?.iconClass)">
+                        <span x-text="selectedFunding?.shortName" style="font-size: 1rem;"></span>
+                    </span>
+                    Détails du financement
+                </h3>
+                <button class="modal-close" @click="closeViewModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body" x-show="selectedFunding">
+                <!-- Funding Header -->
+                <div class="funding-header">
+                    <div class="funding-header-icon" :class="selectedFunding?.iconClass" x-text="selectedFunding?.shortName"></div>
+                    <div class="funding-header-info">
+                        <h3 x-text="selectedFunding?.name"></h3>
+                        <p x-text="selectedFunding?.fullName"></p>
+                        <div class="funding-header-badges">
+                            <span class="status-badge" :class="selectedFunding?.status">
+                                <span class="status-dot"></span>
+                                <span x-text="getStatusLabel(selectedFunding?.status)"></span>
+                            </span>
+                            <span style="font-size: 0.8rem; color: var(--text-muted); padding: 4px 12px; background: var(--bg-tertiary); border-radius: 20px;" x-text="selectedFunding?.type"></span>
+                            <span style="font-size: 0.8rem; color: var(--text-muted); padding: 4px 12px; background: var(--bg-tertiary); border-radius: 20px;" x-text="selectedFunding?.convention"></span>
+                        </div>
+                    </div>
+                    <div class="funding-header-stats">
+                        <div class="header-stat">
+                            <span class="header-stat-label">Taux décaissement</span>
+                            <span class="header-stat-value" x-text="selectedFunding?.rate + '%'"></span>
+                        </div>
+                        <div class="header-stat">
+                            <span class="header-stat-label">Projets financés</span>
+                            <span class="header-stat-value" x-text="selectedFunding?.projectsCount || 3"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs-nav">
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'overview' }" @click="viewTab = 'overview'">
+                        <i data-lucide="layout-dashboard" style="width: 16px; height: 16px;"></i>
+                        Vue d'ensemble
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'projects' }" @click="viewTab = 'projects'">
+                        <i data-lucide="briefcase" style="width: 16px; height: 16px;"></i>
+                        Projets
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'disbursements' }" @click="viewTab = 'disbursements'">
+                        <i data-lucide="arrow-down-circle" style="width: 16px; height: 16px;"></i>
+                        Décaissements
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'documents' }" @click="viewTab = 'documents'">
+                        <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+                        Documents
+                    </button>
+                </div>
+
+                <!-- Tab: Overview -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'overview' }">
+                    <!-- Finance Summary -->
+                    <div class="finance-summary">
+                        <div class="finance-box highlight">
+                            <h4><i data-lucide="coins" style="width: 16px; height: 16px;"></i> Montant engagé</h4>
+                            <div class="amount" x-text="selectedFunding?.amount + ' Mds'"><small> FCFA</small></div>
+                        </div>
+                        <div class="finance-box">
+                            <h4><i data-lucide="arrow-down-circle" style="width: 16px; height: 16px;"></i> Décaissé</h4>
+                            <div class="amount" x-text="selectedFunding?.disbursed + ' Mds'"><small> FCFA</small></div>
+                        </div>
+                        <div class="finance-box">
+                            <h4><i data-lucide="clock" style="width: 16px; height: 16px;"></i> Reste à décaisser</h4>
+                            <div class="amount" x-text="(selectedFunding?.amount - selectedFunding?.disbursed).toFixed(1) + ' Mds'"><small> FCFA</small></div>
+                        </div>
+                        <div class="finance-box">
+                            <h4><i data-lucide="percent" style="width: 16px; height: 16px;"></i> Taux d'exécution</h4>
+                            <div class="amount" x-text="selectedFunding?.rate + '%'"></div>
+                        </div>
+                    </div>
+
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="hash" style="width: 14px; height: 14px;"></i>
+                                N° Convention
+                            </div>
+                            <div class="info-card-value" x-text="selectedFunding?.convention"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+                                Date de signature
+                            </div>
+                            <div class="info-card-value" x-text="selectedFunding?.signatureDate || '15 Mars 2023'"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="calendar-check" style="width: 14px; height: 14px;"></i>
+                                Date d'échéance
+                            </div>
+                            <div class="info-card-value" x-text="selectedFunding?.deadline"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="globe" style="width: 14px; height: 14px;"></i>
+                                Type de financement
+                            </div>
+                            <div class="info-card-value" x-text="selectedFunding?.type"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="percent" style="width: 14px; height: 14px;"></i>
+                                Taux d'intérêt
+                            </div>
+                            <div class="info-card-value" x-text="selectedFunding?.interestRate || '0.75%'"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+                                Durée
+                            </div>
+                            <div class="info-card-value" x-text="selectedFunding?.duration || '5 ans'"></div>
+                        </div>
+                        <div class="info-card full-width">
+                            <div class="info-card-label">
+                                <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
+                                Conditions particulières
+                            </div>
+                            <div class="info-card-value" style="font-weight: 400; line-height: 1.6;" x-text="selectedFunding?.conditions || 'Don avec contrepartie gouvernementale de 10%. Conditionnalités liées aux réformes sectorielles et aux indicateurs de performance.'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Projects -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'projects' }">
+                    <div class="projects-list">
+                        <div class="project-item">
+                            <div class="project-item-icon" style="background: linear-gradient(135deg, #002664, #1a4a8a);">
+                                <i data-lucide="road" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="project-item-info">
+                                <h5>Route Nationale N'Djamena - Abéché</h5>
+                                <p>PRJ-2024-001 • Infrastructure</p>
+                            </div>
+                            <div class="project-item-amount">
+                                <div class="value">18.5 Mds FCFA</div>
+                                <div class="percent">40% du financement</div>
+                            </div>
+                        </div>
+                        <div class="project-item">
+                            <div class="project-item-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
+                                <i data-lucide="zap" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="project-item-info">
+                                <h5>Centrale Solaire de Moundou</h5>
+                                <p>PRJ-2024-002 • Énergie</p>
+                            </div>
+                            <div class="project-item-amount">
+                                <div class="value">15.2 Mds FCFA</div>
+                                <div class="percent">33% du financement</div>
+                            </div>
+                        </div>
+                        <div class="project-item">
+                            <div class="project-item-icon" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
+                                <i data-lucide="droplets" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="project-item-info">
+                                <h5>Adduction d'Eau Potable Abéché</h5>
+                                <p>PRJ-2023-022 • Eau & Assainissement</p>
+                            </div>
+                            <div class="project-item-amount">
+                                <div class="value">12.3 Mds FCFA</div>
+                                <div class="percent">27% du financement</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Disbursements -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'disbursements' }">
+                    <div style="overflow-x: auto;">
+                        <table class="disbursements-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Référence</th>
+                                    <th>Projet</th>
+                                    <th>Montant</th>
+                                    <th>Statut</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>15 Nov 2025</td>
+                                    <td>DEC-2025-0156</td>
+                                    <td>Route N'Djamena - Abéché</td>
+                                    <td style="font-weight: 600;">2.5 Mds FCFA</td>
+                                    <td><span class="disbursement-status completed"><i data-lucide="check" style="width: 12px; height: 12px;"></i> Effectué</span></td>
+                                </tr>
+                                <tr>
+                                    <td>01 Oct 2025</td>
+                                    <td>DEC-2025-0142</td>
+                                    <td>Centrale Solaire Moundou</td>
+                                    <td style="font-weight: 600;">3.8 Mds FCFA</td>
+                                    <td><span class="disbursement-status completed"><i data-lucide="check" style="width: 12px; height: 12px;"></i> Effectué</span></td>
+                                </tr>
+                                <tr>
+                                    <td>15 Déc 2025</td>
+                                    <td>DEC-2025-0178</td>
+                                    <td>Adduction Eau Abéché</td>
+                                    <td style="font-weight: 600;">1.2 Mds FCFA</td>
+                                    <td><span class="disbursement-status pending"><i data-lucide="clock" style="width: 12px; height: 12px;"></i> En attente</span></td>
+                                </tr>
+                                <tr>
+                                    <td>20 Août 2025</td>
+                                    <td>DEC-2025-0098</td>
+                                    <td>Route N'Djamena - Abéché</td>
+                                    <td style="font-weight: 600;">4.2 Mds FCFA</td>
+                                    <td><span class="disbursement-status completed"><i data-lucide="check" style="width: 12px; height: 12px;"></i> Effectué</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Tab: Documents -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'documents' }">
+                    <div class="documents-list">
+                        <div class="document-item">
+                            <div class="document-icon pdf">
+                                <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="document-info">
+                                <h5>Convention de financement signée</h5>
+                                <p>PDF • 2.8 MB • 15 Mar 2023</p>
+                            </div>
+                            <div class="document-action">
+                                <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                            </div>
+                        </div>
+                        <div class="document-item">
+                            <div class="document-icon pdf">
+                                <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="document-info">
+                                <h5>Accord de projet</h5>
+                                <p>PDF • 1.5 MB • 20 Avr 2023</p>
+                            </div>
+                            <div class="document-action">
+                                <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                            </div>
+                        </div>
+                        <div class="document-item">
+                            <div class="document-icon xls">
+                                <i data-lucide="file-spreadsheet" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="document-info">
+                                <h5>Plan de décaissement</h5>
+                                <p>XLSX • 456 KB • 10 Déc 2025</p>
+                            </div>
+                            <div class="document-action">
+                                <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                            </div>
+                        </div>
+                        <div class="document-item">
+                            <div class="document-icon doc">
+                                <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="document-info">
+                                <h5>Rapport d'avancement Q3 2025</h5>
+                                <p>DOCX • 890 KB • 05 Oct 2025</p>
+                            </div>
+                            <div class="document-action">
+                                <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeViewModal()">Fermer</button>
+                <button class="btn btn-gold" @click="closeViewModal(); editFunding(selectedFunding)">
+                    <i data-lucide="pencil" style="width: 18px; height: 18px;"></i>
+                    Modifier
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Funding -->
+    <div class="modal-overlay" :class="{ 'active': showEditModal }" @click.self="closeEditModal()">
+        <div class="modal xlarge">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
+                        <i data-lucide="pencil" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    Modifier le financement
+                </h3>
+                <button class="modal-close" @click="closeEditModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form @submit.prevent="saveFunding()">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Source de financement <span class="required">*</span>
+                            </label>
+                            <select class="form-select" x-model="fundingForm.funder" required>
+                                <option value="">Sélectionner...</option>
+                                <template x-for="funder in funders" :key="funder.id">
+                                    <option :value="funder.id" x-text="funder.fullName"></option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                Type de financement <span class="required">*</span>
+                            </label>
+                            <select class="form-select" x-model="fundingForm.type" required>
+                                <option value="">Sélectionner...</option>
+                                <option value="Bilatéral">Bilatéral</option>
+                                <option value="Multilatéral">Multilatéral</option>
+                                <option value="National">National</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                N° Convention <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" x-model="fundingForm.convention" placeholder="Ex: CONV-BM-2024-001" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Statut</label>
+                            <select class="form-select" x-model="fundingForm.status">
+                                <option value="actif">Actif</option>
+                                <option value="en-negociation">En négociation</option>
+                                <option value="cloture">Clôturé</option>
+                                <option value="suspendu">Suspendu</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section-divider">
+                        <span>Montants</span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Montant engagé (Milliards FCFA) <span class="required">*</span>
+                            </label>
+                            <input type="number" step="0.1" class="form-input" x-model="fundingForm.amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Montant décaissé (Milliards FCFA)</label>
+                            <input type="number" step="0.1" class="form-input" x-model="fundingForm.disbursed">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Taux d'intérêt (%)</label>
+                            <input type="text" class="form-input" x-model="fundingForm.interestRate" placeholder="Ex: 0.75%">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Durée du financement</label>
+                            <input type="text" class="form-input" x-model="fundingForm.duration" placeholder="Ex: 5 ans">
+                        </div>
+                    </div>
+
+                    <div class="section-divider">
+                        <span>Dates</span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Date de signature</label>
+                            <input type="date" class="form-input" x-model="fundingForm.signatureDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date d'échéance</label>
+                            <input type="date" class="form-input" x-model="fundingForm.deadline">
+                        </div>
+                    </div>
+
+                    <div class="section-divider">
+                        <span>Conditions</span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">Conditions particulières</label>
+                            <textarea class="form-textarea" x-model="fundingForm.conditions" placeholder="Décrivez les conditions et modalités du financement..."></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeEditModal()">Annuler</button>
+                <button class="btn btn-primary" @click="saveFunding()">
+                    <i data-lucide="save" style="width: 18px; height: 18px;"></i>
+                    Enregistrer les modifications
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Delete Confirmation -->
+    <div class="modal-overlay" :class="{ 'active': showDeleteModal }" @click.self="closeDeleteModal()">
+        <div class="modal" style="max-width: 480px;">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <i data-lucide="alert-triangle" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    Confirmer la suppression
+                </h3>
+                <button class="modal-close" @click="closeDeleteModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    Êtes-vous sûr de vouloir supprimer le financement <strong x-text="selectedFunding?.name + ' - ' + selectedFunding?.convention"></strong> ? 
+                    Cette action est irréversible et toutes les données associées (décaissements, documents) seront perdues.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeDeleteModal()">Annuler</button>
+                <button class="btn btn-danger" @click="deleteFunding()">
+                    <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                    Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div class="toast" :class="toast.type">
+                <div class="toast-icon">
+                    <i :data-lucide="toast.type === 'success' ? 'check-circle' : 'alert-circle'" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="toast-content">
+                    <h5 x-text="toast.title"></h5>
+                    <p x-text="toast.message"></p>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        function fundingAdmin() {
+            return {
+                sidebarOpen: false,
+                theme: 'light',
+                searchQuery: '',
+                currentPage: 1,
+                itemsPerPage: 10,
+                
+                // Modals
+                showViewModal: false,
+                showEditModal: false,
+                showDeleteModal: false,
+                
+                // Selected funding
+                selectedFunding: null,
+                viewTab: 'overview',
+                
+                // Filters
+                filters: {
+                    status: '',
+                    type: '',
+                    funder: ''
+                },
+                
+                // Form
+                fundingForm: {
+                    funder: '',
+                    type: '',
+                    convention: '',
+                    status: 'actif',
+                    amount: 0,
+                    disbursed: 0,
+                    interestRate: '',
+                    duration: '',
+                    signatureDate: '',
+                    deadline: '',
+                    conditions: ''
+                },
+                
+                // Toasts
+                toasts: [],
+                
+                // Data
+                funders: [
+                    { id: 'national', name: 'Budget National', fullName: 'Budget National du Tchad', shortName: 'BN', iconClass: 'national' },
+                    { id: 'bm', name: 'Banque Mondiale', fullName: 'Banque Mondiale (BIRD/IDA)', shortName: 'BM', iconClass: 'bm' },
+                    { id: 'bad', name: 'BAD', fullName: 'Banque Africaine de Développement', shortName: 'BAD', iconClass: 'bad' },
+                    { id: 'afd', name: 'AFD', fullName: 'Agence Française de Développement', shortName: 'AFD', iconClass: 'afd' },
+                    { id: 'ue', name: 'Union Européenne', fullName: 'Union Européenne (FED)', shortName: 'UE', iconClass: 'ue' },
+                    { id: 'fida', name: 'FIDA', fullName: 'Fonds International de Développement Agricole', shortName: 'FIDA', iconClass: 'fida' },
+                    { id: 'oms', name: 'OMS', fullName: 'Organisation Mondiale de la Santé', shortName: 'OMS', iconClass: 'oms' },
+                    { id: 'pnud', name: 'PNUD', fullName: 'Programme des Nations Unies pour le Développement', shortName: 'PNUD', iconClass: 'pnud' }
+                ],
+                
+                fundings: [
+                    {
+                        id: 1,
+                        name: 'Banque Mondiale',
+                        fullName: 'Banque Mondiale (BIRD/IDA)',
+                        shortName: 'BM',
+                        iconClass: 'bm',
+                        type: 'Multilatéral',
+                        convention: 'CONV-BM-2023-001',
+                        amount: 46.0,
+                        disbursed: 28.5,
+                        rate: 62,
+                        status: 'actif',
+                        deadline: '31 Déc 2027',
+                        signatureDate: '15 Mar 2023',
+                        interestRate: '0.75%',
+                        duration: '5 ans',
+                        projectsCount: 3,
+                        conditions: 'Don IDA avec contrepartie gouvernementale de 10%. Conditionnalités liées aux réformes sectorielles.'
+                    },
+                    {
+                        id: 2,
+                        name: 'BAD',
+                        fullName: 'Banque Africaine de Développement',
+                        shortName: 'BAD',
+                        iconClass: 'bad',
+                        type: 'Multilatéral',
+                        convention: 'CONV-BAD-2023-015',
+                        amount: 28.5,
+                        disbursed: 15.8,
+                        rate: 55,
+                        status: 'actif',
+                        deadline: '30 Juin 2026',
+                        signatureDate: '20 Avr 2023',
+                        interestRate: '1.0%',
+                        duration: '4 ans',
+                        projectsCount: 2,
+                        conditions: 'Prêt concessionnel FAD. Décaissement conditionné aux études d\'impact.'
+                    },
+                    {
+                        id: 3,
+                        name: 'Budget National',
+                        fullName: 'Budget National du Tchad',
+                        shortName: 'BN',
+                        iconClass: 'national',
+                        type: 'National',
+                        convention: 'LFI-2024-PRJ',
+                        amount: 35.2,
+                        disbursed: 22.4,
+                        rate: 64,
+                        status: 'actif',
+                        deadline: '31 Déc 2025',
+                        signatureDate: '01 Jan 2024',
+                        interestRate: 'N/A',
+                        duration: '1 an (renouvelable)',
+                        projectsCount: 5,
+                        conditions: 'Allocation budgétaire annuelle. Suivi trimestriel par la Direction du Budget.'
+                    },
+                    {
+                        id: 4,
+                        name: 'AFD',
+                        fullName: 'Agence Française de Développement',
+                        shortName: 'AFD',
+                        iconClass: 'afd',
+                        type: 'Bilatéral',
+                        convention: 'CONV-AFD-2024-008',
+                        amount: 18.6,
+                        disbursed: 8.2,
+                        rate: 44,
+                        status: 'actif',
+                        deadline: '31 Déc 2028',
+                        signatureDate: '10 Jun 2024',
+                        interestRate: '0.5%',
+                        duration: '5 ans',
+                        projectsCount: 2,
+                        conditions: 'Don AFD secteur énergie. Co-financement avec BAD requis.'
+                    },
+                    {
+                        id: 5,
+                        name: 'Union Européenne',
+                        fullName: 'Union Européenne (FED)',
+                        shortName: 'UE',
+                        iconClass: 'ue',
+                        type: 'Multilatéral',
+                        convention: 'FED-11-TCH-2023',
+                        amount: 15.8,
+                        disbursed: 12.5,
+                        rate: 79,
+                        status: 'actif',
+                        deadline: '30 Sep 2025',
+                        signatureDate: '05 Fév 2023',
+                        interestRate: '0%',
+                        duration: '3 ans',
+                        projectsCount: 3,
+                        conditions: 'Subvention FED 11. Appui budgétaire sectoriel conditionnel.'
+                    },
+                    {
+                        id: 6,
+                        name: 'FIDA',
+                        fullName: 'Fonds International de Développement Agricole',
+                        shortName: 'FIDA',
+                        iconClass: 'fida',
+                        type: 'Multilatéral',
+                        convention: 'CONV-FIDA-2024-002',
+                        amount: 12.7,
+                        disbursed: 4.8,
+                        rate: 38,
+                        status: 'en-negociation',
+                        deadline: '31 Déc 2029',
+                        signatureDate: 'En cours',
+                        interestRate: '0.75%',
+                        duration: '6 ans',
+                        projectsCount: 1,
+                        conditions: 'Financement agriculture irriguée. Phase de négociation pour additif.'
+                    },
+                    {
+                        id: 7,
+                        name: 'OMS',
+                        fullName: 'Organisation Mondiale de la Santé',
+                        shortName: 'OMS',
+                        iconClass: 'oms',
+                        type: 'Multilatéral',
+                        convention: 'CONV-OMS-2023-SAN',
+                        amount: 8.4,
+                        disbursed: 6.2,
+                        rate: 74,
+                        status: 'actif',
+                        deadline: '31 Mar 2025',
+                        signatureDate: '12 Sep 2023',
+                        interestRate: '0%',
+                        duration: '2 ans',
+                        projectsCount: 2,
+                        conditions: 'Subvention santé publique. Focus sur infrastructures sanitaires rurales.'
+                    }
+                ],
+                
+                filteredFundings: [],
+                
+                init() {
+                    this.filteredFundings = [...this.fundings];
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                get totalPages() {
+                    return Math.ceil(this.filteredFundings.length / this.itemsPerPage) || 1;
+                },
+                
+                toggleTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', this.theme);
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                filterFundings() {
+                    this.filteredFundings = this.fundings.filter(funding => {
+                        const matchesSearch = !this.searchQuery || 
+                            funding.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                            funding.convention.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        
+                        const matchesStatus = !this.filters.status || funding.status === this.filters.status;
+                        
+                        const matchesType = !this.filters.type || 
+                            funding.type.toLowerCase().includes(this.filters.type.toLowerCase());
+                        
+                        const matchesFunder = !this.filters.funder || 
+                            funding.iconClass === this.filters.funder;
+                        
+                        return matchesSearch && matchesStatus && matchesType && matchesFunder;
+                    });
+                    this.currentPage = 1;
+                },
+                
+                sortBy(field) {
+                    this.filteredFundings.reverse();
+                },
+                
+                refreshFundings() {
+                    this.filterFundings();
+                    this.showToast('success', 'Actualisé', 'Liste des financements mise à jour');
+                },
+                
+                exportFundings() {
+                    this.showToast('success', 'Export', 'Export des financements en cours...');
+                },
+                
+                // View Modal
+                viewFunding(funding) {
+                    this.selectedFunding = funding;
+                    this.viewTab = 'overview';
+                    this.showViewModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeViewModal() {
+                    this.showViewModal = false;
+                    this.selectedFunding = null;
+                },
+                
+                // Edit Modal
+                editFunding(funding) {
+                    this.selectedFunding = funding;
+                    this.fundingForm = {
+                        funder: funding.iconClass,
+                        type: funding.type,
+                        convention: funding.convention,
+                        status: funding.status,
+                        amount: funding.amount,
+                        disbursed: funding.disbursed,
+                        interestRate: funding.interestRate,
+                        duration: funding.duration,
+                        signatureDate: '',
+                        deadline: '',
+                        conditions: funding.conditions || ''
+                    };
+                    this.showEditModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeEditModal() {
+                    this.showEditModal = false;
+                },
+                
+                saveFunding() {
+                    if (!this.fundingForm.funder || !this.fundingForm.convention) {
+                        this.showToast('error', 'Erreur', 'Veuillez remplir tous les champs obligatoires');
+                        return;
+                    }
+                    
+                    const index = this.fundings.findIndex(f => f.id === this.selectedFunding.id);
+                    if (index !== -1) {
+                        const funder = this.funders.find(f => f.id === this.fundingForm.funder);
+                        this.fundings[index] = {
+                            ...this.fundings[index],
+                            name: funder?.name || this.fundings[index].name,
+                            fullName: funder?.fullName || this.fundings[index].fullName,
+                            shortName: funder?.shortName || this.fundings[index].shortName,
+                            iconClass: this.fundingForm.funder,
+                            type: this.fundingForm.type,
+                            convention: this.fundingForm.convention,
+                            status: this.fundingForm.status,
+                            amount: parseFloat(this.fundingForm.amount),
+                            disbursed: parseFloat(this.fundingForm.disbursed),
+                            rate: Math.round((parseFloat(this.fundingForm.disbursed) / parseFloat(this.fundingForm.amount)) * 100),
+                            interestRate: this.fundingForm.interestRate,
+                            duration: this.fundingForm.duration,
+                            conditions: this.fundingForm.conditions
+                        };
+                    }
+                    
+                    this.filterFundings();
+                    this.showToast('success', 'Enregistré', 'Financement mis à jour avec succès');
+                    this.closeEditModal();
+                },
+                
+                // Delete Modal
+                confirmDelete(funding) {
+                    this.selectedFunding = funding;
+                    this.showDeleteModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeDeleteModal() {
+                    this.showDeleteModal = false;
+                },
+                
+                deleteFunding() {
+                    if (this.selectedFunding) {
+                        this.fundings = this.fundings.filter(f => f.id !== this.selectedFunding.id);
+                        this.filterFundings();
+                        this.showToast('success', 'Supprimé', 'Financement supprimé avec succès');
+                    }
+                    this.closeDeleteModal();
+                },
+                
+                // Helpers
+                getStatusLabel(status) {
+                    const labels = {
+                        'actif': 'Actif',
+                        'en-negociation': 'En négociation',
+                        'cloture': 'Clôturé',
+                        'suspendu': 'Suspendu'
+                    };
+                    return labels[status] || status;
+                },
+                
+                getProgressClass(rate) {
+                    if (rate >= 70) return 'gold';
+                    if (rate >= 50) return 'green';
+                    if (rate >= 25) return 'blue';
+                    return 'red';
+                },
+                
+                getFunderGradient(iconClass) {
+                    const gradients = {
+                        'national': 'linear-gradient(135deg, #002664, #1a4a8a)',
+                        'bm': 'linear-gradient(135deg, #0066b3, #009cde)',
+                        'bad': 'linear-gradient(135deg, #1d4e89, #3a7bd5)',
+                        'afd': 'linear-gradient(135deg, #e30613, #ff4444)',
+                        'ue': 'linear-gradient(135deg, #003399, #0055cc)',
+                        'fida': 'linear-gradient(135deg, #f7941e, #fbb03b)',
+                        'oms': 'linear-gradient(135deg, #009cde, #00b4e6)',
+                        'pnud': 'linear-gradient(135deg, #0468b1, #45b0e5)'
+                    };
+                    return gradients[iconClass] || 'var(--accent-gradient)';
+                },
+                
+                showToast(type, title, message) {
+                    const id = Date.now();
+                    this.toasts.push({ id, type, title, message });
+                    this.$nextTick(() => lucide.createIcons());
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 4000);
+                }
+            };
+        }
+    </script>
+</body>
+</html>

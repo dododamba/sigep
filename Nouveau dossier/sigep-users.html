@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Utilisateurs - SIGEP Tchad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            
+            --accent-primary: #002664;
+            --accent-secondary: #1a4a8a;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f1724;
+            --bg-secondary: #1a2535;
+            --bg-tertiary: #243244;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            background: var(--accent-gradient);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            padding: 6px;
+        }
+
+        .sidebar-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .user-info {
+            padding: 16px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .user-role {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            background: rgba(198, 12, 48, 0.1);
+            color: var(--tchad-red);
+            border-radius: 20px;
+            margin-top: 4px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 20px;
+        }
+
+        .nav-section-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 14px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--tchad-gold);
+            color: var(--tchad-blue);
+            font-weight: 600;
+        }
+
+        .nav-item.active .nav-badge {
+            background: rgba(255,255,255,0.25);
+            color: white;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 16px;
+            min-width: 320px;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 38, 100, 0.1);
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .header-btn .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            background: var(--tchad-red);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            padding: 32px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+        }
+
+        .page-header-left h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header-left p {
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .page-header-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .page-header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* ========== STATS CARDS ========== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .mini-stat {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .mini-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mini-stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .mini-stat-icon.blue { background: rgba(0, 38, 100, 0.1); color: var(--tchad-blue); }
+        .mini-stat-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .mini-stat-icon.gold { background: rgba(254, 203, 0, 0.2); color: #b8860b; }
+        .mini-stat-icon.red { background: rgba(198, 12, 48, 0.1); color: var(--tchad-red); }
+
+        .mini-stat-content h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .mini-stat-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* ========== CARD ========== */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--accent-primary);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 0;
+        }
+
+        /* ========== FILTERS BAR ========== */
+        .filters-bar {
+            display: flex;
+            gap: 12px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .filter-select {
+            padding: 8px 32px 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a8fa3' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .filter-search {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .filter-search input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .filter-search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        /* ========== DATA TABLE ========== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .data-table th.sortable:hover {
+            color: var(--accent-primary);
+        }
+
+        .data-table td {
+            font-size: 0.9rem;
+        }
+
+        .data-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* User Cell */
+        .user-cell {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-cell-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        .user-cell-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            object-fit: cover;
+        }
+
+        .user-cell-info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-cell-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .status-badge.inactive {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .status-badge.pending {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Role Badge */
+        .role-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 4px;
+            margin-bottom: 4px;
+        }
+
+        .role-badge.admin {
+            background: rgba(198, 12, 48, 0.1);
+            color: var(--tchad-red);
+        }
+
+        .role-badge.manager {
+            background: rgba(0, 38, 100, 0.1);
+            color: var(--tchad-blue);
+        }
+
+        .role-badge.user {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .role-badge.viewer {
+            background: rgba(107, 114, 128, 0.1);
+            color: var(--text-secondary);
+        }
+
+        /* Actions Cell */
+        .actions-cell {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.05);
+        }
+
+        .action-btn.view:hover {
+            border-color: var(--info);
+            color: var(--info);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .action-btn.edit:hover {
+            border-color: var(--warning);
+            color: var(--warning);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .action-btn.delete:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* ========== PAGINATION ========== */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .table-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .pagination {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pagination-btn {
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 12px;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .pagination-btn.active {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 38, 100, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: var(--tchad-blue);
+        }
+
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+        }
+
+        .btn-lg {
+            padding: 14px 28px;
+            font-size: 0.95rem;
+        }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 720px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal.large {
+            max-width: 900px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-title-icon {
+            width: 44px;
+            height: 44px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .modal-body {
+            padding: 28px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 28px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        /* ========== FORM STYLES ========== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-grid.single {
+            grid-template-columns: 1fr;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 4px rgba(0, 38, 100, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* ========== SECTION DIVIDER ========== */
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 28px 0;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .section-divider span {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        /* ========== ROLES & PERMISSIONS ========== */
+        .roles-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .role-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .role-checkbox:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.02);
+        }
+
+        .role-checkbox.selected {
+            border-color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.05);
+        }
+
+        .role-checkbox input {
+            display: none;
+        }
+
+        .role-checkbox-marker {
+            width: 22px;
+            height: 22px;
+            border: 2px solid var(--border-color);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: transparent;
+            flex-shrink: 0;
+        }
+
+        .role-checkbox.selected .role-checkbox-marker {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+
+        .role-checkbox-content h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .role-checkbox-content p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Permissions Accordion */
+        .permissions-section {
+            margin-top: 20px;
+        }
+
+        .permission-group {
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+
+        .permission-group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 18px;
+            background: var(--bg-tertiary);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .permission-group-header:hover {
+            background: var(--bg-primary);
+        }
+
+        .permission-group-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .permission-group-title i {
+            color: var(--accent-primary);
+        }
+
+        .permission-group-toggle {
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .permission-group.open .permission-group-toggle {
+            transform: rotate(180deg);
+        }
+
+        .permission-group-content {
+            padding: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .permission-group.open .permission-group-content {
+            padding: 16px 18px;
+            max-height: 500px;
+        }
+
+        .permission-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .permission-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .permission-item input {
+            display: none;
+        }
+
+        .permission-marker {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+            color: transparent;
+            flex-shrink: 0;
+        }
+
+        .permission-item.checked .permission-marker {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .permission-item span {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .permission-item.checked span {
+            color: var(--text-primary);
+        }
+
+        /* ========== VIEW USER DETAILS ========== */
+        .user-profile-header {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .user-profile-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 16px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.75rem;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .user-profile-info h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .user-profile-info p {
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+        }
+
+        .user-profile-badges {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .info-item {
+            padding: 16px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+        }
+
+        .info-item-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-item-value {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* ========== TOAST ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            min-width: 320px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .toast-content h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1400px) {
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .roles-grid,
+            .permission-list {
+                grid-template-columns: 1fr;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .filter-search {
+                min-width: 100%;
+            }
+
+            .modal {
+                max-height: 95vh;
+            }
+
+            .modal-body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body x-data="usersAdmin()">
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ 'open': sidebarOpen }">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fecb00"/>
+                            <stop offset="100%" style="stop-color:#e6b800"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="url(#shieldGrad)" stroke="#002664" stroke-width="2"/>
+                    <rect x="15" y="25" width="23" height="45" fill="#002664"/>
+                    <rect x="38" y="25" width="24" height="45" fill="#fecb00"/>
+                    <rect x="62" y="25" width="23" height="45" fill="#c60c30"/>
+                    <polygon points="50,30 53,40 63,40 55,47 58,57 50,51 42,57 45,47 37,40 47,40" fill="#002664"/>
+                    <circle cx="50" cy="15" r="6" fill="#fecb00" stroke="#002664" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+                <span>Gestion des Projets Publics</span>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">SA</div>
+                <div class="user-details">
+                    <h4>Super Admin</h4>
+                    <p>Administration Système</p>
+                    <span class="user-role">Administrateur</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Administration</div>
+                <a class="nav-item" href="sigep-dashboard.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a class="nav-item active">
+                    <i data-lucide="users"></i>
+                    <span>Utilisateurs</span>
+                    <span class="nav-badge" x-text="users.length"></span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="shield"></i>
+                    <span>Rôles & Permissions</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="building-2"></i>
+                    <span>Directions</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="landmark"></i>
+                    <span>Institutions</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Paramètres</div>
+                <a class="nav-item">
+                    <i data-lucide="settings"></i>
+                    <span>Configuration</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="database"></i>
+                    <span>Sauvegarde</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="file-text"></i>
+                    <span>Logs système</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Compte</div>
+                <a class="nav-item">
+                    <i data-lucide="user-circle"></i>
+                    <span>Mon profil</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="log-out"></i>
+                    <span>Se déconnecter</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" @click="sidebarOpen = !sidebarOpen">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="search-box">
+                    <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted);"></i>
+                    <input type="text" placeholder="Rechercher un utilisateur..." x-model="searchQuery" @input="filterUsers()">
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-btn">
+                    <i data-lucide="bell"></i>
+                    <span class="badge">2</span>
+                </button>
+                <button class="header-btn theme-toggle" @click="toggleTheme()">
+                    <i data-lucide="sun" x-show="theme === 'dark'"></i>
+                    <i data-lucide="moon" x-show="theme === 'light'"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h2>
+                        <span class="page-header-icon">
+                            <i data-lucide="users"></i>
+                        </span>
+                        Gestion des Utilisateurs
+                    </h2>
+                    <p>Administrez les comptes utilisateurs, rôles et permissions</p>
+                </div>
+                <div class="page-header-actions">
+                    <button class="btn btn-secondary" @click="exportUsers()">
+                        <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                        Exporter
+                    </button>
+                    <button class="btn btn-primary" @click="openAddModal()">
+                        <i data-lucide="user-plus" style="width: 18px; height: 18px;"></i>
+                        Nouvel utilisateur
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="mini-stat">
+                    <div class="mini-stat-icon blue">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3 x-text="users.length">0</h3>
+                        <p>Total utilisateurs</p>
+                    </div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon green">
+                        <i data-lucide="user-check"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3 x-text="users.filter(u => u.status === 'active').length">0</h3>
+                        <p>Utilisateurs actifs</p>
+                    </div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon gold">
+                        <i data-lucide="shield"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3 x-text="roles.length">0</h3>
+                        <p>Rôles définis</p>
+                    </div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-icon red">
+                        <i data-lucide="user-x"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3 x-text="users.filter(u => u.status === 'inactive').length">0</h3>
+                        <p>Comptes inactifs</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Users Table Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i data-lucide="list"></i>
+                        Liste des utilisateurs
+                    </h3>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-sm" @click="refreshUsers()">
+                            <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                            Actualiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <span class="filter-label">Statut:</span>
+                        <select class="filter-select" x-model="filters.status" @change="filterUsers()">
+                            <option value="">Tous</option>
+                            <option value="active">Actif</option>
+                            <option value="inactive">Inactif</option>
+                            <option value="pending">En attente</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Rôle:</span>
+                        <select class="filter-select" x-model="filters.role" @change="filterUsers()">
+                            <option value="">Tous les rôles</option>
+                            <template x-for="role in roles" :key="role.id">
+                                <option :value="role.id" x-text="role.name"></option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Direction:</span>
+                        <select class="filter-select" x-model="filters.direction" @change="filterUsers()">
+                            <option value="">Toutes</option>
+                            <template x-for="dir in directions" :key="dir.id">
+                                <option :value="dir.id" x-text="dir.name"></option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="filter-search">
+                        <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                        <input type="text" placeholder="Filtrer par nom, email..." x-model="searchQuery" @input="filterUsers()">
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" @click="sortBy('name')">
+                                    Utilisateur
+                                    <i data-lucide="chevrons-up-down" style="width: 14px; height: 14px; margin-left: 4px;"></i>
+                                </th>
+                                <th>Direction</th>
+                                <th>Rôles</th>
+                                <th class="sortable" @click="sortBy('status')">Statut</th>
+                                <th class="sortable" @click="sortBy('lastLogin')">Dernière connexion</th>
+                                <th style="width: 140px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="user in filteredUsers" :key="user.id">
+                                <tr>
+                                    <td>
+                                        <div class="user-cell">
+                                            <div class="user-cell-avatar" x-text="user.initials"></div>
+                                            <div class="user-cell-info">
+                                                <h4 x-text="user.name"></h4>
+                                                <p x-text="user.email"></p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td x-text="user.direction"></td>
+                                    <td>
+                                        <template x-for="role in user.roles" :key="role">
+                                            <span class="role-badge" :class="getRoleClass(role)" x-text="role"></span>
+                                        </template>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge" :class="user.status">
+                                            <span class="status-dot"></span>
+                                            <span x-text="getStatusLabel(user.status)"></span>
+                                        </span>
+                                    </td>
+                                    <td x-text="user.lastLogin"></td>
+                                    <td>
+                                        <div class="actions-cell">
+                                            <button class="action-btn view" @click="viewUser(user)" title="Voir">
+                                                <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <button class="action-btn edit" @click="editUser(user)" title="Modifier">
+                                                <i data-lucide="pencil" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <button class="action-btn" @click="openPermissionsModal(user)" title="Permissions">
+                                                <i data-lucide="shield" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <button class="action-btn delete" @click="confirmDelete(user)" title="Supprimer">
+                                                <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="table-footer">
+                    <div class="table-info">
+                        Affichage de <strong x-text="filteredUsers.length"></strong> sur <strong x-text="users.length"></strong> utilisateurs
+                    </div>
+                    <div class="pagination">
+                        <button class="pagination-btn" :disabled="currentPage === 1" @click="currentPage--">
+                            <i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <template x-for="page in totalPages" :key="page">
+                            <button class="pagination-btn" :class="{ 'active': currentPage === page }" @click="currentPage = page" x-text="page"></button>
+                        </template>
+                        <button class="pagination-btn" :disabled="currentPage === totalPages" @click="currentPage++">
+                            <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: Add/Edit User -->
+    <div class="modal-overlay" :class="{ 'active': showUserModal }" @click.self="closeUserModal()">
+        <div class="modal large">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon">
+                        <i :data-lucide="isEditing ? 'user-pen' : 'user-plus'" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    <span x-text="isEditing ? 'Modifier l\'utilisateur' : 'Nouvel utilisateur'"></span>
+                </h3>
+                <button class="modal-close" @click="closeUserModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form @submit.prevent="saveUser()">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Nom <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" x-model="userForm.lastName" placeholder="Nom de famille" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                Prénom <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" x-model="userForm.firstName" placeholder="Prénom" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                Email <span class="required">*</span>
+                            </label>
+                            <input type="email" class="form-input" x-model="userForm.email" placeholder="email@ministere.td" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Téléphone</label>
+                            <input type="tel" class="form-input" x-model="userForm.phone" placeholder="+235 XX XX XX XX">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                Direction <span class="required">*</span>
+                            </label>
+                            <select class="form-select" x-model="userForm.direction" required>
+                                <option value="">Sélectionner une direction</option>
+                                <template x-for="dir in directions" :key="dir.id">
+                                    <option :value="dir.id" x-text="dir.name"></option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Fonction</label>
+                            <input type="text" class="form-input" x-model="userForm.position" placeholder="Ex: Chef de projet">
+                        </div>
+                        <div class="form-group" x-show="!isEditing">
+                            <label class="form-label">
+                                Mot de passe <span class="required">*</span>
+                            </label>
+                            <input type="password" class="form-input" x-model="userForm.password" placeholder="••••••••" :required="!isEditing">
+                            <span class="form-hint">Minimum 8 caractères</span>
+                        </div>
+                        <div class="form-group" x-show="!isEditing">
+                            <label class="form-label">
+                                Confirmer le mot de passe <span class="required">*</span>
+                            </label>
+                            <input type="password" class="form-input" x-model="userForm.confirmPassword" placeholder="••••••••" :required="!isEditing">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Statut</label>
+                            <select class="form-select" x-model="userForm.status">
+                                <option value="active">Actif</option>
+                                <option value="inactive">Inactif</option>
+                                <option value="pending">En attente</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="section-divider">
+                        <span>Attribution des rôles</span>
+                    </div>
+
+                    <div class="roles-grid">
+                        <template x-for="role in roles" :key="role.id">
+                            <label class="role-checkbox" :class="{ 'selected': userForm.roles.includes(role.id) }">
+                                <input type="checkbox" :value="role.id" x-model="userForm.roles">
+                                <span class="role-checkbox-marker">
+                                    <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                                </span>
+                                <div class="role-checkbox-content">
+                                    <h5 x-text="role.name"></h5>
+                                    <p x-text="role.description"></p>
+                                </div>
+                            </label>
+                        </template>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeUserModal()">Annuler</button>
+                <button class="btn btn-primary" @click="saveUser()">
+                    <i data-lucide="save" style="width: 18px; height: 18px;"></i>
+                    <span x-text="isEditing ? 'Enregistrer' : 'Créer l\'utilisateur'"></span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: View User -->
+    <div class="modal-overlay" :class="{ 'active': showViewModal }" @click.self="closeViewModal()">
+        <div class="modal large">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon">
+                        <i data-lucide="user" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    Détails de l'utilisateur
+                </h3>
+                <button class="modal-close" @click="closeViewModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body" x-show="selectedUser">
+                <!-- User Header -->
+                <div class="user-profile-header">
+                    <div class="user-profile-avatar" x-text="selectedUser?.initials"></div>
+                    <div class="user-profile-info">
+                        <h3 x-text="selectedUser?.name"></h3>
+                        <p x-text="selectedUser?.email"></p>
+                        <div class="user-profile-badges">
+                            <template x-for="role in selectedUser?.roles || []" :key="role">
+                                <span class="role-badge" :class="getRoleClass(role)" x-text="role"></span>
+                            </template>
+                            <span class="status-badge" :class="selectedUser?.status">
+                                <span class="status-dot"></span>
+                                <span x-text="getStatusLabel(selectedUser?.status)"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs-nav">
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'info' }" @click="viewTab = 'info'">
+                        <i data-lucide="user" style="width: 16px; height: 16px;"></i>
+                        Informations
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'permissions' }" @click="viewTab = 'permissions'">
+                        <i data-lucide="shield" style="width: 16px; height: 16px;"></i>
+                        Permissions
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'activity' }" @click="viewTab = 'activity'">
+                        <i data-lucide="activity" style="width: 16px; height: 16px;"></i>
+                        Activité
+                    </button>
+                </div>
+
+                <!-- Tab: Info -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'info' }">
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <i data-lucide="building-2" style="width: 14px; height: 14px;"></i>
+                                Direction
+                            </div>
+                            <div class="info-item-value" x-text="selectedUser?.direction"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <i data-lucide="briefcase" style="width: 14px; height: 14px;"></i>
+                                Fonction
+                            </div>
+                            <div class="info-item-value" x-text="selectedUser?.position || 'Non défini'"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <i data-lucide="phone" style="width: 14px; height: 14px;"></i>
+                                Téléphone
+                            </div>
+                            <div class="info-item-value" x-text="selectedUser?.phone || 'Non renseigné'"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+                                Date de création
+                            </div>
+                            <div class="info-item-value" x-text="selectedUser?.createdAt"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <i data-lucide="clock" style="width: 14px; height: 14px;"></i>
+                                Dernière connexion
+                            </div>
+                            <div class="info-item-value" x-text="selectedUser?.lastLogin"></div>
+                        </div>
+                        <div class="info-item">
+                            <div class="info-item-label">
+                                <i data-lucide="hash" style="width: 14px; height: 14px;"></i>
+                                ID Utilisateur
+                            </div>
+                            <div class="info-item-value" x-text="'USR-' + selectedUser?.id"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Permissions -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'permissions' }">
+                    <template x-for="group in permissionGroups" :key="group.id">
+                        <div class="permission-group" :class="{ 'open': openPermissionGroups.includes(group.id) }">
+                            <div class="permission-group-header" @click="togglePermissionGroup(group.id)">
+                                <div class="permission-group-title">
+                                    <i :data-lucide="group.icon" style="width: 18px; height: 18px;"></i>
+                                    <span x-text="group.name"></span>
+                                </div>
+                                <i data-lucide="chevron-down" class="permission-group-toggle" style="width: 18px; height: 18px;"></i>
+                            </div>
+                            <div class="permission-group-content">
+                                <div class="permission-list">
+                                    <template x-for="perm in group.permissions" :key="perm.id">
+                                        <div class="permission-item" :class="{ 'checked': selectedUser?.permissions?.includes(perm.id) }">
+                                            <span class="permission-marker">
+                                                <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                                            </span>
+                                            <span x-text="perm.label"></span>
+                                        </div>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+
+                <!-- Tab: Activity -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'activity' }">
+                    <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+                        <i data-lucide="activity" style="width: 48px; height: 48px; margin-bottom: 16px; opacity: 0.5;"></i>
+                        <p>Historique d'activité à venir...</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeViewModal()">Fermer</button>
+                <button class="btn btn-gold" @click="closeViewModal(); editUser(selectedUser)">
+                    <i data-lucide="pencil" style="width: 18px; height: 18px;"></i>
+                    Modifier
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Permissions ACL -->
+    <div class="modal-overlay" :class="{ 'active': showPermissionsModal }" @click.self="closePermissionsModal()">
+        <div class="modal large">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon" style="background: linear-gradient(135deg, #059669, #10b981);">
+                        <i data-lucide="shield-check" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    Gérer les permissions ACL
+                </h3>
+                <button class="modal-close" @click="closePermissionsModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body" x-show="selectedUser">
+                <div class="user-profile-header" style="padding-bottom: 20px; margin-bottom: 20px;">
+                    <div class="user-profile-avatar" x-text="selectedUser?.initials"></div>
+                    <div class="user-profile-info">
+                        <h3 x-text="selectedUser?.name"></h3>
+                        <p x-text="selectedUser?.email"></p>
+                    </div>
+                </div>
+
+                <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.9rem;">
+                    Définissez les permissions spécifiques pour cet utilisateur. Ces permissions s'ajoutent à celles héritées de ses rôles.
+                </p>
+
+                <div class="permissions-section">
+                    <template x-for="group in permissionGroups" :key="group.id">
+                        <div class="permission-group" :class="{ 'open': openPermissionGroups.includes(group.id) }">
+                            <div class="permission-group-header" @click="togglePermissionGroup(group.id)">
+                                <div class="permission-group-title">
+                                    <i :data-lucide="group.icon" style="width: 18px; height: 18px;"></i>
+                                    <span x-text="group.name"></span>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 400;" x-text="'(' + group.permissions.length + ' permissions)'"></span>
+                                </div>
+                                <i data-lucide="chevron-down" class="permission-group-toggle" style="width: 18px; height: 18px;"></i>
+                            </div>
+                            <div class="permission-group-content">
+                                <div class="permission-list">
+                                    <template x-for="perm in group.permissions" :key="perm.id">
+                                        <label class="permission-item" :class="{ 'checked': userPermissions.includes(perm.id) }" @click="togglePermission(perm.id)">
+                                            <input type="checkbox" :checked="userPermissions.includes(perm.id)">
+                                            <span class="permission-marker">
+                                                <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                                            </span>
+                                            <span x-text="perm.label"></span>
+                                        </label>
+                                    </template>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closePermissionsModal()">Annuler</button>
+                <button class="btn btn-success" @click="savePermissions()">
+                    <i data-lucide="shield-check" style="width: 18px; height: 18px;"></i>
+                    Enregistrer les permissions
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Delete Confirmation -->
+    <div class="modal-overlay" :class="{ 'active': showDeleteModal }" @click.self="closeDeleteModal()">
+        <div class="modal" style="max-width: 480px;">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <i data-lucide="alert-triangle" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    Confirmer la suppression
+                </h3>
+                <button class="modal-close" @click="closeDeleteModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    Êtes-vous sûr de vouloir supprimer l'utilisateur <strong x-text="selectedUser?.name"></strong> ? 
+                    Cette action est irréversible et toutes les données associées seront perdues.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeDeleteModal()">Annuler</button>
+                <button class="btn btn-danger" @click="deleteUser()">
+                    <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                    Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div class="toast" :class="toast.type">
+                <div class="toast-icon">
+                    <i :data-lucide="toast.type === 'success' ? 'check-circle' : 'alert-circle'" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="toast-content">
+                    <h5 x-text="toast.title"></h5>
+                    <p x-text="toast.message"></p>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        function usersAdmin() {
+            return {
+                sidebarOpen: false,
+                theme: 'light',
+                searchQuery: '',
+                currentPage: 1,
+                itemsPerPage: 10,
+                
+                // Modals
+                showUserModal: false,
+                showViewModal: false,
+                showPermissionsModal: false,
+                showDeleteModal: false,
+                isEditing: false,
+                
+                // Selected user
+                selectedUser: null,
+                viewTab: 'info',
+                
+                // Filters
+                filters: {
+                    status: '',
+                    role: '',
+                    direction: ''
+                },
+                
+                // Form
+                userForm: {
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    phone: '',
+                    direction: '',
+                    position: '',
+                    password: '',
+                    confirmPassword: '',
+                    status: 'active',
+                    roles: []
+                },
+                
+                // Permissions
+                userPermissions: [],
+                openPermissionGroups: [],
+                
+                // Toasts
+                toasts: [],
+                
+                // Data
+                roles: [
+                    { id: 'admin', name: 'Administrateur', description: 'Accès complet au système' },
+                    { id: 'manager', name: 'Chef de projet', description: 'Gestion des projets et équipes' },
+                    { id: 'user', name: 'Utilisateur', description: 'Accès standard aux projets' },
+                    { id: 'viewer', name: 'Observateur', description: 'Consultation seule' }
+                ],
+                
+                directions: [
+                    { id: 1, name: 'Direction Générale' },
+                    { id: 2, name: 'Direction des Infrastructures' },
+                    { id: 3, name: 'Direction de la Santé' },
+                    { id: 4, name: 'Direction de l\'Énergie' },
+                    { id: 5, name: 'Direction de l\'Agriculture' },
+                    { id: 6, name: 'Direction de l\'Éducation' },
+                    { id: 7, name: 'Direction Financière' }
+                ],
+                
+                permissionGroups: [
+                    {
+                        id: 'projects',
+                        name: 'Projets',
+                        icon: 'briefcase',
+                        permissions: [
+                            { id: 'projects.view', label: 'Voir les projets' },
+                            { id: 'projects.create', label: 'Créer des projets' },
+                            { id: 'projects.edit', label: 'Modifier les projets' },
+                            { id: 'projects.delete', label: 'Supprimer des projets' },
+                            { id: 'projects.assign', label: 'Assigner des membres' },
+                            { id: 'projects.export', label: 'Exporter les données' }
+                        ]
+                    },
+                    {
+                        id: 'finance',
+                        name: 'Finances',
+                        icon: 'wallet',
+                        permissions: [
+                            { id: 'finance.view', label: 'Voir les finances' },
+                            { id: 'finance.create', label: 'Créer des opérations' },
+                            { id: 'finance.approve', label: 'Approuver les décaissements' },
+                            { id: 'finance.reports', label: 'Générer des rapports' }
+                        ]
+                    },
+                    {
+                        id: 'users',
+                        name: 'Utilisateurs',
+                        icon: 'users',
+                        permissions: [
+                            { id: 'users.view', label: 'Voir les utilisateurs' },
+                            { id: 'users.create', label: 'Créer des utilisateurs' },
+                            { id: 'users.edit', label: 'Modifier les utilisateurs' },
+                            { id: 'users.delete', label: 'Supprimer des utilisateurs' },
+                            { id: 'users.roles', label: 'Gérer les rôles' },
+                            { id: 'users.permissions', label: 'Gérer les permissions' }
+                        ]
+                    },
+                    {
+                        id: 'reports',
+                        name: 'Rapports & Analyses',
+                        icon: 'bar-chart-3',
+                        permissions: [
+                            { id: 'reports.view', label: 'Voir les rapports' },
+                            { id: 'reports.create', label: 'Créer des rapports' },
+                            { id: 'reports.export', label: 'Exporter en PDF/Excel' },
+                            { id: 'reports.share', label: 'Partager les rapports' }
+                        ]
+                    },
+                    {
+                        id: 'settings',
+                        name: 'Paramètres système',
+                        icon: 'settings',
+                        permissions: [
+                            { id: 'settings.view', label: 'Voir les paramètres' },
+                            { id: 'settings.edit', label: 'Modifier les paramètres' },
+                            { id: 'settings.backup', label: 'Sauvegarder le système' },
+                            { id: 'settings.logs', label: 'Voir les logs' }
+                        ]
+                    }
+                ],
+                
+                users: [
+                    { id: 1, name: 'Abdoulaye Damba', initials: 'AD', email: 'a.damba@mepd.td', direction: 'Direction Générale', position: 'Chef de projet', phone: '+235 66 12 34 56', roles: ['Administrateur', 'Chef de projet'], status: 'active', lastLogin: '17 Déc 2025, 08:45', createdAt: '15 Jan 2024', permissions: ['projects.view', 'projects.create', 'projects.edit', 'finance.view', 'users.view'] },
+                    { id: 2, name: 'Fatima Hassan', initials: 'FH', email: 'f.hassan@mepd.td', direction: 'Direction Financière', position: 'Contrôleur', phone: '+235 66 23 45 67', roles: ['Chef de projet'], status: 'active', lastLogin: '16 Déc 2025, 14:30', createdAt: '20 Mar 2024', permissions: ['finance.view', 'finance.create', 'finance.approve', 'reports.view'] },
+                    { id: 3, name: 'Ibrahim Moussa', initials: 'IM', email: 'i.moussa@mepd.td', direction: 'Direction des Infrastructures', position: 'Ingénieur', phone: '+235 66 34 56 78', roles: ['Utilisateur'], status: 'active', lastLogin: '17 Déc 2025, 10:15', createdAt: '05 Jun 2024', permissions: ['projects.view', 'projects.edit'] },
+                    { id: 4, name: 'Mariam Youssouf', initials: 'MY', email: 'm.youssouf@mepd.td', direction: 'Direction de la Santé', position: 'Coordinatrice', phone: '+235 66 45 67 89', roles: ['Chef de projet'], status: 'active', lastLogin: '15 Déc 2025, 16:20', createdAt: '12 Aug 2024', permissions: ['projects.view', 'projects.create', 'reports.view', 'reports.create'] },
+                    { id: 5, name: 'Ali Brahim', initials: 'AB', email: 'a.brahim@mepd.td', direction: 'Direction de l\'Énergie', position: 'Technicien', phone: '+235 66 56 78 90', roles: ['Utilisateur'], status: 'inactive', lastLogin: '01 Nov 2025, 09:00', createdAt: '25 Sep 2024', permissions: ['projects.view'] },
+                    { id: 6, name: 'Khadija Mahamat', initials: 'KM', email: 'k.mahamat@mepd.td', direction: 'Direction de l\'Agriculture', position: 'Agronome', phone: '+235 66 67 89 01', roles: ['Utilisateur'], status: 'active', lastLogin: '17 Déc 2025, 07:30', createdAt: '10 Oct 2024', permissions: ['projects.view', 'projects.edit', 'reports.view'] },
+                    { id: 7, name: 'Oumar Saleh', initials: 'OS', email: 'o.saleh@mepd.td', direction: 'Direction de l\'Éducation', position: 'Consultant', phone: '+235 66 78 90 12', roles: ['Observateur'], status: 'pending', lastLogin: 'Jamais', createdAt: '15 Déc 2025', permissions: ['projects.view'] },
+                    { id: 8, name: 'Hawa Djibrine', initials: 'HD', email: 'h.djibrine@mepd.td', direction: 'Direction Générale', position: 'Assistante', phone: '+235 66 89 01 23', roles: ['Utilisateur'], status: 'active', lastLogin: '16 Déc 2025, 17:45', createdAt: '20 Nov 2024', permissions: ['projects.view', 'reports.view'] }
+                ],
+                
+                filteredUsers: [],
+                
+                init() {
+                    this.filteredUsers = [...this.users];
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                get totalPages() {
+                    return Math.ceil(this.filteredUsers.length / this.itemsPerPage);
+                },
+                
+                toggleTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', this.theme);
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                filterUsers() {
+                    this.filteredUsers = this.users.filter(user => {
+                        const matchesSearch = !this.searchQuery || 
+                            user.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                            user.email.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        
+                        const matchesStatus = !this.filters.status || user.status === this.filters.status;
+                        
+                        const matchesRole = !this.filters.role || 
+                            user.roles.some(r => r.toLowerCase().includes(this.roles.find(role => role.id === this.filters.role)?.name.toLowerCase() || ''));
+                        
+                        const matchesDirection = !this.filters.direction || 
+                            user.direction === this.directions.find(d => d.id == this.filters.direction)?.name;
+                        
+                        return matchesSearch && matchesStatus && matchesRole && matchesDirection;
+                    });
+                    this.currentPage = 1;
+                },
+                
+                sortBy(field) {
+                    // Simple sort toggle
+                    this.filteredUsers.reverse();
+                },
+                
+                refreshUsers() {
+                    this.filterUsers();
+                    this.showToast('success', 'Actualisé', 'Liste des utilisateurs mise à jour');
+                },
+                
+                exportUsers() {
+                    this.showToast('success', 'Export', 'Export des utilisateurs en cours...');
+                },
+                
+                // User Modal
+                openAddModal() {
+                    this.isEditing = false;
+                    this.resetUserForm();
+                    this.showUserModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                editUser(user) {
+                    this.isEditing = true;
+                    this.selectedUser = user;
+                    this.userForm = {
+                        firstName: user.name.split(' ')[1] || '',
+                        lastName: user.name.split(' ')[0] || '',
+                        email: user.email,
+                        phone: user.phone || '',
+                        direction: this.directions.find(d => d.name === user.direction)?.id || '',
+                        position: user.position || '',
+                        password: '',
+                        confirmPassword: '',
+                        status: user.status,
+                        roles: user.roles.map(r => this.roles.find(role => role.name === r)?.id).filter(Boolean)
+                    };
+                    this.showUserModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeUserModal() {
+                    this.showUserModal = false;
+                    this.resetUserForm();
+                },
+                
+                resetUserForm() {
+                    this.userForm = {
+                        firstName: '',
+                        lastName: '',
+                        email: '',
+                        phone: '',
+                        direction: '',
+                        position: '',
+                        password: '',
+                        confirmPassword: '',
+                        status: 'active',
+                        roles: []
+                    };
+                },
+                
+                saveUser() {
+                    if (!this.userForm.firstName || !this.userForm.lastName || !this.userForm.email) {
+                        this.showToast('error', 'Erreur', 'Veuillez remplir tous les champs obligatoires');
+                        return;
+                    }
+                    
+                    if (!this.isEditing && this.userForm.password !== this.userForm.confirmPassword) {
+                        this.showToast('error', 'Erreur', 'Les mots de passe ne correspondent pas');
+                        return;
+                    }
+                    
+                    if (this.isEditing) {
+                        // Update user
+                        const index = this.users.findIndex(u => u.id === this.selectedUser.id);
+                        if (index !== -1) {
+                            this.users[index] = {
+                                ...this.users[index],
+                                name: `${this.userForm.lastName} ${this.userForm.firstName}`,
+                                initials: `${this.userForm.lastName[0]}${this.userForm.firstName[0]}`.toUpperCase(),
+                                email: this.userForm.email,
+                                phone: this.userForm.phone,
+                                direction: this.directions.find(d => d.id == this.userForm.direction)?.name || '',
+                                position: this.userForm.position,
+                                status: this.userForm.status,
+                                roles: this.userForm.roles.map(r => this.roles.find(role => role.id === r)?.name).filter(Boolean)
+                            };
+                        }
+                        this.showToast('success', 'Modifié', 'Utilisateur mis à jour avec succès');
+                    } else {
+                        // Create user
+                        const newUser = {
+                            id: Date.now(),
+                            name: `${this.userForm.lastName} ${this.userForm.firstName}`,
+                            initials: `${this.userForm.lastName[0]}${this.userForm.firstName[0]}`.toUpperCase(),
+                            email: this.userForm.email,
+                            phone: this.userForm.phone,
+                            direction: this.directions.find(d => d.id == this.userForm.direction)?.name || '',
+                            position: this.userForm.position,
+                            status: this.userForm.status,
+                            roles: this.userForm.roles.map(r => this.roles.find(role => role.id === r)?.name).filter(Boolean),
+                            lastLogin: 'Jamais',
+                            createdAt: new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'short', year: 'numeric' }),
+                            permissions: []
+                        };
+                        this.users.push(newUser);
+                        this.showToast('success', 'Créé', 'Nouvel utilisateur ajouté avec succès');
+                    }
+                    
+                    this.filterUsers();
+                    this.closeUserModal();
+                },
+                
+                // View Modal
+                viewUser(user) {
+                    this.selectedUser = user;
+                    this.viewTab = 'info';
+                    this.showViewModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeViewModal() {
+                    this.showViewModal = false;
+                    this.selectedUser = null;
+                },
+                
+                // Permissions Modal
+                openPermissionsModal(user) {
+                    this.selectedUser = user;
+                    this.userPermissions = [...(user.permissions || [])];
+                    this.openPermissionGroups = this.permissionGroups.map(g => g.id);
+                    this.showPermissionsModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closePermissionsModal() {
+                    this.showPermissionsModal = false;
+                },
+                
+                togglePermissionGroup(groupId) {
+                    const index = this.openPermissionGroups.indexOf(groupId);
+                    if (index === -1) {
+                        this.openPermissionGroups.push(groupId);
+                    } else {
+                        this.openPermissionGroups.splice(index, 1);
+                    }
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                togglePermission(permId) {
+                    const index = this.userPermissions.indexOf(permId);
+                    if (index === -1) {
+                        this.userPermissions.push(permId);
+                    } else {
+                        this.userPermissions.splice(index, 1);
+                    }
+                },
+                
+                savePermissions() {
+                    if (this.selectedUser) {
+                        const index = this.users.findIndex(u => u.id === this.selectedUser.id);
+                        if (index !== -1) {
+                            this.users[index].permissions = [...this.userPermissions];
+                        }
+                    }
+                    this.showToast('success', 'Enregistré', 'Permissions mises à jour avec succès');
+                    this.closePermissionsModal();
+                },
+                
+                // Delete Modal
+                confirmDelete(user) {
+                    this.selectedUser = user;
+                    this.showDeleteModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeDeleteModal() {
+                    this.showDeleteModal = false;
+                },
+                
+                deleteUser() {
+                    if (this.selectedUser) {
+                        this.users = this.users.filter(u => u.id !== this.selectedUser.id);
+                        this.filterUsers();
+                        this.showToast('success', 'Supprimé', 'Utilisateur supprimé avec succès');
+                    }
+                    this.closeDeleteModal();
+                },
+                
+                // Helpers
+                getRoleClass(role) {
+                    const classes = {
+                        'Administrateur': 'admin',
+                        'Chef de projet': 'manager',
+                        'Utilisateur': 'user',
+                        'Observateur': 'viewer'
+                    };
+                    return classes[role] || 'user';
+                },
+                
+                getStatusLabel(status) {
+                    const labels = {
+                        'active': 'Actif',
+                        'inactive': 'Inactif',
+                        'pending': 'En attente'
+                    };
+                    return labels[status] || status;
+                },
+                
+                showToast(type, title, message) {
+                    const id = Date.now();
+                    this.toasts.push({ id, type, title, message });
+                    this.$nextTick(() => lucide.createIcons());
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 4000);
+                }
+            };
+        }
+    </script>
+</body>
+</html>

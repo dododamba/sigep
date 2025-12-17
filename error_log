@@ -1,0 +1,6 @@
+[02-Dec-2025 15:52:42 UTC] [critical] Error thrown while running command "'doctrine:database:info'". Message: "Command "doctrine:database:info" is not defined.
+
+Did you mean one of these?
+    doctrine:database:create
+    doctrine:database:drop
+    doctrine:mapping:info"

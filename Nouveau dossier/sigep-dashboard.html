@@ -1,0 +1,1622 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIGEP Tchad - Système Intégré de Gestion des Projets Publics</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            /* Theme SIGEP Tchad - Couleurs officielles */
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            
+            /* Couleurs du drapeau tchadien */
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            
+            /* Accents */
+            --accent-primary: #002664;
+            --accent-secondary: #1a4a8a;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            
+            /* Status */
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-glow: 0 0 40px rgba(0, 38, 100, 0.15);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f1724;
+            --bg-secondary: #1a2535;
+            --bg-tertiary: #243244;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+            --shadow-glow: 0 0 40px rgba(254, 203, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            padding: 0;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            background: var(--accent-gradient);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            padding: 6px;
+            overflow: hidden;
+        }
+
+        .sidebar-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .sidebar-brand {
+            flex: 1;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1.2;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+            display: block;
+            margin-top: 2px;
+        }
+
+        /* User Info */
+        .user-info {
+            padding: 16px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .user-role {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            background: rgba(0, 38, 100, 0.1);
+            color: var(--accent-primary);
+            border-radius: 20px;
+            margin-top: 4px;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        /* Navigation */
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 20px;
+        }
+
+        .nav-section-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 14px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--tchad-gold);
+            color: var(--tchad-blue);
+            font-weight: 600;
+        }
+
+        .nav-item.active .nav-badge {
+            background: rgba(255,255,255,0.25);
+            color: white;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+            transition: margin-left 0.3s ease;
+        }
+
+        /* Top Header */
+        .top-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 16px;
+            min-width: 320px;
+            transition: all 0.2s ease;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 38, 100, 0.1);
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .header-btn .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            background: var(--tchad-red);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+        }
+
+        /* Content Area */
+        .content-area {
+            padding: 32px;
+        }
+
+        .page-header {
+            margin-bottom: 28px;
+        }
+
+        .page-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header p {
+            color: var(--text-secondary);
+            margin-top: 6px;
+            font-size: 0.95rem;
+        }
+
+        .page-header-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* ========== STATS GRID ========== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .stat-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--card-accent, var(--accent-primary));
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 52px;
+            height: 52px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .stat-icon.blue {
+            background: linear-gradient(135deg, #002664 0%, #1a4a8a 100%);
+            color: white;
+        }
+
+        .stat-icon.gold {
+            background: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            color: #002664;
+        }
+
+        .stat-icon.green {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            color: white;
+        }
+
+        .stat-icon.red {
+            background: linear-gradient(135deg, #c60c30 0%, #e62e4f 100%);
+            color: white;
+        }
+
+        .stat-icon.purple {
+            background: linear-gradient(135deg, #7c3aed 0%, #a855f7 100%);
+            color: white;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-content h3 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            line-height: 1;
+            margin-bottom: 4px;
+            color: var(--text-primary);
+        }
+
+        .stat-content p {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .stat-trend {
+            font-size: 0.75rem;
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 500;
+        }
+
+        .stat-trend.up {
+            color: var(--success);
+        }
+
+        .stat-trend.down {
+            color: var(--danger);
+        }
+
+        /* ========== CARDS ========== */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 24px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+
+        .card-title i {
+            color: var(--accent-primary);
+        }
+
+        .card-body {
+            padding: 24px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        /* ========== GRID LAYOUTS ========== */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 24px;
+        }
+
+        /* ========== DATA TABLE ========== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 14px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+        }
+
+        .data-table td {
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .data-table tr:hover td {
+            background: var(--bg-tertiary);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge.en-cours {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .status-badge.termine {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-badge.retard {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .status-badge.planifie {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.blue {
+            background: var(--accent-gradient);
+        }
+
+        .progress-fill.green {
+            background: linear-gradient(90deg, #10b981, #34d399);
+        }
+
+        .progress-fill.gold {
+            background: var(--gold-gradient);
+        }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            min-width: 45px;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), var(--shadow-glow);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: var(--tchad-blue);
+        }
+
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 0.8rem;
+        }
+
+        .btn-icon {
+            width: 36px;
+            height: 36px;
+            padding: 0;
+            justify-content: center;
+        }
+
+        /* ========== ACTIVITY LIST ========== */
+        .activity-list {
+            list-style: none;
+        }
+
+        .activity-item {
+            display: flex;
+            gap: 14px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .activity-icon.blue {
+            background: rgba(0, 38, 100, 0.1);
+            color: var(--accent-primary);
+        }
+
+        .activity-icon.green {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .activity-icon.gold {
+            background: rgba(254, 203, 0, 0.2);
+            color: #b8860b;
+        }
+
+        .activity-icon.red {
+            background: rgba(198, 12, 48, 0.1);
+            color: var(--tchad-red);
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-content h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+        }
+
+        .activity-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        /* ========== QUICK STATS ========== */
+        .quick-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .quick-stat:last-child {
+            border-bottom: none;
+        }
+
+        .quick-stat-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            color: var(--text-secondary);
+        }
+
+        .quick-stat-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* ========== CHART CONTAINER ========== */
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+
+        /* ========== MESSAGES LIST ========== */
+        .message-item {
+            display: flex;
+            gap: 12px;
+            padding: 14px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .message-item:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .message-item.unread {
+            background: rgba(0, 38, 100, 0.05);
+            border-left: 3px solid var(--accent-primary);
+        }
+
+        .message-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .message-time {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .message-preview {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: 24px 32px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .footer-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            width: 32px;
+            height: 32px;
+        }
+
+        .footer-text {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+
+        .footer-links a {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1400px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .grid-2, .grid-3 {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .search-box {
+                min-width: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+
+            .search-box {
+                display: none;
+            }
+
+            .header-right .header-btn:not(.theme-toggle) {
+                display: none;
+            }
+        }
+
+        /* ========== ANIMATIONS ========== */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-in {
+            animation: fadeIn 0.4s ease forwards;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.3s; }
+        .delay-4 { animation-delay: 0.4s; }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body x-data="dashboard()">
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ 'open': sidebarOpen }">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <!-- Armoirie du Tchad (SVG simplifié) -->
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Bouclier -->
+                    <defs>
+                        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fecb00"/>
+                            <stop offset="100%" style="stop-color:#e6b800"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="url(#shieldGrad)" stroke="#002664" stroke-width="2"/>
+                    <!-- Bandes du drapeau -->
+                    <rect x="15" y="25" width="23" height="45" fill="#002664"/>
+                    <rect x="38" y="25" width="24" height="45" fill="#fecb00"/>
+                    <rect x="62" y="25" width="23" height="45" fill="#c60c30"/>
+                    <!-- Étoile centrale -->
+                    <polygon points="50,30 53,40 63,40 55,47 58,57 50,51 42,57 45,47 37,40 47,40" fill="#002664"/>
+                    <!-- Soleil au sommet -->
+                    <circle cx="50" cy="15" r="6" fill="#fecb00" stroke="#002664" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+                <span>Gestion des Projets Publics</span>
+            </div>
+        </div>
+
+        <!-- User Info -->
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">AD</div>
+                <div class="user-details">
+                    <h4>Abdoulaye Damba</h4>
+                    <p>Direction Générale</p>
+                    <span class="user-role">Chef de Projet</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a class="nav-item" :class="{ 'active': currentPage === 'dashboard' }" @click="currentPage = 'dashboard'">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a class="nav-item" :class="{ 'active': currentPage === 'workgroups' }" @click="currentPage = 'workgroups'">
+                    <i data-lucide="users"></i>
+                    <span>Groupes de travail</span>
+                    <span class="nav-badge">5</span>
+                </a>
+                <a class="nav-item" :class="{ 'active': currentPage === 'messages' }" @click="currentPage = 'messages'">
+                    <i data-lucide="message-square"></i>
+                    <span>Messages</span>
+                    <span class="nav-badge">2</span>
+                </a>
+                <a class="nav-item" :class="{ 'active': currentPage === 'tasks' }" @click="currentPage = 'tasks'">
+                    <i data-lucide="clipboard-list"></i>
+                    <span>Tâches</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Projets</div>
+                <a class="nav-item" :class="{ 'active': currentPage === 'projects' }" @click="currentPage = 'projects'">
+                    <i data-lucide="briefcase"></i>
+                    <span>Projets internes</span>
+                    <span class="nav-badge">12</span>
+                </a>
+                <a class="nav-item" :class="{ 'active': currentPage === 'financing' }" @click="currentPage = 'financing'">
+                    <i data-lucide="banknote"></i>
+                    <span>Financements</span>
+                </a>
+                <a class="nav-item" :class="{ 'active': currentPage === 'disbursements' }" @click="currentPage = 'disbursements'">
+                    <i data-lucide="wallet"></i>
+                    <span>Décaissements</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Compte</div>
+                <a class="nav-item" :class="{ 'active': currentPage === 'profile' }" @click="currentPage = 'profile'">
+                    <i data-lucide="user-circle"></i>
+                    <span>Mon compte</span>
+                </a>
+                <a class="nav-item" @click="logout()">
+                    <i data-lucide="log-out"></i>
+                    <span>Se déconnecter</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Top Header -->
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" @click="sidebarOpen = !sidebarOpen">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="search-box">
+                    <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted);"></i>
+                    <input type="text" placeholder="Rechercher un projet, une tâche..." x-model="searchQuery">
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-btn">
+                    <i data-lucide="bell"></i>
+                    <span class="badge">4</span>
+                </button>
+                <button class="header-btn">
+                    <i data-lucide="mail"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="header-btn theme-toggle" @click="toggleTheme()">
+                    <i data-lucide="sun" x-show="theme === 'dark'"></i>
+                    <i data-lucide="moon" x-show="theme === 'light'"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Dashboard Content -->
+        <div class="content-area" x-show="currentPage === 'dashboard'">
+            <div class="page-header">
+                <h2>
+                    <span class="page-header-icon">
+                        <i data-lucide="layout-dashboard"></i>
+                    </span>
+                    Tableau de bord
+                </h2>
+                <p>Vue d'ensemble de vos projets et activités - Décembre 2025</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card animate-in" style="--card-accent: #002664;">
+                    <div class="stat-icon blue">
+                        <i data-lucide="briefcase"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 x-text="stats.totalProjects">12</h3>
+                        <p>Projets actifs</p>
+                        <div class="stat-trend up">
+                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                            +2 ce mois
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card animate-in delay-1" style="--card-accent: #fecb00;">
+                    <div class="stat-icon gold">
+                        <i data-lucide="coins"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>85.4 Mds</h3>
+                        <p>Budget total (FCFA)</p>
+                        <div class="stat-trend up">
+                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                            +12% vs 2024
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card animate-in delay-2" style="--card-accent: #10b981;">
+                    <div class="stat-icon green">
+                        <i data-lucide="check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>67%</h3>
+                        <p>Taux d'exécution</p>
+                        <div class="stat-trend up">
+                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
+                            +8% ce trimestre
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stat-card animate-in delay-3" style="--card-accent: #c60c30;">
+                    <div class="stat-icon red">
+                        <i data-lucide="alert-triangle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3>3</h3>
+                        <p>Projets en retard</p>
+                        <div class="stat-trend down">
+                            <i data-lucide="trending-down" style="width: 14px; height: 14px;"></i>
+                            -1 vs mois dernier
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts & Projects -->
+            <div class="grid-3">
+                <div>
+                    <!-- Budget Chart -->
+                    <div class="card animate-in delay-2">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i data-lucide="bar-chart-3"></i>
+                                Exécution budgétaire par secteur
+                            </h3>
+                            <div class="card-actions">
+                                <button class="btn btn-secondary btn-sm">
+                                    <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+                                    Exporter
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="budgetChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Projects Table -->
+                    <div class="card animate-in delay-3">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i data-lucide="folder-open"></i>
+                                Projets récents
+                            </h3>
+                            <div class="card-actions">
+                                <button class="btn btn-primary btn-sm">
+                                    <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                                    Nouveau
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-body" style="padding: 0;">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Projet</th>
+                                        <th>Secteur</th>
+                                        <th>Budget</th>
+                                        <th>Progression</th>
+                                        <th>Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template x-for="project in projects.slice(0, 5)" :key="project.id">
+                                        <tr>
+                                            <td>
+                                                <strong x-text="project.name"></strong>
+                                            </td>
+                                            <td x-text="project.sector"></td>
+                                            <td x-text="project.budget"></td>
+                                            <td>
+                                                <div class="progress-container">
+                                                    <div class="progress-bar">
+                                                        <div class="progress-fill blue" :style="'width: ' + project.progress + '%'"></div>
+                                                    </div>
+                                                    <span class="progress-text" x-text="project.progress + '%'"></span>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <span class="status-badge" :class="project.statusClass">
+                                                    <span class="status-dot"></span>
+                                                    <span x-text="project.status"></span>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column -->
+                <div>
+                    <!-- Activity Feed -->
+                    <div class="card animate-in delay-2">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i data-lucide="activity"></i>
+                                Activité récente
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <ul class="activity-list">
+                                <li class="activity-item">
+                                    <div class="activity-icon green">
+                                        <i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h5>Décaissement validé</h5>
+                                        <p>Projet Route N'Djamena-Abéché - 2.5 Mds FCFA</p>
+                                    </div>
+                                    <span class="activity-time">Il y a 2h</span>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon blue">
+                                        <i data-lucide="file-plus" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h5>Nouveau rapport soumis</h5>
+                                        <p>Centrale solaire de Moundou - Q4 2025</p>
+                                    </div>
+                                    <span class="activity-time">Il y a 5h</span>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon gold">
+                                        <i data-lucide="users" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h5>Réunion planifiée</h5>
+                                        <p>Comité de pilotage - 18 Déc. 09:00</p>
+                                    </div>
+                                    <span class="activity-time">Hier</span>
+                                </li>
+                                <li class="activity-item">
+                                    <div class="activity-icon red">
+                                        <i data-lucide="alert-circle" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                    <div class="activity-content">
+                                        <h5>Alerte retard</h5>
+                                        <p>Hôpital Régional Sarh - Livraison équipements</p>
+                                    </div>
+                                    <span class="activity-time">Hier</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Quick Stats -->
+                    <div class="card animate-in delay-3">
+                        <div class="card-header">
+                            <h3 class="card-title">
+                                <i data-lucide="pie-chart"></i>
+                                Répartition
+                            </h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="quick-stat">
+                                <span class="quick-stat-label">
+                                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #002664;"></span>
+                                    Infrastructure
+                                </span>
+                                <span class="quick-stat-value">42%</span>
+                            </div>
+                            <div class="quick-stat">
+                                <span class="quick-stat-label">
+                                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #10b981;"></span>
+                                    Santé
+                                </span>
+                                <span class="quick-stat-value">25%</span>
+                            </div>
+                            <div class="quick-stat">
+                                <span class="quick-stat-label">
+                                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #fecb00;"></span>
+                                    Énergie
+                                </span>
+                                <span class="quick-stat-value">18%</span>
+                            </div>
+                            <div class="quick-stat">
+                                <span class="quick-stat-label">
+                                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #c60c30;"></span>
+                                    Agriculture
+                                </span>
+                                <span class="quick-stat-value">15%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Messages Preview -->
+            <div class="card animate-in delay-4">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i data-lucide="message-square"></i>
+                        Messages récents
+                    </h3>
+                    <button class="btn btn-secondary btn-sm" @click="currentPage = 'messages'">
+                        Voir tout
+                        <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+                    </button>
+                </div>
+                <div class="card-body">
+                    <div class="grid-2">
+                        <div class="message-item unread">
+                            <div class="message-avatar">DP</div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-sender">David Peterson</span>
+                                    <span class="message-time">Il y a 4h</span>
+                                </div>
+                                <p class="message-preview">Merci pour les documents. Je suis en train de les examiner et je reviendrai vers vous...</p>
+                            </div>
+                        </div>
+                        <div class="message-item unread">
+                            <div class="message-avatar">SF</div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-sender">Sindy Forrest</span>
+                                    <span class="message-time">Hier</span>
+                                </div>
+                                <p class="message-preview">Bonjour! Je serai en congé jusqu'au 20 décembre. Pour toute urgence...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-left">
+                <svg class="footer-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="#fecb00" stroke="#002664" stroke-width="2"/>
+                    <rect x="15" y="25" width="23" height="45" fill="#002664"/>
+                    <rect x="38" y="25" width="24" height="45" fill="#fecb00"/>
+                    <rect x="62" y="25" width="23" height="45" fill="#c60c30"/>
+                </svg>
+                <span class="footer-text">© 2025 SIGEP Tchad - République du Tchad</span>
+            </div>
+            <div class="footer-links">
+                <a href="#">Aide</a>
+                <a href="#">Documentation</a>
+                <a href="#">Conditions d'utilisation</a>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        function dashboard() {
+            return {
+                currentPage: 'dashboard',
+                sidebarOpen: false,
+                searchQuery: '',
+                theme: 'light',
+                
+                stats: {
+                    totalProjects: 12,
+                    totalBudget: '85.4 Mds',
+                    executionRate: 67,
+                    delayedProjects: 3
+                },
+                
+                projects: [
+                    {
+                        id: 1,
+                        name: 'Route N\'Djamena-Abéché',
+                        sector: 'Infrastructure',
+                        budget: '25.8 Mds',
+                        progress: 72,
+                        status: 'En cours',
+                        statusClass: 'en-cours'
+                    },
+                    {
+                        id: 2,
+                        name: 'Centrale Solaire Moundou',
+                        sector: 'Énergie',
+                        budget: '18.5 Mds',
+                        progress: 45,
+                        status: 'En cours',
+                        statusClass: 'en-cours'
+                    },
+                    {
+                        id: 3,
+                        name: 'Hôpital Régional Sarh',
+                        sector: 'Santé',
+                        budget: '12.3 Mds',
+                        progress: 38,
+                        status: 'En retard',
+                        statusClass: 'retard'
+                    },
+                    {
+                        id: 4,
+                        name: 'Irrigation Lac Tchad',
+                        sector: 'Agriculture',
+                        budget: '15.2 Mds',
+                        progress: 89,
+                        status: 'Terminé',
+                        statusClass: 'termine'
+                    },
+                    {
+                        id: 5,
+                        name: 'École Normale Bongor',
+                        sector: 'Éducation',
+                        budget: '8.6 Mds',
+                        progress: 25,
+                        status: 'Planifié',
+                        statusClass: 'planifie'
+                    }
+                ],
+                
+                init() {
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                        this.initCharts();
+                    });
+                },
+                
+                toggleTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', this.theme);
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                logout() {
+                    if (confirm('Êtes-vous sûr de vouloir vous déconnecter?')) {
+                        alert('Déconnexion...');
+                    }
+                },
+                
+                initCharts() {
+                    const ctx = document.getElementById('budgetChart');
+                    if (!ctx) return;
+                    
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Infrastructure', 'Santé', 'Énergie', 'Agriculture', 'Éducation'],
+                            datasets: [
+                                {
+                                    label: 'Budget alloué (Mds FCFA)',
+                                    data: [35, 21, 15, 12, 8],
+                                    backgroundColor: 'rgba(0, 38, 100, 0.8)',
+                                    borderRadius: 6
+                                },
+                                {
+                                    label: 'Décaissé (Mds FCFA)',
+                                    data: [25, 14, 8, 10, 2],
+                                    backgroundColor: 'rgba(254, 203, 0, 0.9)',
+                                    borderRadius: 6
+                                }
+                            ]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: {
+                                legend: {
+                                    position: 'bottom',
+                                    labels: {
+                                        usePointStyle: true,
+                                        padding: 20,
+                                        font: {
+                                            family: "'Plus Jakarta Sans', sans-serif",
+                                            size: 12
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                x: {
+                                    grid: {
+                                        display: false
+                                    },
+                                    ticks: {
+                                        font: {
+                                            family: "'Plus Jakarta Sans', sans-serif",
+                                            size: 11
+                                        }
+                                    }
+                                },
+                                y: {
+                                    beginAtZero: true,
+                                    grid: {
+                                        color: 'rgba(0, 0, 0, 0.05)'
+                                    },
+                                    ticks: {
+                                        font: {
+                                            family: "'Plus Jakarta Sans', sans-serif",
+                                            size: 11
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            };
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<aside class="sidebar" :class="{ 'open': sidebarOpen }">
+    <div class="sidebar-header">
+        <div class="sidebar-logo">
+            <img src="{{ asset('logo.png') }}" alt="SIGEP Tchad Logo">
+        </div>
+        <div class="sidebar-brand">
+            <h1>SIGEP Tchad</h1>
+            <span>Gestion des Projets Publics</span>
+        </div>
+    </div>
+
+    <!-- User Info -->
+    <div class="user-info">
+        <div class="user-card">
+            <div class="user-avatar">AD</div>
+            <div class="user-details">
+                <h4>Abdoulaye Damba</h4>
+                <p>Direction Générale</p>
+                <span class="user-role">Chef de Projet</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="sidebar-nav">
+
+        <div class="nav-section">
+            <div class="nav-section-title">Navigation</div>
+
+            <a class="nav-item" :class="{ 'active': currentPage === 'dashboard' }" @click="currentPage = 'dashboard'">
+                <i class="ri-dashboard-line"></i>
+                <span>Tableau de bord</span>
+            </a>
+
+            <a class="nav-item" :class="{ 'active': currentPage === 'workgroups' }" @click="currentPage = 'workgroups'">
+                <i class="ri-team-line"></i>
+                <span>Groupes de travail</span>
+                <span class="nav-badge">5</span>
+            </a>
+
+            <a class="nav-item" :class="{ 'active': currentPage === 'messages' }" @click="currentPage = 'messages'">
+                <i class="ri-message-3-line"></i>
+                <span>Messages</span>
+                <span class="nav-badge">2</span>
+            </a>
+
+            <a class="nav-item" :class="{ 'active': currentPage === 'tasks' }" @click="currentPage = 'tasks'">
+                <i class="ri-task-line"></i>
+                <span>Tâches</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Projets</div>
+
+            <a class="nav-item" :class="{ 'active': currentPage === 'projects' }" @click="currentPage = 'projects'">
+                <i class="ri-briefcase-line"></i>
+                <span>Projets internes</span>
+                <span class="nav-badge">12</span>
+            </a>
+
+            <a class="nav-item" :class="{ 'active': currentPage === 'financing' }" @click="currentPage = 'financing'">
+                <i class="ri-bank-line"></i>
+                <span>Financements</span>
+            </a>
+
+            <a class="nav-item" :class="{ 'active': currentPage === 'disbursements' }" @click="currentPage = 'disbursements'">
+                <i class="ri-wallet-3-line"></i>
+                <span>Décaissements</span>
+            </a>
+        </div>
+
+        <div class="nav-section">
+            <div class="nav-section-title">Compte</div>
+
+            <a class="nav-item" :class="{ 'active': currentPage === 'profile' }" @click="currentPage = 'profile'">
+                <i class="ri-user-settings-line"></i>
+                <span>Mon compte</span>
+            </a>
+
+            <a class="nav-item" @click="logout()">
+                <i class="ri-logout-box-r-line"></i>
+                <span>Se déconnecter</span>
+            </a>
+        </div>
+
+    </nav>
+</aside>

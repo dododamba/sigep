@@ -1,0 +1,33 @@
+<header class="top-header">
+    <div class="header-left">
+        <button class="menu-toggle" @click="sidebarOpen = !sidebarOpen">
+            <i class="ri-menu-line"></i>
+        </button>
+
+        <div class="search-box">
+            <i class="ri-search-line" style="font-size: 18px; color: var(--text-muted);"></i>
+            <input 
+                type="text" 
+                placeholder="Rechercher un projet, une tâche..." 
+                x-model="searchQuery"
+            >
+        </div>
+    </div>
+
+    <div class="header-right">
+        <button class="header-btn">
+            <i class="ri-notification-3-line"></i>
+            <span class="badge">4</span>
+        </button>
+
+        <button class="header-btn">
+            <i class="ri-mail-line"></i>
+            <span class="badge">3</span>
+        </button>
+
+        <button class="header-btn theme-toggle" @click="toggleTheme()">
+            <i class="ri-sun-line" x-show="theme === 'dark'"></i>
+            <i class="ri-moon-line" x-show="theme === 'light'"></i>
+        </button>
+    </div>
+</header>

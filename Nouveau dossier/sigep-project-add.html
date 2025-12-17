@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nouveau Projet - SIGEP Tchad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            
+            --accent-primary: #002664;
+            --accent-secondary: #1a4a8a;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f1724;
+            --bg-secondary: #1a2535;
+            --bg-tertiary: #243244;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            background: var(--accent-gradient);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            padding: 6px;
+        }
+
+        .sidebar-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .user-info {
+            padding: 16px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .user-role {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            background: rgba(0, 38, 100, 0.1);
+            color: var(--tchad-blue);
+            border-radius: 20px;
+            margin-top: 4px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 20px;
+        }
+
+        .nav-section-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 14px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--tchad-gold);
+            color: var(--tchad-blue);
+            font-weight: 600;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .back-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .header-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .theme-toggle {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            padding: 32px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 32px;
+        }
+
+        .page-header-left h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header-left p {
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .page-header-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        /* ========== STEPPER ========== */
+        .stepper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .stepper-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .stepper-item:not(:last-child)::after {
+            content: '';
+            width: 80px;
+            height: 2px;
+            background: var(--border-color);
+            margin: 0 16px;
+        }
+
+        .stepper-item.active:not(:last-child)::after {
+            background: var(--accent-primary);
+        }
+
+        .stepper-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: all 0.3s ease;
+        }
+
+        .stepper-item.active .stepper-number {
+            background: var(--accent-gradient);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+
+        .stepper-item.completed .stepper-number {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .stepper-label {
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--text-muted);
+        }
+
+        .stepper-item.active .stepper-label {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .stepper-item.completed .stepper-label {
+            color: var(--success);
+        }
+
+        /* ========== FORM CARD ========== */
+        .form-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .form-card-header {
+            padding: 24px 28px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .form-card-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .form-card-title h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .form-card-title p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .form-card-body {
+            padding: 28px;
+        }
+
+        /* ========== FORM STYLES ========== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .form-grid.three-cols {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-group.span-3 {
+            grid-column: span 3;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-label .optional {
+            font-weight: 400;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 4px rgba(0, 38, 100, 0.1);
+        }
+
+        .form-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Input with icon */
+        .input-with-icon {
+            position: relative;
+        }
+
+        .input-with-icon .form-input {
+            padding-left: 44px;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .input-with-icon .form-input:focus + .input-icon {
+            color: var(--accent-primary);
+        }
+
+        /* Input suffix */
+        .input-with-suffix {
+            position: relative;
+        }
+
+        .input-with-suffix .form-input {
+            padding-right: 80px;
+        }
+
+        .input-suffix {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        /* Sector Selection */
+        .sector-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .sector-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            padding: 20px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+        }
+
+        .sector-option:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.02);
+        }
+
+        .sector-option.selected {
+            border-color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.05);
+        }
+
+        .sector-option input {
+            display: none;
+        }
+
+        .sector-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: transform 0.2s ease;
+        }
+
+        .sector-option:hover .sector-icon {
+            transform: scale(1.05);
+        }
+
+        .sector-option.selected .sector-icon {
+            transform: scale(1.1);
+        }
+
+        .sector-icon.infrastructure { background: linear-gradient(135deg, #002664, #1a4a8a); }
+        .sector-icon.sante { background: linear-gradient(135deg, #059669, #10b981); }
+        .sector-icon.energie { background: linear-gradient(135deg, #d97706, #f59e0b); }
+        .sector-icon.agriculture { background: linear-gradient(135deg, #16a34a, #22c55e); }
+        .sector-icon.education { background: linear-gradient(135deg, #7c3aed, #a855f7); }
+        .sector-icon.eau { background: linear-gradient(135deg, #0284c7, #38bdf8); }
+
+        .sector-label {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        /* Priority Selection */
+        .priority-options {
+            display: flex;
+            gap: 12px;
+        }
+
+        .priority-option {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+            font-weight: 500;
+        }
+
+        .priority-option:hover {
+            border-color: var(--text-muted);
+        }
+
+        .priority-option.selected {
+            border-width: 2px;
+        }
+
+        .priority-option.selected.haute {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.05);
+            color: #ef4444;
+        }
+
+        .priority-option.selected.moyenne {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.05);
+            color: #f59e0b;
+        }
+
+        .priority-option.selected.normale {
+            border-color: #10b981;
+            background: rgba(16, 185, 129, 0.05);
+            color: #10b981;
+        }
+
+        .priority-option input {
+            display: none;
+        }
+
+        /* File Upload */
+        .file-upload-area {
+            border: 2px dashed var(--border-color);
+            border-radius: 14px;
+            padding: 40px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: var(--bg-primary);
+        }
+
+        .file-upload-area:hover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.02);
+        }
+
+        .file-upload-area.dragover {
+            border-color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.05);
+        }
+
+        .file-upload-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--bg-tertiary);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+            color: var(--text-muted);
+        }
+
+        .file-upload-text h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .file-upload-text p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .file-upload-text span {
+            color: var(--accent-primary);
+            font-weight: 500;
+        }
+
+        .uploaded-files {
+            margin-top: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .uploaded-file {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+
+        .uploaded-file-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .uploaded-file-icon.pdf { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .uploaded-file-icon.doc { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+
+        .uploaded-file-info {
+            flex: 1;
+        }
+
+        .uploaded-file-info h5 {
+            font-size: 0.88rem;
+            font-weight: 600;
+        }
+
+        .uploaded-file-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .uploaded-file-remove {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            background: transparent;
+            color: var(--text-muted);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .uploaded-file-remove:hover {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        /* ========== TEAM MEMBERS ========== */
+        .team-search {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .team-search .form-input {
+            flex: 1;
+        }
+
+        .team-members-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .team-member-option {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .team-member-option:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .team-member-option.selected {
+            border-color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.05);
+        }
+
+        .team-member-option input {
+            display: none;
+        }
+
+        .team-member-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .team-member-info h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .team-member-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .team-member-check {
+            margin-left: auto;
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            border: 2px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: transparent;
+            transition: all 0.2s ease;
+        }
+
+        .team-member-option.selected .team-member-check {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+
+        /* ========== FORM ACTIONS ========== */
+        .form-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 32px;
+        }
+
+        .form-actions-left {
+            display: flex;
+            gap: 12px;
+        }
+
+        .form-actions-right {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 38, 100, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 2px solid var(--border-color);
+        }
+
+        .btn-outline:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-lg {
+            padding: 16px 32px;
+            font-size: 1rem;
+        }
+
+        /* ========== TOAST ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            min-width: 320px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .toast-content h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1200px) {
+            .form-grid.three-cols {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-group.span-3 {
+                grid-column: span 2;
+            }
+            
+            .sector-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .stepper {
+                flex-wrap: wrap;
+                gap: 16px;
+            }
+
+            .stepper-item:not(:last-child)::after {
+                display: none;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width,
+            .form-group.span-3 {
+                grid-column: span 1;
+            }
+
+            .sector-grid,
+            .team-members-list {
+                grid-template-columns: 1fr;
+            }
+
+            .priority-options {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .content-area {
+                padding: 20px;
+            }
+
+            .form-card-body {
+                padding: 20px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .form-actions-left,
+            .form-actions-right {
+                width: 100%;
+            }
+
+            .form-actions-right {
+                flex-direction: column;
+            }
+
+            .form-actions-right .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body x-data="projectAdd()">
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ 'open': sidebarOpen }">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fecb00"/>
+                            <stop offset="100%" style="stop-color:#e6b800"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="url(#shieldGrad)" stroke="#002664" stroke-width="2"/>
+                    <rect x="15" y="25" width="23" height="45" fill="#002664"/>
+                    <rect x="38" y="25" width="24" height="45" fill="#fecb00"/>
+                    <rect x="62" y="25" width="23" height="45" fill="#c60c30"/>
+                    <polygon points="50,30 53,40 63,40 55,47 58,57 50,51 42,57 45,47 37,40 47,40" fill="#002664"/>
+                    <circle cx="50" cy="15" r="6" fill="#fecb00" stroke="#002664" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+                <span>Gestion des Projets Publics</span>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">AD</div>
+                <div class="user-details">
+                    <h4>Abdoulaye Damba</h4>
+                    <p>Direction Générale</p>
+                    <span class="user-role">Chef de Projet</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a class="nav-item" href="sigep-dashboard.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="users"></i>
+                    <span>Groupes de travail</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="message-square"></i>
+                    <span>Messages</span>
+                    <span class="nav-badge">2</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Projets</div>
+                <a class="nav-item active" href="sigep-projects.html">
+                    <i data-lucide="briefcase"></i>
+                    <span>Projets</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="banknote"></i>
+                    <span>Financements</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="wallet"></i>
+                    <span>Décaissements</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Compte</div>
+                <a class="nav-item">
+                    <i data-lucide="user-circle"></i>
+                    <span>Mon profil</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="log-out"></i>
+                    <span>Se déconnecter</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" @click="sidebarOpen = !sidebarOpen">
+                    <i data-lucide="menu"></i>
+                </button>
+                <a href="sigep-projects.html" class="back-btn">
+                    <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                    Retour aux projets
+                </a>
+                <span class="header-title">Créer un nouveau projet</span>
+            </div>
+            <div class="header-right">
+                <button class="header-btn theme-toggle" @click="toggleTheme()">
+                    <i data-lucide="sun" x-show="theme === 'dark'"></i>
+                    <i data-lucide="moon" x-show="theme === 'light'"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h2>
+                        <span class="page-header-icon">
+                            <i data-lucide="folder-plus"></i>
+                        </span>
+                        Nouveau Projet
+                    </h2>
+                    <p>Remplissez les informations pour créer un nouveau projet public</p>
+                </div>
+            </div>
+
+            <!-- Stepper -->
+            <div class="stepper">
+                <div class="stepper-item" :class="{ 'active': currentStep >= 1, 'completed': currentStep > 1 }">
+                    <div class="stepper-number">
+                        <template x-if="currentStep > 1"><i data-lucide="check" style="width: 18px; height: 18px;"></i></template>
+                        <template x-if="currentStep <= 1">1</template>
+                    </div>
+                    <span class="stepper-label">Informations</span>
+                </div>
+                <div class="stepper-item" :class="{ 'active': currentStep >= 2, 'completed': currentStep > 2 }">
+                    <div class="stepper-number">
+                        <template x-if="currentStep > 2"><i data-lucide="check" style="width: 18px; height: 18px;"></i></template>
+                        <template x-if="currentStep <= 2">2</template>
+                    </div>
+                    <span class="stepper-label">Finances</span>
+                </div>
+                <div class="stepper-item" :class="{ 'active': currentStep >= 3, 'completed': currentStep > 3 }">
+                    <div class="stepper-number">
+                        <template x-if="currentStep > 3"><i data-lucide="check" style="width: 18px; height: 18px;"></i></template>
+                        <template x-if="currentStep <= 3">3</template>
+                    </div>
+                    <span class="stepper-label">Équipe</span>
+                </div>
+                <div class="stepper-item" :class="{ 'active': currentStep >= 4 }">
+                    <div class="stepper-number">4</div>
+                    <span class="stepper-label">Documents</span>
+                </div>
+            </div>
+
+            <form @submit.prevent="submitForm()">
+                <!-- Step 1: Basic Information -->
+                <div x-show="currentStep === 1">
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: var(--accent-gradient);">
+                                <i data-lucide="info" style="width: 22px; height: 22px;"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Informations générales</h3>
+                                <p>Définissez les caractéristiques principales du projet</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="form-grid">
+                                <div class="form-group full-width">
+                                    <label class="form-label">
+                                        Nom du projet <span class="required">*</span>
+                                    </label>
+                                    <input type="text" class="form-input" x-model="form.name" placeholder="Ex: Route Nationale N'Djamena - Abéché" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Code projet <span class="required">*</span>
+                                    </label>
+                                    <div class="input-with-icon">
+                                        <input type="text" class="form-input" x-model="form.code" placeholder="PRJ-2025-XXX" required>
+                                        <i data-lucide="hash" class="input-icon" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                    <span class="form-hint">
+                                        <i data-lucide="info" style="width: 14px; height: 14px;"></i>
+                                        Format: PRJ-ANNÉE-NUMÉRO
+                                    </span>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Localisation <span class="required">*</span>
+                                    </label>
+                                    <div class="input-with-icon">
+                                        <input type="text" class="form-input" x-model="form.location" placeholder="Ex: N'Djamena, Région du Lac..." required>
+                                        <i data-lucide="map-pin" class="input-icon" style="width: 18px; height: 18px;"></i>
+                                    </div>
+                                </div>
+                                <div class="form-group full-width">
+                                    <label class="form-label">
+                                        Description <span class="required">*</span>
+                                    </label>
+                                    <textarea class="form-textarea" x-model="form.description" placeholder="Décrivez les objectifs et la portée du projet..." required></textarea>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 32px;">
+                                <label class="form-label" style="margin-bottom: 16px;">
+                                    Secteur d'activité <span class="required">*</span>
+                                </label>
+                                <div class="sector-grid">
+                                    <template x-for="sector in sectors" :key="sector.id">
+                                        <label class="sector-option" :class="{ 'selected': form.sector === sector.id }">
+                                            <input type="radio" name="sector" :value="sector.id" x-model="form.sector">
+                                            <div class="sector-icon" :class="sector.id">
+                                                <i :data-lucide="sector.icon" style="width: 24px; height: 24px;"></i>
+                                            </div>
+                                            <span class="sector-label" x-text="sector.name"></span>
+                                        </label>
+                                    </template>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 32px;">
+                                <label class="form-label" style="margin-bottom: 16px;">
+                                    Priorité <span class="required">*</span>
+                                </label>
+                                <div class="priority-options">
+                                    <label class="priority-option" :class="{ 'selected': form.priority === 'haute', 'haute': form.priority === 'haute' }">
+                                        <input type="radio" name="priority" value="haute" x-model="form.priority">
+                                        <i data-lucide="alert-triangle" style="width: 18px; height: 18px;"></i>
+                                        Haute
+                                    </label>
+                                    <label class="priority-option" :class="{ 'selected': form.priority === 'moyenne', 'moyenne': form.priority === 'moyenne' }">
+                                        <input type="radio" name="priority" value="moyenne" x-model="form.priority">
+                                        <i data-lucide="minus-circle" style="width: 18px; height: 18px;"></i>
+                                        Moyenne
+                                    </label>
+                                    <label class="priority-option" :class="{ 'selected': form.priority === 'normale', 'normale': form.priority === 'normale' }">
+                                        <input type="radio" name="priority" value="normale" x-model="form.priority">
+                                        <i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
+                                        Normale
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">
+                                <i data-lucide="calendar" style="width: 22px; height: 22px;"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Planification</h3>
+                                <p>Définissez les dates clés du projet</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Date de début <span class="required">*</span>
+                                    </label>
+                                    <input type="date" class="form-input" x-model="form.startDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Date de fin prévue <span class="required">*</span>
+                                    </label>
+                                    <input type="date" class="form-input" x-model="form.endDate" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Maître d'ouvrage</label>
+                                    <select class="form-select" x-model="form.owner">
+                                        <option value="">Sélectionner...</option>
+                                        <option value="infra">Ministère des Infrastructures</option>
+                                        <option value="sante">Ministère de la Santé</option>
+                                        <option value="energie">Ministère de l'Énergie</option>
+                                        <option value="agri">Ministère de l'Agriculture</option>
+                                        <option value="edu">Ministère de l'Éducation</option>
+                                        <option value="eau">Ministère de l'Hydraulique</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Bénéficiaires</label>
+                                    <input type="text" class="form-input" x-model="form.beneficiaries" placeholder="Ex: 500,000 habitants">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Finances -->
+                <div x-show="currentStep === 2">
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: var(--gold-gradient);">
+                                <i data-lucide="coins" style="width: 22px; height: 22px; color: var(--tchad-blue);"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Informations financières</h3>
+                                <p>Définissez le budget et les sources de financement</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="form-grid three-cols">
+                                <div class="form-group">
+                                    <label class="form-label">
+                                        Budget total <span class="required">*</span>
+                                    </label>
+                                    <div class="input-with-suffix">
+                                        <input type="number" step="0.1" class="form-input" x-model="form.budget" placeholder="0.0" required>
+                                        <span class="input-suffix">Mds FCFA</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Montant déjà décaissé</label>
+                                    <div class="input-with-suffix">
+                                        <input type="number" step="0.1" class="form-input" x-model="form.disbursed" placeholder="0.0">
+                                        <span class="input-suffix">Mds FCFA</span>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Progression initiale</label>
+                                    <div class="input-with-suffix">
+                                        <input type="number" min="0" max="100" class="form-input" x-model="form.progress" placeholder="0">
+                                        <span class="input-suffix">%</span>
+                                    </div>
+                                </div>
+                                <div class="form-group span-3">
+                                    <label class="form-label">Sources de financement</label>
+                                    <textarea class="form-textarea" x-model="form.fundingSource" placeholder="Ex: Budget National (45%), Banque Mondiale (35%), BAD (20%)..." rows="2"></textarea>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 32px;">
+                                <label class="form-label" style="margin-bottom: 16px;">Répartition par source</label>
+                                <div class="form-grid three-cols">
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <span class="optional">Budget National</span>
+                                        </label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" min="0" max="100" class="form-input" x-model="form.fundingNational" placeholder="0">
+                                            <span class="input-suffix">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <span class="optional">Partenaires techniques</span>
+                                        </label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" min="0" max="100" class="form-input" x-model="form.fundingPartners" placeholder="0">
+                                            <span class="input-suffix">%</span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="form-label">
+                                            <span class="optional">Autres sources</span>
+                                        </label>
+                                        <div class="input-with-suffix">
+                                            <input type="number" min="0" max="100" class="form-input" x-model="form.fundingOther" placeholder="0">
+                                            <span class="input-suffix">%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Team -->
+                <div x-show="currentStep === 3">
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: linear-gradient(135deg, #059669, #10b981);">
+                                <i data-lucide="users" style="width: 22px; height: 22px;"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Équipe du projet</h3>
+                                <p>Sélectionnez les membres de l'équipe projet</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="form-group" style="margin-bottom: 24px;">
+                                <label class="form-label">
+                                    Chef de projet <span class="required">*</span>
+                                </label>
+                                <select class="form-select" x-model="form.manager" required>
+                                    <option value="">Sélectionner le chef de projet...</option>
+                                    <template x-for="member in teamMembers" :key="member.id">
+                                        <option :value="member.id" x-text="member.name + ' - ' + member.role"></option>
+                                    </template>
+                                </select>
+                            </div>
+
+                            <label class="form-label" style="margin-bottom: 16px;">Membres de l'équipe</label>
+                            
+                            <div class="team-search">
+                                <input type="text" class="form-input" placeholder="Rechercher un membre..." x-model="teamSearch">
+                                <button type="button" class="btn btn-secondary">
+                                    <i data-lucide="search" style="width: 18px; height: 18px;"></i>
+                                </button>
+                            </div>
+
+                            <div class="team-members-list">
+                                <template x-for="member in filteredTeamMembers" :key="member.id">
+                                    <label class="team-member-option" :class="{ 'selected': form.team.includes(member.id) }">
+                                        <input type="checkbox" :value="member.id" x-model="form.team">
+                                        <div class="team-member-avatar" :style="'background: ' + member.color" x-text="member.initials"></div>
+                                        <div class="team-member-info">
+                                            <h5 x-text="member.name"></h5>
+                                            <p x-text="member.role"></p>
+                                        </div>
+                                        <div class="team-member-check">
+                                            <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                                        </div>
+                                    </label>
+                                </template>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Documents -->
+                <div x-show="currentStep === 4">
+                    <div class="form-card">
+                        <div class="form-card-header">
+                            <div class="form-card-icon" style="background: linear-gradient(135deg, #0284c7, #38bdf8);">
+                                <i data-lucide="file-text" style="width: 22px; height: 22px;"></i>
+                            </div>
+                            <div class="form-card-title">
+                                <h3>Documents du projet</h3>
+                                <p>Téléchargez les documents relatifs au projet</p>
+                            </div>
+                        </div>
+                        <div class="form-card-body">
+                            <div class="file-upload-area" 
+                                 @dragover.prevent="isDragging = true"
+                                 @dragleave.prevent="isDragging = false"
+                                 @drop.prevent="handleDrop($event)"
+                                 :class="{ 'dragover': isDragging }">
+                                <div class="file-upload-icon">
+                                    <i data-lucide="upload-cloud" style="width: 28px; height: 28px;"></i>
+                                </div>
+                                <div class="file-upload-text">
+                                    <h4>Glissez vos fichiers ici</h4>
+                                    <p>ou <span>parcourir</span> pour sélectionner</p>
+                                    <p style="margin-top: 8px;">PDF, DOC, XLS, images (max. 10 MB)</p>
+                                </div>
+                                <input type="file" multiple style="display: none;" @change="handleFileSelect($event)">
+                            </div>
+
+                            <div class="uploaded-files" x-show="uploadedFiles.length > 0">
+                                <template x-for="(file, index) in uploadedFiles" :key="index">
+                                    <div class="uploaded-file">
+                                        <div class="uploaded-file-icon" :class="getFileType(file.name)">
+                                            <i data-lucide="file-text" style="width: 18px; height: 18px;"></i>
+                                        </div>
+                                        <div class="uploaded-file-info">
+                                            <h5 x-text="file.name"></h5>
+                                            <p x-text="formatFileSize(file.size)"></p>
+                                        </div>
+                                        <button type="button" class="uploaded-file-remove" @click="removeFile(index)">
+                                            <i data-lucide="x" style="width: 18px; height: 18px;"></i>
+                                        </button>
+                                    </div>
+                                </template>
+                            </div>
+
+                            <div class="form-group" style="margin-top: 32px;">
+                                <label class="form-label">Notes additionnelles <span class="optional">(optionnel)</span></label>
+                                <textarea class="form-textarea" x-model="form.notes" placeholder="Ajoutez des notes ou commentaires sur le projet..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Actions -->
+                <div class="form-actions">
+                    <div class="form-actions-left">
+                        <button type="button" class="btn btn-outline" @click="saveDraft()">
+                            <i data-lucide="save" style="width: 18px; height: 18px;"></i>
+                            Enregistrer brouillon
+                        </button>
+                    </div>
+                    <div class="form-actions-right">
+                        <button type="button" class="btn btn-secondary" x-show="currentStep > 1" @click="prevStep()">
+                            <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+                            Précédent
+                        </button>
+                        <button type="button" class="btn btn-primary" x-show="currentStep < 4" @click="nextStep()">
+                            Suivant
+                            <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
+                        </button>
+                        <button type="submit" class="btn btn-success btn-lg" x-show="currentStep === 4">
+                            <i data-lucide="check" style="width: 20px; height: 20px;"></i>
+                            Créer le projet
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div class="toast" :class="toast.type">
+                <div class="toast-icon">
+                    <i :data-lucide="toast.type === 'success' ? 'check-circle' : 'alert-circle'" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="toast-content">
+                    <h5 x-text="toast.title"></h5>
+                    <p x-text="toast.message"></p>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        function projectAdd() {
+            return {
+                sidebarOpen: false,
+                theme: 'light',
+                currentStep: 1,
+                isDragging: false,
+                teamSearch: '',
+                
+                // Form data
+                form: {
+                    name: '',
+                    code: '',
+                    location: '',
+                    description: '',
+                    sector: '',
+                    priority: 'normale',
+                    startDate: '',
+                    endDate: '',
+                    owner: '',
+                    beneficiaries: '',
+                    budget: '',
+                    disbursed: 0,
+                    progress: 0,
+                    fundingSource: '',
+                    fundingNational: 0,
+                    fundingPartners: 0,
+                    fundingOther: 0,
+                    manager: '',
+                    team: [],
+                    notes: ''
+                },
+                
+                uploadedFiles: [],
+                toasts: [],
+                
+                sectors: [
+                    { id: 'infrastructure', name: 'Infrastructure', icon: 'road' },
+                    { id: 'sante', name: 'Santé', icon: 'heart-pulse' },
+                    { id: 'energie', name: 'Énergie', icon: 'zap' },
+                    { id: 'agriculture', name: 'Agriculture', icon: 'wheat' },
+                    { id: 'education', name: 'Éducation', icon: 'graduation-cap' },
+                    { id: 'eau', name: 'Eau & Assainissement', icon: 'droplets' }
+                ],
+                
+                teamMembers: [
+                    { id: 1, name: 'Abdoulaye Damba', initials: 'AD', role: 'Chef de projet', color: 'var(--accent-gradient)' },
+                    { id: 2, name: 'Fatima Hassan', initials: 'FH', role: 'Responsable financier', color: 'linear-gradient(135deg, #059669, #10b981)' },
+                    { id: 3, name: 'Ibrahim Moussa', initials: 'IM', role: 'Ingénieur technique', color: 'linear-gradient(135deg, #d97706, #f59e0b)' },
+                    { id: 4, name: 'Mariam Youssouf', initials: 'MY', role: 'Coordinatrice terrain', color: 'linear-gradient(135deg, #7c3aed, #a855f7)' },
+                    { id: 5, name: 'Ali Brahim', initials: 'AB', role: 'Technicien', color: 'linear-gradient(135deg, #0284c7, #38bdf8)' },
+                    { id: 6, name: 'Khadija Mahamat', initials: 'KM', role: 'Agronome', color: 'linear-gradient(135deg, #16a34a, #22c55e)' },
+                    { id: 7, name: 'Oumar Saleh', initials: 'OS', role: 'Consultant', color: 'linear-gradient(135deg, #dc2626, #ef4444)' },
+                    { id: 8, name: 'Hawa Djibrine', initials: 'HD', role: 'Assistante', color: 'linear-gradient(135deg, #6366f1, #818cf8)' }
+                ],
+                
+                get filteredTeamMembers() {
+                    if (!this.teamSearch) return this.teamMembers;
+                    return this.teamMembers.filter(m => 
+                        m.name.toLowerCase().includes(this.teamSearch.toLowerCase()) ||
+                        m.role.toLowerCase().includes(this.teamSearch.toLowerCase())
+                    );
+                },
+                
+                init() {
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                toggleTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', this.theme);
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                nextStep() {
+                    if (this.validateStep()) {
+                        this.currentStep++;
+                        this.$nextTick(() => lucide.createIcons());
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+                },
+                
+                prevStep() {
+                    this.currentStep--;
+                    this.$nextTick(() => lucide.createIcons());
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                },
+                
+                validateStep() {
+                    if (this.currentStep === 1) {
+                        if (!this.form.name || !this.form.code || !this.form.sector || !this.form.startDate || !this.form.endDate) {
+                            this.showToast('error', 'Erreur', 'Veuillez remplir tous les champs obligatoires');
+                            return false;
+                        }
+                    }
+                    if (this.currentStep === 2) {
+                        if (!this.form.budget) {
+                            this.showToast('error', 'Erreur', 'Veuillez indiquer le budget du projet');
+                            return false;
+                        }
+                    }
+                    if (this.currentStep === 3) {
+                        if (!this.form.manager) {
+                            this.showToast('error', 'Erreur', 'Veuillez sélectionner un chef de projet');
+                            return false;
+                        }
+                    }
+                    return true;
+                },
+                
+                handleDrop(event) {
+                    this.isDragging = false;
+                    const files = event.dataTransfer.files;
+                    this.addFiles(files);
+                },
+                
+                handleFileSelect(event) {
+                    const files = event.target.files;
+                    this.addFiles(files);
+                },
+                
+                addFiles(files) {
+                    for (let file of files) {
+                        if (file.size <= 10 * 1024 * 1024) {
+                            this.uploadedFiles.push(file);
+                        } else {
+                            this.showToast('error', 'Erreur', `${file.name} est trop volumineux (max 10 MB)`);
+                        }
+                    }
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                removeFile(index) {
+                    this.uploadedFiles.splice(index, 1);
+                },
+                
+                getFileType(filename) {
+                    const ext = filename.split('.').pop().toLowerCase();
+                    if (['pdf'].includes(ext)) return 'pdf';
+                    if (['doc', 'docx'].includes(ext)) return 'doc';
+                    return 'doc';
+                },
+                
+                formatFileSize(bytes) {
+                    if (bytes < 1024) return bytes + ' B';
+                    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+                    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+                },
+                
+                saveDraft() {
+                    this.showToast('success', 'Brouillon enregistré', 'Vous pouvez reprendre plus tard');
+                },
+                
+                submitForm() {
+                    this.showToast('success', 'Projet créé!', 'Le projet a été créé avec succès');
+                    setTimeout(() => {
+                        window.location.href = 'sigep-projects.html';
+                    }, 2000);
+                },
+                
+                showToast(type, title, message) {
+                    const id = Date.now();
+                    this.toasts.push({ id, type, title, message });
+                    this.$nextTick(() => lucide.createIcons());
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 4000);
+                }
+            };
+        }
+    </script>
+</body>
+</html>

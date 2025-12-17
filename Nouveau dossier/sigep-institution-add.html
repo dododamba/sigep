@@ -1,0 +1,215 @@
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une Institution - SIGEP Tchad</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+
+        /* Sidebar (Simplified for this page) */
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .sidebar-header { background: var(--accent-gradient); padding: 20px; display: flex; align-items: center; gap: 14px; }
+        .sidebar-logo { width: 56px; height: 56px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); padding: 6px; }
+        .sidebar-brand h1 { font-size: 1.3rem; font-weight: 700; color: white; }
+        
+        .main-content { margin-left: 280px; padding: 40px; }
+        
+        /* Form Container */
+        .form-container { max-width: 900px; margin: 0 auto; background: var(--bg-secondary); border-radius: 20px; box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--border-color); }
+        .form-header { background: var(--bg-tertiary); padding: 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .form-title h2 { font-size: 1.5rem; font-weight: 700; color: var(--tchad-blue); }
+        .form-title p { color: var(--text-secondary); margin-top: 5px; }
+        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .back-btn:hover { color: var(--tchad-blue); }
+
+        .form-body { padding: 40px; }
+        .form-section { margin-bottom: 30px; }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--tchad-blue); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--bg-tertiary); display: flex; align-items: center; gap: 10px; }
+        
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+        .form-group { display: flex; flex-direction: column; gap: 8px; }
+        .full-width { grid-column: span 2; }
+        
+        .label { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); }
+        .input { padding: 14px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-primary); width: 100%; font-family: inherit; transition: all 0.2s; }
+        .input:focus { border-color: var(--tchad-gold); outline: none; background: #fff; }
+        
+        /* File Upload */
+        .file-upload { border: 2px dashed var(--border-color); padding: 30px; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--bg-tertiary); }
+        .file-upload:hover { border-color: var(--tchad-blue); background: #e0e7ff; }
+
+        .form-footer { padding: 30px; background: var(--bg-tertiary); border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 16px; }
+        
+        .btn { padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; transition: transform 0.2s; }
+        .btn-cancel { background: white; border: 1px solid var(--border-color); color: var(--text-secondary); }
+        .btn-save { background: var(--accent-gradient); color: white; box-shadow: var(--shadow-md); }
+        .btn-save:hover { transform: translateY(-2px); }
+
+        @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body x-data="addInstitution()">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="#fecb00" stroke="#002664" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <form class="form-container" @submit.prevent="submitForm">
+            <div class="form-header">
+                <div class="form-title">
+                    <h2>Nouvelle Institution</h2>
+                    <p>Enregistrer un ministère ou une agence publique</p>
+                </div>
+                <a href="sigep-institutions.html" class="back-btn">
+                    <i data-lucide="arrow-left"></i> Retour
+                </a>
+            </div>
+
+            <div class="form-body">
+                <!-- Informations Générales -->
+                <div class="form-section">
+                    <h3 class="section-title"><i data-lucide="building"></i> Informations Générales</h3>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="label">Nom de l'Institution</label>
+                            <input type="text" class="input" placeholder="Ex: Ministère de l'Éducation Nationale" x-model="form.name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Acronyme</label>
+                            <input type="text" class="input" placeholder="Ex: MEN" x-model="form.acronym" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Type d'entité</label>
+                            <select class="input" x-model="form.type">
+                                <option>Ministère</option>
+                                <option>Agence Nationale</option>
+                                <option>Direction Générale</option>
+                                <option>Projet / Unité de Gestion</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Secteur d'activité</label>
+                            <select class="input" x-model="form.sector">
+                                <option>Administration Générale</option>
+                                <option>Éducation & Formation</option>
+                                <option>Santé Publique</option>
+                                <option>Infrastructures</option>
+                                <option>Agriculture & Élevage</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Date de création (Optionnel)</label>
+                            <input type="date" class="input" x-model="form.date">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leadership & Contact -->
+                <div class="form-section">
+                    <h3 class="section-title"><i data-lucide="user-check"></i> Leadership & Contact</h3>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="label">Nom du Responsable (Ministre/DG)</label>
+                            <input type="text" class="input" placeholder="Nom complet" x-model="form.head">
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Email officiel</label>
+                            <input type="email" class="input" placeholder="contact@domaine.td" x-model="form.email">
+                        </div>
+                        <div class="form-group">
+                            <label class="label">Téléphone</label>
+                            <input type="tel" class="input" placeholder="+235 ..." x-model="form.phone">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="label">Adresse physique</label>
+                            <input type="text" class="input" placeholder="Quartier, Avenue, Ville" x-model="form.address">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="label">Site Web</label>
+                            <input type="url" class="input" placeholder="https://..." x-model="form.website">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logo -->
+                <div class="form-section">
+                    <h3 class="section-title"><i data-lucide="image"></i> Identité Visuelle</h3>
+                    <div class="file-upload">
+                        <i data-lucide="upload-cloud" style="width: 40px; height: 40px; color: var(--text-muted); margin-bottom: 10px;"></i>
+                        <p style="font-weight: 600;">Cliquez pour télécharger le logo</p>
+                        <p style="font-size: 0.8rem; color: var(--text-muted);">PNG, JPG (Max 2MB)</p>
+                        <input type="file" style="display:none">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <a href="sigep-institutions.html" class="btn btn-cancel" style="text-decoration:none;">Annuler</a>
+                <button type="submit" class="btn btn-save">Enregistrer l'Institution</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        function addInstitution() {
+            return {
+                form: {
+                    name: '',
+                    acronym: '',
+                    type: 'Ministère',
+                    sector: 'Administration Générale',
+                    head: '',
+                    email: '',
+                    phone: '',
+                    address: '',
+                    website: ''
+                },
+                init() {
+                    lucide.createIcons();
+                },
+                submitForm() {
+                    // Simulation de soumission
+                    alert("Institution '" + this.form.name + "' créée avec succès !");
+                    window.location.href = 'sigep-institutions.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

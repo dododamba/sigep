@@ -1,0 +1,165 @@
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Créer un Rôle - SIGEP Tchad</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .sidebar-header { background: var(--accent-gradient); padding: 20px; display: flex; align-items: center; gap: 14px; }
+        .sidebar-logo { width: 56px; height: 56px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); padding: 6px; }
+        
+        .main-content { margin-left: 280px; padding: 40px; }
+        
+        .form-container { max-width: 900px; margin: 0 auto; background: var(--bg-secondary); border-radius: 20px; box-shadow: var(--shadow-md); overflow: hidden; border: 1px solid var(--border-color); }
+        .form-header { background: var(--bg-tertiary); padding: 30px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .back-btn { display: flex; align-items: center; gap: 8px; color: var(--text-muted); text-decoration: none; font-weight: 600; transition: color 0.2s; }
+        .back-btn:hover { color: var(--tchad-blue); }
+
+        .form-body { padding: 40px; }
+        .form-section { margin-bottom: 30px; }
+        .section-title { font-size: 1.1rem; font-weight: 700; color: var(--tchad-blue); margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid var(--bg-tertiary); display: flex; align-items: center; gap: 10px; }
+        
+        .label { font-size: 0.9rem; font-weight: 600; color: var(--text-primary); display: block; margin-bottom: 8px; }
+        .input { padding: 14px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-primary); width: 100%; font-family: inherit; margin-bottom: 20px; }
+        .input:focus { border-color: var(--tchad-gold); outline: none; background: #fff; }
+        
+        /* Permissions Matrix */
+        .matrix-header { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 10px; padding: 12px 16px; background: var(--bg-tertiary); border-radius: 10px 10px 0 0; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; color: var(--text-muted); }
+        .matrix-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 10px; padding: 16px; border-bottom: 1px solid var(--border-color); align-items: center; transition: background 0.2s; }
+        .matrix-row:hover { background: var(--bg-primary); }
+        .matrix-row:last-child { border-bottom: none; }
+        .matrix-module { font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .matrix-check { display: flex; justify-content: center; }
+        .checkbox-custom { width: 20px; height: 20px; accent-color: var(--tchad-blue); cursor: pointer; }
+
+        .form-footer { padding: 30px; background: var(--bg-tertiary); border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 16px; }
+        .btn { padding: 12px 24px; border-radius: 10px; font-weight: 600; cursor: pointer; border: none; font-size: 1rem; }
+        .btn-cancel { background: white; border: 1px solid var(--border-color); color: var(--text-secondary); }
+        .btn-save { background: var(--accent-gradient); color: white; box-shadow: var(--shadow-md); }
+
+        @media (max-width: 1024px) { .sidebar { display: none; } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body x-data="addRole()">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="#fecb00" stroke="#002664" stroke-width="2"/>
+                </svg>
+            </div>
+            <div style="margin-left: 10px;">
+                <h1 style="font-size: 1.2rem; font-weight: 700; color: white;">SIGEP Tchad</h1>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <form class="form-container" @submit.prevent="submitForm">
+            <div class="form-header">
+                <div>
+                    <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--tchad-blue);">Nouveau Rôle</h2>
+                    <p style="color: var(--text-secondary); margin-top: 5px;">Définir un nouveau profil d'accès</p>
+                </div>
+                <a href="sigep-roles.html" class="back-btn">
+                    <i data-lucide="arrow-left"></i> Retour
+                </a>
+            </div>
+
+            <div class="form-body">
+                <!-- Info -->
+                <div class="form-section">
+                    <h3 class="section-title"><i data-lucide="info"></i> Informations de base</h3>
+                    <label class="label">Nom du Rôle</label>
+                    <input type="text" class="input" placeholder="Ex: Gestionnaire de Projets" x-model="role.name" required>
+                    
+                    <label class="label">Description</label>
+                    <textarea class="input" rows="3" placeholder="Décrivez la fonction de ce rôle..." x-model="role.description"></textarea>
+                </div>
+
+                <!-- Matrix -->
+                <div class="form-section">
+                    <h3 class="section-title"><i data-lucide="lock"></i> Matrice des Permissions</h3>
+                    <div style="border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden;">
+                        <div class="matrix-header">
+                            <div>Module</div>
+                            <div style="text-align:center">Lecture</div>
+                            <div style="text-align:center">Écriture</div>
+                            <div style="text-align:center">Modification</div>
+                            <div style="text-align:center">Suppression</div>
+                        </div>
+                        
+                        <template x-for="module in modules" :key="module.id">
+                            <div class="matrix-row">
+                                <div class="matrix-module">
+                                    <i :data-lucide="module.icon" style="width:18px; color:var(--tchad-blue);"></i>
+                                    <span x-text="module.name"></span>
+                                </div>
+                                <div class="matrix-check"><input type="checkbox" class="checkbox-custom" x-model="module.perms.read"></div>
+                                <div class="matrix-check"><input type="checkbox" class="checkbox-custom" x-model="module.perms.write"></div>
+                                <div class="matrix-check"><input type="checkbox" class="checkbox-custom" x-model="module.perms.edit"></div>
+                                <div class="matrix-check"><input type="checkbox" class="checkbox-custom" x-model="module.perms.delete"></div>
+                            </div>
+                        </template>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-footer">
+                <a href="sigep-roles.html" class="btn btn-cancel" style="text-decoration:none;">Annuler</a>
+                <button type="submit" class="btn btn-save">Créer le Rôle</button>
+            </div>
+        </form>
+    </main>
+
+    <script>
+        function addRole() {
+            return {
+                role: { name: '', description: '' },
+                modules: [
+                    { id: 'users', name: 'Utilisateurs & Profils', icon: 'users', perms: { read: true, write: false, edit: false, delete: false } },
+                    { id: 'inst', name: 'Institutions', icon: 'building', perms: { read: true, write: false, edit: false, delete: false } },
+                    { id: 'fin', name: 'Finances & Budget', icon: 'wallet', perms: { read: false, write: false, edit: false, delete: false } },
+                    { id: 'proj', name: 'Projets', icon: 'briefcase', perms: { read: true, write: true, edit: false, delete: false } },
+                    { id: 'rep', name: 'Rapports & Stats', icon: 'bar-chart', perms: { read: true, write: true, edit: false, delete: false } },
+                    { id: 'set', name: 'Paramètres Système', icon: 'settings', perms: { read: false, write: false, edit: false, delete: false } }
+                ],
+                init() {
+                    lucide.createIcons();
+                },
+                submitForm() {
+                    alert('Nouveau rôle "' + this.role.name + '" créé avec succès.');
+                    window.location.href = 'sigep-roles.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

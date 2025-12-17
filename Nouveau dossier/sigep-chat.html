@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Messagerie - SIGEP Tchad</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); height: 100vh; overflow: hidden; }
+
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; z-index: 100; }
+        .sidebar-header { background: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%); padding: 20px; display: flex; align-items: center; gap: 14px; }
+        .sidebar-logo { width: 56px; height: 56px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); padding: 6px; }
+        .sidebar-brand h1 { font-size: 1.3rem; font-weight: 700; color: white; }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 12px; }
+        .nav-section-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; padding-left: 14px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: all 0.2s ease; margin-bottom: 4px; font-weight: 500; font-size: 0.88rem; }
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: linear-gradient(135deg, #fecb00 0%, #e6b800 100%); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+
+        .main-content { margin-left: 280px; height: 100vh; display: flex; }
+        
+        /* Chat Layout */
+        .chat-sidebar { width: 320px; background: var(--bg-secondary); border-right: 1px solid var(--border-color); display: flex; flex-direction: column; }
+        .chat-header { padding: 20px; border-bottom: 1px solid var(--border-color); }
+        .chat-search { background: var(--bg-tertiary); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 8px; margin-top: 12px; }
+        .chat-search input { border: none; background: none; outline: none; width: 100%; font-size: 0.9rem; }
+        
+        .chat-list { flex: 1; overflow-y: auto; }
+        .chat-item { padding: 16px 20px; display: flex; gap: 12px; cursor: pointer; transition: background 0.2s; border-bottom: 1px solid var(--bg-primary); }
+        .chat-item:hover { background: var(--bg-primary); }
+        .chat-item.active { background: #eef2ff; border-left: 4px solid var(--tchad-blue); }
+        
+        .avatar { width: 44px; height: 44px; border-radius: 50%; background: #e2e8f0; display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--text-secondary); position: relative; }
+        .avatar.online::after { content: ''; position: absolute; bottom: 0; right: 0; width: 10px; height: 10px; background: var(--tchad-gold); border: 2px solid white; border-radius: 50%; }
+        
+        .chat-info { flex: 1; min-width: 0; }
+        .chat-name-row { display: flex; justify-content: space-between; margin-bottom: 4px; }
+        .chat-name { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); }
+        .chat-time { font-size: 0.75rem; color: var(--text-muted); }
+        .chat-preview { font-size: 0.85rem; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .unread-badge { background: var(--tchad-red); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 10px; }
+
+        /* Chat Area */
+        .chat-window { flex: 1; display: flex; flex-direction: column; background: var(--bg-primary); }
+        .window-header { padding: 16px 24px; background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        
+        .messages-area { flex: 1; padding: 24px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+        .message-row { display: flex; gap: 12px; max-width: 70%; }
+        .message-row.me { align-self: flex-end; flex-direction: row-reverse; }
+        
+        .message-bubble { padding: 12px 16px; border-radius: 12px; font-size: 0.95rem; line-height: 1.5; position: relative; }
+        .message-row.me .message-bubble { background: var(--tchad-blue); color: white; border-bottom-right-radius: 2px; }
+        .message-row.other .message-bubble { background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-color); border-bottom-left-radius: 2px; }
+        
+        .message-time { font-size: 0.7rem; margin-top: 4px; opacity: 0.7; text-align: right; }
+        
+        .input-area { padding: 20px; background: var(--bg-secondary); border-top: 1px solid var(--border-color); display: flex; gap: 12px; align-items: center; }
+        .attach-btn { color: var(--text-muted); cursor: pointer; padding: 8px; border-radius: 8px; transition: background 0.2s; }
+        .attach-btn:hover { background: var(--bg-primary); color: var(--tchad-blue); }
+        
+        .msg-input { flex: 1; padding: 12px; border: 1px solid var(--border-color); border-radius: 24px; background: var(--bg-primary); outline: none; transition: border 0.2s; }
+        .msg-input:focus { border-color: var(--tchad-blue); background: white; }
+        
+        .send-btn { background: var(--tchad-blue); color: white; border: none; width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: transform 0.2s; }
+        .send-btn:hover { transform: scale(1.05); background: #1a4a8a; }
+
+        @media (max-width: 1024px) { 
+            .sidebar { display: none; } 
+            .main-content { margin-left: 0; } 
+            .chat-sidebar { width: 80px; }
+            .chat-info, .chat-search { display: none; }
+            .chat-header h2 { display: none; }
+            .chat-item { justify-content: center; padding: 16px 0; }
+        }
+    </style>
+</head>
+<body x-data="messenger()">
+
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="#fecb00" stroke="#002664" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Principal</div>
+            <a class="nav-item" href="sigep-dashboard.html">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Tableau de bord</span>
+            </a>
+            <div class="nav-section-title">Communication</div>
+            <a class="nav-item" href="sigep-notifications.html">
+                <i data-lucide="bell"></i>
+                <span>Notifications</span>
+            </a>
+            <a class="nav-item active">
+                <i data-lucide="message-square"></i>
+                <span>Messagerie</span>
+            </a>
+        </nav>
+    </aside>
+
+    <main class="main-content">
+        <!-- Chat List -->
+        <div class="chat-sidebar">
+            <div class="chat-header">
+                <h2 style="font-size:1.2rem; font-weight:700; color:var(--text-primary);">Messages</h2>
+                <div class="chat-search">
+                    <i data-lucide="search" style="width:16px; color:var(--text-muted);"></i>
+                    <input type="text" placeholder="Rechercher...">
+                </div>
+            </div>
+            <div class="chat-list">
+                <template x-for="chat in contacts" :key="chat.id">
+                    <div class="chat-item" :class="{'active': activeId === chat.id}" @click="setActive(chat)">
+                        <div class="avatar" :class="{'online': chat.online}" x-text="chat.initials"></div>
+                        <div class="chat-info">
+                            <div class="chat-name-row">
+                                <span class="chat-name" x-text="chat.name"></span>
+                                <span class="chat-time" x-text="chat.lastTime"></span>
+                            </div>
+                            <div style="display:flex; justify-content:space-between;">
+                                <span class="chat-preview" x-text="chat.lastMsg"></span>
+                                <span class="unread-badge" x-show="chat.unread > 0" x-text="chat.unread"></span>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+
+        <!-- Chat Window -->
+        <div class="chat-window" x-show="activeChat">
+            <div class="window-header">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div class="avatar" style="width:40px; height:40px;" x-text="activeChat?.initials"></div>
+                    <div>
+                        <div style="font-weight:700; color:var(--text-primary);" x-text="activeChat?.name"></div>
+                        <div style="font-size:0.8rem; color:var(--success); display:flex; align-items:center; gap:4px;">
+                            <span style="width:6px; height:6px; background:var(--success); border-radius:50%;"></span> En ligne
+                        </div>
+                    </div>
+                </div>
+                <div style="display:flex; gap:16px;">
+                    <button class="attach-btn"><i data-lucide="phone"></i></button>
+                    <button class="attach-btn"><i data-lucide="video"></i></button>
+                    <button class="attach-btn"><i data-lucide="more-vertical"></i></button>
+                </div>
+            </div>
+
+            <div class="messages-area" id="msgArea">
+                <template x-for="msg in messages" :key="msg.id">
+                    <div class="message-row" :class="msg.sender === 'me' ? 'me' : 'other'">
+                        <div class="avatar" style="width:32px; height:32px; font-size:0.8rem;" x-text="msg.sender === 'me' ? 'AD' : activeChat.initials"></div>
+                        <div class="message-bubble">
+                            <div x-text="msg.text"></div>
+                            <div class="message-time" x-text="msg.time"></div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div class="input-area">
+                <button class="attach-btn"><i data-lucide="paperclip"></i></button>
+                <input type="text" class="msg-input" placeholder="Écrivez votre message..." x-model="newMessage" @keydown.enter="sendMessage()">
+                <button class="send-btn" @click="sendMessage()"><i data-lucide="send" style="width:20px; margin-left:-2px;"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function messenger() {
+            return {
+                activeId: 1,
+                activeChat: null,
+                newMessage: '',
+                contacts: [
+                    { id: 1, name: 'Dr. Idriss Saleh', initials: 'IS', lastMsg: 'Pouvez-vous valider le rapport ?', lastTime: '10:30', unread: 2, online: true },
+                    { id: 2, name: 'Zara Mahamat', initials: 'ZM', lastMsg: 'Merci pour les informations.', lastTime: 'Hier', unread: 0, online: false },
+                    { id: 3, name: 'Service Support', initials: 'SS', lastMsg: 'Votre ticket #402 est résolu.', lastTime: '22 Juin', unread: 0, online: true }
+                ],
+                messages: [
+                    { id: 1, sender: 'other', text: 'Bonjour Amine, as-tu vu le dernier rapport du Ministère ?', time: '10:15' },
+                    { id: 2, sender: 'me', text: 'Bonjour Dr. Idriss. Non pas encore, je suis en réunion.', time: '10:20' },
+                    { id: 3, sender: 'other', text: 'D\'accord, c\'est assez urgent. Pouvez-vous valider le rapport dès que possible ?', time: '10:30' }
+                ],
+
+                init() {
+                    this.activeChat = this.contacts[0];
+                    this.$nextTick(() => lucide.createIcons());
+                    this.scrollToBottom();
+                },
+
+                setActive(chat) {
+                    this.activeId = chat.id;
+                    this.activeChat = chat;
+                    chat.unread = 0; // Mark as read
+                    // Mock: Load specific messages could happen here
+                    this.$nextTick(() => {
+                        lucide.createIcons();
+                        this.scrollToBottom();
+                    });
+                },
+
+                sendMessage() {
+                    if (this.newMessage.trim() === '') return;
+                    
+                    const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                    this.messages.push({
+                        id: Date.now(),
+                        sender: 'me',
+                        text: this.newMessage,
+                        time: time
+                    });
+                    
+                    this.newMessage = '';
+                    this.$nextTick(() => {
+                        this.scrollToBottom();
+                    });
+                },
+
+                scrollToBottom() {
+                    const el = document.getElementById('msgArea');
+                    if(el) el.scrollTop = el.scrollHeight;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

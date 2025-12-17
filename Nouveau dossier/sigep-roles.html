@@ -1,0 +1,435 @@
+
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Rôles - SIGEP Tchad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
+
+        /* Layout */
+        .sidebar { position: fixed; left: 0; top: 0; width: 280px; height: 100vh; background: var(--bg-secondary); border-right: 1px solid var(--border-color); z-index: 1000; display: flex; flex-direction: column; }
+        .sidebar-header { background: var(--accent-gradient); padding: 20px; display: flex; align-items: center; gap: 14px; }
+        .sidebar-logo { width: 56px; height: 56px; background: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-md); padding: 6px; }
+        .sidebar-nav { flex: 1; overflow-y: auto; padding: 16px 12px; }
+        .nav-section-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 10px; padding-left: 14px; }
+        .nav-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 10px; color: var(--text-secondary); text-decoration: none; cursor: pointer; transition: all 0.2s ease; margin-bottom: 4px; font-weight: 500; font-size: 0.88rem; }
+        .nav-item:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .nav-item.active { background: var(--gold-gradient); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+        
+        .main-content { margin-left: 280px; min-height: 100vh; }
+        .top-header { background: var(--bg-secondary); border-bottom: 1px solid var(--border-color); padding: 16px 32px; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .search-box { display: flex; align-items: center; gap: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 10px; padding: 10px 16px; min-width: 320px; }
+        .search-box input { border: none; background: none; outline: none; flex: 1; font-size: 0.9rem; color: var(--text-primary); }
+
+        /* Content Area */
+        .content-area { padding: 32px; }
+        .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 28px; }
+        .page-header-left h2 { font-size: 1.75rem; font-weight: 700; display: flex; align-items: center; gap: 12px; }
+        .page-header-icon { width: 48px; height: 48px; background: var(--gold-gradient); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--tchad-blue); }
+
+        /* Stats */
+        .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 28px; }
+        .stat-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; padding: 24px; transition: all 0.3s ease; }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
+        .stat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .stat-icon { width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .stat-value { font-size: 1.8rem; font-weight: 700; color: var(--text-primary); }
+        .stat-label { font-size: 0.85rem; color: var(--text-secondary); }
+
+        /* Table */
+        .card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; }
+        .card-header { padding: 20px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-tertiary); }
+        .data-table { width: 100%; border-collapse: collapse; }
+        .data-table th, .data-table td { padding: 16px 20px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        .data-table th { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted); background: var(--bg-tertiary); }
+        .data-table tbody tr:hover { background: var(--bg-tertiary); }
+
+        /* Components */
+        .btn { display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 10px; font-weight: 600; font-size: 0.85rem; border: none; cursor: pointer; text-decoration: none; transition: all 0.2s; }
+        .btn-gold { background: var(--gold-gradient); color: var(--tchad-blue); box-shadow: var(--shadow-md); }
+        .btn-gold:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        .action-btn { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-secondary); color: var(--text-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: all 0.2s; }
+        .action-btn:hover { border-color: var(--tchad-gold); color: var(--tchad-blue); }
+        .action-btn.delete:hover { border-color: var(--danger); color: var(--danger); }
+
+        .role-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; display: inline-block; }
+        .role-badge.system { background: rgba(0, 38, 100, 0.1); color: var(--tchad-blue); }
+        .role-badge.custom { background: rgba(254, 203, 0, 0.15); color: #b8860b; }
+
+        /* Modal */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); z-index: 2000; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.3s; }
+        .modal-overlay.active { opacity: 1; visibility: visible; }
+        .modal { background: var(--bg-secondary); width: 100%; max-width: 800px; border-radius: 20px; max-height: 90vh; display: flex; flex-direction: column; transform: scale(0.95); transition: all 0.3s; }
+        .modal-overlay.active .modal { transform: scale(1); }
+        .modal-header { padding: 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; background: var(--bg-tertiary); }
+        .modal-body { padding: 24px; overflow-y: auto; }
+        .modal-footer { padding: 20px 24px; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 12px; background: var(--bg-tertiary); }
+
+        .form-input { padding: 12px; border: 2px solid var(--border-color); border-radius: 10px; background: var(--bg-primary); width: 100%; font-family: inherit; margin-bottom: 16px; }
+        .form-input:focus { border-color: var(--tchad-blue); outline: none; }
+        .form-label { font-size: 0.85rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; display: block; }
+        
+        .perm-group { margin-bottom: 20px; border: 1px solid var(--border-color); border-radius: 12px; padding: 16px; }
+        .perm-group-title { font-weight: 700; color: var(--tchad-blue); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; }
+        .perm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+        .perm-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; color: var(--text-secondary); cursor: pointer; }
+        .perm-item input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--tchad-blue); }
+
+        @media (max-width: 1024px) { .sidebar { transform: translateX(-100%); } .main-content { margin-left: 0; } }
+    </style>
+</head>
+<body x-data="roleManager()">
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="#fecb00" stroke="#002664" stroke-width="2"/>
+                </svg>
+            </div>
+            <div style="margin-left: 10px;">
+                <h1 style="font-size: 1.2rem; font-weight: 700; color: white;">SIGEP Tchad</h1>
+                <span style="font-size: 0.7rem; color: rgba(255,255,255,0.8);">Administration</span>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section-title">Principal</div>
+            <a class="nav-item" href="sigep-dashboard.html">
+                <i data-lucide="layout-dashboard"></i>
+                <span>Tableau de bord</span>
+            </a>
+            <div class="nav-section-title">Administration</div>
+            <a class="nav-item" href="sigep-institutions.html">
+                <i data-lucide="landmark"></i>
+                <span>Institutions</span>
+            </a>
+            <a class="nav-item active">
+                <i data-lucide="shield-check"></i>
+                <span>Rôles & Permissions</span>
+            </a>
+            <a class="nav-item" href="sigep-users.html">
+                <i data-lucide="users"></i>
+                <span>Utilisateurs</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="search-box">
+                <i data-lucide="search" style="color: var(--text-muted);"></i>
+                <input type="text" placeholder="Rechercher un rôle..." x-model="searchQuery">
+            </div>
+            <div class="user-avatar" style="width:40px; height:40px; border-radius:10px; background:var(--bg-tertiary); display:flex; align-items:center; justify-content:center; font-weight:700; color:var(--tchad-blue);">AD</div>
+        </header>
+
+        <div class="content-area">
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h2>
+                        <span class="page-header-icon">
+                            <i data-lucide="shield-check"></i>
+                        </span>
+                        Rôles & Permissions
+                    </h2>
+                    <p>Définissez les niveaux d'accès et les privilèges utilisateurs</p>
+                </div>
+                <a href="sigep-role-add.html" class="btn btn-gold">
+                    <i data-lucide="plus"></i>
+                    Nouveau Rôle
+                </a>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(0, 38, 100, 0.1); color: var(--tchad-blue);">
+                            <i data-lucide="shield"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" x-text="roles.length"></div>
+                    <div class="stat-label">Total Rôles</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(254, 203, 0, 0.2); color: #b8860b;">
+                            <i data-lucide="user-cog"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" x-text="roles.filter(r => r.type === 'Système').length"></div>
+                    <div class="stat-label">Rôles Système</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">
+                            <i data-lucide="sliders"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value" x-text="roles.filter(r => r.type === 'Personnalisé').length"></div>
+                    <div class="stat-label">Rôles Personnalisés</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-header">
+                        <div class="stat-icon" style="background: rgba(59, 130, 246, 0.1); color: var(--info);">
+                            <i data-lucide="users"></i>
+                        </div>
+                    </div>
+                    <div class="stat-value">142</div>
+                    <div class="stat-label">Utilisateurs Assignés</div>
+                </div>
+            </div>
+
+            <!-- Table -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 style="font-size:1.1rem; font-weight:600;">Liste des Rôles</h3>
+                    <div style="font-size:0.85rem; color:var(--text-muted);">Gérez qui peut faire quoi dans le système</div>
+                </div>
+                <div style="overflow-x:auto;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Rôle</th>
+                                <th>Type</th>
+                                <th>Utilisateurs</th>
+                                <th>Dernière Modif.</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="role in filteredRoles" :key="role.id">
+                                <tr>
+                                    <td>
+                                        <div style="display:flex; align-items:center; gap:12px;">
+                                            <div style="width:36px; height:36px; border-radius:8px; background:var(--bg-tertiary); display:flex; align-items:center; justify-content:center; color:var(--tchad-blue);">
+                                                <i data-lucide="shield" style="width:18px;"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-weight:600; color:var(--text-primary);" x-text="role.name"></div>
+                                                <div style="font-size:0.8rem; color:var(--text-muted);" x-text="role.description"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="role-badge" :class="role.type === 'Système' ? 'system' : 'custom'" x-text="role.type"></span>
+                                    </td>
+                                    <td>
+                                        <div style="display:flex; align-items:center; gap:6px;">
+                                            <i data-lucide="users" style="width:14px; color:var(--text-muted);"></i>
+                                            <span x-text="role.usersCount"></span>
+                                        </div>
+                                    </td>
+                                    <td x-text="role.lastUpdated"></td>
+                                    <td>
+                                        <div style="display:flex; gap:6px;">
+                                            <button class="action-btn" title="Voir les permissions" @click="openViewModal(role)">
+                                                <i data-lucide="eye" style="width:16px;"></i>
+                                            </button>
+                                            <button class="action-btn" title="Modifier" @click="openEditModal(role)">
+                                                <i data-lucide="pencil" style="width:16px;"></i>
+                                            </button>
+                                            <button class="action-btn delete" title="Supprimer" @click="deleteRole(role.id)" :disabled="role.type === 'Système'" :style="role.type === 'Système' ? 'opacity:0.5; cursor:not-allowed;' : ''">
+                                                <i data-lucide="trash-2" style="width:16px;"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- MODAL VIEW (Afficher) -->
+    <div class="modal-overlay" :class="{ 'active': showView }" @click.self="showView = false">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 style="font-size:1.2rem; font-weight:700;">Détails du Rôle</h3>
+                <button @click="showView = false" class="action-btn" style="border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body" x-show="selectedRole">
+                <div style="margin-bottom:24px; padding-bottom:20px; border-bottom:1px solid var(--border-color);">
+                    <h2 style="font-size:1.5rem; color:var(--tchad-blue); margin-bottom:4px;" x-text="selectedRole?.name"></h2>
+                    <p style="color:var(--text-secondary);" x-text="selectedRole?.description"></p>
+                    <div style="margin-top:10px;">
+                        <span class="role-badge" :class="selectedRole?.type === 'Système' ? 'system' : 'custom'" x-text="selectedRole?.type"></span>
+                    </div>
+                </div>
+
+                <h4 style="font-size:1rem; font-weight:700; margin-bottom:16px; color:var(--text-primary);">Permissions Actives</h4>
+                
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px;">
+                    <!-- Simulation of view logic -->
+                    <template x-for="module in ['Administration', 'Institutions', 'Finances', 'Rapports']">
+                        <div class="perm-group" style="margin-bottom:0;">
+                            <div class="perm-group-title">
+                                <i data-lucide="box"></i>
+                                <span x-text="module"></span>
+                            </div>
+                            <ul style="list-style:none; padding-left:28px;">
+                                <li style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+                                    <i data-lucide="check" style="width:14px; color:var(--success);"></i> Lecture
+                                </li>
+                                <li style="font-size:0.9rem; color:var(--text-secondary); margin-bottom:4px; display:flex; align-items:center; gap:8px;">
+                                    <i data-lucide="check" style="width:14px; color:var(--success);"></i> Écriture
+                                </li>
+                            </ul>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:var(--bg-tertiary); color:var(--text-secondary);" @click="showView = false">Fermer</button>
+                <button class="btn btn-gold" @click="showView = false; openEditModal(selectedRole)">Modifier</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL EDIT (Modifier) -->
+    <div class="modal-overlay" :class="{ 'active': showEdit }" @click.self="showEdit = false">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 style="font-size:1.2rem; font-weight:700;">Configurer le Rôle</h3>
+                <button @click="showEdit = false" class="action-btn" style="border:none;"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-body">
+                <div style="margin-bottom:24px;">
+                    <label class="form-label">Nom du rôle</label>
+                    <input type="text" class="form-input" x-model="editForm.name">
+                    
+                    <label class="form-label">Description</label>
+                    <textarea class="form-input" rows="2" x-model="editForm.description"></textarea>
+                </div>
+
+                <div class="perm-group">
+                    <div class="perm-group-title">
+                        <i data-lucide="users"></i> Administration Utilisateurs
+                    </div>
+                    <div class="perm-grid">
+                        <label class="perm-item"><input type="checkbox" checked> <span>Voir liste</span></label>
+                        <label class="perm-item"><input type="checkbox" checked> <span>Créer utilisateur</span></label>
+                        <label class="perm-item"><input type="checkbox" checked> <span>Modifier profil</span></label>
+                        <label class="perm-item"><input type="checkbox"> <span>Supprimer</span></label>
+                    </div>
+                </div>
+
+                <div class="perm-group">
+                    <div class="perm-group-title">
+                        <i data-lucide="building"></i> Institutions
+                    </div>
+                    <div class="perm-grid">
+                        <label class="perm-item"><input type="checkbox" checked> <span>Consulter</span></label>
+                        <label class="perm-item"><input type="checkbox" checked> <span>Ajouter entité</span></label>
+                        <label class="perm-item"><input type="checkbox"> <span>Valider budget</span></label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button class="btn" style="background:var(--bg-tertiary); color:var(--text-secondary);" @click="showEdit = false">Annuler</button>
+                <button class="btn btn-gold" @click="saveEdit">Enregistrer les changements</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function roleManager() {
+            return {
+                searchQuery: '',
+                roles: [
+                    { id: 1, name: 'Super Administrateur', type: 'Système', usersCount: 3, description: 'Accès complet à toutes les fonctionnalités du système', lastUpdated: '01/01/2024' },
+                    { id: 2, name: 'Gestionnaire RH', type: 'Personnalisé', usersCount: 12, description: 'Gestion du personnel et des profils utilisateurs', lastUpdated: '15/05/2024' },
+                    { id: 3, name: 'Auditeur Financier', type: 'Personnalisé', usersCount: 5, description: 'Accès en lecture seule aux rapports financiers et budgets', lastUpdated: '10/06/2024' },
+                    { id: 4, name: 'Administrateur Ministère', type: 'Personnalisé', usersCount: 28, description: 'Gestion des données pour un ministère spécifique', lastUpdated: '22/06/2024' },
+                ],
+                showView: false,
+                showEdit: false,
+                selectedRole: null,
+                editForm: {},
+
+                init() {
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                get filteredRoles() {
+                    return this.roles.filter(r => r.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+                },
+
+                openViewModal(role) {
+                    this.selectedRole = role;
+                    this.showView = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                openEditModal(role) {
+                    this.selectedRole = role;
+                    this.editForm = JSON.parse(JSON.stringify(role));
+                    this.showEdit = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+
+                saveEdit() {
+                    const index = this.roles.findIndex(r => r.id === this.editForm.id);
+                    if (index !== -1) {
+                        this.roles[index] = { ...this.editForm, lastUpdated: new Date().toLocaleDateString() };
+                    }
+                    this.showEdit = false;
+                    alert('Configuration du rôle mise à jour.');
+                },
+
+                deleteRole(id) {
+                    if(confirm('Supprimer ce rôle ? Cette action retirera les permissions à tous les utilisateurs associés.')) {
+                        this.roles = this.roles.filter(r => r.id !== id);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

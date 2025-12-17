@@ -1,0 +1,2997 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Projets - SIGEP Tchad</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Alpine.js -->
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #f0f4f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #e8eef4;
+            --text-primary: #1a2a3a;
+            --text-secondary: #4a5e73;
+            --text-muted: #7a8fa3;
+            --border-color: #d0dbe6;
+            
+            --tchad-blue: #002664;
+            --tchad-gold: #fecb00;
+            --tchad-red: #c60c30;
+            
+            --accent-primary: #002664;
+            --accent-secondary: #1a4a8a;
+            --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+            --gold-gradient: linear-gradient(135deg, #fecb00 0%, #e6b800 100%);
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --info: #3b82f6;
+            
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #0f1724;
+            --bg-secondary: #1a2535;
+            --bg-tertiary: #243244;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #334155;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'DM Sans', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            transition: all 0.3s ease;
+        }
+
+        /* ========== SIDEBAR ========== */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 100vh;
+            background: var(--bg-secondary);
+            border-right: 1px solid var(--border-color);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            background: var(--accent-gradient);
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            background: white;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--shadow-md);
+            padding: 6px;
+        }
+
+        .sidebar-logo svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .sidebar-brand h1 {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .sidebar-brand span {
+            font-size: 0.7rem;
+            color: rgba(255,255,255,0.8);
+        }
+
+        .user-info {
+            padding: 16px 20px;
+            background: var(--bg-tertiary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .user-details h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .user-details p {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        .user-role {
+            font-size: 0.65rem;
+            padding: 3px 8px;
+            background: rgba(0, 38, 100, 0.1);
+            color: var(--tchad-blue);
+            border-radius: 20px;
+            margin-top: 4px;
+            display: inline-block;
+            font-weight: 600;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px 12px;
+        }
+
+        .nav-section {
+            margin-bottom: 20px;
+        }
+
+        .nav-section-title {
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            color: var(--text-muted);
+            margin-bottom: 10px;
+            padding-left: 14px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-bottom: 4px;
+            font-weight: 500;
+            font-size: 0.88rem;
+        }
+
+        .nav-item:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .nav-item i {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: var(--tchad-gold);
+            color: var(--tchad-blue);
+            font-weight: 600;
+        }
+
+        .nav-item.active .nav-badge {
+            background: rgba(255,255,255,0.25);
+            color: white;
+        }
+
+        /* ========== MAIN CONTENT ========== */
+        .main-content {
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        .top-header {
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 10px 16px;
+            min-width: 320px;
+        }
+
+        .search-box:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px rgba(0, 38, 100, 0.1);
+        }
+
+        .search-box input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.9rem;
+            color: var(--text-primary);
+        }
+
+        .search-box input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--text-secondary);
+            position: relative;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .header-btn .badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 20px;
+            height: 20px;
+            background: var(--tchad-red);
+            color: white;
+            border-radius: 50%;
+            font-size: 0.65rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle {
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+        }
+
+        /* ========== CONTENT AREA ========== */
+        .content-area {
+            padding: 32px;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 28px;
+        }
+
+        .page-header-left h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-header-left p {
+            color: var(--text-secondary);
+            margin-top: 6px;
+        }
+
+        .page-header-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--accent-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .page-header-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        /* ========== STATS CARDS ========== */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 20px;
+            margin-bottom: 28px;
+        }
+
+        .mini-stat {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mini-stat::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--stat-color, var(--accent-primary));
+        }
+
+        .mini-stat:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .mini-stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .mini-stat-icon.blue { background: rgba(0, 38, 100, 0.1); color: var(--tchad-blue); }
+        .mini-stat-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+        .mini-stat-icon.gold { background: rgba(254, 203, 0, 0.2); color: #b8860b; }
+        .mini-stat-icon.red { background: rgba(198, 12, 48, 0.1); color: var(--tchad-red); }
+        .mini-stat-icon.purple { background: rgba(124, 58, 237, 0.1); color: #7c3aed; }
+
+        .mini-stat-content h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .mini-stat-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+
+        /* ========== CARD ========== */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-lg);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .card-title {
+            font-size: 1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: var(--accent-primary);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .card-body {
+            padding: 0;
+        }
+
+        /* ========== FILTERS BAR ========== */
+        .filters-bar {
+            display: flex;
+            gap: 12px;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .filter-label {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .filter-select {
+            padding: 8px 32px 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237a8fa3' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+        }
+
+        .filter-search {
+            flex: 1;
+            min-width: 200px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--bg-secondary);
+        }
+
+        .filter-search input {
+            border: none;
+            background: none;
+            outline: none;
+            flex: 1;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+        }
+
+        .filter-search input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .view-toggle {
+            display: flex;
+            background: var(--bg-primary);
+            border-radius: 8px;
+            padding: 4px;
+            gap: 4px;
+        }
+
+        .view-toggle-btn {
+            width: 36px;
+            height: 32px;
+            border: none;
+            background: transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .view-toggle-btn.active {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* ========== DATA TABLE ========== */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 14px 20px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .data-table th {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            background: var(--bg-tertiary);
+            position: sticky;
+            top: 0;
+        }
+
+        .data-table th.sortable {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .data-table th.sortable:hover {
+            color: var(--accent-primary);
+        }
+
+        .data-table td {
+            font-size: 0.9rem;
+        }
+
+        .data-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+        .data-table tbody tr:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Project Cell */
+        .project-cell {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .project-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .project-icon.infrastructure { background: linear-gradient(135deg, #002664, #1a4a8a); color: white; }
+        .project-icon.sante { background: linear-gradient(135deg, #059669, #10b981); color: white; }
+        .project-icon.energie { background: linear-gradient(135deg, #d97706, #f59e0b); color: white; }
+        .project-icon.agriculture { background: linear-gradient(135deg, #16a34a, #22c55e); color: white; }
+        .project-icon.education { background: linear-gradient(135deg, #7c3aed, #a855f7); color: white; }
+        .project-icon.eau { background: linear-gradient(135deg, #0284c7, #38bdf8); color: white; }
+
+        .project-info h4 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .project-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-badge.en-cours {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .status-badge.termine {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        .status-badge.en-retard {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .status-badge.planifie {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .status-badge.suspendu {
+            background: rgba(107, 114, 128, 0.1);
+            color: #6b7280;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Priority Badge */
+        .priority-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .priority-badge.haute {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .priority-badge.moyenne {
+            background: rgba(245, 158, 11, 0.1);
+            color: #f59e0b;
+        }
+
+        .priority-badge.normale {
+            background: rgba(16, 185, 129, 0.1);
+            color: #10b981;
+        }
+
+        /* Progress Bar */
+        .progress-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            min-width: 140px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 8px;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+        }
+
+        .progress-fill.blue { background: linear-gradient(90deg, #002664, #1a4a8a); }
+        .progress-fill.green { background: linear-gradient(90deg, #059669, #10b981); }
+        .progress-fill.gold { background: linear-gradient(90deg, #d97706, #f59e0b); }
+        .progress-fill.red { background: linear-gradient(90deg, #dc2626, #ef4444); }
+
+        .progress-text {
+            font-size: 0.85rem;
+            font-weight: 600;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        /* Budget Cell */
+        .budget-cell {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .budget-cell small {
+            display: block;
+            font-weight: 400;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Actions Cell */
+        .actions-cell {
+            display: flex;
+            gap: 6px;
+        }
+
+        .action-btn {
+            width: 34px;
+            height: 34px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+            background: rgba(0, 38, 100, 0.05);
+        }
+
+        .action-btn.view:hover {
+            border-color: var(--info);
+            color: var(--info);
+            background: rgba(59, 130, 246, 0.05);
+        }
+
+        .action-btn.edit:hover {
+            border-color: var(--warning);
+            color: var(--warning);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        .action-btn.delete:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        /* ========== PAGINATION ========== */
+        .table-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .table-info {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .pagination {
+            display: flex;
+            gap: 6px;
+        }
+
+        .pagination-btn {
+            min-width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 0 12px;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .pagination-btn.active {
+            background: var(--accent-gradient);
+            color: white;
+            border-color: transparent;
+        }
+
+        .pagination-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* ========== BUTTONS ========== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--accent-gradient);
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg), 0 0 20px rgba(0, 38, 100, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-secondary);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #059669, #10b981);
+            color: white;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
+            color: white;
+        }
+
+        .btn-gold {
+            background: var(--gold-gradient);
+            color: var(--tchad-blue);
+        }
+
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+        }
+
+        /* ========== MODAL ========== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active .modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal.xlarge {
+            max-width: 1100px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 28px;
+            border-bottom: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .modal-title-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .modal-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            border-color: var(--danger);
+            color: var(--danger);
+            background: rgba(239, 68, 68, 0.05);
+        }
+
+        .modal-body {
+            padding: 28px;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 20px 28px;
+            border-top: 1px solid var(--border-color);
+            background: var(--bg-tertiary);
+        }
+
+        /* ========== VIEW PROJECT MODAL ========== */
+        .project-header {
+            display: flex;
+            gap: 24px;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 24px;
+        }
+
+        .project-header-icon {
+            width: 72px;
+            height: 72px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .project-header-info {
+            flex: 1;
+        }
+
+        .project-header-info h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .project-header-info p {
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+        }
+
+        .project-header-badges {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .project-header-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 180px;
+        }
+
+        .header-stat {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+
+        .header-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .header-stat-value {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        /* Tabs */
+        .tabs-nav {
+            display: flex;
+            gap: 4px;
+            padding: 4px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            margin-bottom: 24px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 10px 16px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            font-weight: 600;
+            font-family: inherit;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .tab-btn:hover {
+            color: var(--text-primary);
+        }
+
+        .tab-btn.active {
+            background: var(--bg-secondary);
+            color: var(--accent-primary);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Info Grid */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .info-card {
+            padding: 18px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+        }
+
+        .info-card-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .info-card-value {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .info-card-value.large {
+            font-size: 1.4rem;
+        }
+
+        .info-card.full-width {
+            grid-column: span 3;
+        }
+
+        .info-card.half-width {
+            grid-column: span 2;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 10px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--border-color);
+        }
+
+        .timeline-item {
+            position: relative;
+            padding-bottom: 24px;
+        }
+
+        .timeline-item:last-child {
+            padding-bottom: 0;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            left: -30px;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 3px solid var(--accent-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .timeline-marker.completed {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .timeline-marker.current {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+
+        .timeline-content {
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .timeline-content h5 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .timeline-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .timeline-date {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        /* Team List */
+        .team-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .team-member {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+        }
+
+        .team-avatar {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: var(--accent-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .team-info h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .team-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Finance Grid */
+        .finance-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .finance-card {
+            padding: 20px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+        }
+
+        .finance-card h4 {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .finance-card .amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .finance-card .amount small {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .finance-card.highlight {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .finance-card.highlight h4 {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .finance-card.highlight .amount {
+            color: white;
+        }
+
+        /* Documents List */
+        .documents-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .document-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 16px;
+            background: var(--bg-tertiary);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .document-item:hover {
+            background: var(--bg-primary);
+        }
+
+        .document-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .document-icon.pdf { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        .document-icon.doc { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .document-icon.xls { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+
+        .document-info {
+            flex: 1;
+        }
+
+        .document-info h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .document-info p {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .document-action {
+            color: var(--text-muted);
+            transition: color 0.2s ease;
+        }
+
+        .document-item:hover .document-action {
+            color: var(--accent-primary);
+        }
+
+        /* ========== EDIT PROJECT MODAL ========== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        .form-label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .form-label .required {
+            color: var(--danger);
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 12px 16px;
+            border: 2px solid var(--border-color);
+            border-radius: 10px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 4px rgba(0, 38, 100, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .section-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 28px 0;
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .section-divider span {
+            font-size: 0.8rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+        }
+
+        /* ========== TOAST ========== */
+        .toast-container {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 3000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-shadow: var(--shadow-xl);
+            min-width: 320px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .toast-content h5 {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-content p {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 1400px) {
+            .stats-row {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .info-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .info-card.full-width {
+                grid-column: span 2;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .stats-row {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full-width {
+                grid-column: span 1;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-card.full-width,
+            .info-card.half-width {
+                grid-column: span 1;
+            }
+
+            .finance-grid,
+            .team-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .stats-row {
+                grid-template-columns: 1fr;
+            }
+
+            .content-area {
+                padding: 20px;
+            }
+
+            .page-header {
+                flex-direction: column;
+                gap: 16px;
+            }
+
+            .filters-bar {
+                flex-direction: column;
+            }
+
+            .filter-search {
+                min-width: 100%;
+            }
+
+            .project-header {
+                flex-direction: column;
+            }
+
+            .project-header-stats {
+                min-width: 100%;
+            }
+
+            .tabs-nav {
+                flex-wrap: wrap;
+            }
+
+            .tab-btn {
+                flex: none;
+                width: calc(50% - 2px);
+            }
+        }
+    </style>
+</head>
+<body x-data="projectsAdmin()">
+    <!-- Sidebar -->
+    <aside class="sidebar" :class="{ 'open': sidebarOpen }">
+        <div class="sidebar-header">
+            <div class="sidebar-logo">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#fecb00"/>
+                            <stop offset="100%" style="stop-color:#e6b800"/>
+                        </linearGradient>
+                    </defs>
+                    <path d="M50 5 L90 20 L90 55 C90 75 70 90 50 95 C30 90 10 75 10 55 L10 20 Z" fill="url(#shieldGrad)" stroke="#002664" stroke-width="2"/>
+                    <rect x="15" y="25" width="23" height="45" fill="#002664"/>
+                    <rect x="38" y="25" width="24" height="45" fill="#fecb00"/>
+                    <rect x="62" y="25" width="23" height="45" fill="#c60c30"/>
+                    <polygon points="50,30 53,40 63,40 55,47 58,57 50,51 42,57 45,47 37,40 47,40" fill="#002664"/>
+                    <circle cx="50" cy="15" r="6" fill="#fecb00" stroke="#002664" stroke-width="1"/>
+                </svg>
+            </div>
+            <div class="sidebar-brand">
+                <h1>SIGEP Tchad</h1>
+                <span>Gestion des Projets Publics</span>
+            </div>
+        </div>
+
+        <div class="user-info">
+            <div class="user-card">
+                <div class="user-avatar">AD</div>
+                <div class="user-details">
+                    <h4>Abdoulaye Damba</h4>
+                    <p>Direction Générale</p>
+                    <span class="user-role">Chef de Projet</span>
+                </div>
+            </div>
+        </div>
+
+        <nav class="sidebar-nav">
+            <div class="nav-section">
+                <div class="nav-section-title">Navigation</div>
+                <a class="nav-item" href="sigep-dashboard.html">
+                    <i data-lucide="layout-dashboard"></i>
+                    <span>Tableau de bord</span>
+                </a>
+                <a class="nav-item" href="sigep-users.html">
+                    <i data-lucide="users"></i>
+                    <span>Groupes de travail</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="message-square"></i>
+                    <span>Messages</span>
+                    <span class="nav-badge">2</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="clipboard-list"></i>
+                    <span>Tâches</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Projets</div>
+                <a class="nav-item active">
+                    <i data-lucide="briefcase"></i>
+                    <span>Projets</span>
+                    <span class="nav-badge" x-text="projects.length"></span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="banknote"></i>
+                    <span>Financements</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="wallet"></i>
+                    <span>Décaissements</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Administration</div>
+                <a class="nav-item" href="sigep-users.html">
+                    <i data-lucide="users-cog"></i>
+                    <span>Utilisateurs</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="settings"></i>
+                    <span>Paramètres</span>
+                </a>
+            </div>
+
+            <div class="nav-section">
+                <div class="nav-section-title">Compte</div>
+                <a class="nav-item">
+                    <i data-lucide="user-circle"></i>
+                    <span>Mon profil</span>
+                </a>
+                <a class="nav-item">
+                    <i data-lucide="log-out"></i>
+                    <span>Se déconnecter</span>
+                </a>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="menu-toggle" @click="sidebarOpen = !sidebarOpen">
+                    <i data-lucide="menu"></i>
+                </button>
+                <div class="search-box">
+                    <i data-lucide="search" style="width: 18px; height: 18px; color: var(--text-muted);"></i>
+                    <input type="text" placeholder="Rechercher un projet..." x-model="searchQuery" @input="filterProjects()">
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-btn">
+                    <i data-lucide="bell"></i>
+                    <span class="badge">4</span>
+                </button>
+                <button class="header-btn">
+                    <i data-lucide="mail"></i>
+                    <span class="badge">3</span>
+                </button>
+                <button class="header-btn theme-toggle" @click="toggleTheme()">
+                    <i data-lucide="sun" x-show="theme === 'dark'"></i>
+                    <i data-lucide="moon" x-show="theme === 'light'"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="content-area">
+            <!-- Page Header -->
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h2>
+                        <span class="page-header-icon">
+                            <i data-lucide="briefcase"></i>
+                        </span>
+                        Gestion des Projets
+                    </h2>
+                    <p>Suivi et administration de tous les projets publics</p>
+                </div>
+                <div class="page-header-actions">
+                    <button class="btn btn-secondary" @click="exportProjects()">
+                        <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                        Exporter
+                    </button>
+                    <a href="sigep-project-add.html" class="btn btn-primary">
+                        <i data-lucide="plus" style="width: 18px; height: 18px;"></i>
+                        Nouveau projet
+                    </a>
+                </div>
+            </div>
+
+            <!-- Stats Row -->
+            <div class="stats-row">
+                <div class="mini-stat" style="--stat-color: #002664;">
+                    <div class="mini-stat-icon blue">
+                        <i data-lucide="folder-kanban"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3 x-text="projects.length">0</h3>
+                        <p>Total projets</p>
+                    </div>
+                </div>
+                <div class="mini-stat" style="--stat-color: #3b82f6;">
+                    <div class="mini-stat-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                        <i data-lucide="loader"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3 x-text="projects.filter(p => p.status === 'en-cours').length">0</h3>
+                        <p>En cours</p>
+                    </div>
+                </div>
+                <div class="mini-stat" style="--stat-color: #10b981;">
+                    <div class="mini-stat-icon green">
+                        <i data-lucide="check-circle-2"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3 x-text="projects.filter(p => p.status === 'termine').length">0</h3>
+                        <p>Terminés</p>
+                    </div>
+                </div>
+                <div class="mini-stat" style="--stat-color: #ef4444;">
+                    <div class="mini-stat-icon red">
+                        <i data-lucide="alert-triangle"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3 x-text="projects.filter(p => p.status === 'en-retard').length">0</h3>
+                        <p>En retard</p>
+                    </div>
+                </div>
+                <div class="mini-stat" style="--stat-color: #fecb00;">
+                    <div class="mini-stat-icon gold">
+                        <i data-lucide="coins"></i>
+                    </div>
+                    <div class="mini-stat-content">
+                        <h3>125.8</h3>
+                        <p>Budget (Mds FCFA)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Table Card -->
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i data-lucide="list"></i>
+                        Liste des projets
+                    </h3>
+                    <div class="card-actions">
+                        <button class="btn btn-secondary btn-sm" @click="refreshProjects()">
+                            <i data-lucide="refresh-cw" style="width: 16px; height: 16px;"></i>
+                            Actualiser
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="filters-bar">
+                    <div class="filter-group">
+                        <span class="filter-label">Statut:</span>
+                        <select class="filter-select" x-model="filters.status" @change="filterProjects()">
+                            <option value="">Tous</option>
+                            <option value="en-cours">En cours</option>
+                            <option value="termine">Terminé</option>
+                            <option value="en-retard">En retard</option>
+                            <option value="planifie">Planifié</option>
+                            <option value="suspendu">Suspendu</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Secteur:</span>
+                        <select class="filter-select" x-model="filters.sector" @change="filterProjects()">
+                            <option value="">Tous</option>
+                            <template x-for="sector in sectors" :key="sector.id">
+                                <option :value="sector.id" x-text="sector.name"></option>
+                            </template>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <span class="filter-label">Priorité:</span>
+                        <select class="filter-select" x-model="filters.priority" @change="filterProjects()">
+                            <option value="">Toutes</option>
+                            <option value="haute">Haute</option>
+                            <option value="moyenne">Moyenne</option>
+                            <option value="normale">Normale</option>
+                        </select>
+                    </div>
+                    <div class="filter-search">
+                        <i data-lucide="search" style="width: 16px; height: 16px; color: var(--text-muted);"></i>
+                        <input type="text" placeholder="Filtrer par nom, code..." x-model="searchQuery" @input="filterProjects()">
+                    </div>
+                    <div class="view-toggle">
+                        <button class="view-toggle-btn active" title="Vue liste">
+                            <i data-lucide="list" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <button class="view-toggle-btn" title="Vue grille">
+                            <i data-lucide="grid-3x3" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table -->
+                <div class="card-body">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="sortable" @click="sortBy('name')">
+                                    Projet
+                                    <i data-lucide="chevrons-up-down" style="width: 14px; height: 14px; margin-left: 4px;"></i>
+                                </th>
+                                <th>Secteur</th>
+                                <th class="sortable" @click="sortBy('budget')">Budget</th>
+                                <th>Progression</th>
+                                <th>Statut</th>
+                                <th>Priorité</th>
+                                <th>Échéance</th>
+                                <th style="width: 140px;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template x-for="project in filteredProjects" :key="project.id">
+                                <tr>
+                                    <td>
+                                        <div class="project-cell">
+                                            <div class="project-icon" :class="project.sectorClass">
+                                                <i :data-lucide="project.icon" style="width: 20px; height: 20px;"></i>
+                                            </div>
+                                            <div class="project-info">
+                                                <h4 x-text="project.name"></h4>
+                                                <p x-text="project.code"></p>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td x-text="project.sector"></td>
+                                    <td>
+                                        <div class="budget-cell">
+                                            <span x-text="project.budget + ' Mds'"></span>
+                                            <small x-text="'Décaissé: ' + project.disbursed + ' Mds'"></small>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="progress-wrapper">
+                                            <div class="progress-bar">
+                                                <div class="progress-fill" :class="getProgressClass(project.progress)" :style="'width: ' + project.progress + '%'"></div>
+                                            </div>
+                                            <span class="progress-text" x-text="project.progress + '%'"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="status-badge" :class="project.status">
+                                            <span class="status-dot"></span>
+                                            <span x-text="getStatusLabel(project.status)"></span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <span class="priority-badge" :class="project.priority">
+                                            <i data-lucide="flag" style="width: 12px; height: 12px;"></i>
+                                            <span x-text="getPriorityLabel(project.priority)"></span>
+                                        </span>
+                                    </td>
+                                    <td x-text="project.deadline"></td>
+                                    <td>
+                                        <div class="actions-cell">
+                                            <button class="action-btn view" @click="viewProject(project)" title="Voir détails">
+                                                <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <button class="action-btn edit" @click="editProject(project)" title="Modifier">
+                                                <i data-lucide="pencil" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <button class="action-btn" @click="duplicateProject(project)" title="Dupliquer">
+                                                <i data-lucide="copy" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                            <button class="action-btn delete" @click="confirmDelete(project)" title="Supprimer">
+                                                <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                <div class="table-footer">
+                    <div class="table-info">
+                        Affichage de <strong x-text="filteredProjects.length"></strong> sur <strong x-text="projects.length"></strong> projets
+                    </div>
+                    <div class="pagination">
+                        <button class="pagination-btn" :disabled="currentPage === 1" @click="currentPage--">
+                            <i data-lucide="chevron-left" style="width: 16px; height: 16px;"></i>
+                        </button>
+                        <template x-for="page in totalPages" :key="page">
+                            <button class="pagination-btn" :class="{ 'active': currentPage === page }" @click="currentPage = page" x-text="page"></button>
+                        </template>
+                        <button class="pagination-btn" :disabled="currentPage === totalPages" @click="currentPage++">
+                            <i data-lucide="chevron-right" style="width: 16px; height: 16px;"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal: View Project -->
+    <div class="modal-overlay" :class="{ 'active': showViewModal }" @click.self="closeViewModal()">
+        <div class="modal xlarge">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon" :class="selectedProject?.sectorClass" :style="'background: ' + getSectorGradient(selectedProject?.sectorClass)">
+                        <i :data-lucide="selectedProject?.icon || 'briefcase'" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    Détails du projet
+                </h3>
+                <button class="modal-close" @click="closeViewModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body" x-show="selectedProject">
+                <!-- Project Header -->
+                <div class="project-header">
+                    <div class="project-header-icon" :style="'background: ' + getSectorGradient(selectedProject?.sectorClass)">
+                        <i :data-lucide="selectedProject?.icon || 'briefcase'" style="width: 32px; height: 32px;"></i>
+                    </div>
+                    <div class="project-header-info">
+                        <h3 x-text="selectedProject?.name"></h3>
+                        <p x-text="selectedProject?.description"></p>
+                        <div class="project-header-badges">
+                            <span class="status-badge" :class="selectedProject?.status">
+                                <span class="status-dot"></span>
+                                <span x-text="getStatusLabel(selectedProject?.status)"></span>
+                            </span>
+                            <span class="priority-badge" :class="selectedProject?.priority">
+                                <i data-lucide="flag" style="width: 12px; height: 12px;"></i>
+                                <span x-text="getPriorityLabel(selectedProject?.priority)"></span>
+                            </span>
+                            <span style="font-size: 0.8rem; color: var(--text-muted); padding: 4px 12px; background: var(--bg-tertiary); border-radius: 20px;" x-text="selectedProject?.code"></span>
+                        </div>
+                    </div>
+                    <div class="project-header-stats">
+                        <div class="header-stat">
+                            <span class="header-stat-label">Progression</span>
+                            <span class="header-stat-value" x-text="selectedProject?.progress + '%'"></span>
+                        </div>
+                        <div class="header-stat">
+                            <span class="header-stat-label">Budget</span>
+                            <span class="header-stat-value" x-text="selectedProject?.budget + ' Mds FCFA'"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs -->
+                <div class="tabs-nav">
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'overview' }" @click="viewTab = 'overview'">
+                        <i data-lucide="layout-dashboard" style="width: 16px; height: 16px;"></i>
+                        Vue d'ensemble
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'finance' }" @click="viewTab = 'finance'">
+                        <i data-lucide="wallet" style="width: 16px; height: 16px;"></i>
+                        Finances
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'timeline' }" @click="viewTab = 'timeline'">
+                        <i data-lucide="git-branch" style="width: 16px; height: 16px;"></i>
+                        Chronologie
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'team' }" @click="viewTab = 'team'">
+                        <i data-lucide="users" style="width: 16px; height: 16px;"></i>
+                        Équipe
+                    </button>
+                    <button class="tab-btn" :class="{ 'active': viewTab === 'documents' }" @click="viewTab = 'documents'">
+                        <i data-lucide="file-text" style="width: 16px; height: 16px;"></i>
+                        Documents
+                    </button>
+                </div>
+
+                <!-- Tab: Overview -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'overview' }">
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="hash" style="width: 14px; height: 14px;"></i>
+                                Code projet
+                            </div>
+                            <div class="info-card-value" x-text="selectedProject?.code"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="folder" style="width: 14px; height: 14px;"></i>
+                                Secteur
+                            </div>
+                            <div class="info-card-value" x-text="selectedProject?.sector"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="map-pin" style="width: 14px; height: 14px;"></i>
+                                Localisation
+                            </div>
+                            <div class="info-card-value" x-text="selectedProject?.location || 'National'"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="calendar" style="width: 14px; height: 14px;"></i>
+                                Date de début
+                            </div>
+                            <div class="info-card-value" x-text="selectedProject?.startDate"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="calendar-check" style="width: 14px; height: 14px;"></i>
+                                Date de fin prévue
+                            </div>
+                            <div class="info-card-value" x-text="selectedProject?.deadline"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="building-2" style="width: 14px; height: 14px;"></i>
+                                Maître d'ouvrage
+                            </div>
+                            <div class="info-card-value" x-text="selectedProject?.owner || 'Ministère concerné'"></div>
+                        </div>
+                        <div class="info-card full-width">
+                            <div class="info-card-label">
+                                <i data-lucide="file-text" style="width: 14px; height: 14px;"></i>
+                                Description
+                            </div>
+                            <div class="info-card-value" style="font-weight: 400; line-height: 1.6;" x-text="selectedProject?.fullDescription || selectedProject?.description"></div>
+                        </div>
+                        <div class="info-card half-width">
+                            <div class="info-card-label">
+                                <i data-lucide="landmark" style="width: 14px; height: 14px;"></i>
+                                Source de financement
+                            </div>
+                            <div class="info-card-value" x-text="selectedProject?.fundingSource || 'Budget national + PTF'"></div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-card-label">
+                                <i data-lucide="users" style="width: 14px; height: 14px;"></i>
+                                Bénéficiaires
+                            </div>
+                            <div class="info-card-value" x-text="selectedProject?.beneficiaries || 'Population nationale'"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Finance -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'finance' }">
+                    <div class="finance-grid">
+                        <div class="finance-card highlight">
+                            <h4><i data-lucide="coins" style="width: 16px; height: 16px;"></i> Budget total</h4>
+                            <div class="amount" x-text="selectedProject?.budget + ' Mds'"><small> FCFA</small></div>
+                        </div>
+                        <div class="finance-card">
+                            <h4><i data-lucide="arrow-down-circle" style="width: 16px; height: 16px;"></i> Montant décaissé</h4>
+                            <div class="amount" x-text="selectedProject?.disbursed + ' Mds'"><small> FCFA</small></div>
+                        </div>
+                        <div class="finance-card">
+                            <h4><i data-lucide="clock" style="width: 16px; height: 16px;"></i> Reste à décaisser</h4>
+                            <div class="amount" x-text="(selectedProject?.budget - selectedProject?.disbursed).toFixed(1) + ' Mds'"><small> FCFA</small></div>
+                        </div>
+                        <div class="finance-card">
+                            <h4><i data-lucide="percent" style="width: 16px; height: 16px;"></i> Taux d'exécution</h4>
+                            <div class="amount" x-text="Math.round((selectedProject?.disbursed / selectedProject?.budget) * 100) + '%'"></div>
+                        </div>
+                    </div>
+                    
+                    <div style="margin-top: 24px;">
+                        <h4 style="font-size: 1rem; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;">
+                            <i data-lucide="pie-chart" style="width: 18px; height: 18px; color: var(--accent-primary);"></i>
+                            Répartition par source
+                        </h4>
+                        <div class="info-grid" style="grid-template-columns: repeat(3, 1fr);">
+                            <div class="info-card">
+                                <div class="info-card-label">Budget National</div>
+                                <div class="info-card-value large">45%</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-label">Banque Mondiale</div>
+                                <div class="info-card-value large">35%</div>
+                            </div>
+                            <div class="info-card">
+                                <div class="info-card-label">BAD / Autres PTF</div>
+                                <div class="info-card-value large">20%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Timeline -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'timeline' }">
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <div class="timeline-marker completed">
+                                <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h5>Études de faisabilité</h5>
+                                <p>Études techniques et environnementales achevées</p>
+                                <div class="timeline-date">Janvier - Mars 2024</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker completed">
+                                <i data-lucide="check" style="width: 12px; height: 12px;"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h5>Appel d'offres</h5>
+                                <p>Processus de sélection des entreprises terminé</p>
+                                <div class="timeline-date">Avril - Juin 2024</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker current">
+                                <i data-lucide="loader" style="width: 12px; height: 12px;"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h5>Phase de construction</h5>
+                                <p>Travaux en cours selon le planning établi</p>
+                                <div class="timeline-date">Juillet 2024 - En cours</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Réception provisoire</h5>
+                                <p>Inspection et validation des travaux</p>
+                                <div class="timeline-date">Prévu: Juin 2026</div>
+                            </div>
+                        </div>
+                        <div class="timeline-item">
+                            <div class="timeline-marker"></div>
+                            <div class="timeline-content">
+                                <h5>Mise en service</h5>
+                                <p>Inauguration et exploitation</p>
+                                <div class="timeline-date">Prévu: Décembre 2026</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Team -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'team' }">
+                    <div class="team-list">
+                        <div class="team-member">
+                            <div class="team-avatar">AD</div>
+                            <div class="team-info">
+                                <h5>Abdoulaye Damba</h5>
+                                <p>Chef de projet</p>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="team-avatar" style="background: linear-gradient(135deg, #059669, #10b981);">FH</div>
+                            <div class="team-info">
+                                <h5>Fatima Hassan</h5>
+                                <p>Responsable financier</p>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="team-avatar" style="background: linear-gradient(135deg, #d97706, #f59e0b);">IM</div>
+                            <div class="team-info">
+                                <h5>Ibrahim Moussa</h5>
+                                <p>Ingénieur technique</p>
+                            </div>
+                        </div>
+                        <div class="team-member">
+                            <div class="team-avatar" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">MY</div>
+                            <div class="team-info">
+                                <h5>Mariam Youssouf</h5>
+                                <p>Coordinatrice terrain</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab: Documents -->
+                <div class="tab-content" :class="{ 'active': viewTab === 'documents' }">
+                    <div class="documents-list">
+                        <div class="document-item">
+                            <div class="document-icon pdf">
+                                <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="document-info">
+                                <h5>Étude de faisabilité</h5>
+                                <p>PDF • 4.2 MB • Mis à jour le 15 Mar 2024</p>
+                            </div>
+                            <div class="document-action">
+                                <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                            </div>
+                        </div>
+                        <div class="document-item">
+                            <div class="document-icon doc">
+                                <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="document-info">
+                                <h5>Cahier des charges</h5>
+                                <p>DOCX • 1.8 MB • Mis à jour le 20 Avr 2024</p>
+                            </div>
+                            <div class="document-action">
+                                <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                            </div>
+                        </div>
+                        <div class="document-item">
+                            <div class="document-icon xls">
+                                <i data-lucide="file-spreadsheet" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="document-info">
+                                <h5>Budget détaillé</h5>
+                                <p>XLSX • 856 KB • Mis à jour le 10 Déc 2025</p>
+                            </div>
+                            <div class="document-action">
+                                <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                            </div>
+                        </div>
+                        <div class="document-item">
+                            <div class="document-icon pdf">
+                                <i data-lucide="file-text" style="width: 20px; height: 20px;"></i>
+                            </div>
+                            <div class="document-info">
+                                <h5>Rapport d'avancement Q4 2025</h5>
+                                <p>PDF • 2.1 MB • Mis à jour le 15 Déc 2025</p>
+                            </div>
+                            <div class="document-action">
+                                <i data-lucide="download" style="width: 18px; height: 18px;"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeViewModal()">Fermer</button>
+                <button class="btn btn-gold" @click="closeViewModal(); editProject(selectedProject)">
+                    <i data-lucide="pencil" style="width: 18px; height: 18px;"></i>
+                    Modifier
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Edit Project -->
+    <div class="modal-overlay" :class="{ 'active': showEditModal }" @click.self="closeEditModal()">
+        <div class="modal xlarge">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon" style="background: linear-gradient(135deg, #d97706, #f59e0b);">
+                        <i data-lucide="pencil" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    Modifier le projet
+                </h3>
+                <button class="modal-close" @click="closeEditModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form @submit.prevent="saveProject()">
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label class="form-label">
+                                Nom du projet <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" x-model="projectForm.name" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                Code projet <span class="required">*</span>
+                            </label>
+                            <input type="text" class="form-input" x-model="projectForm.code" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">
+                                Secteur <span class="required">*</span>
+                            </label>
+                            <select class="form-select" x-model="projectForm.sector" required>
+                                <option value="">Sélectionner un secteur</option>
+                                <template x-for="sector in sectors" :key="sector.id">
+                                    <option :value="sector.id" x-text="sector.name"></option>
+                                </template>
+                            </select>
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-textarea" x-model="projectForm.description" rows="3"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="section-divider">
+                        <span>Informations financières</span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">
+                                Budget (Milliards FCFA) <span class="required">*</span>
+                            </label>
+                            <input type="number" step="0.1" class="form-input" x-model="projectForm.budget" required>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Montant décaissé (Milliards FCFA)</label>
+                            <input type="number" step="0.1" class="form-input" x-model="projectForm.disbursed">
+                        </div>
+                        <div class="form-group full-width">
+                            <label class="form-label">Source de financement</label>
+                            <input type="text" class="form-input" x-model="projectForm.fundingSource" placeholder="Ex: Budget national, Banque Mondiale, BAD...">
+                        </div>
+                    </div>
+
+                    <div class="section-divider">
+                        <span>Planification</span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Date de début</label>
+                            <input type="date" class="form-input" x-model="projectForm.startDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Date de fin prévue</label>
+                            <input type="date" class="form-input" x-model="projectForm.endDate">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Statut</label>
+                            <select class="form-select" x-model="projectForm.status">
+                                <option value="planifie">Planifié</option>
+                                <option value="en-cours">En cours</option>
+                                <option value="en-retard">En retard</option>
+                                <option value="termine">Terminé</option>
+                                <option value="suspendu">Suspendu</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Priorité</label>
+                            <select class="form-select" x-model="projectForm.priority">
+                                <option value="normale">Normale</option>
+                                <option value="moyenne">Moyenne</option>
+                                <option value="haute">Haute</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Progression (%)</label>
+                            <input type="number" min="0" max="100" class="form-input" x-model="projectForm.progress">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Localisation</label>
+                            <input type="text" class="form-input" x-model="projectForm.location" placeholder="Ex: N'Djamena, Moundou...">
+                        </div>
+                    </div>
+
+                    <div class="section-divider">
+                        <span>Responsables</span>
+                    </div>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label class="form-label">Maître d'ouvrage</label>
+                            <input type="text" class="form-input" x-model="projectForm.owner" placeholder="Ministère / Direction">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Chef de projet</label>
+                            <select class="form-select" x-model="projectForm.manager">
+                                <option value="">Sélectionner</option>
+                                <option value="1">Abdoulaye Damba</option>
+                                <option value="2">Fatima Hassan</option>
+                                <option value="3">Ibrahim Moussa</option>
+                                <option value="4">Mariam Youssouf</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeEditModal()">Annuler</button>
+                <button class="btn btn-primary" @click="saveProject()">
+                    <i data-lucide="save" style="width: 18px; height: 18px;"></i>
+                    Enregistrer les modifications
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Delete Confirmation -->
+    <div class="modal-overlay" :class="{ 'active': showDeleteModal }" @click.self="closeDeleteModal()">
+        <div class="modal" style="max-width: 480px;">
+            <div class="modal-header">
+                <h3 class="modal-title">
+                    <span class="modal-title-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+                        <i data-lucide="alert-triangle" style="width: 22px; height: 22px;"></i>
+                    </span>
+                    Confirmer la suppression
+                </h3>
+                <button class="modal-close" @click="closeDeleteModal()">
+                    <i data-lucide="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p style="color: var(--text-secondary); line-height: 1.6;">
+                    Êtes-vous sûr de vouloir supprimer le projet <strong x-text="selectedProject?.name"></strong> ? 
+                    Cette action est irréversible et toutes les données associées (financements, tâches, documents) seront perdues.
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" @click="closeDeleteModal()">Annuler</button>
+                <button class="btn btn-danger" @click="deleteProject()">
+                    <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                    Supprimer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container">
+        <template x-for="toast in toasts" :key="toast.id">
+            <div class="toast" :class="toast.type">
+                <div class="toast-icon">
+                    <i :data-lucide="toast.type === 'success' ? 'check-circle' : 'alert-circle'" style="width: 20px; height: 20px;"></i>
+                </div>
+                <div class="toast-content">
+                    <h5 x-text="toast.title"></h5>
+                    <p x-text="toast.message"></p>
+                </div>
+            </div>
+        </template>
+    </div>
+
+    <script>
+        function projectsAdmin() {
+            return {
+                sidebarOpen: false,
+                theme: 'light',
+                searchQuery: '',
+                currentPage: 1,
+                itemsPerPage: 10,
+                
+                // Modals
+                showViewModal: false,
+                showEditModal: false,
+                showDeleteModal: false,
+                
+                // Selected project
+                selectedProject: null,
+                viewTab: 'overview',
+                
+                // Filters
+                filters: {
+                    status: '',
+                    sector: '',
+                    priority: ''
+                },
+                
+                // Form
+                projectForm: {
+                    name: '',
+                    code: '',
+                    sector: '',
+                    description: '',
+                    budget: 0,
+                    disbursed: 0,
+                    fundingSource: '',
+                    startDate: '',
+                    endDate: '',
+                    status: 'en-cours',
+                    priority: 'normale',
+                    progress: 0,
+                    location: '',
+                    owner: '',
+                    manager: ''
+                },
+                
+                // Toasts
+                toasts: [],
+                
+                // Data
+                sectors: [
+                    { id: 'infrastructure', name: 'Infrastructure', icon: 'road', class: 'infrastructure' },
+                    { id: 'sante', name: 'Santé', icon: 'heart-pulse', class: 'sante' },
+                    { id: 'energie', name: 'Énergie', icon: 'zap', class: 'energie' },
+                    { id: 'agriculture', name: 'Agriculture', icon: 'wheat', class: 'agriculture' },
+                    { id: 'education', name: 'Éducation', icon: 'graduation-cap', class: 'education' },
+                    { id: 'eau', name: 'Eau & Assainissement', icon: 'droplets', class: 'eau' }
+                ],
+                
+                projects: [
+                    {
+                        id: 1,
+                        name: 'Route Nationale N\'Djamena - Abéché',
+                        code: 'PRJ-2024-001',
+                        sector: 'Infrastructure',
+                        sectorClass: 'infrastructure',
+                        icon: 'road',
+                        description: 'Construction et réhabilitation de 850 km de route nationale',
+                        fullDescription: 'Ce projet vise à moderniser l\'axe routier principal reliant N\'Djamena à Abéché, incluant la construction de ponts, la mise en place d\'un système de drainage et l\'installation de l\'éclairage public sur les tronçons urbains.',
+                        budget: 45.8,
+                        disbursed: 28.5,
+                        progress: 62,
+                        status: 'en-cours',
+                        priority: 'haute',
+                        startDate: '15 Jan 2024',
+                        deadline: '30 Déc 2026',
+                        location: 'N\'Djamena - Abéché',
+                        owner: 'Ministère des Infrastructures',
+                        fundingSource: 'Budget National + Banque Mondiale',
+                        beneficiaries: '2.5 millions d\'habitants'
+                    },
+                    {
+                        id: 2,
+                        name: 'Centrale Solaire de Moundou',
+                        code: 'PRJ-2024-002',
+                        sector: 'Énergie',
+                        sectorClass: 'energie',
+                        icon: 'zap',
+                        description: 'Installation d\'une centrale solaire de 50 MW',
+                        fullDescription: 'Construction d\'une centrale solaire photovoltaïque de 50 MW avec système de stockage par batteries. Ce projet contribuera à l\'électrification rurale et à la réduction de la dépendance aux énergies fossiles.',
+                        budget: 28.5,
+                        disbursed: 12.8,
+                        progress: 45,
+                        status: 'en-cours',
+                        priority: 'haute',
+                        startDate: '01 Mar 2024',
+                        deadline: '30 Juin 2026',
+                        location: 'Moundou',
+                        owner: 'Ministère de l\'Énergie',
+                        fundingSource: 'BAD + AFD',
+                        beneficiaries: '500,000 habitants'
+                    },
+                    {
+                        id: 3,
+                        name: 'Hôpital Régional de Sarh',
+                        code: 'PRJ-2023-015',
+                        sector: 'Santé',
+                        sectorClass: 'sante',
+                        icon: 'heart-pulse',
+                        description: 'Construction d\'un hôpital de 300 lits avec équipements modernes',
+                        fullDescription: 'Construction d\'un complexe hospitalier comprenant des services d\'urgence, de chirurgie, de maternité et d\'imagerie médicale. Le projet inclut la formation du personnel médical.',
+                        budget: 18.2,
+                        disbursed: 6.9,
+                        progress: 38,
+                        status: 'en-retard',
+                        priority: 'haute',
+                        startDate: '15 Sep 2023',
+                        deadline: '31 Mar 2025',
+                        location: 'Sarh',
+                        owner: 'Ministère de la Santé',
+                        fundingSource: 'Budget National + OMS',
+                        beneficiaries: '800,000 habitants'
+                    },
+                    {
+                        id: 4,
+                        name: 'Périmètre Irrigué du Lac Tchad',
+                        code: 'PRJ-2024-008',
+                        sector: 'Agriculture',
+                        sectorClass: 'agriculture',
+                        icon: 'wheat',
+                        description: 'Aménagement de 15,000 ha de terres agricoles irriguées',
+                        fullDescription: 'Projet d\'aménagement hydro-agricole comprenant la construction de canaux d\'irrigation, de stations de pompage et la mise en place d\'un système de gestion de l\'eau.',
+                        budget: 22.4,
+                        disbursed: 19.8,
+                        progress: 89,
+                        status: 'termine',
+                        priority: 'moyenne',
+                        startDate: '01 Jan 2024',
+                        deadline: '30 Nov 2025',
+                        location: 'Région du Lac',
+                        owner: 'Ministère de l\'Agriculture',
+                        fundingSource: 'FIDA + Budget National',
+                        beneficiaries: '50,000 agriculteurs'
+                    },
+                    {
+                        id: 5,
+                        name: 'École Normale Supérieure de Bongor',
+                        code: 'PRJ-2024-012',
+                        sector: 'Éducation',
+                        sectorClass: 'education',
+                        icon: 'graduation-cap',
+                        description: 'Construction d\'une école de formation des enseignants',
+                        fullDescription: 'Construction d\'un campus universitaire comprenant des salles de cours, des laboratoires, une bibliothèque et des logements pour étudiants. Capacité de 2000 étudiants.',
+                        budget: 8.6,
+                        disbursed: 2.2,
+                        progress: 25,
+                        status: 'planifie',
+                        priority: 'normale',
+                        startDate: '01 Sep 2024',
+                        deadline: '31 Déc 2027',
+                        location: 'Bongor',
+                        owner: 'Ministère de l\'Éducation',
+                        fundingSource: 'Budget National + UNESCO',
+                        beneficiaries: '2,000 étudiants/an'
+                    },
+                    {
+                        id: 6,
+                        name: 'Adduction d\'Eau Potable Abéché',
+                        code: 'PRJ-2023-022',
+                        sector: 'Eau & Assainissement',
+                        sectorClass: 'eau',
+                        icon: 'droplets',
+                        description: 'Réseau d\'adduction d\'eau pour 200,000 habitants',
+                        fullDescription: 'Construction d\'un réseau d\'adduction d\'eau potable incluant des forages, une station de traitement, un château d\'eau et 150 km de canalisations.',
+                        budget: 12.3,
+                        disbursed: 10.1,
+                        progress: 82,
+                        status: 'en-cours',
+                        priority: 'haute',
+                        startDate: '01 Jun 2023',
+                        deadline: '28 Fév 2025',
+                        location: 'Abéché',
+                        owner: 'Ministère de l\'Hydraulique',
+                        fundingSource: 'Union Européenne + AFD',
+                        beneficiaries: '200,000 habitants'
+                    },
+                    {
+                        id: 7,
+                        name: 'Pont sur le Chari à N\'Djamena',
+                        code: 'PRJ-2024-003',
+                        sector: 'Infrastructure',
+                        sectorClass: 'infrastructure',
+                        icon: 'road',
+                        description: 'Construction d\'un nouveau pont de 800m sur le fleuve Chari',
+                        fullDescription: 'Construction d\'un pont à 4 voies avec pistes cyclables et piétonnes, incluant les voies d\'accès et l\'éclairage.',
+                        budget: 15.5,
+                        disbursed: 4.2,
+                        progress: 27,
+                        status: 'en-cours',
+                        priority: 'moyenne',
+                        startDate: '15 Avr 2024',
+                        deadline: '30 Sep 2027',
+                        location: 'N\'Djamena',
+                        owner: 'Ministère des Infrastructures',
+                        fundingSource: 'Chine EXIM Bank',
+                        beneficiaries: '1.5 million d\'habitants'
+                    },
+                    {
+                        id: 8,
+                        name: 'Centre de Santé Communautaire Doba',
+                        code: 'PRJ-2024-018',
+                        sector: 'Santé',
+                        sectorClass: 'sante',
+                        icon: 'heart-pulse',
+                        description: 'Construction de 10 centres de santé communautaires',
+                        fullDescription: 'Construction et équipement de centres de santé de proximité pour améliorer l\'accès aux soins de base dans la région.',
+                        budget: 5.8,
+                        disbursed: 5.8,
+                        progress: 100,
+                        status: 'termine',
+                        priority: 'normale',
+                        startDate: '01 Fév 2024',
+                        deadline: '30 Nov 2024',
+                        location: 'Doba et environs',
+                        owner: 'Ministère de la Santé',
+                        fundingSource: 'UNICEF + Budget National',
+                        beneficiaries: '150,000 habitants'
+                    }
+                ],
+                
+                filteredProjects: [],
+                
+                init() {
+                    this.filteredProjects = [...this.projects];
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                get totalPages() {
+                    return Math.ceil(this.filteredProjects.length / this.itemsPerPage) || 1;
+                },
+                
+                toggleTheme() {
+                    this.theme = this.theme === 'light' ? 'dark' : 'light';
+                    document.documentElement.setAttribute('data-theme', this.theme);
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                filterProjects() {
+                    this.filteredProjects = this.projects.filter(project => {
+                        const matchesSearch = !this.searchQuery || 
+                            project.name.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+                            project.code.toLowerCase().includes(this.searchQuery.toLowerCase());
+                        
+                        const matchesStatus = !this.filters.status || project.status === this.filters.status;
+                        
+                        const matchesSector = !this.filters.sector || 
+                            project.sectorClass === this.filters.sector;
+                        
+                        const matchesPriority = !this.filters.priority || project.priority === this.filters.priority;
+                        
+                        return matchesSearch && matchesStatus && matchesSector && matchesPriority;
+                    });
+                    this.currentPage = 1;
+                },
+                
+                sortBy(field) {
+                    this.filteredProjects.reverse();
+                },
+                
+                refreshProjects() {
+                    this.filterProjects();
+                    this.showToast('success', 'Actualisé', 'Liste des projets mise à jour');
+                },
+                
+                exportProjects() {
+                    this.showToast('success', 'Export', 'Export des projets en cours...');
+                },
+                
+                // View Modal
+                viewProject(project) {
+                    this.selectedProject = project;
+                    this.viewTab = 'overview';
+                    this.showViewModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeViewModal() {
+                    this.showViewModal = false;
+                    this.selectedProject = null;
+                },
+                
+                // Edit Modal
+                editProject(project) {
+                    this.selectedProject = project;
+                    this.projectForm = {
+                        name: project.name,
+                        code: project.code,
+                        sector: project.sectorClass,
+                        description: project.description,
+                        budget: project.budget,
+                        disbursed: project.disbursed,
+                        fundingSource: project.fundingSource || '',
+                        startDate: '',
+                        endDate: '',
+                        status: project.status,
+                        priority: project.priority,
+                        progress: project.progress,
+                        location: project.location || '',
+                        owner: project.owner || '',
+                        manager: ''
+                    };
+                    this.showEditModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeEditModal() {
+                    this.showEditModal = false;
+                },
+                
+                saveProject() {
+                    if (!this.projectForm.name || !this.projectForm.code) {
+                        this.showToast('error', 'Erreur', 'Veuillez remplir tous les champs obligatoires');
+                        return;
+                    }
+                    
+                    const index = this.projects.findIndex(p => p.id === this.selectedProject.id);
+                    if (index !== -1) {
+                        const sector = this.sectors.find(s => s.id === this.projectForm.sector);
+                        this.projects[index] = {
+                            ...this.projects[index],
+                            name: this.projectForm.name,
+                            code: this.projectForm.code,
+                            sector: sector?.name || this.projects[index].sector,
+                            sectorClass: this.projectForm.sector || this.projects[index].sectorClass,
+                            icon: sector?.icon || this.projects[index].icon,
+                            description: this.projectForm.description,
+                            budget: parseFloat(this.projectForm.budget),
+                            disbursed: parseFloat(this.projectForm.disbursed),
+                            fundingSource: this.projectForm.fundingSource,
+                            status: this.projectForm.status,
+                            priority: this.projectForm.priority,
+                            progress: parseInt(this.projectForm.progress),
+                            location: this.projectForm.location,
+                            owner: this.projectForm.owner
+                        };
+                    }
+                    
+                    this.filterProjects();
+                    this.showToast('success', 'Enregistré', 'Projet mis à jour avec succès');
+                    this.closeEditModal();
+                },
+                
+                duplicateProject(project) {
+                    const newProject = {
+                        ...project,
+                        id: Date.now(),
+                        name: project.name + ' (copie)',
+                        code: 'PRJ-' + Date.now().toString().slice(-6)
+                    };
+                    this.projects.push(newProject);
+                    this.filterProjects();
+                    this.showToast('success', 'Dupliqué', 'Projet dupliqué avec succès');
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                // Delete Modal
+                confirmDelete(project) {
+                    this.selectedProject = project;
+                    this.showDeleteModal = true;
+                    this.$nextTick(() => lucide.createIcons());
+                },
+                
+                closeDeleteModal() {
+                    this.showDeleteModal = false;
+                },
+                
+                deleteProject() {
+                    if (this.selectedProject) {
+                        this.projects = this.projects.filter(p => p.id !== this.selectedProject.id);
+                        this.filterProjects();
+                        this.showToast('success', 'Supprimé', 'Projet supprimé avec succès');
+                    }
+                    this.closeDeleteModal();
+                },
+                
+                // Helpers
+                getStatusLabel(status) {
+                    const labels = {
+                        'en-cours': 'En cours',
+                        'termine': 'Terminé',
+                        'en-retard': 'En retard',
+                        'planifie': 'Planifié',
+                        'suspendu': 'Suspendu'
+                    };
+                    return labels[status] || status;
+                },
+                
+                getPriorityLabel(priority) {
+                    const labels = {
+                        'haute': 'Haute',
+                        'moyenne': 'Moyenne',
+                        'normale': 'Normale'
+                    };
+                    return labels[priority] || priority;
+                },
+                
+                getProgressClass(progress) {
+                    if (progress >= 80) return 'green';
+                    if (progress >= 50) return 'blue';
+                    if (progress >= 25) return 'gold';
+                    return 'red';
+                },
+                
+                getSectorGradient(sectorClass) {
+                    const gradients = {
+                        'infrastructure': 'linear-gradient(135deg, #002664, #1a4a8a)',
+                        'sante': 'linear-gradient(135deg, #059669, #10b981)',
+                        'energie': 'linear-gradient(135deg, #d97706, #f59e0b)',
+                        'agriculture': 'linear-gradient(135deg, #16a34a, #22c55e)',
+                        'education': 'linear-gradient(135deg, #7c3aed, #a855f7)',
+                        'eau': 'linear-gradient(135deg, #0284c7, #38bdf8)'
+                    };
+                    return gradients[sectorClass] || 'var(--accent-gradient)';
+                },
+                
+                showToast(type, title, message) {
+                    const id = Date.now();
+                    this.toasts.push({ id, type, title, message });
+                    this.$nextTick(() => lucide.createIcons());
+                    setTimeout(() => {
+                        this.toasts = this.toasts.filter(t => t.id !== id);
+                    }, 4000);
+                }
+            };
+        }
+    </script>
+</body>
+</html>
