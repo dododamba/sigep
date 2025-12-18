@@ -57,8 +57,9 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
     <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
     <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
     <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">
-        <link href=\"https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css\" rel=\"stylesheet\">
+    <link href=\"https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css\" rel=\"stylesheet\">
 
+    
     <!-- Lucide Icons -->
     <script src=\"https://unpkg.com/lucide@latest\"></script>
     
@@ -69,49 +70,56 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
     <script defer src=\"https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js\"></script>
     
     <link rel=\"stylesheet\" href=\"";
-        // line 23
+        // line 24
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("css/styles.css"), "html", null, true);
         yield "\">
+    <style>
+    .nav-item.active {
+    background: var(--gold-gradient);
+    color: var(--tchad-blue);
+    box-shadow: var(--shadow-md);
+}
+    </style>
     ";
-        // line 24
+        // line 32
         yield from $this->unwrap()->yieldBlock('stylesheets', $context, $blocks);
-        // line 25
+        // line 33
         yield "</head>
 <body  x-data=\"dashboard()\">
     <!-- Sidebar -->
     ";
-        // line 28
-        yield from $this->load("partials/sidebare.html.twig", 28)->unwrap()->yield($context);
-        // line 29
+        // line 36
+        yield from $this->load("partials/sidebare.html.twig", 36)->unwrap()->yield($context);
+        // line 37
         yield "  
     <main class=\"main-content\">
         
         ";
-        // line 32
-        yield from $this->load("partials/header.html.twig", 32)->unwrap()->yield($context);
-        // line 33
+        // line 40
+        yield from $this->load("partials/header.html.twig", 40)->unwrap()->yield($context);
+        // line 41
         yield "
     <div class=\"content-area\">  
 \t\t    ";
-        // line 35
+        // line 43
         yield from $this->unwrap()->yieldBlock('body', $context, $blocks);
-        // line 36
+        // line 44
         yield "    </div>
      
       ";
-        // line 38
-        yield from $this->load("partials/footer.html.twig", 38)->unwrap()->yield($context);
-        // line 39
+        // line 46
+        yield from $this->load("partials/footer.html.twig", 46)->unwrap()->yield($context);
+        // line 47
         yield "       
     </main>
 
     ";
-        // line 42
+        // line 50
         yield from $this->unwrap()->yieldBlock('modal', $context, $blocks);
-        // line 43
+        // line 51
         yield "\t";
         yield from $this->unwrap()->yieldBlock('javascripts', $context, $blocks);
-        // line 46
+        // line 54
         yield "</body>
 </html>
 ";
@@ -121,7 +129,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
         yield from [];
     }
 
-    // line 24
+    // line 32
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -138,7 +146,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
         yield from [];
     }
 
-    // line 35
+    // line 43
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -154,7 +162,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
         yield from [];
     }
 
-    // line 42
+    // line 50
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -170,7 +178,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
         yield from [];
     }
 
-    // line 43
+    // line 51
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -180,7 +188,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 44
+        // line 52
         yield "\t\t
 \t";
         
@@ -210,7 +218,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  184 => 44,  174 => 43,  158 => 42,  142 => 35,  125 => 24,  115 => 46,  112 => 43,  110 => 42,  105 => 39,  103 => 38,  99 => 36,  97 => 35,  93 => 33,  91 => 32,  86 => 29,  84 => 28,  79 => 25,  77 => 24,  73 => 23,  49 => 1,);
+        return array (  192 => 52,  182 => 51,  166 => 50,  150 => 43,  133 => 32,  123 => 54,  120 => 51,  118 => 50,  113 => 47,  111 => 46,  107 => 44,  105 => 43,  101 => 41,  99 => 40,  94 => 37,  92 => 36,  87 => 33,  85 => 32,  74 => 24,  49 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -226,8 +234,9 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
     <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
     <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
     <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">
-        <link href=\"https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css\" rel=\"stylesheet\">
+    <link href=\"https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css\" rel=\"stylesheet\">
 
+    
     <!-- Lucide Icons -->
     <script src=\"https://unpkg.com/lucide@latest\"></script>
     
@@ -238,6 +247,13 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
     <script defer src=\"https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js\"></script>
     
     <link rel=\"stylesheet\" href=\"{{ asset('css/styles.css') }}\">
+    <style>
+    .nav-item.active {
+    background: var(--gold-gradient);
+    color: var(--tchad-blue);
+    box-shadow: var(--shadow-md);
+}
+    </style>
     {% block stylesheets %} {% endblock %}
 </head>
 <body  x-data=\"dashboard()\">

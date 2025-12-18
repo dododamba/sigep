@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Partenaire - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/partner-add.css') }}">
+{% endblock %}
+
+{% block body %}
+<header class="top-header">
+    <a href="{{ path('app_partners') }}" class="back-btn">
+        <i class="ri-arrow-left-line" style="width:18px;"></i>
+        Retour à la liste
+    </a>
+    <h1 style="font-size:1.1rem; font-weight:600;">Enregistrer un Partenaire</h1>
+    <div style="width:40px;"></div>
+</header>
+
+<div class="content-area">
+    {{ form_start(form, {'attr': {'class': 'partner-form', 'enctype': 'multipart/form-data'}}) }}
+    
+    <!-- Card 1: Info Générales -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon" style="background: var(--accent-gradient);">
+                <i class="ri-building-2-line"></i>
+            </div>
+            <div>
+                <h3 style="font-size:1.1rem; font-weight:600;">Informations Générales</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Identité de l'organisation</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid">
+                <!-- Logo Upload -->
+                <div class="form-group full">
+                    {{ form_label(form.logoFile, null, {'label_attr': {'class': 'form-label'}}) }}
+                    <div class="file-upload-area" onclick="document.getElementById('{{ form.logoFile.vars.id }}').click()">
+                        <div class="file-icon"><i class="ri-upload-cloud-2-line"></i></div>
+                        <p style="font-weight:600;">Cliquez pour télécharger</p>
+                        <p style="font-size:0.8rem; color:var(--text-muted);">PNG, JPG (Max 2MB)</p>
+                        {{ form_widget(form.logoFile, {'attr': {'style': 'display:none', 'onchange': 'showFileName(this)'}}) }}
+                    </div>
+                    <div id="fileNameDisplay" style="margin-top:8px; font-size:0.9rem; color:var(--success); display:none; align-items:center; gap:6px;">
+                        <i class="ri-check-line" style="width:16px;"></i> <span id="selectedFileName"></span>
+                    </div>
+                    {{ form_errors(form.logoFile) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.name, null, {'label_attr': {'class': 'form-label'}}) }}
+                    <span class="required">*</span>
+                    {{ form_widget(form.name) }}
+                    {{ form_errors(form.name) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.acronym, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.acronym) }}
+                    {{ form_errors(form.acronym) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.typePartner, null, {'label_attr': {'class': 'form-label'}}) }}
+                    <span class="required">*</span>
+                    {{ form_widget(form.typePartner) }}
+                    {{ form_errors(form.typePartner) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.siteWeb, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.siteWeb) }}
+                    {{ form_errors(form.siteWeb) }}
+                </div>
+
+                <div class="form-group full">
+                    {{ form_label(form.description, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.description) }}
+                    {{ form_errors(form.description) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 2: Contact / Point Focal -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon" style="background: var(--gold-gradient);">
+                <i class="ri-user-line" style="color:var(--tchad-blue);"></i>
+            </div>
+            <div>
+                <h3 style="font-size:1.1rem; font-weight:600;">Point Focal</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted);">Coordonnées du représentant</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(form.contactName, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.contactName) }}
+                    {{ form_errors(form.contactName) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.contactRole, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.contactRole) }}
+                    {{ form_errors(form.contactRole) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.contactEmail, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.contactEmail) }}
+                    {{ form_errors(form.contactEmail) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.contactPhone, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.contactPhone) }}
+                    {{ form_errors(form.contactPhone) }}
+                </div>
+
+                <div class="form-group full">
+                    {{ form_label(form.address, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.address) }}
+                    {{ form_errors(form.address) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card 3: Statut -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                <i class="ri-toggle-line" style="color: white;"></i>
+            </div>
+            <div>
+                <h3 style="font-size:1.1rem; font-weight:600;">Statut</h3>
+                <p style="font-size:0.85rem; color:var(--text-muted);">État du partenariat</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(form.status, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.status) }}
+                    {{ form_errors(form.status) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <a href="{{ path('app_partners') }}" class="btn btn-secondary">
+            <i class="ri-close-line"></i> Annuler
+        </a>
+        <button type="submit" class="btn btn-primary">
+            <i class="ri-save-line"></i> Enregistrer le Partenaire
+        </button>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function showFileName(input) {
+        const display = document.getElementById('fileNameDisplay');
+        const nameSpan = document.getElementById('selectedFileName');
+        
+        if (input.files && input.files[0]) {
+            nameSpan.textContent = input.files[0].name;
+            display.style.display = 'flex';
+        } else {
+            display.style.display = 'none';
+        }
+    }
+</script>
+{% endblock %}

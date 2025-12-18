@@ -14,65 +14,43 @@ class WebController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
     
- #[Route('/incidents', name: 'app_incidents')]
-    public function incidents(): Response
-    {
-        return $this->render('incidents.html.twig');
-    }
-  
 
-    #[Route('/condamnations', name: 'app_condamnations')]
-    public function condamnations(): Response
+    #[Route('/projects', name: 'app_projects')]
+    public function projects(): Response
     {
-        return $this->render('condamnations.html.twig');
+        return $this->render('projects/index.html.twig');
     }
 
-     #[Route('/sujets', name: 'app_sujets')]
-    public function sujets(): Response
+    #[Route('/institutions', name: 'app_institutions')]
+    public function institutions(): Response
     {
-        return $this->render('sujets.html.twig');
+        return $this->render('institutions/index.html.twig');
     }
 
-     #[Route('/organisations', name: 'app_organisations')]
-    public function organisations(): Response
+    #[Route('/financements', name: 'app_financements')]
+    public function financements(): Response
     {
-        return $this->render('organisations.html.twig');
+        return $this->render('financements/index.html.twig');
     }
 
-
-     #[Route('/identites', name: 'app_identites')]
-    public function identites(): Response
+    #[Route('/finances', name: 'app_finances')]
+    public function finances(): Response
     {
-        return $this->render('identites.html.twig');
+        return $this->render('finances/index.html.twig');
     }
 
 
-     #[Route('/contenus', name: 'app_contenus')]
-    public function contenus(): Response
+    #[Route('/conventions', name: 'app_conventions')]
+    public function conventions(): Response
     {
-        return $this->render('contenus.html.twig');
-    }
-
-     #[Route('/signalements', name: 'app_signalements')]
-    public function signalements(): Response
-    {
-        return $this->render('signalements.html.twig');
-    }
-
-     #[Route('/enquetes', name: 'app_enquetes')]
-    public function enquetes(): Response
-    {
-        return $this->render('enquetes.html.twig');
-    }
-
-      #[Route('/etablissements', name: 'app_etablissements')]
-    public function etablissements(): Response
-    {
-        return $this->render('etablissements.html.twig');
+        return $this->render('conventions/index.html.twig');
     }
 
 
-    
-
+    #[Route('/profile', name: 'app_profile')]
+    public function profile(): Response
+    {
+        return $this->render('profile/index.html.twig');
+    }
 
 }

@@ -21,64 +21,74 @@
         </div>
     </div>
 
+    {% set currentRoute = app.request.attributes.get('_route') %}
+
     <!-- Navigation -->
     <nav class="sidebar-nav">
 
+        <!-- Navigation générale -->
         <div class="nav-section">
             <div class="nav-section-title">Navigation</div>
 
-            <a class="nav-item" :class="{ 'active': currentPage === 'dashboard' }" @click="currentPage = 'dashboard'">
+            <a href="{{ path('app_projects') }}"
+               class="nav-item {{ currentRoute == 'app_projects' ? 'active' }}">
                 <i class="ri-dashboard-line"></i>
                 <span>Tableau de bord</span>
             </a>
 
-            <a class="nav-item" :class="{ 'active': currentPage === 'workgroups' }" @click="currentPage = 'workgroups'">
+            <a href="{{ path('app_partners') }}"
+               class="nav-item {{ currentRoute == 'app_partners' ? 'active' }}">
                 <i class="ri-team-line"></i>
-                <span>Groupes de travail</span>
-                <span class="nav-badge">5</span>
+                <span>Partenaires</span>
             </a>
 
-            <a class="nav-item" :class="{ 'active': currentPage === 'messages' }" @click="currentPage = 'messages'">
-                <i class="ri-message-3-line"></i>
-                <span>Messages</span>
-                <span class="nav-badge">2</span>
-            </a>
-
-            <a class="nav-item" :class="{ 'active': currentPage === 'tasks' }" @click="currentPage = 'tasks'">
-                <i class="ri-task-line"></i>
-                <span>Tâches</span>
+            <a href="{{ path('app_institutions') }}"
+               class="nav-item {{ currentRoute == 'app_institutions' ? 'active' }}">
+                <i class="ri-government-line"></i>
+                <span>Institutions</span>
             </a>
         </div>
 
+        <!-- Projets & Finances -->
         <div class="nav-section">
-            <div class="nav-section-title">Projets</div>
+            <div class="nav-section-title">Projets & Finances</div>
 
-            <a class="nav-item" :class="{ 'active': currentPage === 'projects' }" @click="currentPage = 'projects'">
+            <a href="{{ path('app_projects') }}"
+               class="nav-item {{ currentRoute == 'app_projects' ? 'active' }}">
                 <i class="ri-briefcase-line"></i>
-                <span>Projets internes</span>
-                <span class="nav-badge">12</span>
+                <span>Projets</span>
             </a>
 
-            <a class="nav-item" :class="{ 'active': currentPage === 'financing' }" @click="currentPage = 'financing'">
+            <a href="{{ path('app_financements') }}"
+               class="nav-item {{ currentRoute == 'app_financements' ? 'active' }}">
                 <i class="ri-bank-line"></i>
                 <span>Financements</span>
             </a>
 
-            <a class="nav-item" :class="{ 'active': currentPage === 'disbursements' }" @click="currentPage = 'disbursements'">
+            <a href="{{ path('app_finances') }}"
+               class="nav-item {{ currentRoute == 'app_finances' ? 'active' }}">
                 <i class="ri-wallet-3-line"></i>
-                <span>Décaissements</span>
+                <span>Finances</span>
+            </a>
+
+            <a href="{{ path('app_conventions') }}"
+               class="nav-item {{ currentRoute == 'app_conventions' ? 'active' }}">
+                <i class="ri-file-list-3-line"></i>
+                <span>Conventions</span>
             </a>
         </div>
 
+        <!-- Compte -->
         <div class="nav-section">
             <div class="nav-section-title">Compte</div>
 
-            <a class="nav-item" :class="{ 'active': currentPage === 'profile' }" @click="currentPage = 'profile'">
+            <a href="{{ path('app_profile') }}"
+               class="nav-item {{ currentRoute == 'app_profile' ? 'active' }}">
                 <i class="ri-user-settings-line"></i>
-                <span>Mon compte</span>
+                <span>Mon profil</span>
             </a>
 
-            <a class="nav-item" @click="logout()">
+            <a href="{{ path('app_logout') }}" class="nav-item">
                 <i class="ri-logout-box-r-line"></i>
                 <span>Se déconnecter</span>
             </a>

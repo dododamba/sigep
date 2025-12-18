@@ -1,0 +1,409 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ partner.name }} - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/partner.css') }}">
+<style>
+    .detail-card {
+        background: var(--bg-primary);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        overflow: hidden;
+        margin-bottom: 1.5rem;
+    }
+    
+    .detail-header {
+        background: linear-gradient(135deg, var(--tchad-blue) 0%, #1e3a5f 100%);
+        padding: 2rem;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+    
+    .partner-logo-large {
+        width: 100px;
+        height: 100px;
+        border-radius: 16px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+    
+    .partner-logo-large img {
+        max-width: 90%;
+        max-height: 90%;
+        object-fit: contain;
+    }
+    
+    .partner-logo-large .placeholder {
+        font-size: 2.5rem;
+        color: var(--tchad-blue);
+    }
+    
+    .partner-title {
+        flex: 1;
+    }
+    
+    .partner-title h1 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.25rem;
+    }
+    
+    .partner-title .acronym {
+        font-size: 1rem;
+        opacity: 0.8;
+        font-weight: 400;
+    }
+    
+    .partner-title .type-tag {
+        display: inline-block;
+        background: rgba(255,255,255,0.2);
+        padding: 0.25rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        margin-top: 0.5rem;
+    }
+    
+    .detail-body {
+        padding: 1.5rem;
+    }
+    
+    .info-section {
+        margin-bottom: 2rem;
+    }
+    
+    .info-section:last-child {
+        margin-bottom: 0;
+    }
+    
+    .section-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 1rem;
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    
+    .section-title i {
+        color: var(--tchad-blue);
+    }
+    
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1rem;
+    }
+    
+    .info-item {
+        background: var(--bg-secondary);
+        padding: 1rem;
+        border-radius: 10px;
+    }
+    
+    .info-item .label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0.25rem;
+    }
+    
+    .info-item .value {
+        font-size: 1rem;
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+    
+    .info-item .value a {
+        color: var(--tchad-blue);
+        text-decoration: none;
+    }
+    
+    .info-item .value a:hover {
+        text-decoration: underline;
+    }
+    
+    .description-box {
+        background: var(--bg-secondary);
+        padding: 1.25rem;
+        border-radius: 10px;
+        line-height: 1.7;
+        color: var(--text-secondary);
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .status-large {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .status-large.actif {
+        background: rgba(16, 185, 129, 0.15);
+        color: var(--success);
+    }
+    
+    .status-large.inactif {
+        background: rgba(239, 68, 68, 0.15);
+        color: var(--danger);
+    }
+    
+    .status-large.suspendu {
+        background: rgba(245, 158, 11, 0.15);
+        color: #d97706;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<header class="top-header">
+    <a href="{{ path('app_partners') }}" class="back-btn">
+        <i class="ri-arrow-left-line" style="width:18px;"></i>
+        Retour à la liste
+    </a>
+    <h1 style="font-size:1.1rem; font-weight:600;">Détails du Partenaire</h1>
+    <div style="width:40px;"></div>
+</header>
+
+<div class="content-area">
+    <div class="detail-card">
+        <!-- Header avec Logo et Nom -->
+        <div class="detail-header">
+            <div class="partner-logo-large">
+                {% if partner.logo %}
+                    <img src="{{ asset('uploads/partners/' ~ partner.logo) }}" alt="{{ partner.name }}">
+                {% else %}
+                    <i class="ri-building-2-line placeholder"></i>
+                {% endif %}
+            </div>
+            <div class="partner-title">
+                <h1>
+                    {{ partner.name }}
+                    {% if partner.acronym %}
+                        <span class="acronym">({{ partner.acronym }})</span>
+                    {% endif %}
+                </h1>
+                <span class="type-tag">
+                    <i class="ri-price-tag-3-line"></i>
+                    {{ partner.typePartner.name ?? 'Type non défini' }}
+                </span>
+            </div>
+            <div class="status-large {{ partner.status|lower }}">
+                {% if partner.status == 'Actif' %}
+                    <i class="ri-checkbox-circle-line"></i>
+                {% elseif partner.status == 'Inactif' %}
+                    <i class="ri-close-circle-line"></i>
+                {% else %}
+                    <i class="ri-pause-circle-line"></i>
+                {% endif %}
+                {{ partner.status }}
+            </div>
+        </div>
+        
+        <div class="detail-body">
+            <!-- Description -->
+            {% if partner.description %}
+                <div class="info-section">
+                    <h3 class="section-title">
+                        <i class="ri-file-text-line"></i>
+                        Description / Mission
+                    </h3>
+                    <div class="description-box">
+                        {{ partner.description|nl2br }}
+                    </div>
+                </div>
+            {% endif %}
+            
+            <!-- Informations générales -->
+            <div class="info-section">
+                <h3 class="section-title">
+                    <i class="ri-information-line"></i>
+                    Informations générales
+                </h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="label">Nom complet</div>
+                        <div class="value">{{ partner.name }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Acronyme</div>
+                        <div class="value">{{ partner.acronym ?? '—' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Type de partenaire</div>
+                        <div class="value">{{ partner.typePartner.name ?? '—' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Site Web</div>
+                        <div class="value">
+                            {% if partner.siteWeb %}
+                                <a href="{{ partner.siteWeb }}" target="_blank">
+                                    {{ partner.siteWeb }} <i class="ri-external-link-line"></i>
+                                </a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Point Focal -->
+            <div class="info-section">
+                <h3 class="section-title">
+                    <i class="ri-user-line"></i>
+                    Point Focal
+                </h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="label">Nom complet</div>
+                        <div class="value">{{ partner.contactName ?? '—' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Fonction</div>
+                        <div class="value">{{ partner.contactRole ?? '—' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Email</div>
+                        <div class="value">
+                            {% if partner.contactEmail %}
+                                <a href="mailto:{{ partner.contactEmail }}">
+                                    <i class="ri-mail-line"></i> {{ partner.contactEmail }}
+                                </a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Téléphone</div>
+                        <div class="value">
+                            {% if partner.contactPhone %}
+                                <a href="tel:{{ partner.contactPhone }}">
+                                    <i class="ri-phone-line"></i> {{ partner.contactPhone }}
+                                </a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </div>
+                    </div>
+                    <div class="info-item" style="grid-column: 1 / -1;">
+                        <div class="label">Adresse (Bureau Tchad)</div>
+                        <div class="value">
+                            {% if partner.address %}
+                                <i class="ri-map-pin-line"></i> {{ partner.address }}
+                            {% else %}
+                                —
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Métadonnées -->
+            <div class="info-section">
+                <h3 class="section-title">
+                    <i class="ri-database-2-line"></i>
+                    Informations système
+                </h3>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <div class="label">Identifiant</div>
+                        <div class="value">#{{ partner.id }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Slug</div>
+                        <div class="value">{{ partner.slug }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Date de création</div>
+                        <div class="value">{{ partner.createdAt ? partner.createdAt|date('d/m/Y à H:i') : '—' }}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="label">Dernière modification</div>
+                        <div class="value">{{ partner.updatedAt ? partner.updatedAt|date('d/m/Y à H:i') : 'Jamais modifié' }}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Actions -->
+            <div class="action-buttons">
+                <a href="{{ path('app_partners_edit', {id: partner.id}) }}" class="btn btn-primary">
+                    <i class="ri-edit-line"></i> Modifier
+                </a>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                    <i class="ri-delete-bin-6-line"></i> Supprimer
+                </button>
+                <a href="{{ path('app_partners') }}" class="btn btn-secondary" style="margin-left: auto;">
+                    <i class="ri-arrow-left-line"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Suppression -->
+<div id="deleteModal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeDeleteModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="ri-alert-line" style="color: var(--danger);"></i> Confirmer la suppression</h3>
+            <button class="modal-close" onclick="closeDeleteModal()">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer le partenaire <strong>{{ partner.name }}</strong> ?</p>
+            <p class="text-muted">Cette action est irréversible.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+            <form action="{{ path('app_partners_delete', {id: partner.id}) }}" method="POST" style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ partner.id) }}">
+                <button type="submit" class="btn btn-danger">
+                    <i class="ri-delete-bin-6-line"></i> Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function confirmDelete() {
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+</script>
+{% endblock %}
