@@ -72,6 +72,34 @@
             </a>
         </div>
 
+        <!-- Gestion des utilisateurs -->
+        <div class="nav-section">
+            <div class="nav-section-title">Gestion des utilisateurs</div>
+
+            <a href="#"
+               class="nav-item {{ currentRoute starts with 'app_roles' or currentRoute starts with 'app_login_history' ? 'active' }}">
+                <i class="ri-user-3-line"></i>
+                <span>Utilisateurs</span>
+            </a>
+
+               <a href="{{ path('app_roles') }}"
+                   class="nav-item {{ currentRoute starts with 'app_roles' ? 'active' }}">
+                    <i class="ri-shield-user-line"></i>
+                    <span>Rôles</span>
+                </a>
+
+                <a href="{{ path('app_login_history') }}"
+                   class="nav-item {{ currentRoute starts with 'app_login_history' ? 'active' }}">
+                    <i class="ri-history-line"></i>
+                    <span>Historiques de connexion</span>
+                </a>
+                
+        </div>
+
+
+        
+
+
         <!-- Compte -->
         <div class="nav-section">
             <div class="nav-section-title">Compte</div>

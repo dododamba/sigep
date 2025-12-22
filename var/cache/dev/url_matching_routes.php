@@ -44,6 +44,8 @@ return [
         '/admin/user/new' => [[['_route' => 'app_user_new', '_controller' => 'App\\Controller\\UserController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/' => [[['_route' => 'app_web', '_controller' => 'App\\Controller\\WebController::index'], null, null, null, false, false, null]],
         '/conventions' => [[['_route' => 'app_conventions', '_controller' => 'App\\Controller\\WebController::conventions'], null, null, null, false, false, null]],
+        '/roles' => [[['_route' => 'app_roles', '_controller' => 'App\\Controller\\WebController::roles'], null, null, null, false, false, null]],
+        '/login-history' => [[['_route' => 'app_login_history', '_controller' => 'App\\Controller\\WebController::loginHistory'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'

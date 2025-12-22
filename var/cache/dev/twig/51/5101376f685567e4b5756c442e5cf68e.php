@@ -156,24 +156,67 @@ class __TwigTemplate_dba92bc661fddb01e75c2daa8d8aa6c3 extends Template
             </a>
         </div>
 
+        <!-- Gestion des utilisateurs -->
+        <div class=\"nav-section\">
+            <div class=\"nav-section-title\">Gestion des utilisateurs</div>
+
+            <a href=\"#\"
+               class=\"nav-item ";
+        // line 80
+        yield ((((is_string($_v12 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 80, $this->source); })())) && is_string($_v13 = "app_roles") && str_starts_with($_v12, $_v13)) || (is_string($_v14 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 80, $this->source); })())) && is_string($_v15 = "app_login_history") && str_starts_with($_v14, $_v15)))) ? ("active") : (""));
+        yield "\">
+                <i class=\"ri-user-3-line\"></i>
+                <span>Utilisateurs</span>
+            </a>
+
+               <a href=\"";
+        // line 85
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_roles");
+        yield "\"
+                   class=\"nav-item ";
+        // line 86
+        yield (((is_string($_v16 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 86, $this->source); })())) && is_string($_v17 = "app_roles") && str_starts_with($_v16, $_v17))) ? ("active") : (""));
+        yield "\">
+                    <i class=\"ri-shield-user-line\"></i>
+                    <span>Rôles</span>
+                </a>
+
+                <a href=\"";
+        // line 91
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_login_history");
+        yield "\"
+                   class=\"nav-item ";
+        // line 92
+        yield (((is_string($_v18 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 92, $this->source); })())) && is_string($_v19 = "app_login_history") && str_starts_with($_v18, $_v19))) ? ("active") : (""));
+        yield "\">
+                    <i class=\"ri-history-line\"></i>
+                    <span>Historiques de connexion</span>
+                </a>
+                
+        </div>
+
+
+        
+
+
         <!-- Compte -->
         <div class=\"nav-section\">
             <div class=\"nav-section-title\">Compte</div>
 
             <a href=\"";
-        // line 79
+        // line 107
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_profile");
         yield "\"
                class=\"nav-item ";
-        // line 80
-        yield (((is_string($_v12 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 80, $this->source); })())) && is_string($_v13 = "app_profile") && str_starts_with($_v12, $_v13))) ? ("active") : (""));
+        // line 108
+        yield (((is_string($_v20 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 108, $this->source); })())) && is_string($_v21 = "app_profile") && str_starts_with($_v20, $_v21))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-user-settings-line\"></i>
                 <span>Mon profil</span>
             </a>
 
             <a href=\"";
-        // line 85
+        // line 113
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_logout");
         yield "\" class=\"nav-item\">
                 <i class=\"ri-logout-box-r-line\"></i>
@@ -211,7 +254,7 @@ class __TwigTemplate_dba92bc661fddb01e75c2daa8d8aa6c3 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  177 => 85,  169 => 80,  165 => 79,  152 => 69,  148 => 68,  140 => 63,  136 => 62,  128 => 57,  124 => 56,  111 => 46,  107 => 45,  99 => 40,  95 => 39,  87 => 34,  83 => 33,  53 => 6,  47 => 2,  45 => 1,);
+        return array (  220 => 113,  212 => 108,  208 => 107,  190 => 92,  186 => 91,  178 => 86,  174 => 85,  166 => 80,  152 => 69,  148 => 68,  140 => 63,  136 => 62,  128 => 57,  124 => 56,  111 => 46,  107 => 45,  99 => 40,  95 => 39,  87 => 34,  83 => 33,  53 => 6,  47 => 2,  45 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -289,6 +332,34 @@ class __TwigTemplate_dba92bc661fddb01e75c2daa8d8aa6c3 extends Template
                 <span>Conventions</span>
             </a>
         </div>
+
+        <!-- Gestion des utilisateurs -->
+        <div class=\"nav-section\">
+            <div class=\"nav-section-title\">Gestion des utilisateurs</div>
+
+            <a href=\"#\"
+               class=\"nav-item {{ currentRoute starts with 'app_roles' or currentRoute starts with 'app_login_history' ? 'active' }}\">
+                <i class=\"ri-user-3-line\"></i>
+                <span>Utilisateurs</span>
+            </a>
+
+               <a href=\"{{ path('app_roles') }}\"
+                   class=\"nav-item {{ currentRoute starts with 'app_roles' ? 'active' }}\">
+                    <i class=\"ri-shield-user-line\"></i>
+                    <span>Rôles</span>
+                </a>
+
+                <a href=\"{{ path('app_login_history') }}\"
+                   class=\"nav-item {{ currentRoute starts with 'app_login_history' ? 'active' }}\">
+                    <i class=\"ri-history-line\"></i>
+                    <span>Historiques de connexion</span>
+                </a>
+                
+        </div>
+
+
+        
+
 
         <!-- Compte -->
         <div class=\"nav-section\">

@@ -63,6 +63,8 @@ return [
     'app_user_toggle_status' => [['id'], ['_controller' => 'App\\Controller\\UserController::toggleStatus'], [], [['text', '/toggle-status'], ['variable', '/', '[^/]++', 'id', true], ['text', '/admin/user']], [], [], []],
     'app_web' => [[], ['_controller' => 'App\\Controller\\WebController::index'], [], [['text', '/']], [], [], []],
     'app_conventions' => [[], ['_controller' => 'App\\Controller\\WebController::conventions'], [], [['text', '/conventions']], [], [], []],
+    'app_roles' => [[], ['_controller' => 'App\\Controller\\WebController::roles'], [], [['text', '/roles']], [], [], []],
+    'app_login_history' => [[], ['_controller' => 'App\\Controller\\WebController::loginHistory'], [], [['text', '/login-history']], [], [], []],
     'app_financements_show' => [['slug'], ['_controller' => 'App\\Controller\\FinancementController::show'], [], [['variable', '/', '[^/]++', 'slug', true], ['text', '/financements']], [], [], []],
     'app_institutions_show' => [['slug'], ['_controller' => 'App\\Controller\\InstitutionController::show'], [], [['variable', '/', '[^/]++', 'slug', true], ['text', '/institutions']], [], [], []],
     'App\Controller\DashboardController::index' => [[], ['_controller' => 'App\\Controller\\DashboardController::index'], [], [['text', '/dashboard']], [], [], []],
@@ -125,4 +127,6 @@ return [
     'App\Controller\UserController::toggleStatus' => [['id'], ['_controller' => 'App\\Controller\\UserController::toggleStatus'], [], [['text', '/toggle-status'], ['variable', '/', '[^/]++', 'id', true], ['text', '/admin/user']], [], [], []],
     'App\Controller\WebController::index' => [[], ['_controller' => 'App\\Controller\\WebController::index'], [], [['text', '/']], [], [], []],
     'App\Controller\WebController::conventions' => [[], ['_controller' => 'App\\Controller\\WebController::conventions'], [], [['text', '/conventions']], [], [], []],
+    'App\Controller\WebController::roles' => [[], ['_controller' => 'App\\Controller\\WebController::roles'], [], [['text', '/roles']], [], [], []],
+    'App\Controller\WebController::loginHistory' => [[], ['_controller' => 'App\\Controller\\WebController::loginHistory'], [], [['text', '/login-history']], [], [], []],
 ];

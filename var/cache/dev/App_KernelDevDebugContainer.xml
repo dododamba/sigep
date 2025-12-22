@@ -534,7 +534,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.xjr2uN."/>
+      <argument type="service" id=".service_locator.vaCSgDM"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3405,7 +3405,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.xjr2uN."/>
+      <argument type="service" id=".service_locator.vaCSgDM"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -9329,7 +9329,25 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.nLtHlEw" method="withContext"/>
     </service>
-    <service id=".service_locator.xjr2uN." class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".errored.REyH2XG" class="App\Controller\RoleRepository">
+      <tag name="container.error" message="Cannot determine controller argument for &quot;App\Controller\WebController::roles()&quot;: the $roleRepository argument is type-hinted with the non-existent class or interface: &quot;App\Controller\RoleRepository&quot;. Did you forget to add a use statement?"/>
+    </service>
+    <service id=".service_locator.2oscVQ4" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="roleRepository" type="service_closure" id=".errored.REyH2XG"/>
+      </argument>
+    </service>
+    <service id=".errored.mU_kUNL" class="App\Controller\LoginHistoryRepository">
+      <tag name="container.error" message="Cannot determine controller argument for &quot;App\Controller\WebController::loginHistory()&quot;: the $loginHistoryRepository argument is type-hinted with the non-existent class or interface: &quot;App\Controller\LoginHistoryRepository&quot;. Did you forget to add a use statement?"/>
+    </service>
+    <service id=".service_locator.kjAHTcj" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="loginHistoryRepository" type="service_closure" id=".errored.mU_kUNL"/>
+      </argument>
+    </service>
+    <service id=".service_locator.vaCSgDM" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
@@ -9357,6 +9375,8 @@
         <argument key="App\Controller\UserController::edit" type="service_closure" id=".service_locator.Qh67eS1.App\Controller\UserController::edit()"/>
         <argument key="App\Controller\UserController::delete" type="service_closure" id=".service_locator.nLtHlEw.App\Controller\UserController::delete()"/>
         <argument key="App\Controller\UserController::toggleStatus" type="service_closure" id=".service_locator.nLtHlEw.App\Controller\UserController::toggleStatus()"/>
+        <argument key="App\Controller\WebController::roles" type="service_closure" id=".service_locator.2oscVQ4"/>
+        <argument key="App\Controller\WebController::loginHistory" type="service_closure" id=".service_locator.kjAHTcj"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.4wc4Ag1.kernel::loadRoutes()"/>
         <argument key="App\Controller\DashboardController:adminDashboard" type="service_closure" id=".service_locator.AGatCqT"/>
@@ -9380,6 +9400,8 @@
         <argument key="App\Controller\UserController:edit" type="service_closure" id=".service_locator.Qh67eS1.App\Controller\UserController::edit()"/>
         <argument key="App\Controller\UserController:delete" type="service_closure" id=".service_locator.nLtHlEw.App\Controller\UserController::delete()"/>
         <argument key="App\Controller\UserController:toggleStatus" type="service_closure" id=".service_locator.nLtHlEw.App\Controller\UserController::toggleStatus()"/>
+        <argument key="App\Controller\WebController:roles" type="service_closure" id=".service_locator.2oscVQ4"/>
+        <argument key="App\Controller\WebController:loginHistory" type="service_closure" id=".service_locator.kjAHTcj"/>
       </argument>
     </service>
     <service id=".service_locator.ea.H0ae" class="Symfony\Component\DependencyInjection\ServiceLocator">
@@ -11260,7 +11282,7 @@
     <service id="Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface" alias="webpack_encore.entrypoint_lookup[_default]"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.xjr2uN."/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.vaCSgDM"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="jms_serializer.authorization_checker" alias="security.authorization_checker" public="true"/>
