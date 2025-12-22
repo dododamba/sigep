@@ -30,8 +30,8 @@
         <div class="nav-section">
             <div class="nav-section-title">Navigation</div>
 
-            <a href="{{ path('app_projects') }}"
-               class="nav-item {{ currentRoute == 'app_projects' ? 'active' }}">
+            <a href="{{ path('app_dashboard') }}"
+               class="nav-item {{ currentRoute == 'app_dashboard' ? 'active' }}">
                 <i class="ri-dashboard-line"></i>
                 <span>Tableau de bord</span>
             </a>
@@ -63,12 +63,6 @@
                class="nav-item {{ currentRoute == 'app_financements' ? 'active' }}">
                 <i class="ri-bank-line"></i>
                 <span>Financements</span>
-            </a>
-
-            <a href="{{ path('app_finances') }}"
-               class="nav-item {{ currentRoute == 'app_finances' ? 'active' }}">
-                <i class="ri-wallet-3-line"></i>
-                <span>Finances</span>
             </a>
 
             <a href="{{ path('app_conventions') }}"

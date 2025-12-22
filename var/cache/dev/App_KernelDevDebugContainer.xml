@@ -352,6 +352,27 @@
         <argument type="service" id=".service_locator.QaaoWjx.App\Controller\DashboardController"/>
       </call>
     </service>
+    <service id="App\Controller\FinancementController" class="App\Controller\FinancementController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="App\Repository\FinancementRepository"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.QaaoWjx.App\Controller\FinancementController"/>
+      </call>
+    </service>
+    <service id="App\Controller\InstitutionController" class="App\Controller\InstitutionController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="App\Repository\InstitutionRepository"/>
+      <argument type="service" id="App\Repository\TypeInstitutionRepository"/>
+      <argument type="service" id="App\Repository\SectorInstitutionRepository"/>
+      <argument type="service" id="slugger"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.QaaoWjx.App\Controller\InstitutionController"/>
+      </call>
+    </service>
     <service id="App\Controller\PartnerController" class="App\Controller\PartnerController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
@@ -361,6 +382,15 @@
       <argument type="service" id="slugger"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.QaaoWjx.App\Controller\PartnerController"/>
+      </call>
+    </service>
+    <service id="App\Controller\ProjectController" class="App\Controller\ProjectController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="App\Repository\ProjectRepository"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.QaaoWjx.App\Controller\ProjectController"/>
       </call>
     </service>
     <service id="App\Controller\RoleController" class="App\Controller\RoleController" public="true" autowire="true" autoconfigure="true">
@@ -394,6 +424,15 @@
     <service id="App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
     </service>
+    <service id="App\DataFixtures\FinancementFixtures" class="App\DataFixtures\FinancementFixtures" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+    </service>
+    <service id="App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+    </service>
+    <service id="App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+    </service>
     <service id="App\DataFixtures\TypePartnerFixtures" class="App\DataFixtures\TypePartnerFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
     </service>
@@ -401,7 +440,16 @@
       <tag name="doctrine.fixture.orm"/>
       <argument type="service" id="security.user_password_hasher"/>
     </service>
+    <service id="App\Form\FinancementType" class="App\Form\FinancementType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="App\Form\InstitutionType" class="App\Form\InstitutionType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
     <service id="App\Form\PartnerType" class="App\Form\PartnerType" autowire="true" autoconfigure="true">
+      <tag name="form.type"/>
+    </service>
+    <service id="App\Form\ProjectType" class="App\Form\ProjectType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
     </service>
     <service id="App\Form\RoleType" class="App\Form\RoleType" autowire="true" autoconfigure="true">
@@ -409,6 +457,18 @@
     </service>
     <service id="App\Form\UserType" class="App\Form\UserType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
+    </service>
+    <service id="App\Repository\DocumentRepository" class="App\Repository\DocumentRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\FinancementRepository" class="App\Repository\FinancementRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\InstitutionRepository" class="App\Repository\InstitutionRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\PartnerRepository" class="App\Repository\PartnerRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
@@ -419,6 +479,14 @@
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\RoleRepository" class="App\Repository\RoleRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\SectorInstitutionRepository" class="App\Repository\SectorInstitutionRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\TypeInstitutionRepository" class="App\Repository\TypeInstitutionRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -464,7 +532,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.Stelacn"/>
+      <argument type="service" id=".service_locator.YLDs5oF"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -1232,7 +1300,10 @@
         <argument>Vich\UploaderBundle\Form\Type</argument>
       </argument>
       <argument type="collection">
+        <argument>App\Form\FinancementType</argument>
+        <argument>App\Form\InstitutionType</argument>
         <argument>App\Form\PartnerType</argument>
+        <argument>App\Form\ProjectType</argument>
         <argument>App\Form\RoleType</argument>
         <argument>App\Form\UserType</argument>
         <argument>Symfony\Component\Form\Extension\Core\Type\FormType</argument>
@@ -3332,7 +3403,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.Stelacn"/>
+      <argument type="service" id=".service_locator.YLDs5oF"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -3839,7 +3910,7 @@
       <argument type="service" id="form.registry"/>
     </service>
     <service id="form.extension" class="Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension">
-      <argument type="service" id=".service_locator.V99RXOV"/>
+      <argument type="service" id=".service_locator.5EqREmF"/>
       <argument type="collection">
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="iterator">
           <argument type="service" id="form.type_extension.form.transformation_failure_handling"/>
@@ -4496,7 +4567,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.vYz0SqZ"/>
+      <argument type="service" id=".service_locator.SOpdrpU"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -8244,6 +8315,18 @@
             <argument key="groups" type="collection"/>
           </argument>
           <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\FinancementFixtures"/>
+            <argument key="groups" type="collection"/>
+          </argument>
+          <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\InstitutionFixtures"/>
+            <argument key="groups" type="collection"/>
+          </argument>
+          <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\ProjectFixtures"/>
+            <argument key="groups" type="collection"/>
+          </argument>
+          <argument type="collection">
             <argument key="fixture" type="service" id="App\DataFixtures\TypePartnerFixtures"/>
             <argument key="groups" type="collection"/>
           </argument>
@@ -8341,9 +8424,18 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\DashboardController" class="App\Controller\DashboardController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\DashboardController" class="App\Controller\DashboardController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\DashboardController" class="App\Controller\DashboardController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\FinancementController" class="App\Controller\FinancementController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\FinancementController" class="App\Controller\FinancementController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\FinancementController" class="App\Controller\FinancementController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\InstitutionController" class="App\Controller\InstitutionController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\InstitutionController" class="App\Controller\InstitutionController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\InstitutionController" class="App\Controller\InstitutionController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\PartnerController" class="App\Controller\PartnerController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\PartnerController" class="App\Controller\PartnerController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\PartnerController" class="App\Controller\PartnerController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ProjectController" class="App\Controller\ProjectController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ProjectController" class="App\Controller\ProjectController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\ProjectController" class="App\Controller\ProjectController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\RoleController" class="App\Controller\RoleController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\RoleController" class="App\Controller\RoleController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\RoleController" class="App\Controller\RoleController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -8358,22 +8450,44 @@
     <service id=".abstract.instanceof.App\Controller\WebController" class="App\Controller\WebController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\FinancementFixtures" class="App\DataFixtures\FinancementFixtures" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\FinancementFixtures" class="App\DataFixtures\FinancementFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\TypePartnerFixtures" class="App\DataFixtures\TypePartnerFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\TypePartnerFixtures" class="App\DataFixtures\TypePartnerFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\FinancementType" class="App\Form\FinancementType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\FinancementType" class="App\Form\FinancementType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\InstitutionType" class="App\Form\InstitutionType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\InstitutionType" class="App\Form\InstitutionType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\PartnerType" class="App\Form\PartnerType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\PartnerType" class="App\Form\PartnerType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\ProjectType" class="App\Form\ProjectType" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Form\ProjectType" class="App\Form\ProjectType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\RoleType" class="App\Form\RoleType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\RoleType" class="App\Form\RoleType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\UserType" class="App\Form\UserType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\UserType" class="App\Form\UserType" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\DocumentRepository" class="App\Repository\DocumentRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\DocumentRepository" class="App\Repository\DocumentRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\FinancementRepository" class="App\Repository\FinancementRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\FinancementRepository" class="App\Repository\FinancementRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\InstitutionRepository" class="App\Repository\InstitutionRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\InstitutionRepository" class="App\Repository\InstitutionRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\PartnerRepository" class="App\Repository\PartnerRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\PartnerRepository" class="App\Repository\PartnerRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ProjectRepository" class="App\Repository\ProjectRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\ProjectRepository" class="App\Repository\ProjectRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\RoleRepository" class="App\Repository\RoleRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\RoleRepository" class="App\Repository\RoleRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\SectorInstitutionRepository" class="App\Repository\SectorInstitutionRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\SectorInstitutionRepository" class="App\Repository\SectorInstitutionRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TypeInstitutionRepository" class="App\Repository\TypeInstitutionRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\TypeInstitutionRepository" class="App\Repository\TypeInstitutionRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TypePartnerRepository" class="App\Repository\TypePartnerRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\TypePartnerRepository" class="App\Repository\TypePartnerRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" abstract="true"/>
@@ -9013,6 +9127,30 @@
         <argument key="pointageRepository" type="service_closure" id=".errored.rCOcSXx"/>
       </argument>
     </service>
+    <service id=".service_locator.qBh2uyK" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="institution" type="service_closure" id=".errored..service_locator.qBh2uyK.App\Entity\Institution"/>
+      </argument>
+    </service>
+    <service id=".service_locator.qBh2uyK.App\Controller\InstitutionController::edit()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\InstitutionController::edit()"/>
+      <argument>App\Controller\InstitutionController::edit()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.qBh2uyK" method="withContext"/>
+    </service>
+    <service id=".service_locator.qBh2uyK.App\Controller\InstitutionController::delete()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\InstitutionController::delete()"/>
+      <argument>App\Controller\InstitutionController::delete()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.qBh2uyK" method="withContext"/>
+    </service>
+    <service id=".service_locator.qBh2uyK.App\Controller\InstitutionController::toggleStatus()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\InstitutionController::toggleStatus()"/>
+      <argument>App\Controller\InstitutionController::toggleStatus()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.qBh2uyK" method="withContext"/>
+    </service>
     <service id=".service_locator.cvAK_XJ" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -9178,7 +9316,7 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.nLtHlEw" method="withContext"/>
     </service>
-    <service id=".service_locator.Stelacn" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.YLDs5oF" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
@@ -9186,6 +9324,9 @@
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.4wc4Ag1.kernel::loadRoutes()"/>
         <argument key="App\Kernel::loadRoutes" type="service_closure" id=".service_locator.4wc4Ag1.kernel::loadRoutes()"/>
         <argument key="App\Controller\DashboardController::adminDashboard" type="service_closure" id=".service_locator.AGatCqT"/>
+        <argument key="App\Controller\InstitutionController::edit" type="service_closure" id=".service_locator.qBh2uyK.App\Controller\InstitutionController::edit()"/>
+        <argument key="App\Controller\InstitutionController::delete" type="service_closure" id=".service_locator.qBh2uyK.App\Controller\InstitutionController::delete()"/>
+        <argument key="App\Controller\InstitutionController::toggleStatus" type="service_closure" id=".service_locator.qBh2uyK.App\Controller\InstitutionController::toggleStatus()"/>
         <argument key="App\Controller\PartnerController::edit" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::edit()"/>
         <argument key="App\Controller\PartnerController::delete" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::delete()"/>
         <argument key="App\Controller\PartnerController::toggleStatus" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::toggleStatus()"/>
@@ -9204,6 +9345,9 @@
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.4wc4Ag1.kernel::loadRoutes()"/>
         <argument key="App\Controller\DashboardController:adminDashboard" type="service_closure" id=".service_locator.AGatCqT"/>
+        <argument key="App\Controller\InstitutionController:edit" type="service_closure" id=".service_locator.qBh2uyK.App\Controller\InstitutionController::edit()"/>
+        <argument key="App\Controller\InstitutionController:delete" type="service_closure" id=".service_locator.qBh2uyK.App\Controller\InstitutionController::delete()"/>
+        <argument key="App\Controller\InstitutionController:toggleStatus" type="service_closure" id=".service_locator.qBh2uyK.App\Controller\InstitutionController::toggleStatus()"/>
         <argument key="App\Controller\PartnerController:edit" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::edit()"/>
         <argument key="App\Controller\PartnerController:delete" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::delete()"/>
         <argument key="App\Controller\PartnerController:toggleStatus" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::toggleStatus()"/>
@@ -9298,10 +9442,13 @@
       <argument type="service" id="argument_resolver.query_parameter_value_resolver"/>
       <argument type="service" id="debug.stopwatch"/>
     </service>
-    <service id=".service_locator.V99RXOV" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.5EqREmF" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Form\FinancementType" type="service_closure" id="App\Form\FinancementType"/>
+        <argument key="App\Form\InstitutionType" type="service_closure" id="App\Form\InstitutionType"/>
         <argument key="App\Form\PartnerType" type="service_closure" id="App\Form\PartnerType"/>
+        <argument key="App\Form\ProjectType" type="service_closure" id="App\Form\ProjectType"/>
         <argument key="App\Form\RoleType" type="service_closure" id="App\Form\RoleType"/>
         <argument key="App\Form\UserType" type="service_closure" id="App\Form\UserType"/>
         <argument key="Symfony\Component\Form\Extension\Core\Type\FormType" type="service_closure" id="form.type.form"/>
@@ -9325,12 +9472,17 @@
         <argument key="turbo.doctrine.event_listener" type="service_closure" id="turbo.doctrine.event_listener"/>
       </argument>
     </service>
-    <service id=".service_locator.vYz0SqZ" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.SOpdrpU" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Repository\DocumentRepository" type="service_closure" id="App\Repository\DocumentRepository"/>
+        <argument key="App\Repository\FinancementRepository" type="service_closure" id="App\Repository\FinancementRepository"/>
+        <argument key="App\Repository\InstitutionRepository" type="service_closure" id="App\Repository\InstitutionRepository"/>
         <argument key="App\Repository\PartnerRepository" type="service_closure" id="App\Repository\PartnerRepository"/>
         <argument key="App\Repository\ProjectRepository" type="service_closure" id="App\Repository\ProjectRepository"/>
         <argument key="App\Repository\RoleRepository" type="service_closure" id="App\Repository\RoleRepository"/>
+        <argument key="App\Repository\SectorInstitutionRepository" type="service_closure" id="App\Repository\SectorInstitutionRepository"/>
+        <argument key="App\Repository\TypeInstitutionRepository" type="service_closure" id="App\Repository\TypeInstitutionRepository"/>
         <argument key="App\Repository\TypePartnerRepository" type="service_closure" id="App\Repository\TypePartnerRepository"/>
         <argument key="App\Repository\UserRepository" type="service_closure" id="App\Repository\UserRepository"/>
       </argument>
@@ -9474,9 +9626,27 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.QaaoWjx" method="withContext"/>
     </service>
+    <service id=".service_locator.QaaoWjx.App\Controller\FinancementController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\FinancementController"/>
+      <argument>App\Controller\FinancementController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.QaaoWjx" method="withContext"/>
+    </service>
+    <service id=".service_locator.QaaoWjx.App\Controller\InstitutionController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\InstitutionController"/>
+      <argument>App\Controller\InstitutionController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.QaaoWjx" method="withContext"/>
+    </service>
     <service id=".service_locator.QaaoWjx.App\Controller\PartnerController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\PartnerController"/>
       <argument>App\Controller\PartnerController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.QaaoWjx" method="withContext"/>
+    </service>
+    <service id=".service_locator.QaaoWjx.App\Controller\ProjectController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\ProjectController"/>
+      <argument>App\Controller\ProjectController</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.QaaoWjx" method="withContext"/>
     </service>
@@ -9756,7 +9926,10 @@
         <argument type="collection">
           <argument>App\Kernel</argument>
           <argument>App\Controller\DashboardController</argument>
+          <argument>App\Controller\FinancementController</argument>
+          <argument>App\Controller\InstitutionController</argument>
           <argument>App\Controller\PartnerController</argument>
+          <argument>App\Controller\ProjectController</argument>
           <argument>App\Controller\RoleController</argument>
           <argument>App\Controller\SecurityController</argument>
           <argument>App\Controller\UserController</argument>
@@ -9851,6 +10024,9 @@
     </service>
     <service id=".errored..service_locator.4wc4Ag1.Symfony\Component\Config\Loader\LoaderInterface" class="Symfony\Component\Config\Loader\LoaderInterface">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.4wc4Ag1&quot;: it needs an instance of &quot;Symfony\Component\Config\Loader\LoaderInterface&quot; but this type has been excluded from autowiring."/>
+    </service>
+    <service id=".errored..service_locator.qBh2uyK.App\Entity\Institution" class="App\Entity\Institution">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.qBh2uyK&quot;: it needs an instance of &quot;App\Entity\Institution&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
     </service>
     <service id=".errored..service_locator.cvAK_XJ.App\Entity\Partner" class="App\Entity\Partner">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.cvAK_XJ&quot;: it needs an instance of &quot;App\Entity\Partner&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
@@ -11060,7 +11236,7 @@
     <service id="Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface" alias="webpack_encore.entrypoint_lookup[_default]"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.Stelacn"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.YLDs5oF"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="jms_serializer.authorization_checker" alias="security.authorization_checker" public="true"/>
@@ -11095,6 +11271,7 @@
     <service id="jms_serializer.handler_registry" alias="jms_serializer.traceable_handler_registry"/>
     <service id="jms_serializer.metadata.file_locator" alias="jms_serializer.metadata.traceable_file_locator"/>
     <service id=".service_locator.diNoEIK" alias=".service_locator.4wc4Ag1"/>
+    <service id=".service_locator.3f2.DsK" alias=".service_locator.qBh2uyK"/>
     <service id=".service_locator.63DXeBg" alias=".service_locator.cvAK_XJ"/>
     <service id=".service_locator.jf8JxuJ" alias=".service_locator.2xhCPME"/>
     <service id=".service_locator.4KsIGyf" alias=".service_locator.P.blNFL"/>

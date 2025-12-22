@@ -1,0 +1,179 @@
+/* ===========================================
+   SIGEP Tchad - Financement Form Styles
+   =========================================== */
+
+:root {
+    --bg-primary: #f0f4f8;
+    --bg-secondary: #ffffff;
+    --bg-tertiary: #e8eef4;
+    --text-primary: #1a2a3a;
+    --text-secondary: #4a5e73;
+    --text-muted: #7a8fa3;
+    --border-color: #d0dbe6;
+    --tchad-blue: #002664;
+    --tchad-gold: #fecb00;
+    --tchad-red: #c60c30;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 20px;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+}
+
+.content-area { padding: 32px; max-width: 1000px; margin: 0 auto; }
+
+/* Back Link */
+.back-link { display: inline-flex; align-items: center; gap: 8px; color: var(--text-secondary); text-decoration: none; font-weight: 500; transition: all 0.2s ease; }
+.back-link:hover { color: var(--tchad-blue); }
+.back-link i { width: 18px; height: 18px; }
+
+/* Form Title */
+.form-title { display: flex; align-items: center; gap: 20px; margin: 28px 0; }
+.form-title-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; background: linear-gradient(135deg, #002664, #1a4a8a); color: white; }
+.form-title-icon.edit { background: linear-gradient(135deg, #f59e0b, #fbbf24); }
+.form-title-icon i { width: 32px; height: 32px; }
+.form-title h1 { font-size: 1.75rem; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.form-title p { color: var(--text-muted); }
+
+.convention-badge { display: inline-block; padding: 4px 12px; background: var(--bg-tertiary); border-radius: 6px; font-family: 'Fira Code', monospace; font-size: 0.9rem; color: var(--text-primary); margin-right: 8px; }
+.bailleur-badge { display: inline-block; padding: 4px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: white; }
+.bailleur-badge.national { background: linear-gradient(135deg, #002664, #1a4a8a); }
+.bailleur-badge.bm { background: linear-gradient(135deg, #0066b3, #009cde); }
+.bailleur-badge.bad { background: linear-gradient(135deg, #1d4e89, #3a7bd5); }
+.bailleur-badge.afd { background: linear-gradient(135deg, #e30613, #ff4444); }
+.bailleur-badge.ue { background: linear-gradient(135deg, #003399, #0055cc); }
+.bailleur-badge.fida { background: linear-gradient(135deg, #f7941e, #fbb03b); }
+.bailleur-badge.oms { background: linear-gradient(135deg, #009cde, #00b4e6); }
+.bailleur-badge.pnud { background: linear-gradient(135deg, #0468b1, #45b0e5); }
+.bailleur-badge.bid { background: linear-gradient(135deg, #1a5a3a, #2d8a5e); }
+.bailleur-badge.chine { background: linear-gradient(135deg, #de2910, #ff5533); }
+
+/* Form Card */
+.form-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: var(--radius-xl); overflow: hidden; margin-bottom: 24px; }
+.form-card-header { display: flex; align-items: center; gap: 14px; padding: 20px 24px; border-bottom: 1px solid var(--border-color); background: var(--bg-tertiary); }
+.form-card-icon { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; }
+.form-card-icon i { width: 22px; height: 22px; }
+.form-card-icon.blue { background: linear-gradient(135deg, #002664, #1a4a8a); }
+.form-card-icon.green { background: linear-gradient(135deg, #059669, #10b981); }
+.form-card-icon.gold { background: linear-gradient(135deg, #fecb00, #e6b800); }
+.form-card-icon.purple { background: linear-gradient(135deg, #7c3aed, #a855f7); }
+.form-card-icon.orange { background: linear-gradient(135deg, #ea580c, #f97316); }
+.form-card-icon.gray { background: linear-gradient(135deg, #475569, #64748b); }
+.form-card-header h2 { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
+.form-card-body { padding: 24px; }
+
+/* Form Grid */
+.form-grid { display: grid; gap: 20px; margin-bottom: 20px; }
+.form-grid.cols-2 { grid-template-columns: repeat(2, 1fr); }
+.form-grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+.form-grid:last-child { margin-bottom: 0; }
+
+/* Form Group */
+.form-group { display: flex; flex-direction: column; gap: 8px; }
+.form-group.full-width { grid-column: 1 / -1; }
+.form-label { font-weight: 500; font-size: 0.9rem; color: var(--text-primary); }
+.form-label.required::after { content: ' *'; color: var(--danger); }
+
+/* Form Inputs */
+.form-input, .form-select, .form-textarea,
+input[type="text"], input[type="number"], input[type="date"], select, textarea {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    font-size: 0.95rem;
+    font-family: inherit;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    transition: all 0.2s ease;
+}
+.form-input:focus, .form-select:focus, .form-textarea:focus,
+input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--tchad-gold);
+    box-shadow: 0 0 0 3px rgba(254, 203, 0, 0.15);
+}
+.form-textarea, textarea { resize: vertical; min-height: 100px; }
+
+/* Input with suffix */
+.input-with-suffix { position: relative; }
+.input-with-suffix input { padding-right: 90px; }
+.input-suffix { position: absolute; right: 16px; top: 50%; transform: translateY(-50%); color: var(--text-muted); font-size: 0.85rem; pointer-events: none; }
+
+/* Bailleur Grid */
+.bailleur-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+.bailleur-option { display: flex; flex-direction: column; align-items: center; gap: 8px; padding: 16px 12px; border: 2px solid var(--border-color); border-radius: var(--radius-lg); cursor: pointer; transition: all 0.2s ease; text-align: center; }
+.bailleur-option:hover { border-color: var(--tchad-gold); background: rgba(254, 203, 0, 0.05); }
+.bailleur-option.selected { border-color: var(--tchad-gold); background: rgba(254, 203, 0, 0.1); box-shadow: 0 0 0 3px rgba(254, 203, 0, 0.2); }
+.bailleur-option-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; }
+.bailleur-option-icon.national { background: linear-gradient(135deg, #002664, #1a4a8a); }
+.bailleur-option-icon.bm { background: linear-gradient(135deg, #0066b3, #009cde); }
+.bailleur-option-icon.bad { background: linear-gradient(135deg, #1d4e89, #3a7bd5); }
+.bailleur-option-icon.afd { background: linear-gradient(135deg, #e30613, #ff4444); }
+.bailleur-option-icon.ue { background: linear-gradient(135deg, #003399, #0055cc); }
+.bailleur-option-icon.fida { background: linear-gradient(135deg, #f7941e, #fbb03b); }
+.bailleur-option-icon.oms { background: linear-gradient(135deg, #009cde, #00b4e6); }
+.bailleur-option-icon.pnud { background: linear-gradient(135deg, #0468b1, #45b0e5); }
+.bailleur-option-icon.bid { background: linear-gradient(135deg, #1a5a3a, #2d8a5e); }
+.bailleur-option-icon.chine { background: linear-gradient(135deg, #de2910, #ff5533); }
+.bailleur-option-label { font-size: 0.8rem; font-weight: 500; color: var(--text-secondary); line-height: 1.3; }
+
+/* Progress Preview */
+.progress-preview { margin-top: 20px; padding: 20px; background: var(--bg-tertiary); border-radius: var(--radius-lg); }
+.progress-preview-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; font-weight: 600; }
+.progress-bar-large { height: 12px; background: var(--border-color); border-radius: 6px; overflow: hidden; }
+.progress-fill-large { height: 100%; border-radius: 6px; transition: all 0.3s ease; }
+.progress-fill-large.gold { background: linear-gradient(90deg, #fecb00, #e6b800); }
+.progress-fill-large.green { background: linear-gradient(90deg, #10b981, #34d399); }
+.progress-fill-large.blue { background: linear-gradient(90deg, #3b82f6, #60a5fa); }
+.progress-fill-large.red { background: linear-gradient(90deg, #ef4444, #f87171); }
+
+/* Projects Selection */
+.projects-selection { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+.projects-selection label { display: flex; align-items: center; gap: 12px; padding: 16px; border: 1px solid var(--border-color); border-radius: var(--radius-md); cursor: pointer; transition: all 0.2s ease; }
+.projects-selection label:hover { border-color: var(--tchad-gold); background: rgba(254, 203, 0, 0.05); }
+.projects-selection input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--tchad-gold); }
+
+/* Metadata Card */
+.metadata-card .form-card-body { padding: 20px 24px; }
+.metadata-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.metadata-item { display: flex; flex-direction: column; gap: 4px; }
+.metadata-label { font-size: 0.8rem; color: var(--text-muted); }
+.metadata-value { font-weight: 500; color: var(--text-primary); }
+.metadata-value.code { font-family: 'Fira Code', monospace; font-size: 0.85rem; background: var(--bg-tertiary); padding: 4px 8px; border-radius: 4px; }
+
+/* Form Actions */
+.form-actions { display: flex; justify-content: space-between; align-items: center; padding: 24px 0; margin-top: 12px; }
+.form-actions-left, .form-actions-right { display: flex; gap: 12px; }
+
+/* Buttons */
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 24px; border-radius: var(--radius-md); font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: all 0.2s ease; text-decoration: none; border: none; font-family: inherit; }
+.btn-lg { padding: 14px 28px; font-size: 1rem; }
+.btn-primary { background: linear-gradient(135deg, #002664, #1a4a8a); color: white; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.btn-secondary { background: var(--bg-tertiary); color: var(--text-primary); border: 1px solid var(--border-color); }
+.btn-secondary:hover { background: var(--bg-secondary); border-color: var(--text-muted); }
+.btn i { width: 18px; height: 18px; }
+
+/* Error messages */
+.form-group .invalid-feedback, .form-group ul { color: var(--danger); font-size: 0.85rem; margin-top: 4px; list-style: none; padding: 0; }
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .bailleur-grid { grid-template-columns: repeat(4, 1fr); }
+    .metadata-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+    .content-area { padding: 16px; }
+    .form-grid.cols-2, .form-grid.cols-3 { grid-template-columns: 1fr; }
+    .bailleur-grid { grid-template-columns: repeat(2, 1fr); }
+    .projects-selection { grid-template-columns: 1fr; }
+    .form-actions { flex-direction: column; gap: 16px; }
+    .form-actions-left, .form-actions-right { width: 100%; }
+    .form-actions .btn { width: 100%; }
+}

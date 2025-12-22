@@ -14,32 +14,7 @@ class WebController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
     
-
-    #[Route('/projects', name: 'app_projects')]
-    public function projects(): Response
-    {
-        return $this->render('projects/index.html.twig');
-    }
-
-    #[Route('/institutions', name: 'app_institutions')]
-    public function institutions(): Response
-    {
-        return $this->render('institutions/index.html.twig');
-    }
-
-    #[Route('/financements', name: 'app_financements')]
-    public function financements(): Response
-    {
-        return $this->render('financements/index.html.twig');
-    }
-
-    #[Route('/finances', name: 'app_finances')]
-    public function finances(): Response
-    {
-        return $this->render('finances/index.html.twig');
-    }
-
-
+   
     #[Route('/conventions', name: 'app_conventions')]
     public function conventions(): Response
     {

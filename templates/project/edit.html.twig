@@ -1,0 +1,407 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ project.name }} - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/project-form.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="content-area">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-left">
+            <h2>
+                <span class="page-header-icon">
+                    <i data-lucide="edit-3"></i>
+                </span>
+                Modifier le projet
+            </h2>
+            <p>{{ project.name }} <span class="project-code-badge">{{ project.code }}</span></p>
+        </div>
+        <a href="{{ path('app_projects') }}" class="btn btn-outline">
+            <i data-lucide="arrow-left"></i>
+            Retour aux projets
+        </a>
+    </div>
+
+    <!-- Flash Messages -->
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                <i data-lucide="{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}"></i>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form, {'attr': {'class': 'project-form', 'novalidate': 'novalidate'}}) }}
+    
+    <!-- Section 1: Informations générales -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon blue">
+                <i data-lucide="info"></i>
+            </div>
+            <div class="form-card-title">
+                <h3>Informations générales</h3>
+                <p>Définissez les caractéristiques principales du projet</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label class="form-label">
+                        Nom du projet <span class="required">*</span>
+                    </label>
+                    {{ form_widget(form.name, {'attr': {'placeholder': 'Ex: Route Nationale N\'Djamena - Abéché'}}) }}
+                    {{ form_errors(form.name) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Code projet <span class="required">*</span>
+                    </label>
+                    <div class="input-with-icon">
+                        {{ form_widget(form.code) }}
+                        <i data-lucide="hash" class="input-icon"></i>
+                    </div>
+                    <span class="form-hint">
+                        <i data-lucide="info"></i>
+                        Format: PRJ-ANNÉE-NUMÉRO
+                    </span>
+                    {{ form_errors(form.code) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">
+                        Localisation
+                    </label>
+                    <div class="input-with-icon">
+                        {{ form_widget(form.localisation, {'attr': {'placeholder': 'Ex: N\'Djamena, Région du Lac...'}}) }}
+                        <i data-lucide="map-pin" class="input-icon"></i>
+                    </div>
+                    {{ form_errors(form.localisation) }}
+                </div>
+                
+                <div class="form-group full-width">
+                    <label class="form-label">
+                        Description
+                    </label>
+                    {{ form_widget(form.description, {'attr': {'placeholder': 'Décrivez les objectifs et la portée du projet...', 'rows': 4}}) }}
+                    {{ form_errors(form.description) }}
+                </div>
+            </div>
+
+            <!-- Sector Selection -->
+            <div class="form-section-title">
+                <label class="form-label">Secteur d'activité <span class="required">*</span></label>
+            </div>
+            <div class="sector-grid">
+                {% for label, value in sectors %}
+                    <label class="sector-option {% if project.sector == value %}selected{% endif %}" data-sector="{{ value }}">
+                        <input type="radio" name="{{ form.sector.vars.full_name }}" value="{{ value }}" 
+                               {% if form.sector.vars.value == value %}checked{% endif %}>
+                        <div class="sector-icon {{ value }}">
+                            <i data-lucide="{% if value == 'infrastructure' %}road{% elseif value == 'sante' %}heart-pulse{% elseif value == 'energie' %}zap{% elseif value == 'agriculture' %}wheat{% elseif value == 'education' %}graduation-cap{% elseif value == 'eau' %}droplets{% else %}folder{% endif %}"></i>
+                        </div>
+                        <span class="sector-label">{{ label }}</span>
+                    </label>
+                {% endfor %}
+            </div>
+            {{ form_errors(form.sector) }}
+
+            <!-- Priority Selection -->
+            <div class="form-section-title" style="margin-top: 32px;">
+                <label class="form-label">Priorité <span class="required">*</span></label>
+            </div>
+            <div class="priority-options">
+                {% for label, value in priorities %}
+                    <label class="priority-option {{ value }} {% if project.priorite == value %}selected{% endif %}" data-priority="{{ value }}">
+                        <input type="radio" name="{{ form.priorite.vars.full_name }}" value="{{ value }}"
+                               {% if form.priorite.vars.value == value %}checked{% endif %}>
+                        <i data-lucide="{% if value == 'haute' %}alert-triangle{% elseif value == 'moyenne' %}minus-circle{% else %}check-circle{% endif %}"></i>
+                        {{ label }}
+                    </label>
+                {% endfor %}
+            </div>
+            {{ form_errors(form.priorite) }}
+        </div>
+    </div>
+
+    <!-- Section 2: Planning -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon purple">
+                <i data-lucide="calendar"></i>
+            </div>
+            <div class="form-card-title">
+                <h3>Planning du projet</h3>
+                <p>Définissez les dates et le statut du projet</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid three-cols">
+                <div class="form-group">
+                    <label class="form-label">Date de début</label>
+                    {{ form_widget(form.dateDebut) }}
+                    {{ form_errors(form.dateDebut) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Date de fin prévue</label>
+                    {{ form_widget(form.dateFin) }}
+                    {{ form_errors(form.dateFin) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Statut</label>
+                    {{ form_widget(form.status) }}
+                    {{ form_errors(form.status) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Finances -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon gold">
+                <i data-lucide="wallet"></i>
+            </div>
+            <div class="form-card-title">
+                <h3>Informations financières</h3>
+                <p>Budget et sources de financement du projet</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid three-cols">
+                <div class="form-group">
+                    <label class="form-label">Budget total (Milliards FCFA)</label>
+                    <div class="input-with-suffix">
+                        {{ form_widget(form.budgetTotal, {'attr': {'placeholder': '0.00'}}) }}
+                        <span class="input-suffix">Mds</span>
+                    </div>
+                    {{ form_errors(form.budgetTotal) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Montant décaissé (Milliards FCFA)</label>
+                    <div class="input-with-suffix">
+                        {{ form_widget(form.montantDecaisse, {'attr': {'placeholder': '0.00'}}) }}
+                        <span class="input-suffix">Mds</span>
+                    </div>
+                    {{ form_errors(form.montantDecaisse) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Progression (%)</label>
+                    <div class="progress-input-wrapper">
+                        {{ form_widget(form.progress, {'attr': {'min': 0, 'max': 100, 'placeholder': '0'}}) }}
+                        <div class="progress-preview">
+                            <div class="progress-bar-mini">
+                                <div class="progress-fill-mini" id="progressPreview" style="width: {{ project.progress }}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    {{ form_errors(form.progress) }}
+                </div>
+            </div>
+
+            <div class="form-divider"></div>
+
+            <div class="form-grid three-cols">
+                <div class="form-group span-3">
+                    <label class="form-label">Source de financement</label>
+                    {{ form_widget(form.sourceFinancement, {'attr': {'placeholder': 'Ex: Banque Mondiale, BAD, Budget National...'}}) }}
+                    {{ form_errors(form.sourceFinancement) }}
+                </div>
+            </div>
+
+            <div class="form-grid three-cols">
+                <div class="form-group">
+                    <label class="form-label">Financement national</label>
+                    <div class="input-with-suffix">
+                        {{ form_widget(form.financementNational, {'attr': {'placeholder': '0.00'}}) }}
+                        <span class="input-suffix">Mds</span>
+                    </div>
+                    {{ form_errors(form.financementNational) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Financement partenaires</label>
+                    <div class="input-with-suffix">
+                        {{ form_widget(form.financementPartenaires, {'attr': {'placeholder': '0.00'}}) }}
+                        <span class="input-suffix">Mds</span>
+                    </div>
+                    {{ form_errors(form.financementPartenaires) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Autres financements</label>
+                    <div class="input-with-suffix">
+                        {{ form_widget(form.financementAutre, {'attr': {'placeholder': '0.00'}}) }}
+                        <span class="input-suffix">Mds</span>
+                    </div>
+                    {{ form_errors(form.financementAutre) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 4: Responsables -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon green">
+                <i data-lucide="users"></i>
+            </div>
+            <div class="form-card-title">
+                <h3>Responsables et bénéficiaires</h3>
+                <p>Identifiez les parties prenantes du projet</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label">Maître d'ouvrage</label>
+                    {{ form_widget(form.maitreOuvrage, {'attr': {'placeholder': 'Ex: Ministère des Infrastructures'}}) }}
+                    {{ form_errors(form.maitreOuvrage) }}
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Chef de projet</label>
+                    {{ form_widget(form.chefProjet, {'attr': {'placeholder': 'Nom du responsable'}}) }}
+                    {{ form_errors(form.chefProjet) }}
+                </div>
+                
+                <div class="form-group full-width">
+                    <label class="form-label">Bénéficiaires</label>
+                    {{ form_widget(form.beneficiaires, {'attr': {'placeholder': 'Ex: 500,000 habitants'}}) }}
+                    {{ form_errors(form.beneficiaires) }}
+                </div>
+            </div>
+
+            {% if form.institution is defined %}
+                <div class="form-grid" style="margin-top: 24px;">
+                    <div class="form-group">
+                        <label class="form-label">Institution responsable</label>
+                        {{ form_widget(form.institution) }}
+                        {{ form_errors(form.institution) }}
+                    </div>
+                    
+                    {% if form.partnerPrincipal is defined %}
+                    <div class="form-group">
+                        <label class="form-label">Partenaire principal</label>
+                        {{ form_widget(form.partnerPrincipal) }}
+                        {{ form_errors(form.partnerPrincipal) }}
+                    </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Section 5: Notes -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon gray">
+                <i data-lucide="file-text"></i>
+            </div>
+            <div class="form-card-title">
+                <h3>Notes additionnelles</h3>
+                <p>Informations complémentaires sur le projet</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="form-group">
+                {{ form_widget(form.notes, {'attr': {'placeholder': 'Ajoutez des notes ou commentaires...', 'rows': 4}}) }}
+                {{ form_errors(form.notes) }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 6: Métadonnées -->
+    <div class="form-card metadata-card">
+        <div class="form-card-header">
+            <div class="form-card-icon gray">
+                <i data-lucide="info"></i>
+            </div>
+            <div class="form-card-title">
+                <h3>Informations système</h3>
+                <p>Métadonnées du projet</p>
+            </div>
+        </div>
+        <div class="form-card-body">
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <span class="metadata-label">ID</span>
+                    <span class="metadata-value">#{{ project.id }}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Slug</span>
+                    <span class="metadata-value">{{ project.slug }}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Créé le</span>
+                    <span class="metadata-value">{{ project.createdAt ? project.createdAt|date('d/m/Y à H:i') : 'N/A' }}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Modifié le</span>
+                    <span class="metadata-value">{{ project.updatedAt ? project.updatedAt|date('d/m/Y à H:i') : 'Jamais' }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+        <div class="form-actions-left">
+            <a href="{{ path('app_projects') }}" class="btn btn-outline">
+                <i data-lucide="x"></i>
+                Annuler
+            </a>
+        </div>
+        <div class="form-actions-right">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i data-lucide="save"></i>
+                Mettre à jour
+            </button>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    lucide.createIcons();
+
+    // Sector selection
+    document.querySelectorAll('.sector-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.sector-option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            this.querySelector('input').checked = true;
+        });
+    });
+
+    // Priority selection
+    document.querySelectorAll('.priority-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.priority-option').forEach(o => o.classList.remove('selected'));
+            this.classList.add('selected');
+            this.querySelector('input').checked = true;
+        });
+    });
+
+    // Progress preview
+    const progressInput = document.querySelector('input[name$="[progress]"]');
+    if (progressInput) {
+        progressInput.addEventListener('input', function() {
+            const value = Math.min(100, Math.max(0, this.value || 0));
+            document.getElementById('progressPreview').style.width = value + '%';
+        });
+    }
+</script>
+{% endblock %}

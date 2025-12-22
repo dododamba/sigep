@@ -1,0 +1,311 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ financement.numeroConvention }} - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/financement-form.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="content-area">
+    <!-- Page Header -->
+    <div class="page-header">
+        <a href="{{ path('app_financements') }}" class="back-link">
+            <i data-lucide="arrow-left"></i>
+            Retour aux financements
+        </a>
+    </div>
+
+    <!-- Form Title -->
+    <div class="form-title">
+        <div class="form-title-icon edit">
+            <i data-lucide="edit"></i>
+        </div>
+        <div>
+            <h1>Modifier le financement</h1>
+            <p>
+                <span class="convention-badge">{{ financement.numeroConvention }}</span>
+                <span class="bailleur-badge {{ financement.bailleur }}">{{ financement.bailleurShortName }}</span>
+            </p>
+        </div>
+    </div>
+
+    {{ form_start(form, {'attr': {'class': 'financement-form', 'id': 'financementForm'}}) }}
+    
+    <!-- Section 1: Informations du bailleur -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon blue">
+                <i data-lucide="building-2"></i>
+            </div>
+            <h2>Informations du bailleur</h2>
+        </div>
+        <div class="form-card-body">
+            <div class="form-group">
+                <label class="form-label required">Bailleur de fonds</label>
+                <div class="bailleur-grid">
+                    {% for label, value in bailleurs %}
+                    <div class="bailleur-option {{ financement.bailleur == value ? 'selected' : '' }}" data-value="{{ value }}" onclick="selectBailleur('{{ value }}')">
+                        <div class="bailleur-option-icon {{ value }}">
+                            {% if value == 'national' %}BN{% elseif value == 'bm' %}BM{% elseif value == 'bad' %}BAD{% elseif value == 'afd' %}AFD{% elseif value == 'ue' %}UE{% elseif value == 'fida' %}FIDA{% elseif value == 'oms' %}OMS{% elseif value == 'pnud' %}PNUD{% elseif value == 'bid' %}BID{% elseif value == 'chine' %}CN{% else %}{{ value[:2]|upper }}{% endif %}
+                        </div>
+                        <span class="bailleur-option-label">{{ label }}</span>
+                    </div>
+                    {% endfor %}
+                </div>
+                <div style="display: none;">{{ form_widget(form.bailleur) }}</div>
+                {{ form_errors(form.bailleur) }}
+            </div>
+            
+            <div class="form-grid cols-3">
+                <div class="form-group">
+                    {{ form_label(form.type, null, {'label_attr': {'class': 'form-label required'}}) }}
+                    {{ form_widget(form.type) }}
+                    {{ form_errors(form.type) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.numeroConvention, null, {'label_attr': {'class': 'form-label required'}}) }}
+                    {{ form_widget(form.numeroConvention) }}
+                    {{ form_errors(form.numeroConvention) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.statut, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.statut) }}
+                    {{ form_errors(form.statut) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 2: Dates -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon green">
+                <i data-lucide="calendar"></i>
+            </div>
+            <h2>Calendrier</h2>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid cols-3">
+                <div class="form-group">
+                    {{ form_label(form.dateSignature, null, {'label_attr': {'class': 'form-label required'}}) }}
+                    {{ form_widget(form.dateSignature) }}
+                    {{ form_errors(form.dateSignature) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.dateEntreeVigueur, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.dateEntreeVigueur) }}
+                    {{ form_errors(form.dateEntreeVigueur) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.dateEcheance, null, {'label_attr': {'class': 'form-label required'}}) }}
+                    {{ form_widget(form.dateEcheance) }}
+                    {{ form_errors(form.dateEcheance) }}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 3: Montants -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon gold">
+                <i data-lucide="banknote"></i>
+            </div>
+            <h2>Montants</h2>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid cols-3">
+                <div class="form-group">
+                    {{ form_label(form.montantEngage, null, {'label_attr': {'class': 'form-label required'}}) }}
+                    <div class="input-with-suffix">
+                        {{ form_widget(form.montantEngage) }}
+                        <span class="input-suffix">Mds FCFA</span>
+                    </div>
+                    {{ form_errors(form.montantEngage) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.montantDecaisse, null, {'label_attr': {'class': 'form-label'}}) }}
+                    <div class="input-with-suffix">
+                        {{ form_widget(form.montantDecaisse) }}
+                        <span class="input-suffix">Mds FCFA</span>
+                    </div>
+                    {{ form_errors(form.montantDecaisse) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.contrepartieNationale, null, {'label_attr': {'class': 'form-label'}}) }}
+                    <div class="input-with-suffix">
+                        {{ form_widget(form.contrepartieNationale) }}
+                        <span class="input-suffix">Mds FCFA</span>
+                    </div>
+                    {{ form_errors(form.contrepartieNationale) }}
+                </div>
+            </div>
+            
+            <!-- Progress Preview -->
+            <div class="progress-preview">
+                <div class="progress-preview-header">
+                    <span>Taux de décaissement</span>
+                    <span id="tauxPreview">{{ financement.tauxDecaissement }}%</span>
+                </div>
+                <div class="progress-bar-large">
+                    <div class="progress-fill-large {% if financement.tauxDecaissement >= 70 %}gold{% elseif financement.tauxDecaissement >= 50 %}green{% elseif financement.tauxDecaissement >= 25 %}blue{% else %}red{% endif %}" id="progressFill" style="width: {{ financement.tauxDecaissement }}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 4: Conditions -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon purple">
+                <i data-lucide="file-text"></i>
+            </div>
+            <h2>Conditions de financement</h2>
+        </div>
+        <div class="form-card-body">
+            <div class="form-grid cols-3">
+                <div class="form-group">
+                    {{ form_label(form.tauxInteret, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.tauxInteret) }}
+                    {{ form_errors(form.tauxInteret) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.dureeFinancement, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.dureeFinancement) }}
+                    {{ form_errors(form.dureeFinancement) }}
+                </div>
+                <div class="form-group">
+                    {{ form_label(form.differeRemboursement, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.differeRemboursement) }}
+                    {{ form_errors(form.differeRemboursement) }}
+                </div>
+            </div>
+            <div class="form-group full-width">
+                {{ form_label(form.conditions, null, {'label_attr': {'class': 'form-label'}}) }}
+                {{ form_widget(form.conditions) }}
+                {{ form_errors(form.conditions) }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 5: Projets associés -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon orange">
+                <i data-lucide="folder-kanban"></i>
+            </div>
+            <h2>Projets financés</h2>
+        </div>
+        <div class="form-card-body">
+            <div class="projects-selection">
+                {{ form_widget(form.projets) }}
+            </div>
+            {{ form_errors(form.projets) }}
+        </div>
+    </div>
+
+    <!-- Section 6: Notes -->
+    <div class="form-card">
+        <div class="form-card-header">
+            <div class="form-card-icon gray">
+                <i data-lucide="sticky-note"></i>
+            </div>
+            <h2>Notes</h2>
+        </div>
+        <div class="form-card-body">
+            <div class="form-group full-width">
+                {{ form_widget(form.notes) }}
+                {{ form_errors(form.notes) }}
+            </div>
+        </div>
+    </div>
+
+    <!-- Section 7: Métadonnées -->
+    <div class="form-card metadata-card">
+        <div class="form-card-header">
+            <div class="form-card-icon gray">
+                <i data-lucide="info"></i>
+            </div>
+            <h2>Métadonnées</h2>
+        </div>
+        <div class="form-card-body">
+            <div class="metadata-grid">
+                <div class="metadata-item">
+                    <span class="metadata-label">ID</span>
+                    <span class="metadata-value code">{{ financement.id }}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Slug</span>
+                    <span class="metadata-value code">{{ financement.slug }}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Créé le</span>
+                    <span class="metadata-value">{{ financement.createdAt|date('d/m/Y à H:i') }}</span>
+                </div>
+                <div class="metadata-item">
+                    <span class="metadata-label">Modifié le</span>
+                    <span class="metadata-value">{{ financement.updatedAt|date('d/m/Y à H:i') }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+        <div class="form-actions-left">
+            <a href="{{ path('app_financements') }}" class="btn btn-secondary">
+                <i data-lucide="x"></i>
+                Annuler
+            </a>
+        </div>
+        <div class="form-actions-right">
+            <button type="submit" class="btn btn-primary btn-lg">
+                <i data-lucide="save"></i>
+                Mettre à jour
+            </button>
+        </div>
+    </div>
+
+    {{ form_end(form) }}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        lucide.createIcons();
+        
+        function selectBailleur(value) {
+            document.querySelectorAll('.bailleur-option').forEach(el => {
+                el.classList.remove('selected');
+            });
+            document.querySelector('.bailleur-option[data-value="' + value + '"]').classList.add('selected');
+            document.getElementById('financement_bailleur').value = value;
+        }
+        
+        function updateProgress() {
+            const engage = parseFloat(document.getElementById('financement_montantEngage').value) || 0;
+            const decaisse = parseFloat(document.getElementById('financement_montantDecaisse').value) || 0;
+            
+            let taux = 0;
+            if (engage > 0) {
+                taux = Math.round((decaisse / engage) * 100);
+            }
+            
+            document.getElementById('tauxPreview').textContent = taux + '%';
+            const fill = document.getElementById('progressFill');
+            fill.style.width = taux + '%';
+            
+            fill.className = 'progress-fill-large';
+            if (taux >= 70) fill.classList.add('gold');
+            else if (taux >= 50) fill.classList.add('green');
+            else if (taux >= 25) fill.classList.add('blue');
+            else fill.classList.add('red');
+        }
+        
+        document.getElementById('financement_montantEngage').addEventListener('input', updateProgress);
+        document.getElementById('financement_montantDecaisse').addEventListener('input', updateProgress);
+    </script>
+{% endblock %}

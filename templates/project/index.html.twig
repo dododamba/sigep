@@ -1,0 +1,350 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Projets - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/project.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="content-area">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-left">
+            <h2>
+                <span class="page-header-icon">
+                    <i data-lucide="briefcase"></i>
+                </span>
+                Projets
+            </h2>
+            <p>Gestion des projets publics et suivi des financements</p>
+        </div>
+        <div class="page-header-actions">
+            <a href="{{ path('app_projects_new') }}" class="btn btn-gold">
+                <i data-lucide="plus"></i>
+                Nouveau Projet
+            </a>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                <i data-lucide="{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" class="alert-close" onclick="this.parentElement.remove()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+        <div class="mini-stat" style="--stat-color: var(--tchad-blue);">
+            <div class="mini-stat-icon blue">
+                <i data-lucide="folder-kanban"></i>
+            </div>
+            <div class="mini-stat-content">
+                <h3>{{ stats.total }}</h3>
+                <p>Total Projets</p>
+            </div>
+        </div>
+        <div class="mini-stat" style="--stat-color: var(--success);">
+            <div class="mini-stat-icon green">
+                <i data-lucide="play-circle"></i>
+            </div>
+            <div class="mini-stat-content">
+                <h3>{{ stats.enCours }}</h3>
+                <p>En cours</p>
+            </div>
+        </div>
+        <div class="mini-stat" style="--stat-color: var(--tchad-gold);">
+            <div class="mini-stat-icon gold">
+                <i data-lucide="check-circle"></i>
+            </div>
+            <div class="mini-stat-content">
+                <h3>{{ stats.termines }}</h3>
+                <p>Terminés</p>
+            </div>
+        </div>
+        <div class="mini-stat" style="--stat-color: var(--danger);">
+            <div class="mini-stat-icon red">
+                <i data-lucide="alert-triangle"></i>
+            </div>
+            <div class="mini-stat-content">
+                <h3>{{ stats.enRetard }}</h3>
+                <p>En retard</p>
+            </div>
+        </div>
+        <div class="mini-stat" style="--stat-color: #7c3aed;">
+            <div class="mini-stat-icon purple">
+                <i data-lucide="wallet"></i>
+            </div>
+            <div class="mini-stat-content">
+                <h3>{{ budgetTotal|number_format(1, ',', ' ') }}</h3>
+                <p>Budget (Mds FCFA)</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Projects Card -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title">
+                <i data-lucide="list"></i>
+                Liste des Projets
+            </div>
+            <div class="card-actions">
+                <a href="{{ path('app_projects') }}" class="btn btn-icon" title="Actualiser">
+                    <i data-lucide="refresh-cw"></i>
+                </a>
+                <a href="{{ path('app_projects_export_json') }}" class="btn btn-icon" title="Exporter">
+                    <i data-lucide="download"></i>
+                </a>
+            </div>
+        </div>
+
+        <!-- Filters Bar -->
+        <div class="filters-bar">
+            <form method="GET" action="{{ path('app_projects') }}" class="filters-form">
+                <div class="filter-search">
+                    <i data-lucide="search"></i>
+                    <input type="text" name="search" value="{{ search }}" placeholder="Rechercher un projet...">
+                </div>
+                
+                <div class="filter-group">
+                    <label class="filter-label">Statut:</label>
+                    <select name="status" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Tous</option>
+                        {% for label, value in statuses %}
+                            <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Secteur:</label>
+                    <select name="sector" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Tous</option>
+                        {% for label, value in sectors %}
+                            <option value="{{ value }}" {% if sector == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="filter-group">
+                    <label class="filter-label">Priorité:</label>
+                    <select name="priority" class="filter-select" onchange="this.form.submit()">
+                        <option value="">Toutes</option>
+                        {% for label, value in priorities %}
+                            <option value="{{ value }}" {% if priority == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm">
+                    <i data-lucide="filter"></i>
+                    Filtrer
+                </button>
+
+                {% if search or status or sector or priority %}
+                    <a href="{{ path('app_projects') }}" class="btn btn-outline btn-sm">
+                        <i data-lucide="x"></i>
+                        Réinitialiser
+                    </a>
+                {% endif %}
+            </form>
+        </div>
+
+        <!-- Data Table -->
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Projet</th>
+                        <th>Secteur</th>
+                        <th>Budget</th>
+                        <th>Progression</th>
+                        <th>Statut</th>
+                        <th>Priorité</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                        <tr>
+                            <td>
+                                <div class="project-cell">
+                                    <div class="project-icon {{ project.sector }}">
+                                        <i data-lucide="{{ project.sectorIcon }}"></i>
+                                    </div>
+                                    <div class="project-info">
+                                        <a href="{{ path('app_projects_show', {slug: project.slug}) }}" class="project-name">
+                                            {{ project.name }}
+                                        </a>
+                                        <span class="project-code">{{ project.code }}</span>
+                                        {% if project.localisation %}
+                                            <span class="project-location">
+                                                <i data-lucide="map-pin"></i>
+                                                {{ project.localisation }}
+                                            </span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="sector-badge {{ project.sector }}">
+                                    {{ project.sectorLabel }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="budget-cell">
+                                    <span class="budget-total">{{ project.budgetTotal|number_format(1, ',', ' ') }} Mds</span>
+                                    <span class="budget-disbursed">
+                                        <i data-lucide="trending-up"></i>
+                                        {{ project.tauxDecaissement }}% décaissé
+                                    </span>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="progress-cell">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill {% if project.progress >= 80 %}green{% elseif project.progress >= 50 %}blue{% elseif project.progress >= 25 %}gold{% else %}red{% endif %}" 
+                                             style="width: {{ project.progress }}%"></div>
+                                    </div>
+                                    <span class="progress-value">{{ project.progress }}%</span>
+                                </div>
+                            </td>
+                            <td>
+                                <span class="status-badge {{ project.status }}">
+                                    {{ project.statusLabel }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="priority-badge {{ project.priorite }}">
+                                    {{ project.prioriteLabel }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="actions-group">
+                                    <a href="{{ path('app_projects_show', {slug: project.slug}) }}" class="action-btn" title="Voir">
+                                        <i data-lucide="eye"></i>
+                                    </a>
+                                    <a href="{{ path('app_projects_edit', {id: project.id}) }}" class="action-btn" title="Modifier">
+                                        <i data-lucide="pencil"></i>
+                                    </a>
+                                    <button type="button" class="action-btn delete" title="Supprimer" 
+                                            onclick="openDeleteModal({{ project.id }}, '{{ project.name|e('js') }}')">
+                                        <i data-lucide="trash-2"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="7">
+                                <div class="empty-state">
+                                    <div class="empty-icon">
+                                        <i data-lucide="folder-open"></i>
+                                    </div>
+                                    <h4>Aucun projet trouvé</h4>
+                                    <p>{% if search or status or sector or priority %}Modifiez vos filtres ou {% endif %}créez un nouveau projet</p>
+                                    <a href="{{ path('app_projects_new') }}" class="btn btn-primary">
+                                        <i data-lucide="plus"></i>
+                                        Nouveau Projet
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if totalPages > 1 %}
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Affichage de {{ ((currentPage - 1) * 10) + 1 }} à {{ min(currentPage * 10, totalProjects) }} sur {{ totalProjects }} projets
+                </div>
+                <div class="pagination">
+                    {% if currentPage > 1 %}
+                        <a href="{{ path('app_projects', {page: currentPage - 1, search: search, status: status, sector: sector, priority: priority}) }}" class="pagination-btn">
+                            <i data-lucide="chevron-left"></i>
+                        </a>
+                    {% endif %}
+
+                    {% for i in 1..totalPages %}
+                        {% if i == 1 or i == totalPages or (i >= currentPage - 2 and i <= currentPage + 2) %}
+                            <a href="{{ path('app_projects', {page: i, search: search, status: status, sector: sector, priority: priority}) }}" 
+                               class="pagination-btn {% if i == currentPage %}active{% endif %}">
+                                {{ i }}
+                            </a>
+                        {% elseif i == currentPage - 3 or i == currentPage + 3 %}
+                            <span class="pagination-ellipsis">...</span>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if currentPage < totalPages %}
+                        <a href="{{ path('app_projects', {page: currentPage + 1, search: search, status: status, sector: sector, priority: priority}) }}" class="pagination-btn">
+                            <i data-lucide="chevron-right"></i>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-backdrop" onclick="closeDeleteModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-icon danger">
+                <i data-lucide="alert-triangle"></i>
+            </div>
+            <h3>Confirmer la suppression</h3>
+            <p>Êtes-vous sûr de vouloir supprimer le projet "<span id="projectNameToDelete"></span>" ?</p>
+            <p class="warning-text">Cette action est irréversible.</p>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+                <button type="submit" class="btn btn-danger">
+                    <i data-lucide="trash-2"></i>
+                    Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    lucide.createIcons();
+
+    function openDeleteModal(id, name) {
+        document.getElementById('projectNameToDelete').textContent = name;
+        document.getElementById('deleteForm').action = '/projects/' + id;
+        document.getElementById('deleteForm').querySelector('input[name="_token"]').value = '{{ csrf_token('delete') }}' + id;
+        document.getElementById('deleteModal').classList.add('show');
+        lucide.createIcons();
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').classList.remove('show');
+    }
+
+    // Close modal on escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+</script>
+{% endblock %}

@@ -365,7 +365,7 @@ class __TwigTemplate_7b2ebb79055e432868671f2f019aa7c0 extends Template
             if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["partner"], "logo", [], "any", false, false, false, 156)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
                 // line 157
                 yield "                                        <img src=\"";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl(("uploads/partners/" . CoreExtension::getAttribute($this->env, $this->source, $context["partner"], "logo", [], "any", false, false, false, 157))), "html", null, true);
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl(("uploads/images/" . CoreExtension::getAttribute($this->env, $this->source, $context["partner"], "logo", [], "any", false, false, false, 157))), "html", null, true);
                 yield "\" alt=\"";
                 yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["partner"], "name", [], "any", false, false, false, 157), "html", null, true);
                 yield "\">
@@ -850,7 +850,7 @@ $context["i"] == ((isset($context["currentPage"]) || array_key_exists("currentPa
                             <td>
                                 <div class=\"partner-logo\">
                                     {% if partner.logo %}
-                                        <img src=\"{{ asset('uploads/partners/' ~ partner.logo) }}\" alt=\"{{ partner.name }}\">
+                                        <img src=\"{{ asset('uploads/images/' ~ partner.logo) }}\" alt=\"{{ partner.name }}\">
                                     {% else %}
                                         <div class=\"logo-placeholder\">
                                             <i class=\"ri-building-2-line\"></i>

@@ -59,7 +59,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
     <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">
     <link href=\"https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css\" rel=\"stylesheet\">
 
-    
+    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC\" crossorigin=\"anonymous\">
     <!-- Lucide Icons -->
     <script src=\"https://unpkg.com/lucide@latest\"></script>
     
@@ -117,9 +117,12 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
         // line 50
         yield from $this->unwrap()->yieldBlock('modal', $context, $blocks);
         // line 51
-        yield "\t";
+        yield "
+    <script src=\"https://unpkg.com/lucide@latest\"></script>
+\t";
+        // line 53
         yield from $this->unwrap()->yieldBlock('javascripts', $context, $blocks);
-        // line 54
+        // line 56
         yield "</body>
 </html>
 ";
@@ -178,7 +181,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
         yield from [];
     }
 
-    // line 51
+    // line 53
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -188,7 +191,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 52
+        // line 54
         yield "\t\t
 \t";
         
@@ -218,7 +221,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  192 => 52,  182 => 51,  166 => 50,  150 => 43,  133 => 32,  123 => 54,  120 => 51,  118 => 50,  113 => 47,  111 => 46,  107 => 44,  105 => 43,  101 => 41,  99 => 40,  94 => 37,  92 => 36,  87 => 33,  85 => 32,  74 => 24,  49 => 1,);
+        return array (  195 => 54,  185 => 53,  169 => 50,  153 => 43,  136 => 32,  126 => 56,  124 => 53,  120 => 51,  118 => 50,  113 => 47,  111 => 46,  107 => 44,  105 => 43,  101 => 41,  99 => 40,  94 => 37,  92 => 36,  87 => 33,  85 => 32,  74 => 24,  49 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -236,7 +239,7 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
     <link href=\"https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap\" rel=\"stylesheet\">
     <link href=\"https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css\" rel=\"stylesheet\">
 
-    
+    <link href=\"https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css\" rel=\"stylesheet\" integrity=\"sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC\" crossorigin=\"anonymous\">
     <!-- Lucide Icons -->
     <script src=\"https://unpkg.com/lucide@latest\"></script>
     
@@ -273,6 +276,8 @@ class __TwigTemplate_c184251777ac59886593ec8ae60da32e extends Template
     </main>
 
     {% block modal %}{% endblock %}
+
+    <script src=\"https://unpkg.com/lucide@latest\"></script>
 \t{% block javascripts %}
 \t\t
 \t{% endblock %}

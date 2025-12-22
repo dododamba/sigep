@@ -1,0 +1,254 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ institution.name }} - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/institution-show.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="show-page">
+    <!-- Header -->
+    <header class="show-page-header">
+        <a href="{{ path('app_institutions') }}" class="back-btn">
+            <i class="ri-arrow-left-line"></i>
+            Retour à la liste
+        </a>
+        <h1>Détails de l'Institution</h1>
+        <div class="header-actions">
+            <a href="{{ path('app_institutions_edit', {id: institution.id}) }}" class="btn btn-primary btn-sm">
+                <i class="ri-edit-line"></i> Modifier
+            </a>
+        </div>
+    </header>
+
+    <div class="show-container">
+        <!-- Card Principale -->
+        <div class="detail-card main-card">
+            <div class="card-hero">
+                <div class="institution-logo-large">
+                    {% if institution.logo %}
+                        <img src="{{ asset('uploads/images/' ~ institution.logo) }}" alt="{{ institution.name }}">
+                    {% else %}
+                        <div class="logo-placeholder-large">
+                            <i class="ri-building-line"></i>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="institution-identity">
+                    <div class="name-row">
+                        <h1>{{ institution.name }}</h1>
+                        {% if institution.acronym %}
+                            <span class="acronym-badge">{{ institution.acronym }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="meta-tags">
+                        <span class="type-tag">
+                            <i class="ri-price-tag-3-line"></i>
+                            {{ institution.typeInstitution.name ?? 'Type non défini' }}
+                        </span>
+                        {% if institution.sector %}
+                            <span class="sector-tag">
+                                <i class="ri-folder-line"></i>
+                                {{ institution.sector.name }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="status-badge-large status-{{ institution.status|lower|replace({' ': '-'}) }}">
+                    {% if institution.status == 'Actif' %}
+                        <i class="ri-checkbox-circle-line"></i>
+                    {% elseif institution.status == 'Inactif' %}
+                        <i class="ri-close-circle-line"></i>
+                    {% else %}
+                        <i class="ri-refresh-line"></i>
+                    {% endif %}
+                    {{ institution.status }}
+                </div>
+            </div>
+            
+            <!-- Description -->
+            {% if institution.description %}
+                <div class="card-section">
+                    <h3 class="section-label">
+                        <i class="ri-file-text-line"></i> Description / Mission
+                    </h3>
+                    <div class="description-content">
+                        {{ institution.description|nl2br }}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+        
+        <!-- Grid de détails -->
+        <div class="details-grid">
+            <!-- Leadership -->
+            <div class="detail-card">
+                <div class="card-header">
+                    <div class="card-icon gold">
+                        <i class="ri-user-star-line"></i>
+                    </div>
+                    <h3>Leadership</h3>
+                </div>
+                <div class="card-body">
+                    {% if institution.headName %}
+                        <div class="info-row">
+                            <span class="info-label">Responsable</span>
+                            <span class="info-value">{{ institution.headName }}</span>
+                        </div>
+                    {% endif %}
+                    {% if institution.headTitle %}
+                        <div class="info-row">
+                            <span class="info-label">Titre</span>
+                            <span class="info-value">{{ institution.headTitle }}</span>
+                        </div>
+                    {% endif %}
+                    {% if not institution.headName and not institution.headTitle %}
+                        <p class="empty-text">Aucune information sur le leadership</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Contact -->
+            <div class="detail-card">
+                <div class="card-header">
+                    <div class="card-icon blue">
+                        <i class="ri-contacts-line"></i>
+                    </div>
+                    <h3>Contact</h3>
+                </div>
+                <div class="card-body">
+                    {% if institution.email %}
+                        <div class="info-row clickable">
+                            <span class="info-label"><i class="ri-mail-line"></i> Email</span>
+                            <a href="mailto:{{ institution.email }}" class="info-value link">{{ institution.email }}</a>
+                        </div>
+                    {% endif %}
+                    {% if institution.phone %}
+                        <div class="info-row clickable">
+                            <span class="info-label"><i class="ri-phone-line"></i> Téléphone</span>
+                            <a href="tel:{{ institution.phone }}" class="info-value link">{{ institution.phone }}</a>
+                        </div>
+                    {% endif %}
+                    {% if institution.website %}
+                        <div class="info-row clickable">
+                            <span class="info-label"><i class="ri-global-line"></i> Site Web</span>
+                            <a href="{{ institution.website }}" target="_blank" class="info-value link">
+                                {{ institution.website }} <i class="ri-external-link-line"></i>
+                            </a>
+                        </div>
+                    {% endif %}
+                    {% if not institution.email and not institution.phone and not institution.website %}
+                        <p class="empty-text">Aucune information de contact</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Localisation -->
+            <div class="detail-card">
+                <div class="card-header">
+                    <div class="card-icon red">
+                        <i class="ri-map-pin-line"></i>
+                    </div>
+                    <h3>Localisation</h3>
+                </div>
+                <div class="card-body">
+                    {% if institution.address %}
+                        <div class="info-row">
+                            <span class="info-label">Adresse</span>
+                            <span class="info-value">{{ institution.address }}</span>
+                        </div>
+                    {% else %}
+                        <p class="empty-text">Adresse non renseignée</p>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Informations complémentaires -->
+            <div class="detail-card">
+                <div class="card-header">
+                    <div class="card-icon purple">
+                        <i class="ri-information-line"></i>
+                    </div>
+                    <h3>Informations</h3>
+                </div>
+                <div class="card-body">
+                    {% if institution.creationDate %}
+                        <div class="info-row">
+                            <span class="info-label">Date de création</span>
+                            <span class="info-value">{{ institution.creationDate|date('d/m/Y') }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="info-row">
+                        <span class="info-label">Enregistré le</span>
+                        <span class="info-value">{{ institution.createdAt|date('d/m/Y à H:i') }}</span>
+                    </div>
+                    {% if institution.updatedAt %}
+                        <div class="info-row">
+                            <span class="info-label">Modifié le</span>
+                            <span class="info-value">{{ institution.updatedAt|date('d/m/Y à H:i') }}</span>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Actions -->
+        <div class="action-bar">
+            <a href="{{ path('app_institutions_edit', {id: institution.id}) }}" class="btn btn-primary">
+                <i class="ri-edit-line"></i> Modifier l'institution
+            </a>
+            <button type="button" class="btn btn-danger" onclick="confirmDelete()">
+                <i class="ri-delete-bin-6-line"></i> Supprimer
+            </button>
+            <a href="{{ path('app_institutions') }}" class="btn btn-secondary" style="margin-left: auto;">
+                <i class="ri-arrow-left-line"></i> Retour à la liste
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Suppression -->
+<div id="deleteModal" class="modal">
+    <div class="modal-overlay" onclick="closeDeleteModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="ri-alert-line"></i> Confirmer la suppression</h3>
+            <button class="modal-close" onclick="closeDeleteModal()">
+                <i class="ri-close-line"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer l'institution <strong>{{ institution.name }}</strong> ?</p>
+            <p class="text-muted">Cette action est irréversible.</p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+            <form action="{{ path('app_institutions_delete', {id: institution.id}) }}" method="POST">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ institution.id) }}">
+                <button type="submit" class="btn btn-danger">
+                    <i class="ri-delete-bin-6-line"></i> Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    function confirmDelete() {
+        document.getElementById('deleteModal').style.display = 'flex';
+    }
+
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeleteModal();
+        }
+    });
+</script>
+{% endblock %}

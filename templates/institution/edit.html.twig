@@ -1,0 +1,233 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier {{ institution.name }} - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/institution-form.css') }}">
+{% endblock %}
+
+{% block body %}
+<main class="main-content">
+    {{ form_start(form, {'attr': {'class': 'form-container', 'enctype': 'multipart/form-data'}}) }}
+        
+        <!-- Header -->
+        <div class="form-header">
+            <div class="form-title">
+                <h2>Modifier l'Institution</h2>
+                <p>{{ institution.name }}{% if institution.acronym %} ({{ institution.acronym }}){% endif %}</p>
+            </div>
+            <a href="{{ path('app_institutions') }}" class="back-btn">
+                <i data-lucide="arrow-left"></i> Retour
+            </a>
+        </div>
+
+        <div class="form-body">
+            <!-- Flash Messages -->
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        <i data-lucide="{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}"></i>
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            <!-- Informations Générales -->
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i data-lucide="building"></i> Informations Générales
+                </h3>
+                <div class="form-grid">
+                    <div class="form-group full-width">
+                        <label class="label">Nom de l'Institution <span class="required">*</span></label>
+                        {{ form_widget(form.name, {'attr': {'class': 'input', 'placeholder': 'Ex: Ministère de l\'Éducation Nationale'}}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Acronyme</label>
+                        {{ form_widget(form.acronym, {'attr': {'class': 'input', 'placeholder': 'Ex: MEN'}}) }}
+                        {{ form_errors(form.acronym) }}
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Type d'entité <span class="required">*</span></label>
+                        {{ form_widget(form.typeInstitution, {'attr': {'class': 'input'}}) }}
+                        {{ form_errors(form.typeInstitution) }}
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Secteur d'activité</label>
+                        {{ form_widget(form.sector, {'attr': {'class': 'input'}}) }}
+                        {{ form_errors(form.sector) }}
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Date de création (Optionnel)</label>
+                        {{ form_widget(form.creationDate, {'attr': {'class': 'input'}}) }}
+                        {{ form_errors(form.creationDate) }}
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="label">Description / Mission</label>
+                        {{ form_widget(form.description, {'attr': {'class': 'input textarea', 'rows': 4, 'placeholder': 'Description des missions et attributions...'}}) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leadership & Contact -->
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i data-lucide="user-check"></i> Leadership & Contact
+                </h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="label">Nom du Responsable (Ministre/DG)</label>
+                        {{ form_widget(form.headName, {'attr': {'class': 'input', 'placeholder': 'Nom complet'}}) }}
+                        {{ form_errors(form.headName) }}
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Titre / Fonction</label>
+                        {{ form_widget(form.headTitle, {'attr': {'class': 'input', 'placeholder': 'Ex: Ministre, Directeur Général'}}) }}
+                        {{ form_errors(form.headTitle) }}
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Email officiel</label>
+                        {{ form_widget(form.email, {'attr': {'class': 'input', 'placeholder': 'contact@domaine.td'}}) }}
+                        {{ form_errors(form.email) }}
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Téléphone</label>
+                        {{ form_widget(form.phone, {'attr': {'class': 'input', 'placeholder': '+235 XX XX XX XX'}}) }}
+                        {{ form_errors(form.phone) }}
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="label">Adresse physique</label>
+                        {{ form_widget(form.address, {'attr': {'class': 'input', 'placeholder': 'Quartier, Avenue, Ville'}}) }}
+                        {{ form_errors(form.address) }}
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="label">Site Web</label>
+                        {{ form_widget(form.website, {'attr': {'class': 'input', 'placeholder': 'https://...'}}) }}
+                        {{ form_errors(form.website) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Identité Visuelle -->
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i data-lucide="image"></i> Identité Visuelle
+                </h3>
+                
+                <!-- Logo actuel -->
+                {% if institution.logo %}
+                    <div class="current-logo-wrapper">
+                        <p class="current-logo-label">Logo actuel:</p>
+                        <div class="current-logo">
+                            <img src="{{ asset('uploads/institutions/' ~ institution.logo) }}" alt="{{ institution.name }}">
+                            <span class="logo-filename">{{ institution.logo }}</span>
+                        </div>
+                    </div>
+                {% endif %}
+                
+                <div class="file-upload" onclick="document.getElementById('{{ form.logoFile.vars.id }}').click()">
+                    <i data-lucide="upload-cloud" class="upload-icon"></i>
+                    <p class="upload-title">
+                        {% if institution.logo %}
+                            Cliquez pour remplacer le logo
+                        {% else %}
+                            Cliquez pour télécharger le logo
+                        {% endif %}
+                    </p>
+                    <p class="upload-hint">PNG, JPG (Max 2MB)</p>
+                    {{ form_widget(form.logoFile, {'attr': {'class': 'file-input-hidden', 'onchange': 'previewLogo(this)'}}) }}
+                </div>
+                <div id="logoPreview" class="logo-preview" style="display: none;">
+                    <img id="logoPreviewImg" src="" alt="Aperçu">
+                    <button type="button" class="remove-preview" onclick="removeLogo()">
+                        <i data-lucide="x"></i>
+                    </button>
+                </div>
+                {{ form_errors(form.logoFile) }}
+            </div>
+
+            <!-- Statut -->
+            <div class="form-section">
+                <h3 class="section-title">
+                    <i data-lucide="toggle-left"></i> Statut
+                </h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="label">État de l'institution</label>
+                        {{ form_widget(form.status, {'attr': {'class': 'input'}}) }}
+                        {{ form_errors(form.status) }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations Système -->
+            <div class="form-section metadata-section">
+                <h3 class="section-title">
+                    <i data-lucide="info"></i> Informations Système
+                </h3>
+                <div class="metadata-grid">
+                    <div class="metadata-item">
+                        <span class="metadata-label">ID</span>
+                        <span class="metadata-value">#{{ institution.id }}</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Slug</span>
+                        <span class="metadata-value">{{ institution.slug }}</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Créé le</span>
+                        <span class="metadata-value">{{ institution.createdAt ? institution.createdAt|date('d/m/Y à H:i') : 'N/A' }}</span>
+                    </div>
+                    <div class="metadata-item">
+                        <span class="metadata-label">Modifié le</span>
+                        <span class="metadata-value">{{ institution.updatedAt ? institution.updatedAt|date('d/m/Y à H:i') : 'Jamais' }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-footer">
+            <a href="{{ path('app_institutions') }}" class="btn btn-cancel">Annuler</a>
+            <button type="submit" class="btn btn-save">
+                <i data-lucide="save"></i> Mettre à jour
+            </button>
+        </div>
+        
+    {{ form_end(form) }}
+</main>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    lucide.createIcons();
+    
+    function previewLogo(input) {
+        const preview = document.getElementById('logoPreview');
+        const previewImg = document.getElementById('logoPreviewImg');
+        const uploadArea = document.querySelector('.file-upload');
+        
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                preview.style.display = 'flex';
+                uploadArea.style.display = 'none';
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    function removeLogo() {
+        const preview = document.getElementById('logoPreview');
+        const uploadArea = document.querySelector('.file-upload');
+        const fileInput = document.querySelector('.file-input-hidden');
+        
+        fileInput.value = '';
+        preview.style.display = 'none';
+        uploadArea.style.display = 'flex';
+        lucide.createIcons();
+    }
+</script>
+{% endblock %}

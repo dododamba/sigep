@@ -1,0 +1,287 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Financements - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('css/financement.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="content-area">
+    <!-- Page Header -->
+    <div class="page-header">
+        <div class="page-header-left">
+            <h1><i data-lucide="landmark"></i> Gestion des Financements</h1>
+            <p>Conventions et accords de financement</p>
+        </div>
+        <div class="page-header-right">
+            <a href="{{ path('app_financements_new') }}" class="btn btn-primary">
+                <i data-lucide="plus"></i>
+                Nouveau Financement
+            </a>
+        </div>
+    </div>
+
+    <!-- Flash Messages -->
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            <i data-lucide="check-circle"></i>
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <!-- Stats Row -->
+    <div class="stats-row">
+        <div class="mini-stat">
+            <div class="mini-stat-icon blue">
+                <i data-lucide="file-text"></i>
+            </div>
+            <div class="mini-stat-content">
+                <span class="mini-stat-value">{{ stats.total }}</span>
+                <span class="mini-stat-label">Total conventions</span>
+            </div>
+        </div>
+        <div class="mini-stat">
+            <div class="mini-stat-icon green">
+                <i data-lucide="check-circle"></i>
+            </div>
+            <div class="mini-stat-content">
+                <span class="mini-stat-value">{{ stats.actifs }}</span>
+                <span class="mini-stat-label">Actifs</span>
+            </div>
+        </div>
+        <div class="mini-stat">
+            <div class="mini-stat-icon orange">
+                <i data-lucide="clock"></i>
+            </div>
+            <div class="mini-stat-content">
+                <span class="mini-stat-value">{{ stats.enNegociation }}</span>
+                <span class="mini-stat-label">En négociation</span>
+            </div>
+        </div>
+        <div class="mini-stat">
+            <div class="mini-stat-icon gold">
+                <i data-lucide="banknote"></i>
+            </div>
+            <div class="mini-stat-content">
+                <span class="mini-stat-value">{{ montantTotal|number_format(1, ',', ' ') }}</span>
+                <span class="mini-stat-label">Mds FCFA engagés</span>
+            </div>
+        </div>
+        <div class="mini-stat">
+            <div class="mini-stat-icon purple">
+                <i data-lucide="trending-up"></i>
+            </div>
+            <div class="mini-stat-content">
+                <span class="mini-stat-value">{{ montantDecaisse|number_format(1, ',', ' ') }}</span>
+                <span class="mini-stat-label">Mds FCFA décaissés</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="card">
+        <div class="card-header">
+            <h3><i data-lucide="list"></i> Liste des financements</h3>
+            <div class="card-actions">
+                <a href="{{ path('app_financements_export_json') }}" class="btn btn-outline btn-sm">
+                    <i data-lucide="download"></i>
+                    Exporter
+                </a>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar">
+            <form method="get" action="{{ path('app_financements') }}" class="filters-form">
+                <div class="search-box">
+                    <i data-lucide="search"></i>
+                    <input type="text" name="search" placeholder="Rechercher..." value="{{ search }}">
+                </div>
+                <select name="statut" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Tous les statuts</option>
+                    {% for label, value in statuts %}
+                        <option value="{{ value }}" {{ statut == value ? 'selected' : '' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <select name="bailleur" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Tous les bailleurs</option>
+                    {% for label, value in bailleurs %}
+                        <option value="{{ value }}" {{ bailleur == value ? 'selected' : '' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <select name="type" class="filter-select" onchange="this.form.submit()">
+                    <option value="">Tous les types</option>
+                    {% for label, value in types %}
+                        <option value="{{ value }}" {{ type == value ? 'selected' : '' }}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-secondary btn-sm">
+                    <i data-lucide="filter"></i>
+                    Filtrer
+                </button>
+            </form>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Convention</th>
+                        <th>Bailleur</th>
+                        <th>Type</th>
+                        <th>Montant engagé</th>
+                        <th>Décaissement</th>
+                        <th>Échéance</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for financement in financements %}
+                    <tr>
+                        <td>
+                            <div class="convention-cell">
+                                <span class="convention-numero">{{ financement.numeroConvention }}</span>
+                                <span class="convention-date">Signé le {{ financement.dateSignature|date('d/m/Y') }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="bailleur-cell">
+                                <div class="bailleur-icon {{ financement.bailleur }}">
+                                    {{ financement.bailleurShortName }}
+                                </div>
+                                <div class="bailleur-info">
+                                    <span class="bailleur-name">{{ financement.bailleurLabel }}</span>
+                                    <span class="bailleur-type">{{ financement.typeBailleur }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="type-badge {{ financement.type }}">{{ financement.typeLabel }}</span>
+                        </td>
+                        <td class="amount-cell">
+                            <span class="amount-value">{{ financement.montantEngage|number_format(2, ',', ' ') }}</span>
+                            <span class="amount-unit">Mds FCFA</span>
+                        </td>
+                        <td>
+                            <div class="progress-cell">
+                                <div class="progress-bar">
+                                    <div class="progress-fill {% if financement.tauxDecaissement >= 70 %}gold{% elseif financement.tauxDecaissement >= 50 %}green{% elseif financement.tauxDecaissement >= 25 %}blue{% else %}red{% endif %}" style="width: {{ financement.tauxDecaissement }}%"></div>
+                                </div>
+                                <span class="progress-value">{{ financement.tauxDecaissement }}%</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="date-cell {% if financement.isExpired %}expired{% elseif financement.isApproachingDeadline %}warning{% endif %}">
+                                {{ financement.dateEcheance|date('d/m/Y') }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="status-badge {{ financement.statut }}">{{ financement.statutLabel }}</span>
+                        </td>
+                        <td>
+                            <div class="actions-group">
+                                <a href="{{ path('app_financements_show', {slug: financement.slug}) }}" class="action-btn" title="Voir">
+                                    <i data-lucide="eye"></i>
+                                </a>
+                                <a href="{{ path('app_financements_edit', {id: financement.id}) }}" class="action-btn" title="Modifier">
+                                    <i data-lucide="edit"></i>
+                                </a>
+                                <button type="button" class="action-btn danger" title="Supprimer" onclick="openDeleteModal({{ financement.id }}, '{{ financement.numeroConvention }}')">
+                                    <i data-lucide="trash-2"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8">
+                            <div class="empty-state">
+                                <i data-lucide="inbox"></i>
+                                <p>Aucun financement trouvé</p>
+                                <a href="{{ path('app_financements_new') }}" class="btn btn-primary">
+                                    <i data-lucide="plus"></i>
+                                    Ajouter un financement
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if totalPages > 1 %}
+        <div class="pagination-wrapper">
+            <div class="pagination-info">
+                Affichage {{ ((currentPage - 1) * 10) + 1 }} à {{ min(currentPage * 10, totalFinancements) }} sur {{ totalFinancements }} financements
+            </div>
+            <div class="pagination">
+                {% if currentPage > 1 %}
+                    <a href="{{ path('app_financements', {page: currentPage - 1, search: search, statut: statut, bailleur: bailleur, type: type}) }}" class="pagination-btn">
+                        <i data-lucide="chevron-left"></i>
+                    </a>
+                {% endif %}
+                
+                {% for i in max(1, currentPage - 2)..min(totalPages, currentPage + 2) %}
+                    <a href="{{ path('app_financements', {page: i, search: search, statut: statut, bailleur: bailleur, type: type}) }}" class="pagination-btn {{ i == currentPage ? 'active' : '' }}">{{ i }}</a>
+                {% endfor %}
+                
+                {% if currentPage < totalPages %}
+                    <a href="{{ path('app_financements', {page: currentPage + 1, search: search, statut: statut, bailleur: bailleur, type: type}) }}" class="pagination-btn">
+                        <i data-lucide="chevron-right"></i>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Delete Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-backdrop" onclick="closeDeleteModal()"></div>
+    <div class="modal-content">
+        <div class="modal-header">
+            <div class="modal-icon danger">
+                <i data-lucide="alert-triangle"></i>
+            </div>
+            <h3>Supprimer le financement</h3>
+            <p>Êtes-vous sûr de vouloir supprimer le financement <strong id="deleteConventionName"></strong> ?</p>
+            <p class="warning-text">Cette action est irréversible.</p>
+        </div>
+        <div class="modal-actions">
+            <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Annuler</button>
+            <form id="deleteForm" method="post" style="display: inline;">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
+                <button type="submit" class="btn btn-danger">
+                    <i data-lucide="trash-2"></i>
+                    Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        lucide.createIcons();
+        
+        function openDeleteModal(id, numero) {
+            document.getElementById('deleteConventionName').textContent = numero;
+            document.getElementById('deleteForm').action = '/financements/' + id;
+            document.getElementById('deleteModal').classList.add('show');
+            lucide.createIcons();
+        }
+        
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+    </script>
+{% endblock %}
