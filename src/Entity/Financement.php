@@ -21,18 +21,6 @@ class Financement
     public const TYPE_PRET_CONCESSIONNEL = 'pret-concessionnel';
     public const TYPE_CREDIT = 'credit';
 
-    // Bailleurs de fonds
-    public const BAILLEUR_NATIONAL = 'national';
-    public const BAILLEUR_BM = 'bm';
-    public const BAILLEUR_BAD = 'bad';
-    public const BAILLEUR_AFD = 'afd';
-    public const BAILLEUR_UE = 'ue';
-    public const BAILLEUR_FIDA = 'fida';
-    public const BAILLEUR_OMS = 'oms';
-    public const BAILLEUR_PNUD = 'pnud';
-    public const BAILLEUR_BID = 'bid';
-    public const BAILLEUR_CHINE = 'chine';
-
     // Statuts
     public const STATUT_ACTIF = 'actif';
     public const STATUT_EN_NEGOCIATION = 'en-negociation';
@@ -44,9 +32,10 @@ class Financement
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
     #[Assert\NotBlank(message: 'Le bailleur de fonds est obligatoire')]
-    private ?string $bailleur = null;
+    private Partner $bailleur;
 
     #[ORM\Column(length: 100)]
     #[Assert\NotBlank(message: 'Le type de financement est obligatoire')]
@@ -152,12 +141,12 @@ class Financement
         return $this->id;
     }
 
-    public function getBailleur(): ?string
+    public function getBailleur(): ?Partner
     {
         return $this->bailleur;
     }
 
-    public function setBailleur(string $bailleur): static
+    public function setBailleur(Partner $bailleur): static
     {
         $this->bailleur = $bailleur;
         return $this;
@@ -391,38 +380,11 @@ class Financement
         return round((float)$this->montantEngage - (float)$this->montantDecaisse, 2);
     }
 
-    public function getBailleurLabel(): string
-    {
-        return match($this->bailleur) {
-            self::BAILLEUR_NATIONAL => 'Budget National',
-            self::BAILLEUR_BM => 'Banque Mondiale',
-            self::BAILLEUR_BAD => 'Banque Africaine de Développement',
-            self::BAILLEUR_AFD => 'Agence Française de Développement',
-            self::BAILLEUR_UE => 'Union Européenne',
-            self::BAILLEUR_FIDA => 'Fonds International de Développement Agricole',
-            self::BAILLEUR_OMS => 'Organisation Mondiale de la Santé',
-            self::BAILLEUR_PNUD => 'Programme des Nations Unies pour le Développement',
-            self::BAILLEUR_BID => 'Banque Islamique de Développement',
-            self::BAILLEUR_CHINE => 'Chine EXIM Bank',
-            default => $this->bailleur ?? 'Non défini'
-        };
-    }
+ 
 
     public function getBailleurShortName(): string
     {
-        return match($this->bailleur) {
-            self::BAILLEUR_NATIONAL => 'BN',
-            self::BAILLEUR_BM => 'BM',
-            self::BAILLEUR_BAD => 'BAD',
-            self::BAILLEUR_AFD => 'AFD',
-            self::BAILLEUR_UE => 'UE',
-            self::BAILLEUR_FIDA => 'FIDA',
-            self::BAILLEUR_OMS => 'OMS',
-            self::BAILLEUR_PNUD => 'PNUD',
-            self::BAILLEUR_BID => 'BID',
-            self::BAILLEUR_CHINE => 'CHINE',
-            default => strtoupper(substr($this->bailleur ?? '', 0, 3))
-        };
+        return $this->bailleur->getAcronym() ?? substr($this->getBailleurLabel(), 0, 3);
     }
 
     public function getTypeBailleur(): string
@@ -487,22 +449,7 @@ class Financement
         ];
     }
 
-    public static function getBailleurs(): array
-    {
-        return [
-            'Budget National' => self::BAILLEUR_NATIONAL,
-            'Banque Mondiale' => self::BAILLEUR_BM,
-            'BAD' => self::BAILLEUR_BAD,
-            'AFD' => self::BAILLEUR_AFD,
-            'Union Européenne' => self::BAILLEUR_UE,
-            'FIDA' => self::BAILLEUR_FIDA,
-            'OMS' => self::BAILLEUR_OMS,
-            'PNUD' => self::BAILLEUR_PNUD,
-            'BID' => self::BAILLEUR_BID,
-            'Chine EXIM Bank' => self::BAILLEUR_CHINE,
-        ];
-    }
-
+  
     public static function getStatuts(): array
     {
         return [

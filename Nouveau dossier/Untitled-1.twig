@@ -1,0 +1,105 @@
+
+    <div class="auth-container">
+          <!-- Right Panel - Auth Form -->
+        <div class="auth-panel">
+            <div class="auth-card">
+                <!-- Uncomment to test error state -->
+                <!--
+                <div class="alert alert-error">
+                    <i class="ri-error-warning-line"></i>
+                    <span>Identifiants incorrects. Veuillez réessayer.</span>
+                </div>
+                -->
+
+                <div class="login-header">
+                    <div class="mobile-logo">
+                        <div class="logo-icon">
+                            <i class="ri-shield-keyhole-fill"></i>
+                        </div>
+                        <span class="logo-name">SIGMA</span>
+                    </div>
+                    <h1 class="login-title">Authentification</h1>
+                    <p class="login-subtitle">Veuillez vous identifier pour accéder au système</p>
+                </div>
+
+                <form class="login-form" method="post" autocomplete="off">
+                    <!-- Email Field -->
+                    <div class="form-group">
+                        <label for="email" class="form-label">
+                            <i class="ri-mail-line"></i>
+                            Identifiant / Email
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="text" 
+                                id="email"
+								value="{{ last_username }}"
+                                name="email" 
+                                class="form-input"
+                                placeholder="agent@anse.td"
+                                required
+                                autocomplete="username"
+                            >
+                            <span class="input-icon">
+                                <i class="ri-user-line"></i>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="form-group">
+                        <label for="password" class="form-label">
+                            <i class="ri-lock-line"></i>
+                            Mot de passe
+                        </label>
+                        <div class="input-wrapper">
+                            <input 
+                                type="password" 
+                                id="password"
+                                name="password" 
+                                class="form-input"
+                                placeholder="••••••••••••"
+                                required
+                                autocomplete="current-password"
+                            >
+
+                            <button type="button" class="toggle-password" onclick="togglePassword()">
+                                <i class="ri-eye-line" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
+									<input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
+                    <!-- Remember & Forgot -->
+                    <div class="form-options">
+                        <label class="checkbox-wrapper">
+                            <input type="checkbox" name="_remember_me">
+                            <span class="checkmark"></span>
+                            <span class="checkbox-label">Maintenir la session</span>
+                        </label>
+                        <a href="#" class="forgot-link">Mot de passe oublié ?</a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        <span class="btn-text">Se connecter</span>
+                        <i class="ri-arrow-right-line"></i>
+                    </button>
+
+                    <!-- Security Notice -->
+                    <div class="security-notice">
+                        <i class="ri-information-line"></i>
+                        <span>Toute tentative d'accès non autorisée est enregistrée et poursuivie.</span>
+                    </div>
+                </form>
+            </div>
+
+            <div class="auth-footer">
+                <div class="footer-links">
+                    <a href="#">Aide</a>
+                    <span class="separator">•</span>
+                    <a href="#">Contact support</a>
+                    <span class="separator">•</span>
+                    <a href="#">Politique de sécurité</a>
+                </div>
+ 

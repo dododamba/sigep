@@ -6,7 +6,7 @@ use App\Entity\Financement;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
-
+use App\Entity\Partner;
 /**
  * @extends ServiceEntityRepository<Financement>
  */
@@ -61,7 +61,7 @@ class FinancementRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-    public function findByBailleur(string $bailleur): array
+    public function findByBailleur(Partner $bailleur): array
     {
         return $this->createQueryBuilder('f')
             ->andWhere('f.bailleur = :bailleur')

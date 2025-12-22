@@ -39,23 +39,36 @@
             <h2>Informations du bailleur</h2>
         </div>
         <div class="form-card-body">
-            <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label required">Bailleur de fonds</label>
-                    <div class="bailleur-grid">
-                        {% for label, value in bailleurs %}
-                        <div class="bailleur-option" data-value="{{ value }}" onclick="selectBailleur('{{ value }}')">
-                            <div class="bailleur-option-icon {{ value }}">
-                                {% if value == 'national' %}BN{% elseif value == 'bm' %}BM{% elseif value == 'bad' %}BAD{% elseif value == 'afd' %}AFD{% elseif value == 'ue' %}UE{% elseif value == 'fida' %}FIDA{% elseif value == 'oms' %}OMS{% elseif value == 'pnud' %}PNUD{% elseif value == 'bid' %}BID{% elseif value == 'chine' %}CN{% else %}{{ value[:2]|upper }}{% endif %}
-                            </div>
-                            <span class="bailleur-option-label">{{ label }}</span>
-                        </div>
-                        {% endfor %}
+     <div class="form-grid">
+    <div class="form-group">
+        <label class="form-label required">Bailleur de fonds</label>
+
+        <div class="bailleur-grid">
+            {% for bailleur in bailleurs %}
+                {% set code = bailleur.acronym|lower %}
+                <div class="bailleur-option"
+                     data-value="{{ bailleur.id }}"
+                     onclick="selectBailleur('{{ bailleur.id }}')">
+
+                    <div class="bailleur-option-icon {{ code }}">
+                        {{ bailleur.acronym ?? bailleur.name[:2]|upper }}
                     </div>
-                    <div style="display: none;">{{ form_widget(form.bailleur) }}</div>
-                    {{ form_errors(form.bailleur) }}
+
+                    <span class="bailleur-option-label">
+                        {{ bailleur.name }}
+                    </span>
                 </div>
-            </div>
+            {% endfor %}
+        </div>
+
+        {# Champ Symfony caché #}
+        <div style="display: none;">
+            {{ form_widget(form.bailleur) }}
+        </div>
+
+        {{ form_errors(form.bailleur) }}
+    </div>
+</div>
             
             <div class="form-grid cols-3">
                 <div class="form-group">

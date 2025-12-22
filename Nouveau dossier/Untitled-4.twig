@@ -1,0 +1,11 @@
+ <div class="timeline">
+                            {% for activity in recentActivities %}
+                                <div class="timeline-item">
+                                    <div class="timeline-date">{{ activity.date|date('d F Y, H:i') }}</div>
+                                    <div class="timeline-content">{{ activity.description }}</div>
+                                    <div class="timeline-meta">{{ activity.location }} • {{ activity.device }}</div>
+                                </div>
+                            {% else %}
+                                <p style="color: var(--text-muted);">Aucune activité récente</p>
+                            {% endfor %}
+                        </div>

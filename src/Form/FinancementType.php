@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Financement;
 use App\Entity\Project;
+use App\Entity\Partner;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -21,11 +22,18 @@ class FinancementType extends AbstractType
     {
         $builder
             // Informations du bailleur
-            ->add('bailleur', ChoiceType::class, [
+         ->add('bailleur', EntityType::class, [
+                'class' => Partner::class,
+                'choice_label' => function (Partner $partner) {
+                    return sprintf(
+                        '%s (%s)',
+                        $partner->getName(),
+                        $partner->getAcronym()
+                    );
+                },
                 'label' => 'Bailleur de fonds',
-                'required' => true,
-                'choices' => Financement::getBailleurs(),
                 'placeholder' => 'Sélectionner un bailleur',
+                'required' => true,
                 'attr' => [
                     'class' => 'form-select',
                 ],

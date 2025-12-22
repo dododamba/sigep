@@ -11,13 +11,16 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Entity\Partner;
+use App\Repository\PartnerRepository;
 
 #[Route('/financements')]
 class FinancementController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private FinancementRepository $financementRepository
+        private FinancementRepository $financementRepository,
+        private PartnerRepository $partnerRepository
     ) {}
 
     /**
@@ -63,7 +66,7 @@ class FinancementController extends AbstractController
             'bailleur' => $bailleur,
             'type' => $type,
             'statuts' => Financement::getStatuts(),
-            'bailleurs' => Financement::getBailleurs(),
+            'bailleurs' => [],//Financement::getBailleur(),
             'types' => Financement::getTypes(),
         ]);
     }
@@ -82,6 +85,8 @@ class FinancementController extends AbstractController
         $form = $this->createForm(FinancementType::class, $financement);
         $form->handleRequest($request);
 
+
+
         if ($form->isSubmitted() && $form->isValid()) {
             $this->entityManager->persist($financement);
             $this->entityManager->flush();
@@ -94,7 +99,7 @@ class FinancementController extends AbstractController
         return $this->render('financement/new.html.twig', [
             'financement' => $financement,
             'form' => $form,
-            'bailleurs' => Financement::getBailleurs(),
+            'bailleurs' => $this->partnerRepository->findAllActive(),
             'types' => Financement::getTypes(),
         ]);
     }
@@ -142,7 +147,7 @@ class FinancementController extends AbstractController
         return $this->render('financement/edit.html.twig', [
             'financement' => $financement,
             'form' => $form,
-            'bailleurs' => Financement::getBailleurs(),
+            'bailleurs' => $this->partnerRepository->findAll(),
             'types' => Financement::getTypes(),
         ]);
     }

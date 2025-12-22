@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ProjectRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -117,12 +119,21 @@ class Project
     #[ORM\JoinColumn(nullable: true)]
     private ?Partner $partnerPrincipal = null;
 
+    #[ORM\ManyToMany(mappedBy: 'projets', targetEntity: Financement::class)]
+    private Collection $financements;
+
+    #[ORM\ManyToMany(targetEntity: Partner::class, inversedBy: 'projects')]
+    #[ORM\JoinTable(name: 'project_partner')]
+    private Collection $partners;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
         $this->status = self::STATUS_PLANIFIE;
         $this->priorite = self::PRIORITY_NORMALE;
         $this->progress = 0;
+        $this->financements = new ArrayCollection();
+        $this->partners = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -429,6 +440,28 @@ class Project
         return $this;
     }
 
+    public function getFinancements(): Collection
+    {
+        return $this->financements;
+    }
+
+    public function setFinancements(Collection $financements): static
+    {
+        $this->financements = $financements;
+        return $this;
+    }
+
+    public function getPartners(): Collection
+    {
+        return $this->partners;
+    }
+
+    public function setPartners(Collection $partners): static
+    {
+        $this->partners = $partners;
+        return $this;
+    }
+
     // Helper methods
     public function getTauxDecaissement(): float
     {
@@ -522,4 +555,6 @@ class Project
     {
         return $this->name ?? '';
     }
+
+     
 }

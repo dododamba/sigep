@@ -42,7 +42,7 @@ class __TwigTemplate_410434eafc1114cfd4258679169978c5 extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "@DataTables/datatable_html.html.twig"));
 
         // line 1
-        $context["__internal_2cfef8de8d415df7cc00e78c602d8505"] = CoreExtension::getAttribute($this->env, $this->source, (isset($context["datatable"]) || array_key_exists("datatable", $context) ? $context["datatable"] : (function () { throw new RuntimeError('Variable "datatable" does not exist.', 1, $this->source); })()), "translationDomain", [], "any", false, false, false, 1);
+        $context["__internal_a2fc21eafde7dfd4e39fb67b04c595c6"] = CoreExtension::getAttribute($this->env, $this->source, (isset($context["datatable"]) || array_key_exists("datatable", $context) ? $context["datatable"] : (function () { throw new RuntimeError('Variable "datatable" does not exist.', 1, $this->source); })()), "translationDomain", [], "any", false, false, false, 1);
         // line 2
         yield "
 <table id=\"";
@@ -63,7 +63,7 @@ class __TwigTemplate_410434eafc1114cfd4258679169978c5 extends Template
             // line 7
             yield "            <th>";
             yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\TranslationExtension']->trans(CoreExtension::getAttribute($this->env, $this->source, $context["column"], "label", [], "any", false, false, false, 7), [],             // line 1
-(isset($context["__internal_2cfef8de8d415df7cc00e78c602d8505"]) || array_key_exists("__internal_2cfef8de8d415df7cc00e78c602d8505", $context) ? $context["__internal_2cfef8de8d415df7cc00e78c602d8505"] : (function () { throw new RuntimeError('Variable "__internal_2cfef8de8d415df7cc00e78c602d8505" does not exist.', 1, $this->source); })())), "html", null, true);
+(isset($context["__internal_a2fc21eafde7dfd4e39fb67b04c595c6"]) || array_key_exists("__internal_a2fc21eafde7dfd4e39fb67b04c595c6", $context) ? $context["__internal_a2fc21eafde7dfd4e39fb67b04c595c6"] : (function () { throw new RuntimeError('Variable "__internal_a2fc21eafde7dfd4e39fb67b04c595c6" does not exist.', 1, $this->source); })())), "html", null, true);
             // line 7
             yield "</th>
         ";

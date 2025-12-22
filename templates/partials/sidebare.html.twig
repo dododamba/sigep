@@ -1,3 +1,5 @@
+{% set currentRoute = app.request.attributes.get('_route') %}
+
 <aside class="sidebar" :class="{ 'open': sidebarOpen }">
     <div class="sidebar-header">
         <div class="sidebar-logo">
@@ -21,8 +23,6 @@
         </div>
     </div>
 
-    {% set currentRoute = app.request.attributes.get('_route') %}
-
     <!-- Navigation -->
     <nav class="sidebar-nav">
 
@@ -31,19 +31,19 @@
             <div class="nav-section-title">Navigation</div>
 
             <a href="{{ path('app_dashboard') }}"
-               class="nav-item {{ currentRoute == 'app_dashboard' ? 'active' }}">
+               class="nav-item {{ currentRoute starts with 'app_dashboard' ? 'active' }}">
                 <i class="ri-dashboard-line"></i>
                 <span>Tableau de bord</span>
             </a>
 
             <a href="{{ path('app_partners') }}"
-               class="nav-item {{ currentRoute == 'app_partners' ? 'active' }}">
+               class="nav-item {{ currentRoute starts with 'app_partners' ? 'active' }}">
                 <i class="ri-team-line"></i>
                 <span>Partenaires</span>
             </a>
 
             <a href="{{ path('app_institutions') }}"
-               class="nav-item {{ currentRoute == 'app_institutions' ? 'active' }}">
+               class="nav-item {{ currentRoute starts with 'app_institutions' ? 'active' }}">
                 <i class="ri-government-line"></i>
                 <span>Institutions</span>
             </a>
@@ -54,19 +54,19 @@
             <div class="nav-section-title">Projets & Finances</div>
 
             <a href="{{ path('app_projects') }}"
-               class="nav-item {{ currentRoute == 'app_projects' ? 'active' }}">
+               class="nav-item {{ currentRoute starts with 'app_projects' ? 'active' }}">
                 <i class="ri-briefcase-line"></i>
                 <span>Projets</span>
             </a>
 
             <a href="{{ path('app_financements') }}"
-               class="nav-item {{ currentRoute == 'app_financements' ? 'active' }}">
+               class="nav-item {{ currentRoute starts with 'app_financements' ? 'active' }}">
                 <i class="ri-bank-line"></i>
                 <span>Financements</span>
             </a>
 
             <a href="{{ path('app_conventions') }}"
-               class="nav-item {{ currentRoute == 'app_conventions' ? 'active' }}">
+               class="nav-item {{ currentRoute starts with 'app_conventions' ? 'active' }}">
                 <i class="ri-file-list-3-line"></i>
                 <span>Conventions</span>
             </a>
@@ -77,7 +77,7 @@
             <div class="nav-section-title">Compte</div>
 
             <a href="{{ path('app_profile') }}"
-               class="nav-item {{ currentRoute == 'app_profile' ? 'active' }}">
+               class="nav-item {{ currentRoute starts with 'app_profile' ? 'active' }}">
                 <i class="ri-user-settings-line"></i>
                 <span>Mon profil</span>
             </a>

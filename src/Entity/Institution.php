@@ -63,6 +63,10 @@ class Institution
     #[ORM\Column(length: 20)]
     private ?string $status = 'Actif';
 
+    
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: 'institution')]
+    private Collection $users;
+
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
@@ -74,6 +78,8 @@ class Institution
     {
         $this->createdAt = new \DateTime();
         $this->generateSlug();
+        $this->users = new ArrayCollection();
+
     }
 
     #[ORM\PreUpdate]
@@ -287,4 +293,63 @@ class Institution
     {
         return $this->name ?? '';
     }
+
+     /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(User $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setInstitution($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(User $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            // set the owning side to null (unless already changed)
+            if ($user->getInstitution() === $this) {
+                $user->setInstitution(null);
+            }
+        }
+
+        return $this;
+    }
+    
+    /**
+     * Retourne le nombre d'utilisateurs actifs dans l'institution
+     */
+    public function getActiveUsersCount(): int
+    {
+        return $this->users->filter(function(User $user) {
+            return $user->isVerified();
+        })->count();
+    }
+    
+    /**
+     * Retourne les administrateurs de l'institution
+     */
+    public function getAdministrators(): Collection
+    {
+        return $this->users->filter(function(User $user) {
+            return $user->isAdmin();
+        });
+    }
+    
+    /**
+     * Vérifie si un utilisateur fait partie de cette institution
+     */
+    public function hasUser(User $user): bool
+    {
+        return $this->users->contains($user);
+    }
+
 }

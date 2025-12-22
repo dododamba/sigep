@@ -357,6 +357,7 @@
       <tag name="container.service_subscriber"/>
       <argument type="service" id="doctrine.orm.default_entity_manager"/>
       <argument type="service" id="App\Repository\FinancementRepository"/>
+      <argument type="service" id="App\Repository\PartnerRepository"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.QaaoWjx.App\Controller\FinancementController"/>
       </call>
@@ -382,6 +383,13 @@
       <argument type="service" id="slugger"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.QaaoWjx.App\Controller\PartnerController"/>
+      </call>
+    </service>
+    <service id="App\Controller\ProfileController" class="App\Controller\ProfileController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.QaaoWjx.App\Controller\ProfileController"/>
       </call>
     </service>
     <service id="App\Controller\ProjectController" class="App\Controller\ProjectController" public="true" autowire="true" autoconfigure="true">
@@ -424,16 +432,10 @@
     <service id="App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
     </service>
-    <service id="App\DataFixtures\FinancementFixtures" class="App\DataFixtures\FinancementFixtures" autowire="true" autoconfigure="true">
-      <tag name="doctrine.fixture.orm"/>
-    </service>
     <service id="App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
     </service>
     <service id="App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" autoconfigure="true">
-      <tag name="doctrine.fixture.orm"/>
-    </service>
-    <service id="App\DataFixtures\TypePartnerFixtures" class="App\DataFixtures\TypePartnerFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
     </service>
     <service id="App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" autoconfigure="true">
@@ -532,7 +534,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.YLDs5oF"/>
+      <argument type="service" id=".service_locator.xjr2uN."/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3403,7 +3405,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.YLDs5oF"/>
+      <argument type="service" id=".service_locator.xjr2uN."/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -8315,19 +8317,11 @@
             <argument key="groups" type="collection"/>
           </argument>
           <argument type="collection">
-            <argument key="fixture" type="service" id="App\DataFixtures\FinancementFixtures"/>
-            <argument key="groups" type="collection"/>
-          </argument>
-          <argument type="collection">
             <argument key="fixture" type="service" id="App\DataFixtures\InstitutionFixtures"/>
             <argument key="groups" type="collection"/>
           </argument>
           <argument type="collection">
             <argument key="fixture" type="service" id="App\DataFixtures\ProjectFixtures"/>
-            <argument key="groups" type="collection"/>
-          </argument>
-          <argument type="collection">
-            <argument key="fixture" type="service" id="App\DataFixtures\TypePartnerFixtures"/>
             <argument key="groups" type="collection"/>
           </argument>
           <argument type="collection">
@@ -8433,6 +8427,9 @@
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\PartnerController" class="App\Controller\PartnerController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\PartnerController" class="App\Controller\PartnerController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\PartnerController" class="App\Controller\PartnerController" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ProfileController" class="App\Controller\ProfileController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ProfileController" class="App\Controller\ProfileController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\ProfileController" class="App\Controller\ProfileController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ProjectController" class="App\Controller\ProjectController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ProjectController" class="App\Controller\ProjectController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\ProjectController" class="App\Controller\ProjectController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -8450,14 +8447,10 @@
     <service id=".abstract.instanceof.App\Controller\WebController" class="App\Controller\WebController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\FinancementFixtures" class="App\DataFixtures\FinancementFixtures" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\DataFixtures\FinancementFixtures" class="App\DataFixtures\FinancementFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\TypePartnerFixtures" class="App\DataFixtures\TypePartnerFixtures" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\DataFixtures\TypePartnerFixtures" class="App\DataFixtures\TypePartnerFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\FinancementType" class="App\Form\FinancementType" autowire="true" abstract="true"/>
@@ -9175,6 +9168,32 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.cvAK_XJ" method="withContext"/>
     </service>
+    <service id=".service_locator.gigYcBf" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+        <argument key="passwordHasher" type="service_closure" id="security.user_password_hasher"/>
+        <argument key="slugger" type="service_closure" id="slugger"/>
+      </argument>
+    </service>
+    <service id=".service_locator.gigYcBf.App\Controller\ProfileController::profileUpdate()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\ProfileController::profileUpdate()"/>
+      <argument>App\Controller\ProfileController::profileUpdate()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.gigYcBf" method="withContext"/>
+    </service>
+    <service id=".service_locator.P.blNFL" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
+      </argument>
+    </service>
+    <service id=".service_locator.P.blNFL.App\Controller\ProfileController::deleteAvatar()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\ProfileController::deleteAvatar()"/>
+      <argument>App\Controller\ProfileController::deleteAvatar()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.P.blNFL" method="withContext"/>
+    </service>
     <service id=".service_locator.2xhCPME" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -9186,12 +9205,6 @@
       <argument>App\Controller\RoleController::index()</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.2xhCPME" method="withContext"/>
-    </service>
-    <service id=".service_locator.P.blNFL" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
-      </argument>
     </service>
     <service id=".service_locator.P.blNFL.App\Controller\RoleController::new()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\RoleController::new()"/>
@@ -9316,7 +9329,7 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.nLtHlEw" method="withContext"/>
     </service>
-    <service id=".service_locator.YLDs5oF" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.xjr2uN." class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
@@ -9330,6 +9343,8 @@
         <argument key="App\Controller\PartnerController::edit" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::edit()"/>
         <argument key="App\Controller\PartnerController::delete" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::delete()"/>
         <argument key="App\Controller\PartnerController::toggleStatus" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::toggleStatus()"/>
+        <argument key="App\Controller\ProfileController::profileUpdate" type="service_closure" id=".service_locator.gigYcBf.App\Controller\ProfileController::profileUpdate()"/>
+        <argument key="App\Controller\ProfileController::deleteAvatar" type="service_closure" id=".service_locator.P.blNFL.App\Controller\ProfileController::deleteAvatar()"/>
         <argument key="App\Controller\RoleController::index" type="service_closure" id=".service_locator.2xhCPME.App\Controller\RoleController::index()"/>
         <argument key="App\Controller\RoleController::new" type="service_closure" id=".service_locator.P.blNFL.App\Controller\RoleController::new()"/>
         <argument key="App\Controller\RoleController::show" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::show()"/>
@@ -9351,6 +9366,8 @@
         <argument key="App\Controller\PartnerController:edit" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::edit()"/>
         <argument key="App\Controller\PartnerController:delete" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::delete()"/>
         <argument key="App\Controller\PartnerController:toggleStatus" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::toggleStatus()"/>
+        <argument key="App\Controller\ProfileController:profileUpdate" type="service_closure" id=".service_locator.gigYcBf.App\Controller\ProfileController::profileUpdate()"/>
+        <argument key="App\Controller\ProfileController:deleteAvatar" type="service_closure" id=".service_locator.P.blNFL.App\Controller\ProfileController::deleteAvatar()"/>
         <argument key="App\Controller\RoleController:index" type="service_closure" id=".service_locator.2xhCPME.App\Controller\RoleController::index()"/>
         <argument key="App\Controller\RoleController:new" type="service_closure" id=".service_locator.P.blNFL.App\Controller\RoleController::new()"/>
         <argument key="App\Controller\RoleController:show" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::show()"/>
@@ -9644,6 +9661,12 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.QaaoWjx" method="withContext"/>
     </service>
+    <service id=".service_locator.QaaoWjx.App\Controller\ProfileController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\ProfileController"/>
+      <argument>App\Controller\ProfileController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.QaaoWjx" method="withContext"/>
+    </service>
     <service id=".service_locator.QaaoWjx.App\Controller\ProjectController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\ProjectController"/>
       <argument>App\Controller\ProjectController</argument>
@@ -9929,6 +9952,7 @@
           <argument>App\Controller\FinancementController</argument>
           <argument>App\Controller\InstitutionController</argument>
           <argument>App\Controller\PartnerController</argument>
+          <argument>App\Controller\ProfileController</argument>
           <argument>App\Controller\ProjectController</argument>
           <argument>App\Controller\RoleController</argument>
           <argument>App\Controller\SecurityController</argument>
@@ -11236,7 +11260,7 @@
     <service id="Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface" alias="webpack_encore.entrypoint_lookup[_default]"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.YLDs5oF"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.xjr2uN."/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="jms_serializer.authorization_checker" alias="security.authorization_checker" public="true"/>
@@ -11273,8 +11297,9 @@
     <service id=".service_locator.diNoEIK" alias=".service_locator.4wc4Ag1"/>
     <service id=".service_locator.3f2.DsK" alias=".service_locator.qBh2uyK"/>
     <service id=".service_locator.63DXeBg" alias=".service_locator.cvAK_XJ"/>
-    <service id=".service_locator.jf8JxuJ" alias=".service_locator.2xhCPME"/>
+    <service id=".service_locator.RbXSRxP" alias=".service_locator.gigYcBf"/>
     <service id=".service_locator.4KsIGyf" alias=".service_locator.P.blNFL"/>
+    <service id=".service_locator.jf8JxuJ" alias=".service_locator.2xhCPME"/>
     <service id=".service_locator.Hwcehuq" alias=".service_locator.pVdAH_Q"/>
     <service id=".service_locator.C5hKwa7" alias=".service_locator.l4yMAbu"/>
     <service id=".service_locator...2Ndi3" alias=".service_locator.mXDaS5b"/>

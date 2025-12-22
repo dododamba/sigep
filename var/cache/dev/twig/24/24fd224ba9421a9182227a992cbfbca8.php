@@ -84,7 +84,9 @@ class __TwigTemplate_c90bba5b21034ae9bd295086d4ac815b extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "stylesheets"));
 
         // line 4
-        yield "
+        yield "<link rel=\"stylesheet\" href=\"";
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("css/profile.css"), "html", null, true);
+        yield "\">
 ";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
@@ -103,290 +105,185 @@ class __TwigTemplate_c90bba5b21034ae9bd295086d4ac815b extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
         // line 7
-        yield "       <div class=\"page-header\">
-                <h2>
-                    <span class=\"page-header-icon\">
-                        <i data-lucide=\"layout-dashboard\"></i>
-                    </span>
-                    Tableau de bord
-                </h2>
-                <p>Vue d'ensemble de vos projets et activités - Décembre 2025</p>
-            </div>
+        yield "   <div class=\"profile-container mt-5\">
+            <div class=\"profile-grid\">
+                
+                <!-- Left Column -->
+                <div class=\"profile-card\">
+                    <div class=\"avatar-wrapper mt-4\">
+                        ";
+        // line 14
+        yield "                        ";
+        $context["initials"] = (Twig\Extension\CoreExtension::first($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 14, $this->source); })()), "user", [], "any", false, false, false, 14), "firstname", [], "any", false, false, false, 14)) . Twig\Extension\CoreExtension::first($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 14, $this->source); })()), "user", [], "any", false, false, false, 14), "lastname", [], "any", false, false, false, 14)));
+        // line 15
+        yield "                        <div class=\"avatar\">";
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape((isset($context["initials"]) || array_key_exists("initials", $context) ? $context["initials"] : (function () { throw new RuntimeError('Variable "initials" does not exist.', 15, $this->source); })()), "html", null, true);
+        yield "</div>
+                    </div>
+                    
+                    ";
+        // line 19
+        yield "                    <h2 class=\"profile-name\">";
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 19, $this->source); })()), "user", [], "any", false, false, false, 19), "firstname", [], "any", false, false, false, 19), "html", null, true);
+        yield " ";
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 19, $this->source); })()), "user", [], "any", false, false, false, 19), "lastname", [], "any", false, false, false, 19), "html", null, true);
+        yield "</h2>
+                    
+                    ";
+        // line 22
+        yield "                    <p class=\"profile-role\">";
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::join(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 22, $this->source); })()), "user", [], "any", false, false, false, 22), "roles", [], "any", false, false, false, 22), ", "), "html", null, true);
+        yield "</p>
+                    
+                    <div class=\"status-badge\">
+                        <span style=\"width:6px; height:6px; background:var(--success); border-radius:50%;\"></span>
+                        ";
+        // line 26
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 26, $this->source); })()), "user", [], "any", false, false, false, 26), "isVerified", [], "any", false, false, false, 26)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 27
+            yield "                            Compte Actif
+                        ";
+        } else {
+            // line 29
+            yield "                            Compte Inactif
+                        ";
+        }
+        // line 31
+        yield "                    </div>
 
- <!-- Stats Grid -->
-            <div class=\"stats-grid\">
-                <div class=\"stat-card animate-in\" style=\"--card-accent: #002664;\">
-                    <div class=\"stat-icon blue\">
-                        <i data-lucide=\"briefcase\"></i>
-                    </div>
-                    <div class=\"stat-content\">
-                        <h3 x-text=\"stats.totalProjects\">12</h3>
-                        <p>Projets actifs</p>
-                        <div class=\"stat-trend up\">
-                            <i data-lucide=\"trending-up\" style=\"width: 14px; height: 14px;\"></i>
-                            +2 ce mois
+                    <div class=\"contact-list\">
+                        <div class=\"contact-item\">
+                            <i data-lucide=\"mail\"></i>
+                            <span>";
+        // line 36
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 36, $this->source); })()), "user", [], "any", false, false, false, 36), "email", [], "any", false, false, false, 36), "html", null, true);
+        yield "</span>
+                        </div>
+                        <div class=\"contact-item\">
+                            <i data-lucide=\"phone\"></i>
+                            <span>";
+        // line 40
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 40, $this->source); })()), "user", [], "any", false, false, false, 40), "phone", [], "any", false, false, false, 40), "html", null, true);
+        yield "</span>
+                        </div>
+                        <div class=\"contact-item\">
+                            <i data-lucide=\"map-pin\"></i>
+                            <span>";
+        // line 44
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 44, $this->source); })()), "user", [], "any", false, false, false, 44), "address", [], "any", false, false, false, 44), "html", null, true);
+        yield "</span>
+                        </div>
+                        <div class=\"contact-item\">
+                            <i data-lucide=\"building\"></i>
+                             <span>
+        ";
+        // line 49
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 49, $this->source); })()), "user", [], "any", false, false, false, 49), "institution", [], "any", false, false, false, 49)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 50
+            yield "            ";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 50, $this->source); })()), "user", [], "any", false, false, false, 50), "institution", [], "any", false, false, false, 50), "name", [], "any", false, false, false, 50), "html", null, true);
+            yield "
+            ";
+            // line 51
+            if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 51, $this->source); })()), "user", [], "any", false, false, false, 51), "institution", [], "any", false, false, false, 51), "acronym", [], "any", false, false, false, 51)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+                // line 52
+                yield "                (";
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 52, $this->source); })()), "user", [], "any", false, false, false, 52), "institution", [], "any", false, false, false, 52), "acronym", [], "any", false, false, false, 52), "html", null, true);
+                yield ")
+            ";
+            }
+            // line 54
+            yield "        ";
+        } else {
+            // line 55
+            yield "            Aucune institution assignée
+        ";
+        }
+        // line 57
+        yield "    </span>
                         </div>
                     </div>
-                </div>
-
-                <div class=\"stat-card animate-in delay-1\" style=\"--card-accent: #fecb00;\">
-                    <div class=\"stat-icon gold\">
-                        <i data-lucide=\"coins\"></i>
-                    </div>
-                    <div class=\"stat-content\">
-                        <h3>85.4 Mds</h3>
-                        <p>Budget total (FCFA)</p>
-                        <div class=\"stat-trend up\">
-                            <i data-lucide=\"trending-up\" style=\"width: 14px; height: 14px;\"></i>
-                            +12% vs 2024
-                        </div>
-                    </div>
-                </div>
-
-                <div class=\"stat-card animate-in delay-2\" style=\"--card-accent: #10b981;\">
-                    <div class=\"stat-icon green\">
-                        <i data-lucide=\"check-circle\"></i>
-                    </div>
-                    <div class=\"stat-content\">
-                        <h3>67%</h3>
-                        <p>Taux d'exécution</p>
-                        <div class=\"stat-trend up\">
-                            <i data-lucide=\"trending-up\" style=\"width: 14px; height: 14px;\"></i>
-                            +8% ce trimestre
-                        </div>
-                    </div>
-                </div>
-
-                <div class=\"stat-card animate-in delay-3\" style=\"--card-accent: #c60c30;\">
-                    <div class=\"stat-icon red\">
-                        <i data-lucide=\"alert-triangle\"></i>
-                    </div>
-                    <div class=\"stat-content\">
-                        <h3>3</h3>
-                        <p>Projets en retard</p>
-                        <div class=\"stat-trend down\">
-                            <i data-lucide=\"trending-down\" style=\"width: 14px; height: 14px;\"></i>
-                            -1 vs mois dernier
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Charts & Projects -->
-            <div class=\"grid-3\">
-                <div>
-                    <!-- Budget Chart -->
-                    <div class=\"card animate-in delay-2\">
-                        <div class=\"card-header\">
-                            <h3 class=\"card-title\">
-                                <i data-lucide=\"bar-chart-3\"></i>
-                                Exécution budgétaire par secteur
-                            </h3>
-                            <div class=\"card-actions\">
-                                <button class=\"btn btn-secondary btn-sm\">
-                                    <i data-lucide=\"download\" style=\"width: 14px; height: 14px;\"></i>
-                                    Exporter
-                                </button>
-                            </div>
-                        </div>
-                        <div class=\"card-body\">
-                            <div class=\"chart-container\">
-                                <canvas id=\"budgetChart\"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Projects Table -->
-                    <div class=\"card animate-in delay-3\">
-                        <div class=\"card-header\">
-                            <h3 class=\"card-title\">
-                                <i data-lucide=\"folder-open\"></i>
-                                Projets récents
-                            </h3>
-                            <div class=\"card-actions\">
-                                <button class=\"btn btn-primary btn-sm\">
-                                    <i data-lucide=\"plus\" style=\"width: 14px; height: 14px;\"></i>
-                                    Nouveau
-                                </button>
-                            </div>
-                        </div>
-                        <div class=\"card-body\" style=\"padding: 0;\">
-                            <table class=\"data-table\">
-                                <thead>
-                                    <tr>
-                                        <th>Projet</th>
-                                        <th>Secteur</th>
-                                        <th>Budget</th>
-                                        <th>Progression</th>
-                                        <th>Statut</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template x-for=\"project in projects.slice(0, 5)\" :key=\"project.id\">
-                                        <tr>
-                                            <td>
-                                                <strong x-text=\"project.name\"></strong>
-                                            </td>
-                                            <td x-text=\"project.sector\"></td>
-                                            <td x-text=\"project.budget\"></td>
-                                            <td>
-                                                <div class=\"progress-container\">
-                                                    <div class=\"progress-bar\">
-                                                        <div class=\"progress-fill blue\" :style=\"'width: ' + project.progress + '%'\"></div>
-                                                    </div>
-                                                    <span class=\"progress-text\" x-text=\"project.progress + '%'\"></span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class=\"status-badge\" :class=\"project.statusClass\">
-                                                    <span class=\"status-dot\"></span>
-                                                    <span x-text=\"project.status\"></span>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>
+                    
+                    <div style=\"padding: 0 24px;\">
+                        <a href=\"";
+        // line 62
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_profile_edit");
+        yield "\" class=\"btn btn-gold\" style=\"width: 100%; justify-content: center;\">
+                            <i data-lucide=\"edit-3\" style=\"width: 18px;\"></i> Modifier le profil
+                        </a>
                     </div>
                 </div>
 
                 <!-- Right Column -->
                 <div>
-                    <!-- Activity Feed -->
-                    <div class=\"card animate-in delay-2\">
-                        <div class=\"card-header\">
-                            <h3 class=\"card-title\">
-                                <i data-lucide=\"activity\"></i>
-                                Activité récente
-                            </h3>
+                    <!-- Details Section -->
+                    <div class=\"info-card\">
+                        <div class=\"card-title\">
+                            <span>Informations Professionnelles</span>
+                            <i data-lucide=\"briefcase\" style=\"color: var(--tchad-blue);\"></i>
                         </div>
-                        <div class=\"card-body\">
-                            <ul class=\"activity-list\">
-                                <li class=\"activity-item\">
-                                    <div class=\"activity-icon green\">
-                                        <i data-lucide=\"check-circle\" style=\"width: 18px; height: 18px;\"></i>
-                                    </div>
-                                    <div class=\"activity-content\">
-                                        <h5>Décaissement validé</h5>
-                                        <p>Projet Route N'Djamena-Abéché - 2.5 Mds FCFA</p>
-                                    </div>
-                                    <span class=\"activity-time\">Il y a 2h</span>
-                                </li>
-                                <li class=\"activity-item\">
-                                    <div class=\"activity-icon blue\">
-                                        <i data-lucide=\"file-plus\" style=\"width: 18px; height: 18px;\"></i>
-                                    </div>
-                                    <div class=\"activity-content\">
-                                        <h5>Nouveau rapport soumis</h5>
-                                        <p>Centrale solaire de Moundou - Q4 2025</p>
-                                    </div>
-                                    <span class=\"activity-time\">Il y a 5h</span>
-                                </li>
-                                <li class=\"activity-item\">
-                                    <div class=\"activity-icon gold\">
-                                        <i data-lucide=\"users\" style=\"width: 18px; height: 18px;\"></i>
-                                    </div>
-                                    <div class=\"activity-content\">
-                                        <h5>Réunion planifiée</h5>
-                                        <p>Comité de pilotage - 18 Déc. 09:00</p>
-                                    </div>
-                                    <span class=\"activity-time\">Hier</span>
-                                </li>
-                                <li class=\"activity-item\">
-                                    <div class=\"activity-icon red\">
-                                        <i data-lucide=\"alert-circle\" style=\"width: 18px; height: 18px;\"></i>
-                                    </div>
-                                    <div class=\"activity-content\">
-                                        <h5>Alerte retard</h5>
-                                        <p>Hôpital Régional Sarh - Livraison équipements</p>
-                                    </div>
-                                    <span class=\"activity-time\">Hier</span>
-                                </li>
-                            </ul>
+                        <div class=\"info-grid\">
+                            <div class=\"info-group\">
+                                <label>Matricule</label>
+                                <div>";
+        // line 79
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 79, $this->source); })()), "user", [], "any", false, false, false, 79), "matricule", [], "any", false, false, false, 79), "html", null, true);
+        yield "</div>
+                            </div>
+                            <div class=\"info-group\">
+                                <label>Date d'embauche</label>
+                                <div>";
+        // line 83
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 83, $this->source); })()), "user", [], "any", false, false, false, 83), "hireDate", [], "any", false, false, false, 83), "d F Y"), "html", null, true);
+        yield "</div>
+                            </div>
+                            <div class=\"info-group\">
+                                <label>Département</label>
+                                <div>";
+        // line 87
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 87, $this->source); })()), "user", [], "any", false, false, false, 87), "department", [], "any", false, false, false, 87), "html", null, true);
+        yield "</div>
+                            </div>
+                            <div class=\"info-group\">
+                                <label>Niveau d'accès</label>
+                                <div style=\"color: var(--tchad-blue);\">
+                                    ";
+        // line 92
+        if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 92, $this->source); })()), "user", [], "any", false, false, false, 92), "accessLevel", [], "any", false, false, false, 92) == "SUPER_ADMIN")) {
+            // line 93
+            yield "                                        Super Admin
+                                    ";
+        } elseif ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source,         // line 94
+(isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 94, $this->source); })()), "user", [], "any", false, false, false, 94), "accessLevel", [], "any", false, false, false, 94) == "ADMIN")) {
+            // line 95
+            yield "                                        Administrateur
+                                    ";
+        } else {
+            // line 97
+            yield "                                        Utilisateur Standard
+                                    ";
+        }
+        // line 99
+        yield "                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Quick Stats -->
-                    <div class=\"card animate-in delay-3\">
-                        <div class=\"card-header\">
-                            <h3 class=\"card-title\">
-                                <i data-lucide=\"pie-chart\"></i>
-                                Répartition
-                            </h3>
+                    <!-- Activity Log -->
+                    <div class=\"info-card\">
+                        <div class=\"card-title\">
+                            <span>Activité Récente</span>
+                            <i data-lucide=\"activity\" style=\"color: var(--tchad-blue);\"></i>
                         </div>
-                        <div class=\"card-body\">
-                            <div class=\"quick-stat\">
-                                <span class=\"quick-stat-label\">
-                                    <span style=\"width: 12px; height: 12px; border-radius: 3px; background: #002664;\"></span>
-                                    Infrastructure
-                                </span>
-                                <span class=\"quick-stat-value\">42%</span>
-                            </div>
-                            <div class=\"quick-stat\">
-                                <span class=\"quick-stat-label\">
-                                    <span style=\"width: 12px; height: 12px; border-radius: 3px; background: #10b981;\"></span>
-                                    Santé
-                                </span>
-                                <span class=\"quick-stat-value\">25%</span>
-                            </div>
-                            <div class=\"quick-stat\">
-                                <span class=\"quick-stat-label\">
-                                    <span style=\"width: 12px; height: 12px; border-radius: 3px; background: #fecb00;\"></span>
-                                    Énergie
-                                </span>
-                                <span class=\"quick-stat-value\">18%</span>
-                            </div>
-                            <div class=\"quick-stat\">
-                                <span class=\"quick-stat-label\">
-                                    <span style=\"width: 12px; height: 12px; border-radius: 3px; background: #c60c30;\"></span>
-                                    Agriculture
-                                </span>
-                                <span class=\"quick-stat-value\">15%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                       
 
-            <!-- Messages Preview -->
-            <div class=\"card animate-in delay-4\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"message-square\"></i>
-                        Messages récents
-                    </h3>
-                    <button class=\"btn btn-secondary btn-sm\" @click=\"currentPage = 'messages'\">
-                        Voir tout
-                        <i data-lucide=\"arrow-right\" style=\"width: 14px; height: 14px;\"></i>
-                    </button>
-                </div>
-                <div class=\"card-body\">
-                    <div class=\"grid-2\">
-                        <div class=\"message-item unread\">
-                            <div class=\"message-avatar\">DP</div>
-                            <div class=\"message-content\">
-                                <div class=\"message-header\">
-                                    <span class=\"message-sender\">David Peterson</span>
-                                    <span class=\"message-time\">Il y a 4h</span>
-                                </div>
-                                <p class=\"message-preview\">Merci pour les documents. Je suis en train de les examiner et je reviendrai vers vous...</p>
-                            </div>
-                        </div>
-                        <div class=\"message-item unread\">
-                            <div class=\"message-avatar\">SF</div>
-                            <div class=\"message-content\">
-                                <div class=\"message-header\">
-                                    <span class=\"message-sender\">Sindy Forrest</span>
-                                    <span class=\"message-time\">Hier</span>
-                                </div>
-                                <p class=\"message-preview\">Bonjour! Je serai en congé jusqu'au 20 décembre. Pour toute urgence...</p>
-                            </div>
-                        </div>
+
+
                     </div>
                 </div>
+
             </div>
-      
+        </div>
    ";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
@@ -394,7 +291,7 @@ class __TwigTemplate_c90bba5b21034ae9bd295086d4ac815b extends Template
         yield from [];
     }
 
-    // line 293
+    // line 121
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -404,7 +301,7 @@ class __TwigTemplate_c90bba5b21034ae9bd295086d4ac815b extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 294
+        // line 122
         yield "     
     ";
         
@@ -434,7 +331,7 @@ class __TwigTemplate_c90bba5b21034ae9bd295086d4ac815b extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  408 => 294,  398 => 293,  106 => 7,  96 => 6,  87 => 4,  77 => 3,  60 => 2,  43 => 1,);
+        return array (  305 => 122,  295 => 121,  267 => 99,  263 => 97,  259 => 95,  257 => 94,  254 => 93,  252 => 92,  244 => 87,  237 => 83,  230 => 79,  210 => 62,  203 => 57,  199 => 55,  196 => 54,  190 => 52,  188 => 51,  183 => 50,  181 => 49,  173 => 44,  166 => 40,  159 => 36,  152 => 31,  148 => 29,  144 => 27,  142 => 26,  134 => 22,  126 => 19,  119 => 15,  116 => 14,  108 => 7,  98 => 6,  87 => 4,  77 => 3,  60 => 2,  43 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -442,293 +339,121 @@ class __TwigTemplate_c90bba5b21034ae9bd295086d4ac815b extends Template
         return new Source("{% extends 'base.html.twig' %}
 {% block title %}Tableau de Bord{% endblock %}
 {% block stylesheets %}
-
+<link rel=\"stylesheet\" href=\"{{ asset('css/profile.css') }}\">
 {% endblock %}
     {% block body %}
-       <div class=\"page-header\">
-                <h2>
-                    <span class=\"page-header-icon\">
-                        <i data-lucide=\"layout-dashboard\"></i>
-                    </span>
-                    Tableau de bord
-                </h2>
-                <p>Vue d'ensemble de vos projets et activités - Décembre 2025</p>
-            </div>
-
- <!-- Stats Grid -->
-            <div class=\"stats-grid\">
-                <div class=\"stat-card animate-in\" style=\"--card-accent: #002664;\">
-                    <div class=\"stat-icon blue\">
-                        <i data-lucide=\"briefcase\"></i>
+   <div class=\"profile-container mt-5\">
+            <div class=\"profile-grid\">
+                
+                <!-- Left Column -->
+                <div class=\"profile-card\">
+                    <div class=\"avatar-wrapper mt-4\">
+                        {# Initiales dynamiques #}
+                        {% set initials = app.user.firstname|first ~ app.user.lastname|first %}
+                        <div class=\"avatar\">{{ initials }}</div>
                     </div>
-                    <div class=\"stat-content\">
-                        <h3 x-text=\"stats.totalProjects\">12</h3>
-                        <p>Projets actifs</p>
-                        <div class=\"stat-trend up\">
-                            <i data-lucide=\"trending-up\" style=\"width: 14px; height: 14px;\"></i>
-                            +2 ce mois
-                        </div>
-                    </div>
-                </div>
-
-                <div class=\"stat-card animate-in delay-1\" style=\"--card-accent: #fecb00;\">
-                    <div class=\"stat-icon gold\">
-                        <i data-lucide=\"coins\"></i>
-                    </div>
-                    <div class=\"stat-content\">
-                        <h3>85.4 Mds</h3>
-                        <p>Budget total (FCFA)</p>
-                        <div class=\"stat-trend up\">
-                            <i data-lucide=\"trending-up\" style=\"width: 14px; height: 14px;\"></i>
-                            +12% vs 2024
-                        </div>
-                    </div>
-                </div>
-
-                <div class=\"stat-card animate-in delay-2\" style=\"--card-accent: #10b981;\">
-                    <div class=\"stat-icon green\">
-                        <i data-lucide=\"check-circle\"></i>
-                    </div>
-                    <div class=\"stat-content\">
-                        <h3>67%</h3>
-                        <p>Taux d'exécution</p>
-                        <div class=\"stat-trend up\">
-                            <i data-lucide=\"trending-up\" style=\"width: 14px; height: 14px;\"></i>
-                            +8% ce trimestre
-                        </div>
-                    </div>
-                </div>
-
-                <div class=\"stat-card animate-in delay-3\" style=\"--card-accent: #c60c30;\">
-                    <div class=\"stat-icon red\">
-                        <i data-lucide=\"alert-triangle\"></i>
-                    </div>
-                    <div class=\"stat-content\">
-                        <h3>3</h3>
-                        <p>Projets en retard</p>
-                        <div class=\"stat-trend down\">
-                            <i data-lucide=\"trending-down\" style=\"width: 14px; height: 14px;\"></i>
-                            -1 vs mois dernier
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Charts & Projects -->
-            <div class=\"grid-3\">
-                <div>
-                    <!-- Budget Chart -->
-                    <div class=\"card animate-in delay-2\">
-                        <div class=\"card-header\">
-                            <h3 class=\"card-title\">
-                                <i data-lucide=\"bar-chart-3\"></i>
-                                Exécution budgétaire par secteur
-                            </h3>
-                            <div class=\"card-actions\">
-                                <button class=\"btn btn-secondary btn-sm\">
-                                    <i data-lucide=\"download\" style=\"width: 14px; height: 14px;\"></i>
-                                    Exporter
-                                </button>
-                            </div>
-                        </div>
-                        <div class=\"card-body\">
-                            <div class=\"chart-container\">
-                                <canvas id=\"budgetChart\"></canvas>
-                            </div>
-                        </div>
+                    
+                    {# Nom complet dynamique #}
+                    <h2 class=\"profile-name\">{{ app.user.firstname }} {{ app.user.lastname }}</h2>
+                    
+                    {# Rôle dynamique #}
+                    <p class=\"profile-role\">{{ app.user.roles|join(', ') }}</p>
+                    
+                    <div class=\"status-badge\">
+                        <span style=\"width:6px; height:6px; background:var(--success); border-radius:50%;\"></span>
+                        {% if app.user.isVerified %}
+                            Compte Actif
+                        {% else %}
+                            Compte Inactif
+                        {% endif %}
                     </div>
 
-                    <!-- Projects Table -->
-                    <div class=\"card animate-in delay-3\">
-                        <div class=\"card-header\">
-                            <h3 class=\"card-title\">
-                                <i data-lucide=\"folder-open\"></i>
-                                Projets récents
-                            </h3>
-                            <div class=\"card-actions\">
-                                <button class=\"btn btn-primary btn-sm\">
-                                    <i data-lucide=\"plus\" style=\"width: 14px; height: 14px;\"></i>
-                                    Nouveau
-                                </button>
-                            </div>
+                    <div class=\"contact-list\">
+                        <div class=\"contact-item\">
+                            <i data-lucide=\"mail\"></i>
+                            <span>{{ app.user.email }}</span>
                         </div>
-                        <div class=\"card-body\" style=\"padding: 0;\">
-                            <table class=\"data-table\">
-                                <thead>
-                                    <tr>
-                                        <th>Projet</th>
-                                        <th>Secteur</th>
-                                        <th>Budget</th>
-                                        <th>Progression</th>
-                                        <th>Statut</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template x-for=\"project in projects.slice(0, 5)\" :key=\"project.id\">
-                                        <tr>
-                                            <td>
-                                                <strong x-text=\"project.name\"></strong>
-                                            </td>
-                                            <td x-text=\"project.sector\"></td>
-                                            <td x-text=\"project.budget\"></td>
-                                            <td>
-                                                <div class=\"progress-container\">
-                                                    <div class=\"progress-bar\">
-                                                        <div class=\"progress-fill blue\" :style=\"'width: ' + project.progress + '%'\"></div>
-                                                    </div>
-                                                    <span class=\"progress-text\" x-text=\"project.progress + '%'\"></span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class=\"status-badge\" :class=\"project.statusClass\">
-                                                    <span class=\"status-dot\"></span>
-                                                    <span x-text=\"project.status\"></span>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
+                        <div class=\"contact-item\">
+                            <i data-lucide=\"phone\"></i>
+                            <span>{{ app.user.phone }}</span>
                         </div>
+                        <div class=\"contact-item\">
+                            <i data-lucide=\"map-pin\"></i>
+                            <span>{{ app.user.address }}</span>
+                        </div>
+                        <div class=\"contact-item\">
+                            <i data-lucide=\"building\"></i>
+                             <span>
+        {% if app.user.institution %}
+            {{ app.user.institution.name }}
+            {% if app.user.institution.acronym %}
+                ({{ app.user.institution.acronym }})
+            {% endif %}
+        {% else %}
+            Aucune institution assignée
+        {% endif %}
+    </span>
+                        </div>
+                    </div>
+                    
+                    <div style=\"padding: 0 24px;\">
+                        <a href=\"{{ path('app_profile_edit') }}\" class=\"btn btn-gold\" style=\"width: 100%; justify-content: center;\">
+                            <i data-lucide=\"edit-3\" style=\"width: 18px;\"></i> Modifier le profil
+                        </a>
                     </div>
                 </div>
 
                 <!-- Right Column -->
                 <div>
-                    <!-- Activity Feed -->
-                    <div class=\"card animate-in delay-2\">
-                        <div class=\"card-header\">
-                            <h3 class=\"card-title\">
-                                <i data-lucide=\"activity\"></i>
-                                Activité récente
-                            </h3>
+                    <!-- Details Section -->
+                    <div class=\"info-card\">
+                        <div class=\"card-title\">
+                            <span>Informations Professionnelles</span>
+                            <i data-lucide=\"briefcase\" style=\"color: var(--tchad-blue);\"></i>
                         </div>
-                        <div class=\"card-body\">
-                            <ul class=\"activity-list\">
-                                <li class=\"activity-item\">
-                                    <div class=\"activity-icon green\">
-                                        <i data-lucide=\"check-circle\" style=\"width: 18px; height: 18px;\"></i>
-                                    </div>
-                                    <div class=\"activity-content\">
-                                        <h5>Décaissement validé</h5>
-                                        <p>Projet Route N'Djamena-Abéché - 2.5 Mds FCFA</p>
-                                    </div>
-                                    <span class=\"activity-time\">Il y a 2h</span>
-                                </li>
-                                <li class=\"activity-item\">
-                                    <div class=\"activity-icon blue\">
-                                        <i data-lucide=\"file-plus\" style=\"width: 18px; height: 18px;\"></i>
-                                    </div>
-                                    <div class=\"activity-content\">
-                                        <h5>Nouveau rapport soumis</h5>
-                                        <p>Centrale solaire de Moundou - Q4 2025</p>
-                                    </div>
-                                    <span class=\"activity-time\">Il y a 5h</span>
-                                </li>
-                                <li class=\"activity-item\">
-                                    <div class=\"activity-icon gold\">
-                                        <i data-lucide=\"users\" style=\"width: 18px; height: 18px;\"></i>
-                                    </div>
-                                    <div class=\"activity-content\">
-                                        <h5>Réunion planifiée</h5>
-                                        <p>Comité de pilotage - 18 Déc. 09:00</p>
-                                    </div>
-                                    <span class=\"activity-time\">Hier</span>
-                                </li>
-                                <li class=\"activity-item\">
-                                    <div class=\"activity-icon red\">
-                                        <i data-lucide=\"alert-circle\" style=\"width: 18px; height: 18px;\"></i>
-                                    </div>
-                                    <div class=\"activity-content\">
-                                        <h5>Alerte retard</h5>
-                                        <p>Hôpital Régional Sarh - Livraison équipements</p>
-                                    </div>
-                                    <span class=\"activity-time\">Hier</span>
-                                </li>
-                            </ul>
+                        <div class=\"info-grid\">
+                            <div class=\"info-group\">
+                                <label>Matricule</label>
+                                <div>{{ app.user.matricule }}</div>
+                            </div>
+                            <div class=\"info-group\">
+                                <label>Date d'embauche</label>
+                                <div>{{ app.user.hireDate|date('d F Y') }}</div>
+                            </div>
+                            <div class=\"info-group\">
+                                <label>Département</label>
+                                <div>{{ app.user.department }}</div>
+                            </div>
+                            <div class=\"info-group\">
+                                <label>Niveau d'accès</label>
+                                <div style=\"color: var(--tchad-blue);\">
+                                    {% if app.user.accessLevel == 'SUPER_ADMIN' %}
+                                        Super Admin
+                                    {% elseif app.user.accessLevel == 'ADMIN' %}
+                                        Administrateur
+                                    {% else %}
+                                        Utilisateur Standard
+                                    {% endif %}
+                                </div>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Quick Stats -->
-                    <div class=\"card animate-in delay-3\">
-                        <div class=\"card-header\">
-                            <h3 class=\"card-title\">
-                                <i data-lucide=\"pie-chart\"></i>
-                                Répartition
-                            </h3>
+                    <!-- Activity Log -->
+                    <div class=\"info-card\">
+                        <div class=\"card-title\">
+                            <span>Activité Récente</span>
+                            <i data-lucide=\"activity\" style=\"color: var(--tchad-blue);\"></i>
                         </div>
-                        <div class=\"card-body\">
-                            <div class=\"quick-stat\">
-                                <span class=\"quick-stat-label\">
-                                    <span style=\"width: 12px; height: 12px; border-radius: 3px; background: #002664;\"></span>
-                                    Infrastructure
-                                </span>
-                                <span class=\"quick-stat-value\">42%</span>
-                            </div>
-                            <div class=\"quick-stat\">
-                                <span class=\"quick-stat-label\">
-                                    <span style=\"width: 12px; height: 12px; border-radius: 3px; background: #10b981;\"></span>
-                                    Santé
-                                </span>
-                                <span class=\"quick-stat-value\">25%</span>
-                            </div>
-                            <div class=\"quick-stat\">
-                                <span class=\"quick-stat-label\">
-                                    <span style=\"width: 12px; height: 12px; border-radius: 3px; background: #fecb00;\"></span>
-                                    Énergie
-                                </span>
-                                <span class=\"quick-stat-value\">18%</span>
-                            </div>
-                            <div class=\"quick-stat\">
-                                <span class=\"quick-stat-label\">
-                                    <span style=\"width: 12px; height: 12px; border-radius: 3px; background: #c60c30;\"></span>
-                                    Agriculture
-                                </span>
-                                <span class=\"quick-stat-value\">15%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                       
 
-            <!-- Messages Preview -->
-            <div class=\"card animate-in delay-4\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"message-square\"></i>
-                        Messages récents
-                    </h3>
-                    <button class=\"btn btn-secondary btn-sm\" @click=\"currentPage = 'messages'\">
-                        Voir tout
-                        <i data-lucide=\"arrow-right\" style=\"width: 14px; height: 14px;\"></i>
-                    </button>
-                </div>
-                <div class=\"card-body\">
-                    <div class=\"grid-2\">
-                        <div class=\"message-item unread\">
-                            <div class=\"message-avatar\">DP</div>
-                            <div class=\"message-content\">
-                                <div class=\"message-header\">
-                                    <span class=\"message-sender\">David Peterson</span>
-                                    <span class=\"message-time\">Il y a 4h</span>
-                                </div>
-                                <p class=\"message-preview\">Merci pour les documents. Je suis en train de les examiner et je reviendrai vers vous...</p>
-                            </div>
-                        </div>
-                        <div class=\"message-item unread\">
-                            <div class=\"message-avatar\">SF</div>
-                            <div class=\"message-content\">
-                                <div class=\"message-header\">
-                                    <span class=\"message-sender\">Sindy Forrest</span>
-                                    <span class=\"message-time\">Hier</span>
-                                </div>
-                                <p class=\"message-preview\">Bonjour! Je serai en congé jusqu'au 20 décembre. Pour toute urgence...</p>
-                            </div>
-                        </div>
+
+
                     </div>
                 </div>
+
             </div>
-      
+        </div>
    {% endblock %}
 
  {% block javascripts %}

@@ -37,19 +37,43 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $firstname = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    private ?string $lastname = null;
+    private ?string $lastname = null; 
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $address = null;
+
+    
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
+
+     #[ORM\Column(length: 50, nullable: true)]
+    private ?string $matricule = null;
+
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $hireDate = null;
+
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $department = null;
+
+    #[ORM\Column(length: 20, nullable: true)]
+    private ?string $accessLevel = 'USER_STANDARD';
+
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $slug = null;
 
+      #[ORM\Column(length: 255, nullable: true)]
+    private ?string $phone = null;
+
+
     #[ORM\Column(type: 'datetime_immutable')]
     private ?\DateTimeImmutable $createdAt = null;
 
-   
+    
 
+    #[ORM\ManyToOne(targetEntity: Institution::class, inversedBy: 'users')]
+    #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
+    private ?Institution $institution = null;
 
     public function __construct()
     {
@@ -99,6 +123,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
         return array_unique($roles);
     }
+
+
 
     public function setRoles(array $roles): static
     {
@@ -247,5 +273,134 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->institution && $otherUser->getInstitution() 
             && $this->institution->getId() === $otherUser->getInstitution()->getId();
+    }
+
+    public function getPhone(): ?string
+    {
+        return $this->phone;
+    }
+
+    public function setPhone(?string $phone): static
+    {
+        $this->phone = $phone;
+        return $this;
+    }   
+
+    public function getAddress(): ?string
+    {
+        return $this->address;
+    }   
+
+    public function setAddress(?string $address): static
+    {
+        $this->address = $address;
+        return $this;
+    }
+
+
+     /**
+     * Get the institution associated with the user
+     */
+    public function getInstitution(): ?Institution
+    {
+        return $this->institution;
+    }
+
+    /**
+     * Set the institution for the user
+     */
+    public function setInstitution(?Institution $institution): static
+    {
+        $this->institution = $institution;
+        return $this;
+    }
+    
+    // ... autres méthodes ...
+
+    /**
+     * Vérifie si l'utilisateur appartient à une institution spécifique
+     */
+    public function belongsToInstitution(?Institution $institution): bool
+    {
+        if (!$this->institution || !$institution) {
+            return false;
+        }
+        return $this->institution->getId() === $institution->getId();
+    }
+    
+    /**
+     * Vérifie si l'utilisateur est responsable de son institution
+     */
+    public function isInstitutionHead(): bool
+    {
+        return $this->institution && 
+               $this->institution->getHeadName() === $this->getFullName();
+    }
+
+     public function getMatricule(): ?string
+    {
+        return $this->matricule;
+    }
+
+    public function setMatricule(?string $matricule): static
+    {
+        $this->matricule = $matricule;
+        return $this;
+    }
+
+    public function getHireDate(): ?\DateTimeInterface
+    {
+        return $this->hireDate;
+    }
+
+    public function setHireDate(?\DateTimeInterface $hireDate): static
+    {
+        $this->hireDate = $hireDate;
+        return $this;
+    }
+
+    public function getDepartment(): ?string
+    {
+        return $this->department;
+    }
+
+    public function setDepartment(?string $department): static
+    {
+        $this->department = $department;
+        return $this;
+    }
+
+    public function getAccessLevel(): ?string
+    {
+        return $this->accessLevel;
+    }
+
+    public function setAccessLevel(?string $accessLevel): static
+    {
+        $this->accessLevel = $accessLevel;
+        return $this;
+    }
+
+
+     
+    /**
+     * Retourne le niveau d'accès en format lisible
+     */
+    public function getAccessLevelLabel(): string
+    {
+        return match($this->accessLevel) {
+            'SUPER_ADMIN' => 'Super Administrateur',
+            'ADMIN' => 'Administrateur',
+            'MANAGER' => 'Gestionnaire',
+            default => 'Utilisateur Standard'
+        };
+    }
+    
+    /**
+     * Vérifie si l'utilisateur est super administrateur
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->accessLevel === 'SUPER_ADMIN' || $this->hasRole('ROLE_SUPER_ADMIN');
     }
 }

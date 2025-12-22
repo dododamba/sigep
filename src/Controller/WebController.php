@@ -20,12 +20,4 @@ class WebController extends AbstractController
     {
         return $this->render('conventions/index.html.twig');
     }
-
-
-    #[Route('/profile', name: 'app_profile')]
-    public function profile(): Response
-    {
-        return $this->render('profile/index.html.twig');
-    }
-
 }

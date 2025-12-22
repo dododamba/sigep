@@ -1,0 +1,123 @@
+{% extends 'base.html.twig' %}
+{% block title %}Modifier le Profil{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('css/profile-edit.css') }}">   
+{% endblock %}
+
+{% block body %}
+
+ <form class="form-container" @submit.prevent="saveChanges" action="{{ path('app_profile_update') }}" method="POST">
+            <div class="form-header">
+                <h2>Modifier le Profil</h2>
+                <a href="{{ path('app_profile') }}" class="back-btn">
+                    <i data-lucide="x"></i> Annuler
+                </a>
+            </div>
+
+            <div class="form-body">
+                
+                <!-- Avatar -->
+                <div class="avatar-edit-section">
+                    {% set initials = app.user.firstname|first ~ app.user.lastname|first %}
+                    <div class="current-avatar">{{ initials }}</div>
+                    <div class="upload-actions">
+                        <h4>Photo de profil</h4>
+                        <p>JPG, GIF ou PNG. Max 800Ko.</p>
+                        <div style="display:flex; gap:10px;">
+                            <button type="button" class="btn-outline">Changer la photo</button>
+                            <button type="button" class="btn-outline" style="color:var(--danger); border-color:var(--border-color);">Supprimer</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Info -->
+                <div class="form-section-title">
+                    <i data-lucide="user-circle"></i> Informations Personnelles
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="label">Prénom</label>
+                        <input type="text" class="input" name="firstname" value="{{ app.user.firstname }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Nom</label>
+                        <input type="text" class="input" name="lastname" value="{{ app.user.lastname }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Email</label>
+                        <input type="email" class="input" name="email" value="{{ app.user.email }}">
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Téléphone</label>
+                        <input type="text" class="input" name="phone" value="{{ app.user.phone }}">
+                    </div>
+                    <div class="form-group full-width">
+                        <label class="label">Adresse</label>
+                        <input type="text" class="input" name="address" value="{{ app.user.address }}">
+                    </div>
+                </div>
+
+                <!-- Professional (Read Only) -->
+                <div class="form-section-title">
+                    <i data-lucide="briefcase"></i> Poste & Fonction
+                </div>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="label">Institution</label>
+                        <input type="text" class="input" value="{{ app.user.institution }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Département</label>
+                        <input type="text" class="input" value="{{ app.user.department }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Rôle Système</label>
+                        <input type="text" class="input" value="{{ app.user.roles|join(', ') }}" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Matricule</label>
+                        <input type="text" class="input" value="{{ app.user.matricule }}" readonly>
+                    </div>
+                </div>
+
+                <!-- Security -->
+                <div class="form-section-title" style="color:var(--tchad-gold);">
+                    <i data-lucide="lock"></i> Sécurité
+                </div>
+                <div class="form-grid" style="background: rgba(254, 203, 0, 0.05); padding: 20px; border-radius: 12px; border: 1px solid rgba(254, 203, 0, 0.2);">
+                    <div class="form-group full-width">
+                        <label class="label">Ancien mot de passe</label>
+                        <input type="password" class="input" name="old_password" placeholder="••••••••">
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Nouveau mot de passe</label>
+                        <input type="password" class="input" name="new_password">
+                    </div>
+                    <div class="form-group">
+                        <label class="label">Confirmer nouveau mot de passe</label>
+                        <input type="password" class="input" name="confirm_password">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="form-footer">
+                <a href="{{ path('app_profile') }}" class="btn-cancel">Annuler</a>
+                <button type="submit" class="btn-save">Enregistrer les modifications</button>
+            </div>
+        </form>
+    {% endblock %}
+
+    {% block javascripts %}
+
+ <script>
+        function editProfile() {
+            return {
+                init() {
+                    lucide.createIcons();
+                }
+            }
+        }
+    </script>
+    {% endblock %}
+    
