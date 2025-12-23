@@ -1,0 +1,31 @@
+{# Component: KPI Card
+   Usage: {% include 'components/_kpi_card.html.twig' with {
+       icon: 'folder-kanban',
+       value: 147,
+       label: 'Projets Total',
+       sublabel: '<span>🟢 89 en cours</span>',
+       trend: {direction: 'up', value: '+12%'},
+       color: 'primary'
+   } %}
+#}
+
+<div class="kpi-card {{ color|default('primary') }}">
+    <div class="kpi-header">
+        <div class="kpi-icon">
+            <i data-lucide="{{ icon }}"></i>
+        </div>
+        {% if trend is defined and trend %}
+        <div class="kpi-trend {{ trend.direction }}">
+            <i data-lucide="{{ trend.direction == 'up' ? 'trending-up' : 'trending-down' }}"></i>
+            {{ trend.value }}
+        </div>
+        {% endif %}
+    </div>
+    <div class="kpi-value" data-counter="{{ value }}">{{ value|number_format(0, ',', ' ') }}</div>
+    <div class="kpi-label">{{ label }}</div>
+    {% if sublabel is defined and sublabel %}
+    <div class="kpi-sublabel">
+        {{ sublabel|raw }}
+    </div>
+    {% endif %}
+</div>

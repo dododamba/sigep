@@ -12,16 +12,40 @@
     </div>
 
     <!-- User Info -->
-    <div class="user-info">
-        <div class="user-card">
-            <div class="user-avatar">AD</div>
-            <div class="user-details">
-                <h4>Abdoulaye Damba</h4>
-                <p>Direction Générale</p>
-                <span class="user-role">Chef de Projet</span>
-            </div>
+<div class="user-info">
+    <div class="user-card">
+
+        <!-- Avatar -->
+        <div class="user-avatar">
+            {{ app.user.firstname|first }}{{ app.user.lastname|first }}
         </div>
+
+        <!-- Détails utilisateur -->
+        <div class="user-details">
+            <h4>{{ app.user.firstname }} {{ app.user.lastname }}</h4>
+
+            {% if app.user.institution is defined and app.user.institution %}
+                <p>{{ app.user.institution.nom }}</p>
+            {% else %}
+                <p>Institution non définie</p>
+            {% endif %}
+
+            {% if app.user.roles is defined and app.user.roles|length > 0 %}
+                <span class="user-role">
+                    {{ app.user.roles[0]|replace({
+                        'ROLE_ADMIN': 'Administrateur',
+                        'ROLE_MANAGER': 'Chef de Projet',
+                        'ROLE_USER': 'Utilisateur'
+                    }) }}
+                </span>
+            {% else %}
+                <span class="user-role">Rôle non défini</span>
+            {% endif %}
+        </div>
+
     </div>
+</div>
+
 
     <!-- Navigation -->
     <nav class="sidebar-nav">
@@ -32,19 +56,19 @@
 
             <a href="{{ path('app_dashboard') }}"
                class="nav-item {{ currentRoute starts with 'app_dashboard' ? 'active' }}">
-                <i class="ri-dashboard-line"></i>
+                <i class="ri-dashboard-3-line"></i>
                 <span>Tableau de bord</span>
             </a>
 
             <a href="{{ path('app_partners') }}"
                class="nav-item {{ currentRoute starts with 'app_partners' ? 'active' }}">
-                <i class="ri-team-line"></i>
+                <i class="ri-shake-hands-line"></i>
                 <span>Partenaires</span>
             </a>
 
             <a href="{{ path('app_institutions') }}"
                class="nav-item {{ currentRoute starts with 'app_institutions' ? 'active' }}">
-                <i class="ri-government-line"></i>
+                <i class="ri-building-4-line"></i>
                 <span>Institutions</span>
             </a>
         </div>
@@ -55,31 +79,31 @@
 
             <a href="{{ path('app_projects') }}"
                class="nav-item {{ currentRoute starts with 'app_projects' ? 'active' }}">
-                <i class="ri-briefcase-line"></i>
+                <i class="ri-briefcase-4-line"></i>
                 <span>Projets</span>
             </a>
 
             <a href="{{ path('app_financements') }}"
                class="nav-item {{ currentRoute starts with 'app_financements' ? 'active' }}">
-                <i class="ri-bank-line"></i>
+                <i class="ri-funds-line"></i>
                 <span>Financements</span>
             </a>
 
-             <a href="{{ path('app_decaissement_index') }}"
+            <a href="{{ path('app_decaissement_index') }}"
                class="nav-item {{ currentRoute starts with 'app_decaissement_index' ? 'active' }}">
-                <i class="ri-bank-line"></i>
-                <span>Decaissements</span>
+                <i class="ri-exchange-dollar-line"></i>
+                <span>Décaissements</span>
             </a>
 
             <a href="{{ path('app_convention_index') }}"
-            class="nav-item {{ currentRoute starts with 'app_convention' ? 'active' }}">
-                <i class="ri-file-list-3-line"></i>
+               class="nav-item {{ currentRoute starts with 'app_convention' ? 'active' }}">
+                <i class="ri-file-text-line"></i>
                 <span>Conventions</span>
             </a>
 
             <a href="{{ path('app_audit_index') }}"
-            class="nav-item {{ currentRoute starts with 'app_audit' ? 'active' }}">
-                <i class="ri-file-list-3-line"></i>
+               class="nav-item {{ currentRoute starts with 'app_audit' ? 'active' }}">
+                <i class="ri-search-eye-line"></i>
                 <span>Audits</span>
             </a>
         </div>
@@ -88,29 +112,24 @@
         <div class="nav-section">
             <div class="nav-section-title">Gestion des utilisateurs</div>
 
-            <a href="#"
-               class="nav-item {{ currentRoute starts with 'app_roles' or currentRoute starts with 'app_login_history' ? 'active' }}">
-                <i class="ri-user-3-line"></i>
+            <a href="{{ path('app_user_index') }}"
+               class="nav-item {{ currentRoute starts with 'app_user' or currentRoute starts with 'app_user' ? 'active' }}">
+                <i class="ri-group-line"></i>
                 <span>Utilisateurs</span>
             </a>
 
-               <a href="{{ path('app_roles') }}"
-                   class="nav-item {{ currentRoute starts with 'app_roles' ? 'active' }}">
-                    <i class="ri-shield-user-line"></i>
-                    <span>Rôles</span>
-                </a>
+            <a href="{{ path('app_roles') }}"
+               class="nav-item {{ currentRoute starts with 'app_roles' ? 'active' }}">
+                <i class="ri-shield-keyhole-line"></i>
+                <span>Rôles & permissions</span>
+            </a>
 
-                <a href="{{ path('app_login_history') }}"
-                   class="nav-item {{ currentRoute starts with 'app_login_history' ? 'active' }}">
-                    <i class="ri-history-line"></i>
-                    <span>Historiques de connexion</span>
-                </a>
-                
+            <a href="{{ path('app_login_history') }}"
+               class="nav-item {{ currentRoute starts with 'app_login_history' ? 'active' }}">
+                <i class="ri-time-line"></i>
+                <span>Historiques de connexion</span>
+            </a>
         </div>
-
-
-        
-
 
         <!-- Compte -->
         <div class="nav-section">
@@ -123,7 +142,7 @@
             </a>
 
             <a href="{{ path('app_logout') }}" class="nav-item">
-                <i class="ri-logout-box-r-line"></i>
+                <i class="ri-logout-circle-r-line"></i>
                 <span>Se déconnecter</span>
             </a>
         </div>

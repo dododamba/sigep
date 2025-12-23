@@ -356,4 +356,100 @@ class AuditRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+        /**
+     * Trouve les audits planifiés
+     */
+    public function findPlanifies(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.statut = :statut')
+            ->setParameter('statut', 'planifie')
+            ->orderBy('a.dateAudit', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Trouve les audits en cours
+     */
+    public function findEnCours(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.statut = :statut')
+            ->setParameter('statut', 'en_cours')
+            ->orderBy('a.dateDebut', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Trouve les audits terminés
+     */
+    public function findTermines(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.statut = :statut')
+            ->setParameter('statut', 'termine')
+            ->orderBy('a.dateFin', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Trouve les audits par projet
+     */
+    public function findByProject(int $projectId): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.projet = :projet')
+            ->setParameter('projet', $projectId)
+            ->orderBy('a.dateAudit', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Statistiques par type d'audit
+     */
+    public function getStatsByType(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a.type, COUNT(a.id) as count')
+            ->groupBy('a.type')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Statistiques par statut
+     */
+    public function getStatsByStatut(): array
+    {
+        return $this->createQueryBuilder('a')
+            ->select('a.statut, COUNT(a.id) as count')
+            ->groupBy('a.statut')
+            ->getQuery()
+            ->getResult();
+    }
+
+ 
+
+ 
+
+    /**
+     * Score moyen des audits terminés
+     */
+    public function getAverageScore(): ?float
+    {
+        $result = $this->createQueryBuilder('a')
+            ->select('AVG(a.score)')
+            ->where('a.statut = :statut')
+            ->andWhere('a.score IS NOT NULL')
+            ->setParameter('statut', 'termine')
+            ->getQuery()
+            ->getSingleScalarResult();
+        
+        return $result ? round((float) $result, 1) : null;
+    }
 }

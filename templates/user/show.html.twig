@@ -1,352 +1,582 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Détails de l'utilisateur{% endblock %}
+{% block title %}{{ user.fullName }} - SIGEP Tchad{% endblock %}
 
 {% block stylesheets %}
+    {{ parent() }}
     <style>
-        .profile-header {
-            background-color: #f8f9fa;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
+        :root {
+            --tchad-blue: #002664;
+            --tchad-gold: #FECB00;
+            --tchad-red: #C60C30;
         }
-        
+
+        .profile-header {
+            background: linear-gradient(135deg, var(--tchad-blue) 0%, #003d96 100%);
+            color: white;
+            padding: 3rem 0;
+            border-radius: 0.75rem 0.75rem 0 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 300px;
+            height: 300px;
+            background: rgba(254, 203, 0, 0.1);
+            border-radius: 50%;
+        }
+
+        .profile-card {
+            background: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .profile-avatar-section {
+            text-align: center;
+            padding: 2rem 0;
+            position: relative;
+        }
+
         .profile-avatar {
-            width: 120px;
-            height: 120px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            border: 5px solid white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border: 5px solid var(--tchad-gold);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            margin: 0 auto;
         }
-        
-        .profile-avatar-placeholder {
-            width: 120px;
-            height: 120px;
+
+        .profile-initials {
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
-            background-color: #6c757d;
+            background: linear-gradient(135deg, var(--tchad-blue) 0%, #003d96 100%);
             color: white;
-            font-size: 2.5rem;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            font-weight: 700;
+            border: 5px solid var(--tchad-gold);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .profile-name {
+            font-size: 2rem;
+            font-weight: 700;
+            margin: 1.5rem 0 0.5rem;
+            color: white;
+        }
+
+        .profile-role {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        .profile-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+        }
+
+        .info-section {
+            padding: 2rem;
+        }
+
+        .info-section-title {
+            color: var(--tchad-blue);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--tchad-gold);
+            padding-bottom: 0.75rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+        }
+
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 0.5rem;
+            background: linear-gradient(135deg, var(--tchad-blue) 0%, #003d96 100%);
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 5px solid white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            flex-shrink: 0;
         }
-        
-        .profile-info-card {
-            background-color: white;
-            border-radius: 8px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            height: 100%;
+
+        .info-content {
+            flex: 1;
         }
-        
-        .profile-info-title {
-            border-bottom: 1px solid #dee2e6;
-            padding-bottom: 0.75rem;
-            margin-bottom: 1.25rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-        }
-        
-        .profile-info-title i {
-            margin-right: 0.5rem;
-            color: #0d6efd;
-        }
-        
-        .info-item {
-            margin-bottom: 1rem;
-        }
-        
+
         .info-label {
-            font-weight: 600;
+            font-size: 0.875rem;
             color: #6c757d;
-            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+            font-weight: 600;
         }
-        
+
         .info-value {
             font-size: 1rem;
+            color: #212529;
+            font-weight: 500;
         }
-        
-        .role-badge {
-            padding: 0.35em 0.65em;
-            font-size: 0.75em;
+
+        .badge-role-display {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
             font-weight: 600;
-            border-radius: 0.25rem;
-            margin-right: 0.25rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
         }
-        
-        .role-ROLE_ADMIN {
-            background-color: #dc3545;
+
+        .badge-role-display.admin {
+            background-color: var(--tchad-red);
             color: white;
         }
-        
-        .role-ROLE_MANAGER {
-            background-color: #fd7e14;
+
+        .badge-role-display.manager {
+            background-color: var(--tchad-gold);
+            color: #333;
+        }
+
+        .badge-role-display.user {
+            background-color: var(--tchad-blue);
             color: white;
         }
-        
-        .role-ROLE_USER {
-            background-color: #0d6efd;
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            padding: 2rem;
+            background: #f8f9fa;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .btn-action-primary {
+            background: linear-gradient(135deg, var(--tchad-blue) 0%, #003d96 100%);
+            border: none;
             color: white;
+            padding: 0.75rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-action-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 38, 100, 0.3);
+            color: white;
+        }
+
+        .stats-quick-view {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+        }
+
+        .stat-quick-item {
+            text-align: center;
+            padding: 1rem;
+            background: white;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-quick-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--tchad-blue);
+        }
+
+        .stat-quick-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 0.25rem;
+        }
+
+        .empty-value {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        @media (max-width: 768px) {
+            .profile-name {
+                font-size: 1.5rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
         }
     </style>
 {% endblock %}
 
 {% block body %}
-    <div class="container-fluid py-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="display-6">Détails de l'utilisateur</h1>
-            <div>
-                <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary me-2">
-                    <i class="fas fa-arrow-left"></i> Retour à la liste
-                </a>
-                <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-primary">
-                    <i class="fas fa-edit"></i> Modifier
-                </a>
+<div class="container-fluid px-4">
+    {# En-tête de retour #}
+    <div class="mb-3">
+        <a href="{{ path('app_user_index') }}" class="btn btn-outline-secondary">
+            <i data-lucide="arrow-left" style="width: 18px; height: 18px;"></i>
+            Retour à la liste
+        </a>
+    </div>
+
+    {# Messages Flash #}
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                <i data-lucide="{% if label == 'success' %}check-circle{% elseif label == 'error' %}x-circle{% else %}info{% endif %}" style="width: 20px; height: 20px;"></i>
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {# Carte de profil #}
+    <div class="profile-card">
+        {# En-tête du profil #}
+        <div class="profile-header">
+            <div class="profile-avatar-section">
+                {% if user.avatar %}
+                    <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" 
+                         alt="{{ user.fullName }}" 
+                         class="profile-avatar">
+                {% else %}
+                    <div class="profile-initials">{{ user.initials }}</div>
+                {% endif %}
+                
+                <h1 class="profile-name">{{ user.fullName }}</h1>
+                <div class="profile-role">{{ user.accessLevelLabel }}</div>
+                
+                <div class="profile-status">
+                    <i data-lucide="{% if user.isVerified %}check-circle{% else %}clock{% endif %}" style="width: 18px; height: 18px;"></i>
+                    {{ user.isVerified ? 'Compte Vérifié' : 'En Attente de Vérification' }}
+                </div>
             </div>
         </div>
-        
-        {# Flash messages #}
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
-            {% endfor %}
-        {% endfor %}
-        
-        {# Profile Header #}
-        <div class="profile-header">
-            <div class="row">
-                <div class="col-md-auto text-center">
-                    {% if user.avatar %}
-                        <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="Avatar" class="profile-avatar">
+
+        {# Vue rapide des statistiques #}
+        <div class="stats-quick-view">
+            <div class="stat-quick-item">
+                <div class="stat-quick-value">{{ user.roles|length }}</div>
+                <div class="stat-quick-label">Rôles</div>
+            </div>
+            <div class="stat-quick-item">
+                <div class="stat-quick-value">
+                    {% if user.createdAt %}
+                        {{ 'now'|date('U') - user.createdAt.timestamp }}
+                        {{ ((('now'|date('U') - user.createdAt.timestamp) / 86400)|round) }} j
                     {% else %}
-                        <div class="profile-avatar-placeholder">
-                            {{ user.firstname|first|upper }}{{ user.lastname|first|upper }}
-                        </div>
+                        —
                     {% endif %}
                 </div>
-                <div class="col-md">
-                    <h2>{{ user.firstname }} {{ user.lastname }}</h2>
-                    <p class="text-muted mb-2">{{ user.email }}</p>
-                    <div class="mb-3">
-                        {% for role in user.roles %}
-                            {% if role != 'ROLE_USER' or user.roles|length == 1 %}
-                                <span class="badge role-badge role-{{ role }}">
-                                    {{ role|replace({'ROLE_': ''}) }}
-                                </span>
-                            {% endif %}
-                        {% endfor %}
-                        <span class="badge {{ user.isVerified ? 'bg-success' : 'bg-warning' }} ms-2">
-                            {{ user.isVerified ? 'Vérifié' : 'Non vérifié' }}
-                        </span>
-                    </div>
-                    <div class="d-flex">
-                        <button type="button" class="btn btn-sm btn-outline-primary me-2" data-bs-toggle="modal" data-bs-target="#changeRoleModal">
-                            <i class="fas fa-user-tag"></i> Changer les rôles
-                        </button>
-                        <form method="post" action="{{ path('app_user_toggle_status', {'id': user.id}) }}" class="me-2">
-                            <input type="hidden" name="_token" value="{{ csrf_token('toggle-status' ~ user.id) }}">
-                            <button type="submit" class="btn btn-sm {{ user.isVerified ? 'btn-outline-warning' : 'btn-outline-success' }}">
-                                <i class="fas fa-{{ user.isVerified ? 'user-times' : 'user-check' }}"></i>
-                                {{ user.isVerified ? 'Désactiver' : 'Activer' }}
-                            </button>
-                        </form>
-                        <button type="button" class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">
-                            <i class="fas fa-trash"></i> Supprimer
-                        </button>
-                    </div>
+                <div class="stat-quick-label">Ancienneté</div>
+            </div>
+            <div class="stat-quick-item">
+                <div class="stat-quick-value">
+                    <i data-lucide="{% if user.isVerified %}check{% else %}x{% endif %}" style="width: 24px; height: 24px; color: {{ user.isVerified ? 'var(--tchad-blue)' : 'var(--tchad-red)' }}"></i>
                 </div>
+                <div class="stat-quick-label">Statut</div>
+            </div>
+            <div class="stat-quick-item">
+                <div class="stat-quick-value">{{ user.institution ? '✓' : '—' }}</div>
+                <div class="stat-quick-label">Institution</div>
             </div>
         </div>
-        
-        {# Profile Info #}
-        <div class="row">
-            <div class="col-md-6 mb-4">
-                <div class="profile-info-card">
-                    <h4 class="profile-info-title">
-                        <i class="fas fa-user"></i> Informations utilisateur
-                    </h4>
-                    <div class="info-item">
-                        <div class="info-label">Identifiant</div>
-                        <div class="info-value">{{ user.id }}</div>
+
+        {# Section 1: Informations personnelles #}
+        <div class="info-section">
+            <h2 class="info-section-title">
+                <i data-lucide="user" style="width: 24px; height: 24px;"></i>
+                Informations Personnelles
+            </h2>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="mail" style="width: 20px; height: 20px;"></i>
                     </div>
-                    <div class="info-item">
+                    <div class="info-content">
                         <div class="info-label">Email</div>
                         <div class="info-value">{{ user.email }}</div>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">Nom complet</div>
-                        <div class="info-value">{{ user.firstname }} {{ user.lastname }}</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="phone" style="width: 20px; height: 20px;"></i>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">Date de création</div>
-                        <div class="info-value">{{ user.createdAt ? user.createdAt|date('d/m/Y H:i') : 'Non spécifiée' }}</div>
+                    <div class="info-content">
+                        <div class="info-label">Téléphone</div>
+                        <div class="info-value">{{ user.phone ?? '<span class="empty-value">Non renseigné</span>'|raw }}</div>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">Statut</div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="map-pin" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Adresse</div>
+                        <div class="info-value">{{ user.address ?? '<span class="empty-value">Non renseignée</span>'|raw }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="calendar" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Compte créé le</div>
+                        <div class="info-value">{{ user.createdAt ? user.createdAt|date('d/m/Y à H:i') : 'Non disponible' }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Section 2: Informations professionnelles #}
+        <div class="info-section">
+            <h2 class="info-section-title">
+                <i data-lucide="briefcase" style="width: 24px; height: 24px;"></i>
+                Informations Professionnelles
+            </h2>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="hash" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Matricule</div>
+                        <div class="info-value">{{ user.matricule ?? '<span class="empty-value">Non attribué</span>'|raw }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="calendar-check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Date d'embauche</div>
+                        <div class="info-value">{{ user.hireDate ? user.hireDate|date('d/m/Y') : '<span class="empty-value">Non renseignée</span>'|raw }}</div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="folder" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Département</div>
+                        <div class="info-value">{{ user.department ?? '<span class="empty-value">Non renseigné</span>'|raw }}</div>
+                    </div>
+                </div>
+
+                {% if user.institution %}
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="building" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Institution</div>
                         <div class="info-value">
-                            <span class="badge {{ user.isVerified ? 'bg-success' : 'bg-warning' }}">
-                                {{ user.isVerified ? 'Vérifié' : 'Non vérifié' }}
-                            </span>
+                            {{ user.institution.nom }}
+                            {% if user.institution.sigle %}
+                                <span class="badge bg-secondary">{{ user.institution.sigle }}</span>
+                            {% endif %}
                         </div>
                     </div>
-                    <div class="info-item">
-                        <div class="info-label">Rôles</div>
-                        <div class="info-value">
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Section 3: Rôles et permissions #}
+        <div class="info-section">
+            <h2 class="info-section-title">
+                <i data-lucide="shield" style="width: 24px; height: 24px;"></i>
+                Rôles et Permissions
+            </h2>
+            
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="shield-check" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Rôles assignés</div>
+                        <div class="info-value mt-2">
                             {% for role in user.roles %}
-                                <span class="badge role-badge role-{{ role }}">
-                                    {{ role|replace({'ROLE_': ''}) }}
-                                </span>
+                                {% if role != 'ROLE_USER' %}
+                                    <span class="badge-role-display {{ role == 'ROLE_ADMIN' or role == 'ROLE_SUPER_ADMIN' ? 'admin' : (role == 'ROLE_MANAGER' ? 'manager' : 'user') }}">
+                                        <i data-lucide="{% if role == 'ROLE_ADMIN' or role == 'ROLE_SUPER_ADMIN' %}shield{% elseif role == 'ROLE_MANAGER' %}briefcase{% else %}user{% endif %}" style="width: 16px; height: 16px;"></i>
+                                        {{ role|replace({'ROLE_': '', '_': ' '})|title }}
+                                    </span>
+                                {% endif %}
                             {% endfor %}
                         </div>
                     </div>
                 </div>
-            </div>
-            
-            <div class="col-md-6 mb-4">
-                <div class="profile-info-card">
-                    <h4 class="profile-info-title">
-                        <i class="fas fa-id-card"></i> Informations employé
-                    </h4>
-                    
-                    {% if user.employe %}
-                        <div class="info-item">
-                            <div class="info-label">Matricule</div>
-                            <div class="info-value">{{ user.employe.matricule }}</div>
+
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="key" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Niveau d'accès</div>
+                        <div class="info-value">
+                            <span class="badge bg-primary">{{ user.accessLevelLabel }}</span>
                         </div>
-                        <div class="info-item">
-                            <div class="info-label">Service</div>
-                            <div class="info-value">
-                                {% if user.employe.service %}
-                                    {{ user.employe.service.nom|default('Non assigné') }}
-                                {% else %}
-                                    Non assigné
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Fonction</div>
-                            <div class="info-value">
-                                {% if user.employe.fonction %}
-                                    {{ user.employe.fonction.nom|default('Non assigné') }}
-                                {% else %}
-                                    Non assigné
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Date d'embauche</div>
-                            <div class="info-value">
-                                {{ user.employe.dateEmbauche ? user.employe.dateEmbauche|date('d/m/Y') : 'Non spécifiée' }}
-                            </div>
-                        </div>
-                        <div class="info-item">
-                            <div class="info-label">Statut employé</div>
-                            <div class="info-value">
-                                <span class="badge {{ user.employe.statut ? 'bg-success' : 'bg-warning' }}">
-                                    {{ user.employe.statut ? 'Actif' : 'Inactif' }}
-                                </span>
-                            </div>
-                        </div>
-                        <div class="mt-3">
-                            <a href="#" class="btn btn-sm btn-outline-info">
-                                <i class="fas fa-external-link-alt"></i> Voir détails employé
-                            </a>
-                        </div>
-                    {% else %}
-                        <div class="alert alert-warning">
-                            <i class="fas fa-exclamation-triangle"></i> Cet utilisateur n'est pas lié à un employé.
-                        </div>
-                        <a href="{{ path('app_user_edit', {'id': user.id}) }}" class="btn btn-sm btn-outline-primary">
-                            <i class="fas fa-link"></i> Créer un compte employé
-                        </a>
-                    {% endif %}
+                    </div>
                 </div>
-            </div>
-        </div>
-        
-        {# Additional Info #}
-        <div class="row">
-            <div class="col-md-12 mb-4">
-                <div class="profile-info-card">
-                    <h4 class="profile-info-title">
-                        <i class="fas fa-history"></i> Historique des activités
-                    </h4>
-                    
-                    <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i> Cette fonctionnalité sera disponible dans une future mise à jour.
+
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="{% if user.isVerified %}check-circle{% else %}x-circle{% endif %}" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Statut du compte</div>
+                        <div class="info-value">
+                            <span class="badge {{ user.isVerified ? 'bg-success' : 'bg-warning' }}">
+                                {{ user.isVerified ? 'Vérifié et actif' : 'En attente de vérification' }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-item">
+                    <div class="info-icon">
+                        <i data-lucide="{% if user.isSuperAdmin %}crown{% elseif user.isAdmin %}shield{% elseif user.isManager %}briefcase{% else %}user{% endif %}" style="width: 20px; height: 20px;"></i>
+                    </div>
+                    <div class="info-content">
+                        <div class="info-label">Privilèges</div>
+                        <div class="info-value">
+                            {% if user.isSuperAdmin %}
+                                Super Administrateur
+                            {% elseif user.isAdmin %}
+                                Administrateur
+                            {% elseif user.isManager %}
+                                Gestionnaire
+                            {% else %}
+                                Utilisateur Standard
+                            {% endif %}
+                        </div>
                     </div>
                 </div>
             </div>
+        </div>
+
+        {# Boutons d'action #}
+        <div class="action-buttons">
+            <a href="{{ path('app_user_edit', {id: user.id}) }}" class="btn btn-action-primary">
+                <i data-lucide="edit" style="width: 18px; height: 18px;"></i>
+                Modifier l'utilisateur
+            </a>
+            
+            <form method="post" action="{{ path('app_user_toggle_status', {id: user.id}) }}" class="d-inline">
+                <input type="hidden" name="_token" value="{{ csrf_token('toggle-status' ~ user.id) }}">
+                <button type="submit" class="btn btn-{{ user.isVerified ? 'warning' : 'success' }}">
+                    <i data-lucide="{% if user.isVerified %}user-x{% else %}user-check{% endif %}" style="width: 18px; height: 18px;"></i>
+                    {{ user.isVerified ? 'Désactiver' : 'Activer' }}
+                </button>
+            </form>
+
+            <button type="button" 
+                    class="btn btn-danger ms-auto" 
+                    data-bs-toggle="modal" 
+                    data-bs-target="#deleteModal">
+                <i data-lucide="trash-2" style="width: 18px; height: 18px;"></i>
+                Supprimer
+            </button>
         </div>
     </div>
-    
-    {# Delete Modal #}
-    <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+
+    {# Modal de suppression #}
+    <div class="modal fade" id="deleteModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Confirmer la suppression</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">
+                        <i data-lucide="alert-triangle" style="width: 20px; height: 20px;"></i>
+                        Confirmation de suppression
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
-                    Êtes-vous sûr de vouloir supprimer cet utilisateur ?
-                    {% if user.employe %}
-                    <div class="alert alert-warning mt-2">
-                        <i class="fas fa-exclamation-triangle"></i> Attention : l'employé associé sera également supprimé !
+                    <p>⚠️ <strong>Attention !</strong> Cette action est irréversible.</p>
+                    <p>Voulez-vous vraiment supprimer le compte de :</p>
+                    <p class="text-center">
+                        <strong>{{ user.fullName }}</strong><br>
+                        <small class="text-muted">{{ user.email }}</small>
+                    </p>
+                    <div class="alert alert-warning">
+                        <small>
+                            <i data-lucide="info" style="width: 14px; height: 14px;"></i>
+                            Toutes les données associées seront définitivement supprimées.
+                        </small>
                     </div>
-                    {% endif %}
                 </div>
                 <div class="modal-footer">
-                    <form method="post" action="{{ path('app_user_delete', {'id': user.id}) }}">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                    <form method="post" action="{{ path('app_user_delete', {id: user.id}) }}" class="d-inline">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ user.id) }}">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-danger">Supprimer</button>
+                        <button type="submit" class="btn btn-danger">
+                            <i data-lucide="trash-2" style="width: 16px; height: 16px;"></i>
+                            Supprimer définitivement
+                        </button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    
-    {# Change Role Modal #}
-    <div class="modal fade" id="changeRoleModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Modifier les rôles</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <form method="post" action="{{ path('app_user_edit', {'id': user.id}) }}">
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Rôles de l'utilisateur</label>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="user[roles][]" value="ROLE_USER" checked disabled>
-                                <label class="form-check-label">Utilisateur (par défaut)</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="user[roles][]" value="ROLE_MANAGER" {% if 'ROLE_MANAGER' in user.roles %}checked{% endif %}>
-                                <label class="form-check-label">Manager</label>
-                            </div>
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" name="user[roles][]" value="ROLE_ADMIN" {% if 'ROLE_ADMIN' in user.roles %}checked{% endif %}>
-                                <label class="form-check-label">Administrateur</label>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                        <button type="submit" class="btn btn-primary">Enregistrer</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        // Initialiser Lucide
+        lucide.createIcons();
+    </script>
 {% endblock %}

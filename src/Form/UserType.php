@@ -4,14 +4,18 @@ namespace App\Form;
 
 use App\Entity\User;
 use App\Entity\Institution;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -25,6 +29,7 @@ class UserType extends AbstractType
         $institution = $options['institution'];
 
         $builder
+            // Informations personnelles
             ->add('firstname', TextType::class, [
                 'label' => 'Prénom',
                 'required' => true,
@@ -43,7 +48,7 @@ class UserType extends AbstractType
                 ]
             ])
             ->add('lastname', TextType::class, [
-                'label' => 'Nom',
+                'label' => 'Nom de famille',
                 'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'Le nom est obligatoire']),
@@ -56,11 +61,11 @@ class UserType extends AbstractType
                 ],
                 'attr' => [
                     'class' => 'form-control',
-                    'placeholder' => 'Saisissez le nom'
+                    'placeholder' => 'Saisissez le nom de famille'
                 ]
             ])
             ->add('email', EmailType::class, [
-                'label' => 'Email',
+                'label' => 'Adresse email',
                 'required' => true,
                 'constraints' => [
                     new Assert\NotBlank(['message' => 'L\'email est obligatoire']),
@@ -71,22 +76,92 @@ class UserType extends AbstractType
                     'placeholder' => 'exemple@email.com'
                 ]
             ])
+            ->add('phone', TelType::class, [
+                'label' => 'Téléphone',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => '+235 XX XX XX XX'
+                ],
+                'help' => 'Format recommandé: +235 XX XX XX XX'
+            ])
+            ->add('address', TextareaType::class, [
+                'label' => 'Adresse',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'rows' => 3,
+                    'placeholder' => 'Adresse complète'
+                ]
+            ])
+            
+            // Informations professionnelles
+            ->add('matricule', TextType::class, [
+                'label' => 'Matricule',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Numéro de matricule'
+                ],
+                'help' => 'Numéro d\'identification unique de l\'agent'
+            ])
+            ->add('hireDate', DateType::class, [
+                'label' => 'Date d\'embauche',
+                'required' => false,
+                'widget' => 'single_text',
+                'attr' => [
+                    'class' => 'form-control'
+                ],
+                'help' => 'Date d\'entrée en service'
+            ])
+            ->add('department', TextType::class, [
+                'label' => 'Département/Service',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control',
+                    'placeholder' => 'Direction, service ou département'
+                ]
+            ])
+            
+            // Institution (affiché mais en lecture seule si déjà définie)
+            ->add('institution', EntityType::class, [
+                'label' => 'Institution',
+                'class' => Institution::class,
+                'choice_label' => 'nom',
+                'placeholder' => 'Sélectionner une institution',
+                'required' => false,
+                'disabled' => $institution !== null, // Désactivé si l'institution est déjà définie
+                'data' => $institution, // Pré-remplir avec l'institution courante
+                'attr' => [
+                    'class' => 'form-select'
+                ],
+                'help' => $institution 
+                    ? 'Institution assignée automatiquement' 
+                    : 'Sélectionnez l\'institution de rattachement'
+            ])
+            
+            // Sécurité et accès
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent être identiques',
-                'required' => !$isEdit, // Mot de passe optionnel en édition
+                'required' => !$isEdit,
                 'first_options' => [
                     'label' => 'Mot de passe',
                     'attr' => [
                         'class' => 'form-control',
-                        'placeholder' => 'Minimum 8 caractères'
-                    ]
+                        'placeholder' => 'Minimum 8 caractères',
+                        'autocomplete' => 'new-password'
+                    ],
+                    'help' => $isEdit 
+                        ? 'Laisser vide pour conserver le mot de passe actuel' 
+                        : 'Minimum 8 caractères, lettres et chiffres recommandés'
                 ],
                 'second_options' => [
                     'label' => 'Confirmer le mot de passe',
                     'attr' => [
                         'class' => 'form-control',
-                        'placeholder' => 'Répétez le mot de passe'
+                        'placeholder' => 'Répétez le mot de passe',
+                        'autocomplete' => 'new-password'
                     ]
                 ],
                 'constraints' => $isEdit ? [] : [
@@ -94,16 +169,22 @@ class UserType extends AbstractType
                     new Assert\Length([
                         'min' => 8,
                         'minMessage' => 'Le mot de passe doit contenir au moins {{ limit }} caractères'
+                    ]),
+                    new Assert\Regex([
+                        'pattern' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/',
+                        'message' => 'Le mot de passe doit contenir au moins une majuscule, une minuscule et un chiffre'
                     ])
                 ],
-                'mapped' => false, // Ne pas mapper directement sur l'entité
+                'mapped' => false,
             ])
+            
             ->add('roles', ChoiceType::class, [
-                'label' => 'Rôles',
+                'label' => 'Rôles système',
                 'choices' => [
                     'Utilisateur standard' => 'ROLE_USER',
-                    'Manager' => 'ROLE_MANAGER', 
-                    'Administrateur' => 'ROLE_ADMIN'
+                    'Gestionnaire' => 'ROLE_MANAGER',
+                    'Administrateur' => 'ROLE_ADMIN',
+                    'Super Administrateur' => 'ROLE_SUPER_ADMIN'
                 ],
                 'multiple' => true,
                 'expanded' => true,
@@ -112,8 +193,35 @@ class UserType extends AbstractType
                 'attr' => [
                     'class' => 'roles-checkbox-group'
                 ],
-                'help' => 'Sélectionnez les rôles appropriés pour cet utilisateur'
+                'help' => 'Sélectionnez un ou plusieurs rôles pour définir les permissions'
             ])
+            
+            ->add('accessLevel', ChoiceType::class, [
+                'label' => 'Niveau d\'accès',
+                'choices' => [
+                    'Utilisateur Standard' => 'USER_STANDARD',
+                    'Gestionnaire' => 'MANAGER',
+                    'Administrateur' => 'ADMIN',
+                    'Super Administrateur' => 'SUPER_ADMIN'
+                ],
+                'required' => true,
+                'attr' => [
+                    'class' => 'form-select'
+                ],
+                'help' => 'Définit le niveau de privilèges dans le système'
+            ])
+            
+            ->add('isVerified', CheckboxType::class, [
+                'label' => 'Compte vérifié et actif',
+                'required' => false,
+                'data' => !$isEdit,
+                'attr' => [
+                    'class' => 'form-check-input'
+                ],
+                'help' => 'Un compte vérifié peut se connecter au système'
+            ])
+            
+            // Avatar
             ->add('avatarFile', FileType::class, [
                 'label' => 'Photo de profil',
                 'required' => false,
@@ -123,28 +231,21 @@ class UserType extends AbstractType
                         'maxSize' => '2M',
                         'mimeTypes' => [
                             'image/jpeg',
-                            'image/jpg', 
+                            'image/jpg',
                             'image/png',
-                            'image/gif'
+                            'image/gif',
+                            'image/webp'
                         ],
-                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPG, PNG, GIF)',
+                        'mimeTypesMessage' => 'Veuillez télécharger une image valide (JPG, PNG, GIF, WEBP)',
                         'maxSizeMessage' => 'Le fichier ne doit pas dépasser 2MB'
                     ])
                 ],
                 'attr' => [
+                    'class' => 'form-control',
                     'accept' => 'image/*'
                 ],
-                'help' => 'Formats acceptés: JPG, PNG, GIF (max 2MB)'
-            ])
-            ->add('isVerified', CheckboxType::class, [
-                'label' => 'Compte vérifié',
-                'required' => false,
-                'data' => !$isEdit, // Par défaut vérifié pour les nouveaux comptes
-                'help' => 'Un compte vérifié peut se connecter au système'
+                'help' => 'Formats acceptés: JPG, PNG, GIF, WEBP (max 2MB)'
             ]);
-
-        // Note: Le champ institution n'est pas ajouté car il est géré automatiquement
-        // dans le contrôleur en fonction de l'utilisateur connecté
     }
 
     public function configureOptions(OptionsResolver $resolver): void

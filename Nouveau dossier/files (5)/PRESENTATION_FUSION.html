@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Fusionné - SIGEP Tchad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #002664 0%, #004d99 100%);
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #002664 0%, #003d96 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #c41e3a 0%, #daa520 50%, #c41e3a 100%);
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 3rem 2rem;
+        }
+        
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .dashboard-box {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            border-top: 4px solid #002664;
+        }
+        
+        .dashboard-box.management {
+            border-top-color: #daa520;
+            background: linear-gradient(135deg, #fff 0%, #fef9e7 100%);
+        }
+        
+        .dashboard-box h3 {
+            color: #002664;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feature-list li::before {
+            content: '✓';
+            width: 24px;
+            height: 24px;
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+        
+        .feature-list.plus li::before {
+            content: '+';
+            background: #daa520;
+        }
+        
+        .section {
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            color: #002664;
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            border-bottom: 3px solid #daa520;
+            padding-bottom: 0.5rem;
+        }
+        
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #002664;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #f59e0b;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            border-radius: 8px;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #68d391;
+            padding: 1.5rem;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+        
+        .routes-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        
+        .routes-table th,
+        .routes-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .routes-table th {
+            background: #002664;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .routes-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .badge.user {
+            background: #e7f3ff;
+            color: #002664;
+        }
+        
+        .badge.manager {
+            background: #fff3cd;
+            color: #b8860b;
+        }
+        
+        .cta-section {
+            background: linear-gradient(135deg, #daa520 0%, #e6b833 100%);
+            color: #002664;
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: 3rem;
+            border-radius: 10px;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: #002664;
+            color: white;
+            padding: 1rem 3rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 1rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0, 38, 100, 0.5);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #002664;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #002664;
+        }
+        
+        .stat-label {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+        
+        @media (max-width: 968px) {
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔗 Dashboard Fusionné SIGEP Tchad</h1>
+            <p class="subtitle">2 Dashboards en 1 Contrôleur</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2 class="section-title">📦 Vue d'Ensemble</h2>
+                
+                <div class="info-box">
+                    <strong>✅ Mission Accomplie !</strong><br>
+                    L'ancien dashboard a été fusionné avec le nouveau dashboard top management dans un seul contrôleur.
+                    Vous disposez maintenant de <strong>2 dashboards distincts</strong> avec des routes et templates séparés.
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">Dashboards</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">1</div>
+                        <div class="stat-label">Contrôleur</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">2</div>
+                        <div class="stat-label">Templates Principaux</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">6</div>
+                        <div class="stat-label">Routes Totales</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">🎯 Les Deux Dashboards</h2>
+                
+                <div class="comparison">
+                    <div class="dashboard-box">
+                        <h3>📊 Dashboard Principal</h3>
+                        <p><strong>Route:</strong> <code>/dashboard/</code></p>
+                        <p><strong>Template:</strong> <code>index.html.twig</code></p>
+                        <p><strong>Accès:</strong> <span class="badge user">ROLE_USER</span></p>
+                        
+                        <ul class="feature-list">
+                            <li>KPIs Principaux (4 cartes)</li>
+                            <li>Graphiques Chart.js</li>
+                            <li>Top Projets par Budget</li>
+                            <li>Projets Critiques</li>
+                            <li>Performance Institutions</li>
+                            <li>Audits Récents</li>
+                            <li>Filtres (année, institution)</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="dashboard-box management">
+                        <h3>📈 Dashboard Top Management</h3>
+                        <p><strong>Route:</strong> <code>/dashboard/management</code></p>
+                        <p><strong>Template:</strong> <code>management.html.twig</code></p>
+                        <p><strong>Accès:</strong> <span class="badge manager">ROLE_MANAGER</span></p>
+                        
+                        <p><strong>= Tout du Dashboard Principal +</strong></p>
+                        
+                        <ul class="feature-list plus">
+                            <li>Métriques Management (4 cartes)</li>
+                            <li>Analyse Risques Globaux</li>
+                            <li>Tendances & Croissance</li>
+                            <li>Valeur du Portefeuille</li>
+                            <li>Efficacité du Financement</li>
+                            <li>Comparaisons Annuelles</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">🛤️ Routes Disponibles</h2>
+                
+                <table class="routes-table">
+                    <thead>
+                        <tr>
+                            <th>Route</th>
+                            <th>Template</th>
+                            <th>Accès</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>/dashboard/</code></td>
+                            <td>index.html.twig</td>
+                            <td><span class="badge user">ROLE_USER</span></td>
+                            <td>Dashboard principal</td>
+                        </tr>
+                        <tr>
+                            <td><code>/dashboard/management</code></td>
+                            <td>management.html.twig</td>
+                            <td><span class="badge manager">ROLE_MANAGER</span></td>
+                            <td>Dashboard top management</td>
+                        </tr>
+                        <tr>
+                            <td><code>/dashboard/project/{id}</code></td>
+                            <td>_project_details.html.twig</td>
+                            <td><span class="badge user">ROLE_USER</span></td>
+                            <td>Détails d'un projet</td>
+                        </tr>
+                        <tr>
+                            <td><code>/dashboard/financing/{id}</code></td>
+                            <td>_financing_details.html.twig</td>
+                            <td><span class="badge user">ROLE_USER</span></td>
+                            <td>Détails d'un financement</td>
+                        </tr>
+                        <tr>
+                            <td><code>/dashboard/api/kpis</code></td>
+                            <td>JSON</td>
+                            <td><span class="badge user">ROLE_USER</span></td>
+                            <td>API KPIs</td>
+                        </tr>
+                        <tr>
+                            <td><code>/dashboard/api/charts</code></td>
+                            <td>JSON</td>
+                            <td><span class="badge user">ROLE_USER</span></td>
+                            <td>API graphiques</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">🚀 Installation Rapide</h2>
+                
+                <h3>1. Remplacer le contrôleur</h3>
+                <div class="code-block">
+cp src/Controller/DashboardController_FUSION.php \\
+   votre_projet/src/Controller/DashboardController.php
+                </div>
+                
+                <h3>2. Copier les templates</h3>
+                <div class="code-block">
+# Les 2 dashboards
+cp templates/dashboard/index.html.twig \\
+   votre_projet/templates/dashboard/
+   
+cp templates/dashboard/management.html.twig \\
+   votre_projet/templates/dashboard/
+
+# Les détails
+cp templates/dashboard/_project_details.html.twig \\
+   votre_projet/templates/dashboard/
+   
+cp templates/dashboard/_financing_details.html.twig \\
+   votre_projet/templates/dashboard/
+                </div>
+                
+                <h3>3. Copier le CSS</h3>
+                <div class="code-block">
+mkdir -p votre_projet/public/css
+cp templates/dashboard/styles.css \\
+   votre_projet/public/css/dashboard.css
+                </div>
+                
+                <h3>4. Configurer la sécurité</h3>
+                <div class="code-block">
+# config/packages/security.yaml
+security:
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_MANAGER
+        ROLE_MANAGER: ROLE_USER
+    
+    access_control:
+        - { path: ^/dashboard$, roles: ROLE_USER }
+        - { path: ^/dashboard/management, roles: ROLE_MANAGER }
+                </div>
+                
+                <h3>5. Tester</h3>
+                <div class="code-block">
+symfony server:start
+
+# Dashboard principal (ROLE_USER)
+http://localhost:8000/dashboard
+
+# Dashboard management (ROLE_MANAGER)
+http://localhost:8000/dashboard/management
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">📚 Fichiers Livrés</h2>
+                
+                <div class="code-block">
+sigep_dashboard_fusion_complete.zip
+├── src/Controller/
+│   └── DashboardController_FUSION.php     ✅ Contrôleur fusionné
+├── templates/
+│   ├── dashboard/
+│   │   ├── index.html.twig                ✅ Dashboard principal
+│   │   ├── management.html.twig           ✅ Dashboard management
+│   │   ├── _project_details.html.twig     ✅ Détails projet
+│   │   ├── _financing_details.html.twig   ✅ Détails financement
+│   │   └── styles.css                      ✅ CSS complet
+│   └── components/
+│       └── _kpi_card.html.twig            ✅ Composant KPI
+├── config/
+│   ├── routes_dashboard.yaml              ✅ Routes
+│   └── services_dashboard.yaml            ✅ Services
+└── docs/
+    ├── FUSION_README.md                    ✅ Doc fusion
+    ├── README.md                           ✅ Doc complète
+    ├── LIVRAISON.md                        ✅ Récapitulatif
+    └── INSTALLATION.md                     ✅ Guide install
+                </div>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">✨ Nouveautés Dashboard Management</h2>
+                
+                <h3>💼 Métriques Management (4 cartes)</h3>
+                <ul>
+                    <li><strong>Valeur du Portefeuille:</strong> Montant total des financements</li>
+                    <li><strong>Efficacité du Financement:</strong> Ratio fonds activés / budget total</li>
+                    <li><strong>Taux de Respect des Délais:</strong> % projets dans les temps</li>
+                    <li><strong>Projets par Institution:</strong> Moyenne de projets par institution</li>
+                </ul>
+                
+                <h3>⚠️ Analyse des Risques Globaux</h3>
+                <ul>
+                    <li>Distribution des risques (faible / moyen / élevé)</li>
+                    <li>Pourcentages et compteurs par niveau de risque</li>
+                    <li>Alertes pour projets critiques</li>
+                </ul>
+                
+                <h3>📈 Tendances et Croissance</h3>
+                <ul>
+                    <li>Croissance des projets (année N vs année N-1)</li>
+                    <li>Croissance du budget (comparaison annuelle)</li>
+                    <li>Badges de tendance (positive / négative)</li>
+                </ul>
+            </div>
+            
+            <div class="section">
+                <h2 class="section-title">🔐 Hiérarchie des Rôles</h2>
+                
+                <div class="info-box">
+                    <pre style="margin: 0;">
+ROLE_USER
+  └── Accès dashboard principal
+      └── Accès détails projets/financements
+      
+ROLE_MANAGER (hérite de ROLE_USER)
+  └── Accès dashboard management
+      └── Métriques stratégiques complètes
+      
+ROLE_ADMIN (hérite de ROLE_MANAGER)
+  └── Accès complet à tous les dashboards
+                    </pre>
+                </div>
+            </div>
+            
+            <div class="cta-section">
+                <h2>Prêt à Intégrer les 2 Dashboards ?</h2>
+                <p style="margin-top: 1rem; font-size: 1.1rem;">
+                    Contrôleur fusionné avec 2 dashboards distincts, templates séparés,<br>
+                    et toutes les fonctionnalités de l'ancien + nouveau dashboard
+                </p>
+                <a href="#" class="cta-button">📥 Télécharger l'Archive Fusionnée</a>
+                <p style="margin-top: 1.5rem; font-size: 0.9rem; opacity: 0.8;">
+                    Fichier ZIP : <strong>sigep_dashboard_fusion_complete.zip</strong> (~45KB)
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+# Routes pour le Dashboard Top Management - SIGEP Tchad
+
+dashboard:
+    resource: App\Controller\DashboardController
+    type: annotation
+    prefix: /dashboard
+
+# Ou définir manuellement les routes :
+# app_dashboard_index:
+#     path: /dashboard
+#     controller: App\Controller\DashboardController::index
+#     methods: [GET]
+#
+# app_dashboard_project_detail:
+#     path: /dashboard/project/{id}
+#     controller: App\Controller\DashboardController::projectDetail
+#     methods: [GET]
+#     requirements:
+#         id: '\d+'
+#
+# app_dashboard_financing_detail:
+#     path: /dashboard/financing/{id}
+#     controller: App\Controller\DashboardController::financingDetail
+#     methods: [GET]
+#     requirements:
+#         id: '\d+'
+#
+# app_dashboard_api_kpis:
+#     path: /dashboard/api/kpis
+#     controller: App\Controller\DashboardController::apiKpis
+#     methods: [GET]
+#
+# app_dashboard_api_charts:
+#     path: /dashboard/api/charts
+#     controller: App\Controller\DashboardController::apiCharts
+#     methods: [GET]

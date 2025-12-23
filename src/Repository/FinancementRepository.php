@@ -272,4 +272,71 @@ class FinancementRepository extends ServiceEntityRepository
 
         return "CONV-{$prefix}-{$year}-{$newNumber}";
     }
+
+
+     /**
+     * Trouve les financements actifs
+     */
+    public function findActifs(): array
+    {
+        return $this->createQueryBuilder('f')
+            ->where('f.statut = :statut')
+            ->setParameter('statut', Financement::STATUT_ACTIF)
+            ->orderBy('f.dateSignature', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * Montant total engagé
+     */
+    public function getTotalEngage(): float
+    {
+        $result = $this->createQueryBuilder('f')
+            ->select('SUM(f.montantEngage)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        
+        return (float) ($result ?? 0);
+    }
+
+    /**
+     * Montant total décaissé
+     */
+    public function getTotalDecaisse(): float
+    {
+        $result = $this->createQueryBuilder('f')
+            ->select('SUM(f.montantDecaisse)')
+            ->getQuery()
+            ->getSingleScalarResult();
+        
+        return (float) ($result ?? 0);
+    }
+
+    /**
+     * Statistiques par type de financement
+     */
+    public function getStatsByType(): array
+    {
+        return $this->createQueryBuilder('f')
+            ->select('f.type, COUNT(f.id) as count, SUM(f.montantEngage) as totalEngage, SUM(f.montantDecaisse) as totalDecaisse')
+            ->groupBy('f.type')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Statistiques par bailleur
+     */
+    public function getStatsByBailleur(): array
+    {
+        return $this->createQueryBuilder('f')
+            ->select('IDENTITY(f.bailleur) as bailleurId, COUNT(f.id) as count, SUM(f.montantEngage) as totalEngage')
+            ->groupBy('f.bailleur')
+            ->orderBy('totalEngage', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

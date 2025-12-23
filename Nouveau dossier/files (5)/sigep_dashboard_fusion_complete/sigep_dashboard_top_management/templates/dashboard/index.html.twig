@@ -1,0 +1,488 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dashboard Top Management - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="dashboard-container">
+    {# Header avec Armoirie et Filtres #}
+    <header class="header">
+        <div class="header-content">
+            <div class="header-brand">
+                <div class="logo-container">
+                    <div class="logo-emblem">
+                        <img src="{{ asset('images/armoirie-tchad.png') }}" alt="Armoirie du Tchad">
+                    </div>
+                    <div class="brand-text">
+                        <h1 class="brand-name">SIGEP</h1>
+                        <span class="brand-subtitle">République du Tchad</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-filters">
+                <form method="get" action="{{ path('app_dashboard_index') }}" class="filter-form">
+                    <div class="filter-group">
+                        <select name="year" id="filterYear" class="filter-select">
+                            <option value="">Toutes les années</option>
+                            {% for year in years %}
+                                <option value="{{ year }}" {% if filters.year == year %}selected{% endif %}>{{ year }}</option>
+                            {% endfor %}
+                        </select>
+                        <i data-lucide="calendar" class="filter-icon"></i>
+                    </div>
+
+                    <div class="filter-group">
+                        <select name="institution" id="filterInstitution" class="filter-select">
+                            <option value="">Toutes les institutions</option>
+                            {% for institution in institutions %}
+                                <option value="{{ institution.id }}" {% if filters.institution_id == institution.id %}selected{% endif %}>
+                                    {{ institution.nom }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <i data-lucide="building" class="filter-icon"></i>
+                    </div>
+
+                    <button type="submit" class="btn-filter">
+                        <i data-lucide="filter"></i>
+                        Filtrer
+                    </button>
+                </form>
+            </div>
+
+            <div class="header-user">
+                <div class="user-avatar">
+                    <i data-lucide="user"></i>
+                </div>
+                <div class="user-info">
+                    <span class="user-name">{{ app.user.fullName }}</span>
+                    <span class="user-role">{{ app.user.accessLevelLabel }}</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {# Contenu Principal #}
+    <main class="main-content">
+        <div class="container-fluid">
+            {# Section KPIs #}
+            <section class="kpi-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i data-lucide="bar-chart-3"></i>
+                        Indicateurs Clés
+                    </h2>
+                </div>
+
+                <div class="kpi-grid">
+                    {% include 'components/_kpi_card.html.twig' with {
+                        icon: 'folder-kanban',
+                        value: kpis.totalProjects,
+                        label: 'Projets Total',
+                        sublabel: '<span>🟢 ' ~ kpis.activeProjects ~ ' en cours</span> <span>✅ ' ~ kpis.completedProjects ~ ' terminés</span>',
+                        trend: {direction: 'up', value: '+12%'},
+                        color: 'primary'
+                    } %}
+
+                    {% include 'components/_kpi_card.html.twig' with {
+                        icon: 'banknote',
+                        value: kpis.totalBudget,
+                        label: 'Budget Total (FCFA)',
+                        sublabel: '<span>💰 ' ~ (kpis.totalBudget|number_format(0, ',', ' ')) ~ '</span>',
+                        color: 'gold'
+                    } %}
+
+                    {% include 'components/_kpi_card.html.twig' with {
+                        icon: 'trending-up',
+                        value: kpis.disbursementRate,
+                        label: 'Taux de Décaissement (%)',
+                        sublabel: '<span>📊 ' ~ (kpis.totalDisbursed|number_format(0, ',', ' ')) ~ ' FCFA décaissés</span>',
+                        trend: {direction: kpis.disbursementRate > 50 ? 'up' : 'down', value: kpis.disbursementRate ~ '%'},
+                        color: kpis.disbursementRate > 70 ? 'success' : (kpis.disbursementRate > 50 ? 'warning' : 'danger')
+                    } %}
+
+                    {% include 'components/_kpi_card.html.twig' with {
+                        icon: 'activity',
+                        value: kpis.avgPhysicalProgress,
+                        label: 'Réalisation Physique Moyenne (%)',
+                        sublabel: '<span>📈 Progression globale</span>',
+                        trend: {direction: 'up', value: '+' ~ kpis.avgPhysicalProgress ~ '%'},
+                        color: 'success'
+                    } %}
+                </div>
+            </section>
+
+            {# Section Graphiques #}
+            <section class="charts-section">
+                <div class="charts-grid">
+                    {# Graphique Répartition par Secteur #}
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">
+                                <i data-lucide="pie-chart"></i>
+                                Répartition par Secteur
+                            </h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="sectorChart"></canvas>
+                        </div>
+                    </div>
+
+                    {# Graphique Sources de Financement #}
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">
+                                <i data-lucide="wallet"></i>
+                                Sources de Financement
+                            </h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="financingChart"></canvas>
+                        </div>
+                    </div>
+
+                    {# Graphique Statuts des Projets #}
+                    <div class="chart-card">
+                        <div class="chart-header">
+                            <h3 class="chart-title">
+                                <i data-lucide="check-circle"></i>
+                                Statuts des Projets
+                            </h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+
+                    {# Graphique Évolution Mensuelle #}
+                    <div class="chart-card full-width">
+                        <div class="chart-header">
+                            <h3 class="chart-title">
+                                <i data-lucide="trending-up"></i>
+                                Évolution Mensuelle
+                            </h3>
+                        </div>
+                        <div class="chart-body">
+                            <canvas id="evolutionChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {# Section Top Projets #}
+            <section class="projects-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i data-lucide="star"></i>
+                        Top Projets par Budget
+                    </h2>
+                    <a href="{{ path('app_project_index') }}" class="btn-link">
+                        Voir tous les projets
+                        <i data-lucide="arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Projet</th>
+                                <th>Institution</th>
+                                <th>Secteur</th>
+                                <th>Budget (FCFA)</th>
+                                <th>Progression</th>
+                                <th>Statut</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for project in topProjects %}
+                            <tr>
+                                <td>
+                                    <div class="project-name">
+                                        <strong>{{ project.titre }}</strong>
+                                        <small>{{ project.code }}</small>
+                                    </div>
+                                </td>
+                                <td>{{ project.institution ? project.institution.nom : 'N/A' }}</td>
+                                <td>
+                                    <span class="badge badge-sector">{{ project.secteur }}</span>
+                                </td>
+                                <td class="text-right">
+                                    <strong>{{ project.budgetTotal|number_format(0, ',', ' ') }}</strong>
+                                </td>
+                                <td>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: {{ project.tauxRealisation }}%"></div>
+                                        <span class="progress-text">{{ project.tauxRealisation }}%</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="badge badge-{{ project.statut }}">
+                                        {{ project.statutLabel }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <a href="{{ path('app_dashboard_project_detail', {id: project.id}) }}" class="btn-icon" title="Voir détails">
+                                        <i data-lucide="eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="7" class="text-center">
+                                    <div class="empty-state">
+                                        <i data-lucide="folder-x"></i>
+                                        <p>Aucun projet trouvé</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            {# Section Projets Critiques #}
+            {% if criticalProjects is not empty %}
+            <section class="critical-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i data-lucide="alert-triangle"></i>
+                        Projets Critiques - Attention Requise
+                    </h2>
+                </div>
+
+                <div class="critical-grid">
+                    {% for project in criticalProjects|slice(0, 6) %}
+                    <div class="critical-card">
+                        <div class="critical-header">
+                            <h4>{{ project.titre }}</h4>
+                            <span class="risk-badge risk-{{ project.riskLevel|lower }}">
+                                {{ project.riskLevel }}
+                            </span>
+                        </div>
+                        <div class="critical-body">
+                            <div class="critical-metric">
+                                <span class="label">Progression</span>
+                                <span class="value">{{ project.tauxRealisation }}%</span>
+                            </div>
+                            <div class="critical-metric">
+                                <span class="label">Statut</span>
+                                <span class="value">{{ project.statutLabel }}</span>
+                            </div>
+                            {% if project.isDelayed %}
+                            <div class="critical-alert">
+                                <i data-lucide="clock"></i>
+                                Projet en retard
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="critical-footer">
+                            <a href="{{ path('app_dashboard_project_detail', {id: project.id}) }}" class="btn-critical">
+                                Voir détails
+                                <i data-lucide="arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+
+            {# Section Performance Institutionnelle #}
+            <section class="performance-section">
+                <div class="section-header">
+                    <h2 class="section-title">
+                        <i data-lucide="award"></i>
+                        Performance par Institution
+                    </h2>
+                </div>
+
+                <div class="performance-grid">
+                    {% for perf in institutionPerformance|slice(0, 6) %}
+                    <div class="performance-card">
+                        <div class="performance-icon">
+                            <i data-lucide="building-2"></i>
+                        </div>
+                        <div class="performance-content">
+                            <h4>{{ perf.institution.nom }}</h4>
+                            <div class="performance-stats">
+                                <div class="stat">
+                                    <span class="stat-value">{{ perf.projectsCount }}</span>
+                                    <span class="stat-label">Projets</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">{{ perf.avgProgress }}%</span>
+                                    <span class="stat-label">Progression</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-value">{{ perf.successRate }}%</span>
+                                    <span class="stat-label">Taux de succès</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialiser Lucide Icons
+        lucide.createIcons();
+
+        // Configuration Chart.js par défaut
+        Chart.defaults.font.family = "'DM Sans', sans-serif";
+        Chart.defaults.color = '#4b5563';
+
+        // Données des graphiques
+        const sectorData = {{ sectorStats|json_encode|raw }};
+        const financingData = {{ financingSourceStats|json_encode|raw }};
+        const statusData = {{ statusStats|json_encode|raw }};
+        const evolutionData = {{ monthlyEvolution|json_encode|raw }};
+
+        // Graphique Secteur
+        if (document.getElementById('sectorChart')) {
+            new Chart(document.getElementById('sectorChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(sectorData),
+                    datasets: [{
+                        data: Object.values(sectorData).map(d => d.count),
+                        backgroundColor: [
+                            '#004d99', '#daa520', '#c41e3a', '#10b981', 
+                            '#f59e0b', '#6366f1', '#ec4899', '#14b8a6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Graphique Financement
+        if (document.getElementById('financingChart')) {
+            new Chart(document.getElementById('financingChart'), {
+                type: 'pie',
+                data: {
+                    labels: Object.keys(financingData),
+                    datasets: [{
+                        data: Object.values(financingData).map(d => d.totalAmount),
+                        backgroundColor: ['#004d99', '#daa520', '#c41e3a', '#10b981', '#f59e0b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Graphique Statuts
+        if (document.getElementById('statusChart')) {
+            new Chart(document.getElementById('statusChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Planifié', 'En cours', 'Suspendu', 'Terminé', 'Annulé'],
+                    datasets: [{
+                        label: 'Nombre de projets',
+                        data: [
+                            statusData.planifie || 0,
+                            statusData.en_cours || 0,
+                            statusData.suspendu || 0,
+                            statusData.termine || 0,
+                            statusData.annule || 0
+                        ],
+                        backgroundColor: ['#6b7280', '#004d99', '#f59e0b', '#10b981', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Graphique Évolution
+        if (document.getElementById('evolutionChart')) {
+            new Chart(document.getElementById('evolutionChart'), {
+                type: 'line',
+                data: {
+                    labels: Object.keys(evolutionData),
+                    datasets: [{
+                        label: 'Nombre de projets',
+                        data: Object.values(evolutionData).map(d => d.projects),
+                        borderColor: '#004d99',
+                        backgroundColor: 'rgba(0, 77, 153, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Animation des KPIs (counter)
+        document.querySelectorAll('[data-counter]').forEach(el => {
+            const target = parseInt(el.getAttribute('data-counter'));
+            let current = 0;
+            const increment = target / 50;
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    el.textContent = target.toLocaleString('fr-FR');
+                    clearInterval(timer);
+                } else {
+                    el.textContent = Math.floor(current).toLocaleString('fr-FR');
+                }
+            }, 30);
+        });
+
+        // Auto-submit des filtres
+        document.querySelectorAll('.filter-select').forEach(select => {
+            select.addEventListener('change', () => {
+                select.closest('form').submit();
+            });
+        });
+    </script>
+{% endblock %}

@@ -3,196 +3,156 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Entity\Employe;
+use App\Entity\Institution;
 use App\Form\UserType;
 use App\Repository\UserRepository;
-use App\Repository\EmployeRepository;
+use App\Repository\InstitutionRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
-#[Route('/admin/user')]
-final class UserController extends AbstractController
+#[Route('/user')]
+#[IsGranted('ROLE_ADMIN')]
+class UserController extends AbstractController
 {
-    #[Route(name: 'app_user_index', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
-    public function index(UserRepository $userRepository, EmployeRepository $employeRepository): Response
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private UserPasswordHasherInterface $passwordHasher,
+        private SluggerInterface $slugger
+    ) {}
+
+    #[Route('/', name: 'app_user_index', methods: ['GET'])]
+    public function index(
+        UserRepository $userRepository,
+        InstitutionRepository $institutionRepository
+    ): Response {
+        // Récupérer l'institution de l'utilisateur connecté
         $currentUser = $this->getUser();
-        
-        if (!$currentUser) {
-            $this->addFlash('error', 'Vous devez être connecté pour accéder à cette page.');
-            return $this->redirectToRoute('app_login');
-        }
-
         $institution = $currentUser->getInstitution();
-        if (!$institution) {
-            $this->addFlash('error', 'Votre compte n\'est associé à aucune institution.');
-            return $this->render('user/index.html.twig', [
-                'users' => [],
-                'stats' => [
-                    'total' => 0,
-                    'verified' => 0,
-                    'admins' => 0,
-                    'managers' => 0,
-                    'recentUsers' => 0,
-                ],
-                'institution' => null,
-            ]);
-        }
 
-        // Récupérer seulement les utilisateurs de la même institution
-        $users = $userRepository->createQueryBuilder('u')
-            ->where('u.institution = :institution')
-            ->setParameter('institution', $institution)
-            ->orderBy('u.createdAt', 'DESC')
-            ->getQuery()
-            ->getResult();
+        // Filtrer les utilisateurs par institution
+        $users = $institution 
+            ? $userRepository->findBy(['institution' => $institution], ['createdAt' => 'DESC'])
+            : $userRepository->findAll();
 
-        $totalUsers = count($users);
-        
-        // Statistiques pour le dashboard filtrées par institution
-        $stats = [
-            'total' => $totalUsers,
-            'verified' => count(array_filter($users, fn($user) => $user->isVerified())),
-            'admins' => count(array_filter($users, fn($user) => in_array('ROLE_ADMIN', $user->getRoles()))),
-            'managers' => count(array_filter($users, fn($user) => in_array('ROLE_MANAGER', $user->getRoles()))),
-            'recentUsers' => count(array_filter($users, fn($user) => $user->getCreatedAt() > new \DateTimeImmutable('-30 days'))),
-        ];
-
-        // Compter les employés liés dans cette institution
-        $employesWithUser = $employeRepository->createQueryBuilder('e')
-            ->join('e.user', 'u')
-            ->where('u.institution = :institution')
-            ->setParameter('institution', $institution)
-            ->getQuery()
-            ->getResult();
-
-        $stats['withEmploye'] = count($employesWithUser);
-        $stats['withoutEmploye'] = $totalUsers - $stats['withEmploye'];
+        // Calculer les statistiques
+        $stats = $this->calculateUserStats($users);
 
         return $this->render('user/index.html.twig', [
             'users' => $users,
-            'stats' => $stats,
             'institution' => $institution,
+            'stats' => $stats,
+        ]);
+    }
+
+    #[Route('/api/list', name: 'app_user_api_list', methods: ['GET'])]
+    public function apiList(
+        Request $request,
+        UserRepository $userRepository
+    ): JsonResponse {
+        $currentUser = $this->getUser();
+        $institution = $currentUser->getInstitution();
+
+        $users = $institution 
+            ? $userRepository->findBy(['institution' => $institution])
+            : $userRepository->findAll();
+
+        $data = array_map(function(User $user) {
+            return [
+                'id' => $user->getId(),
+                'fullName' => $user->getFullName(),
+                'email' => $user->getEmail(),
+                'roles' => $user->getRoles(),
+                'isVerified' => $user->isVerified(),
+                'institution' => $user->getInstitution() ? [
+                    'id' => $user->getInstitution()->getId(),
+                    'nom' => $user->getInstitution()->getNom(),
+                ] : null,
+                'matricule' => $user->getMatricule(),
+                'department' => $user->getDepartment(),
+                'accessLevel' => $user->getAccessLevel(),
+                'accessLevelLabel' => $user->getAccessLevelLabel(),
+                'createdAt' => $user->getCreatedAt()?->format('Y-m-d H:i:s'),
+            ];
+        }, $users);
+
+        return $this->json([
+            'success' => true,
+            'data' => $data,
+            'total' => count($data),
         ]);
     }
 
     #[Route('/new', name: 'app_user_new', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function new(
-        Request $request, 
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
-    ): Response {
+    public function new(Request $request): Response
+    {
+        $user = new User();
         $currentUser = $this->getUser();
         
-        if (!$currentUser) {
-            $this->addFlash('error', 'Vous devez être connecté pour créer un utilisateur.');
-            return $this->redirectToRoute('app_login');
+        // Assigner automatiquement l'institution de l'utilisateur connecté
+        if ($currentUser->getInstitution()) {
+            $user->setInstitution($currentUser->getInstitution());
         }
 
-        $institution = $currentUser->getInstitution();
-        if (!$institution) {
-            $this->addFlash('error', 'Votre compte n\'est associé à aucune institution. Contactez l\'administrateur.');
-            return $this->redirectToRoute('app_user_index');
-        }
-
-        $user = new User();
-        // Associer automatiquement l'institution de l'utilisateur connecté
-        $user->setInstitution($institution);
-        
         $form = $this->createForm(UserType::class, $user, [
-            'institution' => $institution
+            'is_edit' => false,
+            'institution' => $currentUser->getInstitution()
         ]);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                // Vérifier l'unicité de l'email dans l'institution
-                $existingUser = $entityManager->getRepository(User::class)
-                    ->createQueryBuilder('u')
-                    ->where('u.email = :email')
-                    ->andWhere('u.institution = :institution')
-                    ->setParameter('email', $user->getEmail())
-                    ->setParameter('institution', $institution)
-                    ->getQuery()
-                    ->getOneOrNullResult();
-
-                if ($existingUser) {
-                    $this->addFlash('error', 'Un utilisateur avec cet email existe déjà dans votre institution.');
-                    return $this->render('user/new.html.twig', [
-                        'user' => $user,
-                        'form' => $form,
-                        'institution' => $institution,
-                    ]);
-                }
-
-                // Hasher le mot de passe
-                $hashedPassword = $passwordHasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                );
+            // Gérer le mot de passe
+            $plainPassword = $form->get('password')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
                 $user->setPassword($hashedPassword);
-                
-                // Créer un compte employé associé automatiquement
-                $employe = new Employe();
-                if ($user->getFirstname() && $user->getLastname()) {
-                    $employe->setPrenom($user->getFirstname());
-                    $employe->setNom($user->getLastname());
-                }
-                $employe->setEmail($user->getEmail());
-                
-                // Générer un matricule unique pour l'institution
-                $matricule = $this->generateMatricule($entityManager, $institution);
-                $employe->setMatricule($matricule);
-                
-                $employe->setStatut(true);
-                $employe->setDateEmbauche(new \DateTime());
-                $employe->setSalaire(0); // Valeur par défaut, à modifier
-                $employe->setActif(true);
-                
-                // Associer l'utilisateur et l'employé
-                $employe->setUser($user);
-
-                $entityManager->persist($user);
-                $entityManager->persist($employe);
-                $entityManager->flush();
-
-                $this->addFlash('success', sprintf(
-                    'Utilisateur %s créé avec succès dans l\'institution %s !',
-                    $user->getFullName(),
-                    $institution->getNom()
-                ));
-                
-                return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-                
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la création de l\'utilisateur : ' . $e->getMessage());
             }
+
+            // Gérer l'upload de l'avatar
+            $avatarFile = $form->get('avatarFile')->getData();
+            if ($avatarFile) {
+                $this->handleAvatarUpload($user, $avatarFile);
+            }
+
+            // Assurer que l'institution est bien définie
+            if (!$user->getInstitution() && $currentUser->getInstitution()) {
+                $user->setInstitution($currentUser->getInstitution());
+            }
+
+            $this->entityManager->persist($user);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', sprintf(
+                'L\'utilisateur "%s" a été créé avec succès.',
+                $user->getFullName()
+            ));
+
+            return $this->redirectToRoute('app_user_index');
         }
 
         return $this->render('user/new.html.twig', [
             'user' => $user,
             'form' => $form,
-            'institution' => $institution,
+            'institution' => $currentUser->getInstitution(),
         ]);
     }
 
     #[Route('/{id}', name: 'app_user_show', methods: ['GET'])]
-    #[IsGranted('ROLE_USER')]
     public function show(User $user): Response
     {
-        $currentUser = $this->getUser();
-        
         // Vérifier que l'utilisateur appartient à la même institution
-        if ($user->getInstitution()->getId() !== $currentUser->getInstitution()->getId()) {
-            $this->addFlash('error', 'Accès non autorisé à cet utilisateur.');
-            return $this->redirectToRoute('app_user_index');
+        $currentUser = $this->getUser();
+        if ($currentUser->getInstitution() && 
+            !$user->belongsToInstitution($currentUser->getInstitution())) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas accéder à cet utilisateur.');
         }
 
         return $this->render('user/show.html.twig', [
@@ -201,163 +161,246 @@ final class UserController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_user_edit', methods: ['GET', 'POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function edit(
-        Request $request, 
-        User $user, 
-        EntityManagerInterface $entityManager,
-        UserPasswordHasherInterface $passwordHasher
-    ): Response {
-        $currentUser = $this->getUser();
-        
+    public function edit(Request $request, User $user): Response
+    {
         // Vérifier que l'utilisateur appartient à la même institution
-        if ($user->getInstitution()->getId() !== $currentUser->getInstitution()->getId()) {
-            $this->addFlash('error', 'Accès non autorisé à cet utilisateur.');
-            return $this->redirectToRoute('app_user_index');
+        $currentUser = $this->getUser();
+        if ($currentUser->getInstitution() && 
+            !$user->belongsToInstitution($currentUser->getInstitution())) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet utilisateur.');
         }
 
         $form = $this->createForm(UserType::class, $user, [
             'is_edit' => true,
-            'institution' => $user->getInstitution()
+            'institution' => $currentUser->getInstitution()
         ]);
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            try {
-                // Mise à jour du mot de passe si fourni
-                if ($password = $form->get('password')->getData()) {
-                    $hashedPassword = $passwordHasher->hashPassword($user, $password);
-                    $user->setPassword($hashedPassword);
-                }
-                
-                // Synchroniser les informations de base avec l'employé
-                $employes = $entityManager->getRepository(Employe::class)
-                    ->findBy(['user' => $user]);
-                
-                foreach ($employes as $employe) {
-                    $employe->setPrenom($user->getFirstname());
-                    $employe->setNom($user->getLastname());
-                    $employe->setEmail($user->getEmail());
-                    $entityManager->persist($employe);
-                }
-                
-                if (empty($employes)) {
-                    // Créer un employé si l'utilisateur n'en a pas
-                    $employe = new Employe();
-                    $employe->setPrenom($user->getFirstname());
-                    $employe->setNom($user->getLastname());
-                    $employe->setEmail($user->getEmail());
-                    $employe->setMatricule($this->generateMatricule($entityManager, $user->getInstitution()));
-                    $employe->setStatut(true);
-                    $employe->setDateEmbauche(new \DateTime());
-                    $employe->setSalaire(0);
-                    $employe->setActif(true);
-                    $employe->setUser($user);
-                    
-                    $entityManager->persist($employe);
-                }
-                
-                $entityManager->flush();
-                
-                $this->addFlash('success', 'Utilisateur mis à jour avec succès!');
-                return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-                
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Une erreur est survenue lors de la mise à jour : ' . $e->getMessage());
+            // Gérer le mot de passe s'il est fourni
+            $plainPassword = $form->get('password')->getData();
+            if ($plainPassword) {
+                $hashedPassword = $this->passwordHasher->hashPassword($user, $plainPassword);
+                $user->setPassword($hashedPassword);
             }
+
+            // Gérer l'upload de l'avatar
+            $avatarFile = $form->get('avatarFile')->getData();
+            if ($avatarFile) {
+                $this->handleAvatarUpload($user, $avatarFile);
+            }
+
+            $this->entityManager->flush();
+
+            $this->addFlash('success', sprintf(
+                'L\'utilisateur "%s" a été modifié avec succès.',
+                $user->getFullName()
+            ));
+
+            return $this->redirectToRoute('app_user_index');
         }
 
         return $this->render('user/edit.html.twig', [
             'user' => $user,
             'form' => $form,
+            'institution' => $currentUser->getInstitution(),
         ]);
     }
 
     #[Route('/{id}', name: 'app_user_delete', methods: ['POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, User $user): Response
     {
-        $currentUser = $this->getUser();
-        
         // Vérifier que l'utilisateur appartient à la même institution
-        if ($user->getInstitution()->getId() !== $currentUser->getInstitution()->getId()) {
-            $this->addFlash('error', 'Accès non autorisé à cet utilisateur.');
+        $currentUser = $this->getUser();
+        if ($currentUser->getInstitution() && 
+            !$user->belongsToInstitution($currentUser->getInstitution())) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas supprimer cet utilisateur.');
+        }
+
+        // Empêcher la suppression de son propre compte
+        if ($user->getId() === $currentUser->getId()) {
+            $this->addFlash('error', 'Vous ne pouvez pas supprimer votre propre compte.');
             return $this->redirectToRoute('app_user_index');
         }
 
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
-            try {
-                // Les employés associés seront supprimés automatiquement via la relation
-                $entityManager->remove($user);
-                $entityManager->flush();
-                $this->addFlash('success', 'Utilisateur supprimé avec succès!');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Impossible de supprimer cet utilisateur : ' . $e->getMessage());
-            }
-        }
-
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
-    }
-    
-    #[Route('/{id}/toggle-status', name: 'app_user_toggle_status', methods: ['POST'])]
-    #[IsGranted('ROLE_USER')]
-    public function toggleStatus(Request $request, User $user, EntityManagerInterface $entityManager): Response
-    {
-        $currentUser = $this->getUser();
-        
-        // Vérifier que l'utilisateur appartient à la même institution
-        if ($user->getInstitution()->getId() !== $currentUser->getInstitution()->getId()) {
-            $this->addFlash('error', 'Accès non autorisé à cet utilisateur.');
-            return $this->redirectToRoute('app_user_index');
-        }
-
-        if ($this->isCsrfTokenValid('toggle-status'.$user->getId(), $request->getPayload()->getString('_token'))) {
-            try {
-                // Changer le statut de vérification
-                $user->setIsVerified(!$user->isVerified());
-                
-                // Synchroniser le statut avec les employés associés
-                $employes = $entityManager->getRepository(Employe::class)
-                    ->findBy(['user' => $user]);
-                
-                foreach ($employes as $employe) {
-                    $employe->setStatut($user->isVerified());
-                    $employe->setActif($user->isVerified());
-                    $entityManager->persist($employe);
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+            $fullName = $user->getFullName();
+            
+            // Supprimer l'avatar s'il existe
+            if ($user->getAvatar()) {
+                $avatarPath = $this->getParameter('kernel.project_dir') . '/public/uploads/avatars/' . $user->getAvatar();
+                if (file_exists($avatarPath)) {
+                    unlink($avatarPath);
                 }
-                
-                $entityManager->flush();
-                $this->addFlash('success', 'Statut modifié avec succès!');
-            } catch (\Exception $e) {
-                $this->addFlash('error', 'Erreur lors de la modification du statut : ' . $e->getMessage());
             }
+
+            $this->entityManager->remove($user);
+            $this->entityManager->flush();
+
+            $this->addFlash('success', sprintf(
+                'L\'utilisateur "%s" a été supprimé avec succès.',
+                $fullName
+            ));
         }
 
-        return $this->redirectToRoute('app_user_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_user_index');
+    }
+
+    #[Route('/{id}/toggle-status', name: 'app_user_toggle_status', methods: ['POST'])]
+    public function toggleStatus(Request $request, User $user): Response
+    {
+        // Vérifier que l'utilisateur appartient à la même institution
+        $currentUser = $this->getUser();
+        if ($currentUser->getInstitution() && 
+            !$user->belongsToInstitution($currentUser->getInstitution())) {
+            throw $this->createAccessDeniedException('Vous ne pouvez pas modifier cet utilisateur.');
+        }
+
+        if ($this->isCsrfTokenValid('toggle-status'.$user->getId(), $request->request->get('_token'))) {
+            $user->setIsVerified(!$user->isVerified());
+            $this->entityManager->flush();
+
+            $status = $user->isVerified() ? 'activé' : 'désactivé';
+            $this->addFlash('success', sprintf(
+                'L\'utilisateur "%s" a été %s avec succès.',
+                $user->getFullName(),
+                $status
+            ));
+        }
+
+        return $this->redirectToRoute('app_user_index');
+    }
+
+    #[Route('/api/{id}', name: 'app_user_api_show', methods: ['GET'])]
+    public function apiShow(User $user): JsonResponse
+    {
+        // Vérifier que l'utilisateur appartient à la même institution
+        $currentUser = $this->getUser();
+        if ($currentUser->getInstitution() && 
+            !$user->belongsToInstitution($currentUser->getInstitution())) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Accès non autorisé'
+            ], Response::HTTP_FORBIDDEN);
+        }
+
+        return $this->json([
+            'success' => true,
+            'data' => [
+                'id' => $user->getId(),
+                'firstname' => $user->getFirstname(),
+                'lastname' => $user->getLastname(),
+                'fullName' => $user->getFullName(),
+                'email' => $user->getEmail(),
+                'phone' => $user->getPhone(),
+                'address' => $user->getAddress(),
+                'roles' => $user->getRoles(),
+                'isVerified' => $user->isVerified(),
+                'avatar' => $user->getAvatar(),
+                'initials' => $user->getInitials(),
+                'institution' => $user->getInstitution() ? [
+                    'id' => $user->getInstitution()->getId(),
+                    'nom' => $user->getInstitution()->getNom(),
+                    'sigle' => $user->getInstitution()->getSigle(),
+                    'type' => $user->getInstitution()->getType(),
+                ] : null,
+                'matricule' => $user->getMatricule(),
+                'hireDate' => $user->getHireDate()?->format('Y-m-d'),
+                'department' => $user->getDepartment(),
+                'accessLevel' => $user->getAccessLevel(),
+                'accessLevelLabel' => $user->getAccessLevelLabel(),
+                'createdAt' => $user->getCreatedAt()?->format('Y-m-d H:i:s'),
+                'isAdmin' => $user->isAdmin(),
+                'isManager' => $user->isManager(),
+                'isSuperAdmin' => $user->isSuperAdmin(),
+            ]
+        ]);
+    }
+
+    #[Route('/api/stats', name: 'app_user_api_stats', methods: ['GET'])]
+    public function apiStats(UserRepository $userRepository): JsonResponse
+    {
+        $currentUser = $this->getUser();
+        $institution = $currentUser->getInstitution();
+
+        $users = $institution 
+            ? $userRepository->findBy(['institution' => $institution])
+            : $userRepository->findAll();
+
+        $stats = $this->calculateUserStats($users);
+
+        return $this->json([
+            'success' => true,
+            'data' => $stats,
+        ]);
     }
 
     /**
-     * Génère un matricule unique pour l'institution
+     * Gère l'upload de l'avatar
      */
-    private function generateMatricule(EntityManagerInterface $entityManager, $institution): string
+    private function handleAvatarUpload(User $user, $avatarFile): void
     {
-        $prefix = strtoupper(substr($institution->getNom(), 0, 3));
-        $year = date('Y');
-        
-        // Compte le nombre d'employés dans l'institution pour cette année
-        $count = $entityManager->getRepository(Employe::class)
-            ->createQueryBuilder('e')
-            ->select('COUNT(e.id)')
-            ->join('e.user', 'u')
-            ->where('u.institution = :institution')
-            ->andWhere('YEAR(e.date_embauche) = :year')
-            ->setParameter('institution', $institution)
-            ->setParameter('year', $year)
-            ->getQuery()
-            ->getSingleScalarResult();
-        
-        $nextNumber = str_pad($count + 1, 3, '0', STR_PAD_LEFT);
-        
-        return $prefix . $year . $nextNumber;
+        $originalFilename = pathinfo($avatarFile->getClientOriginalName(), PATHINFO_FILENAME);
+        $safeFilename = $this->slugger->slug($originalFilename);
+        $newFilename = $safeFilename.'-'.uniqid().'.'.$avatarFile->guessExtension();
+
+        try {
+            $avatarFile->move(
+                $this->getParameter('kernel.project_dir') . '/public/uploads/avatars',
+                $newFilename
+            );
+
+            // Supprimer l'ancien avatar s'il existe
+            if ($user->getAvatar()) {
+                $oldAvatarPath = $this->getParameter('kernel.project_dir') . '/public/uploads/avatars/' . $user->getAvatar();
+                if (file_exists($oldAvatarPath)) {
+                    unlink($oldAvatarPath);
+                }
+            }
+
+            $user->setAvatar($newFilename);
+        } catch (FileException $e) {
+            $this->addFlash('error', 'Une erreur est survenue lors de l\'upload de l\'avatar.');
+        }
+    }
+
+    /**
+     * Calcule les statistiques des utilisateurs
+     */
+    private function calculateUserStats(array $users): array
+    {
+        $total = count($users);
+        $verified = 0;
+        $unverified = 0;
+        $admins = 0;
+        $managers = 0;
+        $standardUsers = 0;
+
+        foreach ($users as $user) {
+            if ($user->isVerified()) {
+                $verified++;
+            } else {
+                $unverified++;
+            }
+
+            if ($user->isAdmin()) {
+                $admins++;
+            } elseif ($user->isManager()) {
+                $managers++;
+            } else {
+                $standardUsers++;
+            }
+        }
+
+        return [
+            'total' => $total,
+            'verified' => $verified,
+            'unverified' => $unverified,
+            'admins' => $admins,
+            'managers' => $managers,
+            'standardUsers' => $standardUsers,
+            'verifiedPercentage' => $total > 0 ? round(($verified / $total) * 100, 1) : 0,
+        ];
     }
 }

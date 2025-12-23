@@ -1,0 +1,16 @@
+# Configuration des services pour le Dashboard - SIGEP Tchad
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    # Contrôleur Dashboard
+    App\Controller\DashboardController:
+        tags: ['controller.service_arguments']
+        arguments:
+            $projectRepository: '@App\Repository\ProjectRepository'
+            $financingRepository: '@App\Repository\FinancingRepository'
+            $disbursementRepository: '@App\Repository\DisbursementRepository'
+            $institutionRepository: '@App\Repository\InstitutionRepository'
+            $auditRepository: '@App\Repository\AuditRepository'

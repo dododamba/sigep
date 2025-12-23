@@ -211,4 +211,62 @@ class PartnerRepository extends ServiceEntityRepository
 
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
+
+
+      /**
+     * Trouve les partenaires actifs
+     */
+    public function findActifs(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.status = :status')
+            ->setParameter('status', 'Actif')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+
+    /**
+     * Statistiques par type de partenaire
+     */
+    public function getStatsByType(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('IDENTITY(p.typePartner) as typeId, COUNT(p.id) as count')
+            ->groupBy('p.typePartner')
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * Top partenaires par nombre de projets
+     */
+    public function findTopByProjects(int $limit = 5): array
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p.name, p.acronym, COUNT(proj.id) as projectCount')
+            ->leftJoin('p.projects', 'proj')
+            ->groupBy('p.id')
+            ->orderBy('projectCount', 'DESC')
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+  
+    /**
+     * Partenaires avec projets actifs
+     */
+    public function findWithActiveProjects(): array
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.projects', 'proj')
+            ->where('proj.status = :status')
+            ->setParameter('status', 'en-cours')
+            ->groupBy('p.id')
+            ->orderBy('p.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
 }

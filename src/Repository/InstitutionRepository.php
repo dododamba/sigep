@@ -280,4 +280,37 @@ class InstitutionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+
+    
+    /**
+     * Trouve les institutions actives
+     */
+    public function findActives(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->where('i.status = :status')
+            ->setParameter('status', 'Actif')
+            ->orderBy('i.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    
+
+  
+
+
+
+    /**
+     * Statistiques par type
+     */
+    public function getStatsByType(): array
+    {
+        return $this->createQueryBuilder('i')
+            ->select('IDENTITY(i.typeInstitution) as typeId, COUNT(i.id) as count')
+            ->groupBy('i.typeInstitution')
+            ->getQuery()
+            ->getResult();
+    }
 }

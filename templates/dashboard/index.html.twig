@@ -1,295 +1,959 @@
 {% extends 'base.html.twig' %}
-{% block title %}Tableau de Bord{% endblock %}
+
+{% block title %}Tableau de Bord - SIGEP Tchad{% endblock %}
+
 {% block stylesheets %}
+<style>
+    /* ===== Variables et Base ===== */
+    :root {
+        --primary: #002664;
+        --primary-light: #003399;
+        --gold: #FECB00;
+        --gold-dark: #D4A800;
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #c60c30;
+        --info: #3b82f6;
+        --gray-50: #f9fafb;
+        --gray-100: #f3f4f6;
+        --gray-200: #e5e7eb;
+        --gray-300: #d1d5db;
+        --gray-400: #9ca3af;
+        --gray-500: #6b7280;
+        --gray-600: #4b5563;
+        --gray-700: #374151;
+        --gray-800: #1f2937;
+        --gray-900: #111827;
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    }
 
+    /* ===== Page Header ===== */
+    .page-header {
+        margin-bottom: 2rem;
+    }
+    .page-header h2 {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: var(--gray-900);
+        margin-bottom: 0.5rem;
+    }
+    .page-header-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        border-radius: 12px;
+        color: white;
+    }
+    .page-header p {
+        color: var(--gray-500);
+        margin: 0;
+        font-size: 0.95rem;
+    }
+
+    /* ===== Stats Grid ===== */
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    @media (max-width: 1200px) {
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 640px) {
+        .stats-grid { grid-template-columns: 1fr; }
+    }
+
+    .stat-card {
+        background: white;
+        border-radius: 16px;
+        padding: 1.5rem;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        border: 1px solid var(--gray-100);
+    }
+    .stat-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--card-accent, var(--primary));
+    }
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .stat-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .stat-icon.blue { background: linear-gradient(135deg, #002664, #003399); color: white; }
+    .stat-icon.gold { background: linear-gradient(135deg, #FECB00, #FFD633); color: #002664; }
+    .stat-icon.green { background: linear-gradient(135deg, #059669, #10b981); color: white; }
+    .stat-icon.red { background: linear-gradient(135deg, #c60c30, #ef4444); color: white; }
+    .stat-icon.purple { background: linear-gradient(135deg, #7c3aed, #8b5cf6); color: white; }
+
+    .stat-content h3 {
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: var(--gray-900);
+        margin: 0 0 0.25rem;
+        line-height: 1.2;
+    }
+    .stat-content p {
+        color: var(--gray-500);
+        margin: 0 0 0.5rem;
+        font-size: 0.9rem;
+    }
+    .stat-trend {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.8rem;
+        font-weight: 600;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+    }
+    .stat-trend.up { color: var(--success); background: rgba(16, 185, 129, 0.1); }
+    .stat-trend.down { color: var(--danger); background: rgba(198, 12, 48, 0.1); }
+    .stat-trend.neutral { color: var(--gray-500); background: var(--gray-100); }
+
+    /* ===== Cards ===== */
+    .card {
+        background: white;
+        border-radius: 16px;
+        box-shadow: var(--shadow-md);
+        border: 1px solid var(--gray-100);
+        overflow: hidden;
+    }
+    .card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1.25rem 1.5rem;
+        border-bottom: 1px solid var(--gray-100);
+        background: var(--gray-50);
+    }
+    .card-title {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--gray-800);
+        margin: 0;
+    }
+    .card-title i { color: var(--primary); }
+    .card-actions { display: flex; gap: 0.5rem; }
+    .card-body { padding: 1.5rem; }
+
+    /* ===== Grid Layouts ===== */
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+    .grid-3 { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; margin-bottom: 2rem; }
+    @media (max-width: 1024px) {
+        .grid-2, .grid-3 { grid-template-columns: 1fr; }
+    }
+
+    /* ===== Buttons ===== */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        text-decoration: none;
+    }
+    .btn-sm { padding: 0.375rem 0.75rem; font-size: 0.8rem; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-light); }
+    .btn-secondary { background: var(--gray-100); color: var(--gray-700); border: 1px solid var(--gray-200); }
+    .btn-secondary:hover { background: var(--gray-200); }
+    .btn-gold { background: var(--gold); color: var(--primary); }
+    .btn-gold:hover { background: var(--gold-dark); }
+
+    /* ===== Data Table ===== */
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    .data-table th {
+        text-align: left;
+        padding: 1rem 1.25rem;
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: var(--gray-500);
+        background: var(--gray-50);
+        border-bottom: 1px solid var(--gray-200);
+    }
+    .data-table td {
+        padding: 1rem 1.25rem;
+        border-bottom: 1px solid var(--gray-100);
+        font-size: 0.9rem;
+        color: var(--gray-700);
+    }
+    .data-table tbody tr:hover { background: var(--gray-50); }
+    .data-table tbody tr:last-child td { border-bottom: none; }
+
+    /* ===== Progress Bar ===== */
+    .progress-container { display: flex; align-items: center; gap: 0.75rem; }
+    .progress-bar {
+        flex: 1;
+        height: 8px;
+        background: var(--gray-200);
+        border-radius: 4px;
+        overflow: hidden;
+    }
+    .progress-fill {
+        height: 100%;
+        border-radius: 4px;
+        transition: width 0.5s ease;
+    }
+    .progress-fill.blue { background: linear-gradient(90deg, var(--primary), var(--primary-light)); }
+    .progress-fill.green { background: linear-gradient(90deg, #059669, var(--success)); }
+    .progress-fill.gold { background: linear-gradient(90deg, var(--gold-dark), var(--gold)); }
+    .progress-fill.red { background: linear-gradient(90deg, #b91c1c, var(--danger)); }
+    .progress-text { font-size: 0.8rem; font-weight: 600; color: var(--gray-600); min-width: 40px; }
+
+    /* ===== Status Badge ===== */
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.375rem 0.75rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+    .status-badge.success { background: rgba(16, 185, 129, 0.1); color: #059669; }
+    .status-badge.warning { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+    .status-badge.danger { background: rgba(198, 12, 48, 0.1); color: #c60c30; }
+    .status-badge.info { background: rgba(0, 38, 100, 0.1); color: #002664; }
+    .status-badge.secondary { background: var(--gray-100); color: var(--gray-600); }
+
+    /* ===== Activity List ===== */
+    .activity-list { list-style: none; padding: 0; margin: 0; }
+    .activity-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 1rem;
+        padding: 1rem 0;
+        border-bottom: 1px solid var(--gray-100);
+    }
+    .activity-item:last-child { border-bottom: none; }
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+    .activity-icon.green { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+    .activity-icon.blue { background: rgba(0, 38, 100, 0.1); color: var(--primary); }
+    .activity-icon.gold { background: rgba(254, 203, 0, 0.15); color: #b8860b; }
+    .activity-icon.red { background: rgba(198, 12, 48, 0.1); color: var(--danger); }
+    .activity-content { flex: 1; min-width: 0; }
+    .activity-content h5 { margin: 0 0 0.25rem; font-size: 0.9rem; font-weight: 600; color: var(--gray-800); }
+    .activity-content p { margin: 0; font-size: 0.8rem; color: var(--gray-500); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .activity-time { font-size: 0.75rem; color: var(--gray-400); white-space: nowrap; }
+
+    /* ===== Quick Stats ===== */
+    .quick-stat {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--gray-100);
+    }
+    .quick-stat:last-child { border-bottom: none; }
+    .quick-stat-label {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--gray-600);
+    }
+    .quick-stat-value { font-weight: 700; color: var(--gray-800); }
+
+    /* ===== Chart Container ===== */
+    .chart-container {
+        position: relative;
+        height: 300px;
+        width: 100%;
+    }
+
+    /* ===== Sector Badge ===== */
+    .sector-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.375rem;
+        padding: 0.25rem 0.5rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        font-weight: 500;
+    }
+    .sector-badge.infrastructure { background: rgba(0, 38, 100, 0.1); color: #002664; }
+    .sector-badge.sante { background: rgba(16, 185, 129, 0.1); color: #059669; }
+    .sector-badge.energie { background: rgba(254, 203, 0, 0.15); color: #b8860b; }
+    .sector-badge.agriculture { background: rgba(34, 197, 94, 0.1); color: #16a34a; }
+    .sector-badge.education { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
+    .sector-badge.eau { background: rgba(6, 182, 212, 0.1); color: #0891b2; }
+
+    /* ===== Animations ===== */
+    .animate-in {
+        animation: slideIn 0.5s ease forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    @keyframes slideIn {
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ===== Priority Badge ===== */
+    .priority-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.25rem;
+        font-size: 0.7rem;
+        font-weight: 600;
+        padding: 0.2rem 0.4rem;
+        border-radius: 4px;
+    }
+    .priority-badge.haute { background: rgba(198, 12, 48, 0.1); color: #c60c30; }
+    .priority-badge.moyenne { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+    .priority-badge.normale { background: var(--gray-100); color: var(--gray-600); }
+
+    /* ===== Empty State ===== */
+    .empty-state {
+        text-align: center;
+        padding: 3rem 1.5rem;
+        color: var(--gray-500);
+    }
+    .empty-state i { font-size: 3rem; margin-bottom: 1rem; opacity: 0.3; }
+    .empty-state p { margin: 0; }
+
+    /* ===== KPI Mini Cards ===== */
+    .kpi-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1rem;
+    }
+    .kpi-mini {
+        background: var(--gray-50);
+        padding: 1rem;
+        border-radius: 10px;
+        text-align: center;
+    }
+    .kpi-mini-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+    }
+    .kpi-mini-label {
+        font-size: 0.75rem;
+        color: var(--gray-500);
+        margin-top: 0.25rem;
+    }
+</style>
 {% endblock %}
-    {% block body %}
-       <div class="page-header">
-                <h2>
-                    <span class="page-header-icon">
-                        <i data-lucide="layout-dashboard"></i>
-                    </span>
-                    Tableau de bord
-                </h2>
-                <p>Vue d'ensemble de vos projets et activités - Décembre 2025</p>
+
+{% block body %}
+<div class="page-header animate-in">
+    <h2>
+        <span class="page-header-icon">
+            <i data-lucide="layout-dashboard"></i>
+        </span>
+        Tableau de bord
+    </h2>
+    <p>Vue d'ensemble des projets publics - {{ currentDate|date('F Y')|capitalize }}</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <div class="stat-card animate-in" style="--card-accent: #002664;">
+        <div class="stat-icon blue">
+            <i data-lucide="briefcase"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ stats.projectsActifs }}</h3>
+            <p>Projets actifs</p>
+            <div class="stat-trend {% if stats.projectsCeMois > 0 %}up{% else %}neutral{% endif %}">
+                <i data-lucide="{% if stats.projectsCeMois > 0 %}trending-up{% else %}minus{% endif %}" style="width: 14px; height: 14px;"></i>
+                {% if stats.projectsCeMois > 0 %}+{{ stats.projectsCeMois }} ce mois{% else %}Aucun ce mois{% endif %}
             </div>
+        </div>
+    </div>
 
- <!-- Stats Grid -->
-            <div class="stats-grid">
-                <div class="stat-card animate-in" style="--card-accent: #002664;">
-                    <div class="stat-icon blue">
-                        <i data-lucide="briefcase"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 x-text="stats.totalProjects">12</h3>
-                        <p>Projets actifs</p>
-                        <div class="stat-trend up">
-                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
-                            +2 ce mois
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card animate-in delay-1" style="--card-accent: #fecb00;">
-                    <div class="stat-icon gold">
-                        <i data-lucide="coins"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>85.4 Mds</h3>
-                        <p>Budget total (FCFA)</p>
-                        <div class="stat-trend up">
-                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
-                            +12% vs 2024
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card animate-in delay-2" style="--card-accent: #10b981;">
-                    <div class="stat-icon green">
-                        <i data-lucide="check-circle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>67%</h3>
-                        <p>Taux d'exécution</p>
-                        <div class="stat-trend up">
-                            <i data-lucide="trending-up" style="width: 14px; height: 14px;"></i>
-                            +8% ce trimestre
-                        </div>
-                    </div>
-                </div>
-
-                <div class="stat-card animate-in delay-3" style="--card-accent: #c60c30;">
-                    <div class="stat-icon red">
-                        <i data-lucide="alert-triangle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3>3</h3>
-                        <p>Projets en retard</p>
-                        <div class="stat-trend down">
-                            <i data-lucide="trending-down" style="width: 14px; height: 14px;"></i>
-                            -1 vs mois dernier
-                        </div>
-                    </div>
-                </div>
+    <div class="stat-card animate-in delay-1" style="--card-accent: #fecb00;">
+        <div class="stat-icon gold">
+            <i data-lucide="coins"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ (stats.budgetTotal / 1000000000)|number_format(1, ',', ' ') }} Mds</h3>
+            <p>Budget total (FCFA)</p>
+            <div class="stat-trend up">
+                <i data-lucide="banknote" style="width: 14px; height: 14px;"></i>
+                {{ stats.totalFinancements }} financements
             </div>
+        </div>
+    </div>
 
-            <!-- Charts & Projects -->
-            <div class="grid-3">
-                <div>
-                    <!-- Budget Chart -->
-                    <div class="card animate-in delay-2">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i data-lucide="bar-chart-3"></i>
-                                Exécution budgétaire par secteur
-                            </h3>
-                            <div class="card-actions">
-                                <button class="btn btn-secondary btn-sm">
-                                    <i data-lucide="download" style="width: 14px; height: 14px;"></i>
-                                    Exporter
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div class="chart-container">
-                                <canvas id="budgetChart"></canvas>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Projects Table -->
-                    <div class="card animate-in delay-3">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i data-lucide="folder-open"></i>
-                                Projets récents
-                            </h3>
-                            <div class="card-actions">
-                                <button class="btn btn-primary btn-sm">
-                                    <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
-                                    Nouveau
-                                </button>
-                            </div>
-                        </div>
-                        <div class="card-body" style="padding: 0;">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>Projet</th>
-                                        <th>Secteur</th>
-                                        <th>Budget</th>
-                                        <th>Progression</th>
-                                        <th>Statut</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template x-for="project in projects.slice(0, 5)" :key="project.id">
-                                        <tr>
-                                            <td>
-                                                <strong x-text="project.name"></strong>
-                                            </td>
-                                            <td x-text="project.sector"></td>
-                                            <td x-text="project.budget"></td>
-                                            <td>
-                                                <div class="progress-container">
-                                                    <div class="progress-bar">
-                                                        <div class="progress-fill blue" :style="'width: ' + project.progress + '%'"></div>
-                                                    </div>
-                                                    <span class="progress-text" x-text="project.progress + '%'"></span>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <span class="status-badge" :class="project.statusClass">
-                                                    <span class="status-dot"></span>
-                                                    <span x-text="project.status"></span>
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </template>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Right Column -->
-                <div>
-                    <!-- Activity Feed -->
-                    <div class="card animate-in delay-2">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i data-lucide="activity"></i>
-                                Activité récente
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            <ul class="activity-list">
-                                <li class="activity-item">
-                                    <div class="activity-icon green">
-                                        <i data-lucide="check-circle" style="width: 18px; height: 18px;"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h5>Décaissement validé</h5>
-                                        <p>Projet Route N'Djamena-Abéché - 2.5 Mds FCFA</p>
-                                    </div>
-                                    <span class="activity-time">Il y a 2h</span>
-                                </li>
-                                <li class="activity-item">
-                                    <div class="activity-icon blue">
-                                        <i data-lucide="file-plus" style="width: 18px; height: 18px;"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h5>Nouveau rapport soumis</h5>
-                                        <p>Centrale solaire de Moundou - Q4 2025</p>
-                                    </div>
-                                    <span class="activity-time">Il y a 5h</span>
-                                </li>
-                                <li class="activity-item">
-                                    <div class="activity-icon gold">
-                                        <i data-lucide="users" style="width: 18px; height: 18px;"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h5>Réunion planifiée</h5>
-                                        <p>Comité de pilotage - 18 Déc. 09:00</p>
-                                    </div>
-                                    <span class="activity-time">Hier</span>
-                                </li>
-                                <li class="activity-item">
-                                    <div class="activity-icon red">
-                                        <i data-lucide="alert-circle" style="width: 18px; height: 18px;"></i>
-                                    </div>
-                                    <div class="activity-content">
-                                        <h5>Alerte retard</h5>
-                                        <p>Hôpital Régional Sarh - Livraison équipements</p>
-                                    </div>
-                                    <span class="activity-time">Hier</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <!-- Quick Stats -->
-                    <div class="card animate-in delay-3">
-                        <div class="card-header">
-                            <h3 class="card-title">
-                                <i data-lucide="pie-chart"></i>
-                                Répartition
-                            </h3>
-                        </div>
-                        <div class="card-body">
-                            <div class="quick-stat">
-                                <span class="quick-stat-label">
-                                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #002664;"></span>
-                                    Infrastructure
-                                </span>
-                                <span class="quick-stat-value">42%</span>
-                            </div>
-                            <div class="quick-stat">
-                                <span class="quick-stat-label">
-                                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #10b981;"></span>
-                                    Santé
-                                </span>
-                                <span class="quick-stat-value">25%</span>
-                            </div>
-                            <div class="quick-stat">
-                                <span class="quick-stat-label">
-                                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #fecb00;"></span>
-                                    Énergie
-                                </span>
-                                <span class="quick-stat-value">18%</span>
-                            </div>
-                            <div class="quick-stat">
-                                <span class="quick-stat-label">
-                                    <span style="width: 12px; height: 12px; border-radius: 3px; background: #c60c30;"></span>
-                                    Agriculture
-                                </span>
-                                <span class="quick-stat-value">15%</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="stat-card animate-in delay-2" style="--card-accent: #10b981;">
+        <div class="stat-icon green">
+            <i data-lucide="check-circle"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ stats.tauxExecution }}%</h3>
+            <p>Taux d'exécution</p>
+            <div class="stat-trend {% if stats.tauxExecution >= 50 %}up{% else %}down{% endif %}">
+                <i data-lucide="{% if stats.tauxExecution >= 50 %}trending-up{% else %}trending-down{% endif %}" style="width: 14px; height: 14px;"></i>
+                {{ (stats.montantDecaisse / 1000000000)|number_format(1, ',', ' ') }} Mds décaissés
             </div>
+        </div>
+    </div>
 
-            <!-- Messages Preview -->
-            <div class="card animate-in delay-4">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i data-lucide="message-square"></i>
-                        Messages récents
-                    </h3>
-                    <button class="btn btn-secondary btn-sm" @click="currentPage = 'messages'">
-                        Voir tout
-                        <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+    <div class="stat-card animate-in delay-3" style="--card-accent: #c60c30;">
+        <div class="stat-icon red">
+            <i data-lucide="alert-triangle"></i>
+        </div>
+        <div class="stat-content">
+            <h3>{{ stats.projectsEnRetard }}</h3>
+            <p>Projets en retard</p>
+            <div class="stat-trend {% if stats.projectsEnRetard > 0 %}down{% else %}up{% endif %}">
+                <i data-lucide="{% if stats.projectsEnRetard > 0 %}alert-circle{% else %}check{% endif %}" style="width: 14px; height: 14px;"></i>
+                {% if stats.projectsEnRetard > 0 %}À surveiller{% else %}Tout va bien{% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Charts & Projects -->
+<div class="grid-3">
+    <div>
+        <!-- Budget Chart -->
+        <div class="card animate-in delay-2">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i data-lucide="bar-chart-3"></i>
+                    Exécution budgétaire par secteur
+                </h3>
+                <div class="card-actions">
+                    <button class="btn btn-secondary btn-sm" onclick="exportChart()">
+                        <i data-lucide="download" style="width: 14px; height: 14px;"></i>
+                        Exporter
                     </button>
                 </div>
-                <div class="card-body">
-                    <div class="grid-2">
-                        <div class="message-item unread">
-                            <div class="message-avatar">DP</div>
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-sender">David Peterson</span>
-                                    <span class="message-time">Il y a 4h</span>
+            </div>
+            <div class="card-body">
+                <div class="chart-container">
+                    <canvas id="budgetChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Projects Table -->
+        <div class="card animate-in delay-3" style="margin-top: 1.5rem;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i data-lucide="folder-open"></i>
+                    Projets récents
+                </h3>
+                <div class="card-actions">
+                    <a href="{{ path('app_projects') }}" class="btn btn-secondary btn-sm">
+                        Voir tout
+                        <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+                    </a>
+                    <a href="{{ path('app_projects_new') }}" class="btn btn-primary btn-sm">
+                        <i data-lucide="plus" style="width: 14px; height: 14px;"></i>
+                        Nouveau
+                    </a>
+                </div>
+            </div>
+            <div class="card-body" style="padding: 0;">
+                {% if recentProjects|length > 0 %}
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Projet</th>
+                            <th>Secteur</th>
+                            <th>Budget</th>
+                            <th>Progression</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for project in recentProjects|slice(0, 5) %}
+                        <tr>
+                            <td>
+                                <a href="{{ path('app_projects_show', {slug: project.slug}) }}" style="text-decoration: none; color: inherit;">
+                                    <strong>{{ project.name }}</strong>
+                                    {% if project.priorite == 'haute' %}
+                                    <span class="priority-badge haute" style="margin-left: 0.5rem;">
+                                        <i data-lucide="alert-circle" style="width: 10px; height: 10px;"></i>
+                                        Prioritaire
+                                    </span>
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td>
+                                <span class="sector-badge {{ project.sector }}">
+                                    <i data-lucide="{{ project.sectorIcon }}" style="width: 12px; height: 12px;"></i>
+                                    {{ project.sectorLabel }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if project.budgetTotal %}
+                                    {{ (project.budgetTotal / 1000000000)|number_format(2, ',', ' ') }} Mds
+                                {% else %}
+                                    <span style="color: var(--gray-400);">Non défini</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <div class="progress-container">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill {% if project.progress >= 75 %}green{% elseif project.progress >= 50 %}blue{% elseif project.progress >= 25 %}gold{% else %}red{% endif %}" 
+                                             style="width: {{ project.progress }}%"></div>
+                                    </div>
+                                    <span class="progress-text">{{ project.progress }}%</span>
                                 </div>
-                                <p class="message-preview">Merci pour les documents. Je suis en train de les examiner et je reviendrai vers vous...</p>
-                            </div>
+                            </td>
+                            <td>
+                                {% set statusClass = {
+                                    'planifie': 'secondary',
+                                    'en-cours': 'info',
+                                    'en-retard': 'danger',
+                                    'termine': 'success',
+                                    'suspendu': 'warning'
+                                } %}
+                                <span class="status-badge {{ statusClass[project.status] ?? 'secondary' }}">
+                                    <span class="status-dot"></span>
+                                    {{ project.statusLabel }}
+                                </span>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <div class="empty-state">
+                    <i data-lucide="folder-x"></i>
+                    <p>Aucun projet enregistré</p>
+                    <a href="{{ path('app_projects_new') }}" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i data-lucide="plus" style="width: 16px; height: 16px;"></i>
+                        Créer un projet
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Column -->
+    <div>
+        <!-- Activity Feed -->
+        <div class="card animate-in delay-2">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i data-lucide="activity"></i>
+                    Activité récente
+                </h3>
+            </div>
+            <div class="card-body">
+                {% if activitesRecentes|length > 0 %}
+                <ul class="activity-list">
+                    {% for activite in activitesRecentes %}
+                    <li class="activity-item">
+                        <div class="activity-icon {{ activite.iconClass }}">
+                            <i data-lucide="{{ activite.icon }}" style="width: 18px; height: 18px;"></i>
                         </div>
-                        <div class="message-item unread">
-                            <div class="message-avatar">SF</div>
-                            <div class="message-content">
-                                <div class="message-header">
-                                    <span class="message-sender">Sindy Forrest</span>
-                                    <span class="message-time">Hier</span>
-                                </div>
-                                <p class="message-preview">Bonjour! Je serai en congé jusqu'au 20 décembre. Pour toute urgence...</p>
-                            </div>
+                        <div class="activity-content">
+                            <h5>{{ activite.title }}</h5>
+                            <p>{{ activite.description }}</p>
                         </div>
+                        <span class="activity-time">
+                            {% set diff = date() | date_modify('-1 day') %}
+                            {% if activite.date|date('Y-m-d') == 'now'|date('Y-m-d') %}
+                                Aujourd'hui
+                            {% elseif activite.date|date('Y-m-d') == diff|date('Y-m-d') %}
+                                Hier
+                            {% else %}
+                                {{ activite.date|date('d/m') }}
+                            {% endif %}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state" style="padding: 2rem;">
+                    <i data-lucide="inbox"></i>
+                    <p>Aucune activité récente</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Quick Stats - Répartition par secteur -->
+        <div class="card animate-in delay-3" style="margin-top: 1.5rem;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i data-lucide="pie-chart"></i>
+                    Répartition par secteur
+                </h3>
+            </div>
+            <div class="card-body">
+                {% set sectorColors = {
+                    'infrastructure': '#002664',
+                    'sante': '#10b981',
+                    'energie': '#FECB00',
+                    'agriculture': '#22c55e',
+                    'education': '#3b82f6',
+                    'eau': '#06b6d4'
+                } %}
+                {% set sectorLabels = {
+                    'infrastructure': 'Infrastructure',
+                    'sante': 'Santé',
+                    'energie': 'Énergie',
+                    'agriculture': 'Agriculture',
+                    'education': 'Éducation',
+                    'eau': 'Eau & Assainissement'
+                } %}
+                {% set totalBudget = 0 %}
+                {% for sector, data in sectorsData %}
+                    {% set totalBudget = totalBudget + data.budget %}
+                {% endfor %}
+                
+                {% for sector, data in sectorsData %}
+                {% set percentage = totalBudget > 0 ? ((data.budget / totalBudget) * 100)|round(0) : 0 %}
+                <div class="quick-stat">
+                    <span class="quick-stat-label">
+                        <span style="width: 12px; height: 12px; border-radius: 3px; background: {{ sectorColors[sector] ?? '#6b7280' }}; display: inline-block;"></span>
+                        {{ sectorLabels[sector] ?? sector|capitalize }}
+                    </span>
+                    <span class="quick-stat-value">{{ percentage }}%</span>
+                </div>
+                {% else %}
+                <div class="empty-state" style="padding: 1rem;">
+                    <p>Aucune donnée disponible</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- KPI Financements -->
+        <div class="card animate-in delay-4" style="margin-top: 1.5rem;">
+            <div class="card-header">
+                <h3 class="card-title">
+                    <i data-lucide="landmark"></i>
+                    Financements
+                </h3>
+            </div>
+            <div class="card-body">
+                <div class="kpi-grid">
+                    <div class="kpi-mini">
+                        <div class="kpi-mini-value">{{ stats.financementsActifs }}</div>
+                        <div class="kpi-mini-label">Actifs</div>
+                    </div>
+                    <div class="kpi-mini">
+                        <div class="kpi-mini-value" style="color: var(--success);">{{ stats.decaissementsExecutes }}</div>
+                        <div class="kpi-mini-label">Décaissements</div>
+                    </div>
+                    <div class="kpi-mini">
+                        <div class="kpi-mini-value" style="color: var(--warning);">{{ stats.decaissementsEnAttente }}</div>
+                        <div class="kpi-mini-label">En attente</div>
+                    </div>
+                    <div class="kpi-mini">
+                        <div class="kpi-mini-value" style="color: var(--info);">{{ stats.totalPartners }}</div>
+                        <div class="kpi-mini-label">Partenaires</div>
                     </div>
                 </div>
             </div>
-      
-   {% endblock %}
+        </div>
+    </div>
+</div>
 
- {% block javascripts %}
-     
-    {% endblock %}
+<!-- Projets à risque -->
+{% if projetsArisque|length > 0 %}
+<div class="card animate-in delay-4" style="margin-bottom: 2rem;">
+    <div class="card-header" style="background: rgba(198, 12, 48, 0.05);">
+        <h3 class="card-title" style="color: var(--danger);">
+            <i data-lucide="alert-octagon"></i>
+            Projets à surveiller (échéance < 30 jours)
+        </h3>
+    </div>
+    <div class="card-body" style="padding: 0;">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Projet</th>
+                    <th>Échéance</th>
+                    <th>Progression</th>
+                    <th>Écart</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for project in projetsArisque %}
+                <tr>
+                    <td><strong>{{ project.name }}</strong></td>
+                    <td>
+                        <span style="color: var(--danger); font-weight: 600;">
+                            {{ project.dateFin|date('d/m/Y') }}
+                        </span>
+                        <br>
+                        <small style="color: var(--gray-500);">
+                            {% set joursRestants = (project.dateFin|date('U') - 'now'|date('U')) / 86400 %}
+                            {{ joursRestants|round(0) }} jours restants
+                        </small>
+                    </td>
+                    <td>
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill red" style="width: {{ project.progress }}%"></div>
+                            </div>
+                            <span class="progress-text">{{ project.progress }}%</span>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="status-badge danger">
+                            {{ (100 - project.progress) }}% restant
+                        </span>
+                    </td>
+                    <td>
+                        <a href="{{ path('app_projects_show', {id: project.id}) }}" class="btn btn-secondary btn-sm">
+                            <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                            Voir
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<!-- Stats Audits -->
+<div class="card animate-in delay-4">
+    <div class="card-header">
+        <h3 class="card-title">
+            <i data-lucide="clipboard-check"></i>
+            Audits & Contrôles
+        </h3>
+        <div class="card-actions">
+            <a href="{{ path('app_audit_index') }}" class="btn btn-secondary btn-sm">
+                Voir tout
+                <i data-lucide="arrow-right" style="width: 14px; height: 14px;"></i>
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="grid-2">
+            <div>
+                <div class="kpi-grid">
+                    <div class="kpi-mini">
+                        <div class="kpi-mini-value">{{ stats.totalAudits }}</div>
+                        <div class="kpi-mini-label">Total audits</div>
+                    </div>
+                    <div class="kpi-mini">
+                        <div class="kpi-mini-value" style="color: var(--warning);">{{ stats.auditsPlanifies }}</div>
+                        <div class="kpi-mini-label">Planifiés</div>
+                    </div>
+                    <div class="kpi-mini">
+                        <div class="kpi-mini-value" style="color: var(--info);">{{ stats.auditsEnCours }}</div>
+                        <div class="kpi-mini-label">En cours</div>
+                    </div>
+                    <div class="kpi-mini">
+                        <div class="kpi-mini-value" style="color: var(--success);">{{ stats.auditsTermines }}</div>
+                        <div class="kpi-mini-label">Terminés</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                {% if recentAudits|length > 0 %}
+                <h4 style="font-size: 0.85rem; color: var(--gray-600); margin-bottom: 0.75rem;">Prochains audits</h4>
+                <ul class="activity-list" style="margin: 0;">
+                    {% for audit in recentAudits|slice(0, 3) %}
+                    <li class="activity-item" style="padding: 0.75rem 0;">
+                        <div class="activity-icon {% if audit.statut == 'termine' %}green{% elseif audit.statut == 'en_cours' %}blue{% else %}gold{% endif %}">
+                            <i data-lucide="clipboard-list" style="width: 16px; height: 16px;"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h5 style="font-size: 0.85rem;">{{ audit.titre|u.truncate(30) }}</h5>
+                            <p>{{ audit.typeLabel }}</p>
+                        </div>
+                        <span class="status-badge {{ audit.statutBadgeClass }}">
+                            {{ audit.statutLabel }}
+                        </span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% else %}
+                <div class="empty-state" style="padding: 1rem;">
+                    <p>Aucun audit planifié</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialisation des icônes Lucide
+    if (typeof lucide !== 'undefined') {
+        lucide.createIcons();
+    }
+
+    // Données pour le graphique par secteur
+    const sectorsData = {{ sectorsData|json_encode|raw }};
+    
+    const sectorLabels = {
+        'infrastructure': 'Infrastructure',
+        'sante': 'Santé',
+        'energie': 'Énergie',
+        'agriculture': 'Agriculture',
+        'education': 'Éducation',
+        'eau': 'Eau & Assainissement'
+    };
+
+    const labels = [];
+    const budgets = [];
+    const decaisses = [];
+
+    for (const [key, data] of Object.entries(sectorsData)) {
+        labels.push(sectorLabels[key] || key);
+        budgets.push((data.budget / 1000000000).toFixed(2));
+        decaisses.push((data.decaisse / 1000000000).toFixed(2));
+    }
+
+    // Graphique Budget par secteur
+    const budgetCtx = document.getElementById('budgetChart');
+    if (budgetCtx && labels.length > 0) {
+        new Chart(budgetCtx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Budget engagé (Mds FCFA)',
+                        data: budgets,
+                        backgroundColor: 'rgba(0, 38, 100, 0.85)',
+                        borderColor: '#002664',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                    },
+                    {
+                        label: 'Montant décaissé (Mds FCFA)',
+                        data: decaisses,
+                        backgroundColor: 'rgba(254, 203, 0, 0.85)',
+                        borderColor: '#FECB00',
+                        borderWidth: 1,
+                        borderRadius: 6,
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            usePointStyle: true,
+                            padding: 20,
+                            font: { size: 12 }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        padding: 12,
+                        titleFont: { size: 14, weight: 'bold' },
+                        bodyFont: { size: 13 },
+                        callbacks: {
+                            label: function(context) {
+                                return context.dataset.label + ': ' + context.raw + ' Mds FCFA';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 } }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+                        ticks: {
+                            font: { size: 11 },
+                            callback: function(value) {
+                                return value + ' Mds';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    } else if (budgetCtx) {
+        // Afficher un message si pas de données
+        budgetCtx.parentElement.innerHTML = '<div class="empty-state"><i data-lucide="bar-chart-2"></i><p>Aucune donnée à afficher</p></div>';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+});
+
+// Fonction d'export (simulation)
+function exportChart() {
+    const canvas = document.getElementById('budgetChart');
+    if (canvas) {
+        const link = document.createElement('a');
+        link.download = 'execution-budgetaire-secteur.png';
+        link.href = canvas.toDataURL();
+        link.click();
+    }
+}
+</script>
+{% endblock %}
