@@ -12,7 +12,7 @@ class LiveComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
 {
     private $secret;
     private $_usedProperties = [];
-    
+
     /**
      * The secret used to compute fingerprints and checksums
      * @default '%kernel.secret%'
@@ -23,15 +23,15 @@ class LiveComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
     {
         $this->_usedProperties['secret'] = true;
         $this->secret = $value;
-    
+
         return $this;
     }
-    
+
     public function getExtensionAlias(): string
     {
         return 'live_component';
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('secret', $value)) {
@@ -39,19 +39,19 @@ class LiveComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
             $this->secret = $value['secret'];
             unset($value['secret']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
         if (isset($this->_usedProperties['secret'])) {
             $output['secret'] = $this->secret;
         }
-    
+
         return $output;
     }
 

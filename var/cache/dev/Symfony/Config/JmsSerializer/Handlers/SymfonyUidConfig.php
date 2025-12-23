@@ -13,7 +13,7 @@ class SymfonyUidConfig
     private $defaultFormat;
     private $cdata;
     private $_usedProperties = [];
-    
+
     /**
      * @default 'canonical'
      * @param ParamConfigurator|mixed $value
@@ -23,10 +23,10 @@ class SymfonyUidConfig
     {
         $this->_usedProperties['defaultFormat'] = true;
         $this->defaultFormat = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default true
      * @param ParamConfigurator|mixed $value
@@ -36,10 +36,10 @@ class SymfonyUidConfig
     {
         $this->_usedProperties['cdata'] = true;
         $this->cdata = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('default_format', $value)) {
@@ -47,18 +47,18 @@ class SymfonyUidConfig
             $this->defaultFormat = $value['default_format'];
             unset($value['default_format']);
         }
-    
+
         if (array_key_exists('cdata', $value)) {
             $this->_usedProperties['cdata'] = true;
             $this->cdata = $value['cdata'];
             unset($value['cdata']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
@@ -68,7 +68,7 @@ class SymfonyUidConfig
         if (isset($this->_usedProperties['cdata'])) {
             $output['cdata'] = $this->cdata;
         }
-    
+
         return $output;
     }
 

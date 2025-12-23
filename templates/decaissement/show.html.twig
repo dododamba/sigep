@@ -1,0 +1,496 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Décaissement {{ decaissement.reference }} - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .detail-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 12px;
+        overflow: hidden;
+        margin-bottom: 24px;
+    }
+
+    .detail-header {
+        background: var(--accent-gradient);
+        color: white;
+        padding: 24px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .detail-header h3 {
+        font-size: 1.4rem;
+        font-weight: 700;
+    }
+
+    .detail-header p {
+        opacity: 0.9;
+        margin-top: 4px;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 8px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: white;
+    }
+
+    .status-badge.warning { color: #f59e0b; }
+    .status-badge.info { color: #3b82f6; }
+    .status-badge.success { color: #10b981; }
+    .status-badge.danger { color: #ef4444; }
+    .status-badge.secondary { color: #64748b; }
+
+    .detail-section {
+        padding: 24px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .detail-section:last-child {
+        border-bottom: none;
+    }
+
+    .section-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+    }
+
+    .detail-item {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .detail-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    .detail-value {
+        font-size: 1rem;
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+
+    .detail-value strong {
+        font-size: 1.2rem;
+        color: var(--tchad-blue);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: 8px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        cursor: pointer;
+        text-decoration: none;
+        border: none;
+        transition: all 0.2s;
+    }
+
+    .btn-primary {
+        background: var(--accent-gradient);
+        color: white;
+    }
+
+    .btn-success {
+        background: #10b981;
+        color: white;
+    }
+
+    .btn-danger {
+        background: #ef4444;
+        color: white;
+    }
+
+    .btn-warning {
+        background: #f59e0b;
+        color: white;
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .btn:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 40px;
+    }
+
+    .timeline-item {
+        position: relative;
+        padding-bottom: 24px;
+    }
+
+    .timeline-item:before {
+        content: '';
+        position: absolute;
+        left: -33px;
+        top: 8px;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: var(--tchad-blue);
+        border: 3px solid white;
+        box-shadow: 0 0 0 2px var(--border-color);
+    }
+
+    .timeline-item:after {
+        content: '';
+        position: absolute;
+        left: -28px;
+        top: 20px;
+        width: 2px;
+        height: calc(100% - 12px);
+        background: var(--border-color);
+    }
+
+    .timeline-item:last-child:after {
+        display: none;
+    }
+
+    .timeline-date {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .timeline-content {
+        font-size: 0.95rem;
+        color: var(--text-primary);
+        margin-top: 4px;
+    }
+
+    .file-attachment {
+        background: var(--bg-tertiary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        transition: all 0.2s;
+    }
+
+    .file-attachment:hover {
+        background: var(--bg-primary);
+        border-color: var(--tchad-blue);
+    }
+
+    .file-icon {
+        width: 40px;
+        height: 40px;
+        background: white;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: var(--tchad-blue);
+    }
+
+    .file-info {
+        flex: 1;
+    }
+
+    .file-name {
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+
+    .file-meta {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content-area">
+    <div class="page-header">
+        <a href="{{ path('app_decaissement_index') }}" class="back-link">
+            <i data-lucide="arrow-left" style="width: 16px;"></i>
+            Retour aux décaissements
+        </a>
+    </div>
+
+    {# En-tête du décaissement #}
+    <div class="detail-card">
+        <div class="detail-header">
+            <div>
+                <h3>{{ decaissement.reference }}</h3>
+                <p>Créé le {{ decaissement.createdAt|date('d/m/Y à H:i') }}</p>
+            </div>
+            <span class="status-badge {{ decaissement.statutBadgeClass }}">
+                {{ decaissement.statutLabel }}
+            </span>
+        </div>
+
+        {# Informations principales #}
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i data-lucide="info"></i>
+                Informations principales
+            </h4>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Projet</span>
+                    <span class="detail-value">{{ decaissement.project.name }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Financement</span>
+                    <span class="detail-value">{{ decaissement.financement.numeroConvention }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Bénéficiaire</span>
+                    <span class="detail-value">{{ decaissement.beneficiaire }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Mode de paiement</span>
+                    <span class="detail-value">{{ decaissement.modePaiementLabel }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Montant</span>
+                    <span class="detail-value"><strong>{{ decaissement.montantFormate }}</strong></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Date de demande</span>
+                    <span class="detail-value">{{ decaissement.dateDemande|date('d/m/Y') }}</span>
+                </div>
+                {% if decaissement.ligneBudgetaire %}
+                <div class="detail-item">
+                    <span class="detail-label">Ligne budgétaire</span>
+                    <span class="detail-value">{{ decaissement.ligneBudgetaire }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Description #}
+        {% if decaissement.description %}
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i data-lucide="file-text"></i>
+                Description
+            </h4>
+            <p>{{ decaissement.description }}</p>
+        </div>
+        {% endif %}
+
+        {# Pièce justificative #}
+        {% if decaissement.pieceJustificative %}
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i data-lucide="paperclip"></i>
+                Pièce justificative
+            </h4>
+            <div class="file-attachment">
+                <div class="file-icon">
+                    <i data-lucide="file"></i>
+                </div>
+                <div class="file-info">
+                    <div class="file-name">{{ decaissement.pieceJustificative }}</div>
+                    <div class="file-meta">Document attaché</div>
+                </div>
+                <a href="{{ asset('uploads/decaissements/' ~ decaissement.pieceJustificative) }}" 
+                   download class="btn btn-secondary" style="padding: 8px 16px;">
+                    <i data-lucide="download"></i>
+                    Télécharger
+                </a>
+            </div>
+        </div>
+        {% endif %}
+
+        {# Historique et timeline #}
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i data-lucide="history"></i>
+                Historique
+            </h4>
+            <div class="timeline">
+                <div class="timeline-item">
+                    <div class="timeline-date">{{ decaissement.dateDemande|date('d/m/Y') }}</div>
+                    <div class="timeline-content">
+                        Demande créée par {{ decaissement.createdBy ?? 'Système' }}
+                    </div>
+                </div>
+                {% if decaissement.dateValidation %}
+                <div class="timeline-item">
+                    <div class="timeline-date">{{ decaissement.dateValidation|date('d/m/Y') }}</div>
+                    <div class="timeline-content">
+                        Validé par {{ decaissement.validePar ?? 'Inconnu' }}
+                    </div>
+                </div>
+                {% endif %}
+                {% if decaissement.dateExecution %}
+                <div class="timeline-item">
+                    <div class="timeline-date">{{ decaissement.dateExecution|date('d/m/Y') }}</div>
+                    <div class="timeline-content">
+                        Exécuté par {{ decaissement.executePar ?? 'Inconnu' }}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        {# Commentaire #}
+        {% if decaissement.commentaire %}
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i data-lucide="message-square"></i>
+                Commentaire
+            </h4>
+            <p>{{ decaissement.commentaire }}</p>
+        </div>
+        {% endif %}
+
+        {# Actions #}
+        <div class="detail-section">
+            <h4 class="section-title">
+                <i data-lucide="settings"></i>
+                Actions
+            </h4>
+            <div class="action-buttons">
+                {% if decaissement.isModifiable() %}
+                <a href="{{ path('app_decaissement_edit', {'id': decaissement.id}) }}" class="btn btn-primary">
+                    <i data-lucide="edit"></i>
+                    Modifier
+                </a>
+                {% endif %}
+
+                {% if decaissement.statut == 'en_attente' %}
+                <form method="post" action="{{ path('app_decaissement_validate', {'id': decaissement.id}) }}" style="display: inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('validate' ~ decaissement.id) }}">
+                    <button type="submit" class="btn btn-success" onclick="return confirm('Confirmer la validation ?')">
+                        <i data-lucide="check"></i>
+                        Valider
+                    </button>
+                </form>
+
+                <button type="button" class="btn btn-danger" onclick="showRejectModal()">
+                    <i data-lucide="x"></i>
+                    Rejeter
+                </button>
+                {% endif %}
+
+                {% if decaissement.statut == 'valide' %}
+                <form method="post" action="{{ path('app_decaissement_execute', {'id': decaissement.id}) }}" style="display: inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('execute' ~ decaissement.id) }}">
+                    <button type="submit" class="btn btn-success" onclick="return confirm('Confirmer l\'exécution du paiement ?')">
+                        <i data-lucide="send"></i>
+                        Exécuter
+                    </button>
+                </form>
+                {% endif %}
+
+                {% if decaissement.isAnnulable() %}
+                <button type="button" class="btn btn-warning" onclick="showCancelModal()">
+                    <i data-lucide="ban"></i>
+                    Annuler
+                </button>
+                {% endif %}
+
+                {% if decaissement.isModifiable() %}
+                <form method="post" action="{{ path('app_decaissement_delete', {'id': decaissement.id}) }}" style="display: inline;">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ decaissement.id) }}">
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Confirmer la suppression définitive ?')">
+                        <i data-lucide="trash-2"></i>
+                        Supprimer
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Modal pour rejeter #}
+<div id="rejectModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 90%;">
+        <h3 style="margin-bottom: 16px;">Rejeter le décaissement</h3>
+        <form method="post" action="{{ path('app_decaissement_reject', {'id': decaissement.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('reject' ~ decaissement.id) }}">
+            <textarea name="commentaire" class="form-textarea" rows="4" placeholder="Raison du rejet (obligatoire)" required style="width: 100%; margin-bottom: 16px; padding: 12px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button type="button" class="btn btn-secondary" onclick="hideRejectModal()">Annuler</button>
+                <button type="submit" class="btn btn-danger">Confirmer le rejet</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# Modal pour annuler #}
+<div id="cancelModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 9999; align-items: center; justify-content: center;">
+    <div style="background: white; padding: 24px; border-radius: 12px; max-width: 500px; width: 90%;">
+        <h3 style="margin-bottom: 16px;">Annuler le décaissement</h3>
+        <form method="post" action="{{ path('app_decaissement_cancel', {'id': decaissement.id}) }}">
+            <input type="hidden" name="_token" value="{{ csrf_token('cancel' ~ decaissement.id) }}">
+            <textarea name="commentaire" class="form-textarea" rows="4" placeholder="Raison de l'annulation (obligatoire)" required style="width: 100%; margin-bottom: 16px; padding: 12px; border: 1px solid #ddd; border-radius: 8px;"></textarea>
+            <div style="display: flex; gap: 12px; justify-content: flex-end;">
+                <button type="button" class="btn btn-secondary" onclick="hideCancelModal()">Annuler</button>
+                <button type="submit" class="btn btn-warning">Confirmer l'annulation</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function showRejectModal() {
+        document.getElementById('rejectModal').style.display = 'flex';
+    }
+    
+    function hideRejectModal() {
+        document.getElementById('rejectModal').style.display = 'none';
+    }
+    
+    function showCancelModal() {
+        document.getElementById('cancelModal').style.display = 'flex';
+    }
+    
+    function hideCancelModal() {
+        document.getElementById('cancelModal').style.display = 'none';
+    }
+</script>
+{% endblock %}

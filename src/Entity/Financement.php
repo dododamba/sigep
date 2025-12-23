@@ -100,14 +100,24 @@ class Financement
     #[ORM\JoinTable(name: 'financement_projet')]
     private Collection $projets;
 
+    #[ORM\OneToMany(mappedBy: 'financement', targetEntity: Decaissement::class)]
+    private Collection $decaissements;
+
+
+    #[ORM\OneToMany(mappedBy: 'financement', targetEntity: Convention::class)]
+    private Collection $conventions;
+
     public function __construct()
     {
         $this->projets = new ArrayCollection();
+        $this->decaissements = new ArrayCollection();
         $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
         $this->statut = self::STATUT_ACTIF;
         $this->montantDecaisse = '0.00';
         $this->contrepartieNationale = '0.00';
+        $this->conventions = new ArrayCollection();
+
     }
 
     #[ORM\PrePersist]
@@ -464,4 +474,10 @@ class Financement
     {
         return sprintf('%s - %s', $this->numeroConvention, $this->getBailleurLabel());
     }
+
+    public function getConventions(): Collection
+    {
+        return $this->conventions;
+    }
+
 }

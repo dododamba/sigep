@@ -19,7 +19,7 @@ class VisitorsConfig
     private $xmlSerialization;
     private $xmlDeserialization;
     private $_usedProperties = [];
-    
+
     /**
      * @default {"options":1024}
     */
@@ -31,10 +31,10 @@ class VisitorsConfig
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "jsonSerialization()" has already been initialized. You cannot pass values the second time you call jsonSerialization().');
         }
-    
+
         return $this->jsonSerialization;
     }
-    
+
     /**
      * @default {"options":0,"strict":false}
     */
@@ -46,10 +46,10 @@ class VisitorsConfig
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "jsonDeserialization()" has already been initialized. You cannot pass values the second time you call jsonDeserialization().');
         }
-    
+
         return $this->jsonDeserialization;
     }
-    
+
     /**
      * @default {"format_output":false,"default_root_ns":""}
     */
@@ -61,10 +61,10 @@ class VisitorsConfig
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "xmlSerialization()" has already been initialized. You cannot pass values the second time you call xmlSerialization().');
         }
-    
+
         return $this->xmlSerialization;
     }
-    
+
     /**
      * @default {"doctype_whitelist":[],"external_entities":false,"options":0}
     */
@@ -76,10 +76,10 @@ class VisitorsConfig
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "xmlDeserialization()" has already been initialized. You cannot pass values the second time you call xmlDeserialization().');
         }
-    
+
         return $this->xmlDeserialization;
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('json_serialization', $value)) {
@@ -87,30 +87,30 @@ class VisitorsConfig
             $this->jsonSerialization = new \Symfony\Config\JmsSerializer\Visitors\JsonSerializationConfig($value['json_serialization']);
             unset($value['json_serialization']);
         }
-    
+
         if (array_key_exists('json_deserialization', $value)) {
             $this->_usedProperties['jsonDeserialization'] = true;
             $this->jsonDeserialization = new \Symfony\Config\JmsSerializer\Visitors\JsonDeserializationConfig($value['json_deserialization']);
             unset($value['json_deserialization']);
         }
-    
+
         if (array_key_exists('xml_serialization', $value)) {
             $this->_usedProperties['xmlSerialization'] = true;
             $this->xmlSerialization = new \Symfony\Config\JmsSerializer\Visitors\XmlSerializationConfig($value['xml_serialization']);
             unset($value['xml_serialization']);
         }
-    
+
         if (array_key_exists('xml_deserialization', $value)) {
             $this->_usedProperties['xmlDeserialization'] = true;
             $this->xmlDeserialization = new \Symfony\Config\JmsSerializer\Visitors\XmlDeserializationConfig($value['xml_deserialization']);
             unset($value['xml_deserialization']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
@@ -126,7 +126,7 @@ class VisitorsConfig
         if (isset($this->_usedProperties['xmlDeserialization'])) {
             $output['xml_deserialization'] = $this->xmlDeserialization->toArray();
         }
-    
+
         return $output;
     }
 

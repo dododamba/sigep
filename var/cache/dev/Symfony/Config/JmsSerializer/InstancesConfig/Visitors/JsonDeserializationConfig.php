@@ -13,7 +13,7 @@ class JsonDeserializationConfig
     private $options;
     private $strict;
     private $_usedProperties = [];
-    
+
     /**
      * @default 0
      * @param ParamConfigurator|mixed $value
@@ -23,10 +23,10 @@ class JsonDeserializationConfig
     {
         $this->_usedProperties['options'] = true;
         $this->options = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default false
      * @param ParamConfigurator|bool $value
@@ -36,10 +36,10 @@ class JsonDeserializationConfig
     {
         $this->_usedProperties['strict'] = true;
         $this->strict = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('options', $value)) {
@@ -47,18 +47,18 @@ class JsonDeserializationConfig
             $this->options = $value['options'];
             unset($value['options']);
         }
-    
+
         if (array_key_exists('strict', $value)) {
             $this->_usedProperties['strict'] = true;
             $this->strict = $value['strict'];
             unset($value['strict']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
@@ -68,7 +68,7 @@ class JsonDeserializationConfig
         if (isset($this->_usedProperties['strict'])) {
             $output['strict'] = $this->strict;
         }
-    
+
         return $output;
     }
 

@@ -13,7 +13,7 @@ class DirectoryNamerConfig
     private $service;
     private $options;
     private $_usedProperties = [];
-    
+
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -23,10 +23,10 @@ class DirectoryNamerConfig
     {
         $this->_usedProperties['service'] = true;
         $this->service = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -37,10 +37,10 @@ class DirectoryNamerConfig
     {
         $this->_usedProperties['options'] = true;
         $this->options = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('service', $value)) {
@@ -48,18 +48,18 @@ class DirectoryNamerConfig
             $this->service = $value['service'];
             unset($value['service']);
         }
-    
+
         if (array_key_exists('options', $value)) {
             $this->_usedProperties['options'] = true;
             $this->options = $value['options'];
             unset($value['options']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
@@ -69,7 +69,7 @@ class DirectoryNamerConfig
         if (isset($this->_usedProperties['options'])) {
             $output['options'] = $this->options;
         }
-    
+
         return $output;
     }
 

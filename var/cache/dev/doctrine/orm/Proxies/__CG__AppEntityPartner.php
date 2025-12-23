@@ -7,7 +7,7 @@ namespace Proxies\__CG__\App\Entity;
  */
 class Partner extends \App\Entity\Partner implements \Doctrine\ORM\Proxy\InternalProxy
 {
-     use \Symfony\Component\VarExporter\LazyGhostTrait {
+    use \Symfony\Component\VarExporter\LazyGhostTrait {
         initializeLazyObject as private;
         setLazyObjectAsInitialized as public __setInitialized;
         isLazyObjectInitialized as private;
@@ -56,7 +56,7 @@ class Partner extends \App\Entity\Partner implements \Doctrine\ORM\Proxy\Interna
         'status' => [parent::class, 'status', null],
         'typePartner' => [parent::class, 'typePartner', null],
         'updatedAt' => [parent::class, 'updatedAt', null],
-    ];
+    ];
 
     public function __isInitialized(): bool
     {

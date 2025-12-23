@@ -34,7 +34,7 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
     private $defaultContext;
     private $instances;
     private $_usedProperties = [];
-    
+
     /**
      * @default 'default'
      * @param ParamConfigurator|mixed $value
@@ -44,10 +44,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
     {
         $this->_usedProperties['twigEnabled'] = true;
         $this->twigEnabled = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default true
      * @param ParamConfigurator|mixed $value
@@ -57,10 +57,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
     {
         $this->_usedProperties['profiler'] = true;
         $this->profiler = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default false
      * @param ParamConfigurator|mixed $value
@@ -70,10 +70,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
     {
         $this->_usedProperties['enumSupport'] = true;
         $this->enumSupport = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default false
      * @param ParamConfigurator|mixed $value
@@ -83,12 +83,12 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
     {
         $this->_usedProperties['defaultValuePropertyReaderSupport'] = true;
         $this->defaultValuePropertyReaderSupport = $value;
-    
+
         return $this;
     }
-    
+
     /**
-     * @default {"datetime":{"default_format":"Y-m-d\\TH:i:sP","default_deserialization_formats":[],"default_timezone":"Europe\/Berlin","cdata":true},"array_collection":{"initialize_excluded":false},"symfony_uid":{"default_format":"canonical","cdata":true}}
+     * @default {"datetime":{"default_format":"Y-m-d\\TH:i:sP","default_deserialization_formats":[],"default_timezone":"UTC","cdata":true},"array_collection":{"initialize_excluded":false},"symfony_uid":{"default_format":"canonical","cdata":true}}
     */
     public function handlers(array $value = []): \Symfony\Config\JmsSerializer\HandlersConfig
     {
@@ -98,10 +98,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "handlers()" has already been initialized. You cannot pass values the second time you call handlers().');
         }
-    
+
         return $this->handlers;
     }
-    
+
     /**
      * @default {"doctrine_proxy":{"initialize_excluded":false,"initialize_virtual_types":false}}
     */
@@ -113,10 +113,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "subscribers()" has already been initialized. You cannot pass values the second time you call subscribers().');
         }
-    
+
         return $this->subscribers;
     }
-    
+
     /**
      * @default {"doctrine":{"enabled":true,"fallback_strategy":"null"}}
     */
@@ -128,10 +128,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "objectConstructors()" has already been initialized. You cannot pass values the second time you call objectConstructors().');
         }
-    
+
         return $this->objectConstructors;
     }
-    
+
     /**
      * @template TValue
      * @param TValue $value
@@ -144,20 +144,20 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         if (!\is_array($value)) {
             $this->_usedProperties['propertyNaming'] = true;
             $this->propertyNaming = $value;
-    
+
             return $this;
         }
-    
+
         if (!$this->propertyNaming instanceof \Symfony\Config\JmsSerializer\PropertyNamingConfig) {
             $this->_usedProperties['propertyNaming'] = true;
             $this->propertyNaming = new \Symfony\Config\JmsSerializer\PropertyNamingConfig($value);
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "propertyNaming()" has already been initialized. You cannot pass values the second time you call propertyNaming().');
         }
-    
+
         return $this->propertyNaming;
     }
-    
+
     /**
      * @template TValue
      * @param TValue $value
@@ -170,20 +170,20 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         if (!\is_array($value)) {
             $this->_usedProperties['expressionEvaluator'] = true;
             $this->expressionEvaluator = $value;
-    
+
             return $this;
         }
-    
+
         if (!$this->expressionEvaluator instanceof \Symfony\Config\JmsSerializer\ExpressionEvaluatorConfig) {
             $this->_usedProperties['expressionEvaluator'] = true;
             $this->expressionEvaluator = new \Symfony\Config\JmsSerializer\ExpressionEvaluatorConfig($value);
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "expressionEvaluator()" has already been initialized. You cannot pass values the second time you call expressionEvaluator().');
         }
-    
+
         return $this->expressionEvaluator;
     }
-    
+
     /**
      * @default {"warmup":{"paths":{"included":[],"excluded":[]}},"cache":"file","debug":true,"file_cache":{"dir":null},"include_interfaces":false,"auto_detection":true,"infer_types_from_doc_block":false,"infer_types_from_doctrine_metadata":true,"directories":[]}
     */
@@ -195,10 +195,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "metadata()" has already been initialized. You cannot pass values the second time you call metadata().');
         }
-    
+
         return $this->metadata;
     }
-    
+
     /**
      * @default {"json_serialization":{"options":1024},"json_deserialization":{"options":0,"strict":false},"xml_serialization":{"format_output":false,"default_root_ns":""},"xml_deserialization":{"doctype_whitelist":[],"external_entities":false,"options":0}}
     */
@@ -210,10 +210,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "visitors()" has already been initialized. You cannot pass values the second time you call visitors().');
         }
-    
+
         return $this->visitors;
     }
-    
+
     /**
      * @default {"serialization":{"attributes":[],"groups":[]},"deserialization":{"attributes":[],"groups":[]}}
     */
@@ -225,10 +225,10 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "defaultContext()" has already been initialized. You cannot pass values the second time you call defaultContext().');
         }
-    
+
         return $this->defaultContext;
     }
-    
+
     public function instances(string $name, array $value = []): \Symfony\Config\JmsSerializer\InstancesConfig
     {
         if (!isset($this->instances[$name])) {
@@ -237,15 +237,15 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         } elseif (1 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "instances()" has already been initialized. You cannot pass values the second time you call instances().');
         }
-    
+
         return $this->instances[$name];
     }
-    
+
     public function getExtensionAlias(): string
     {
         return 'jms_serializer';
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('twig_enabled', $value)) {
@@ -253,84 +253,84 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
             $this->twigEnabled = $value['twig_enabled'];
             unset($value['twig_enabled']);
         }
-    
+
         if (array_key_exists('profiler', $value)) {
             $this->_usedProperties['profiler'] = true;
             $this->profiler = $value['profiler'];
             unset($value['profiler']);
         }
-    
+
         if (array_key_exists('enum_support', $value)) {
             $this->_usedProperties['enumSupport'] = true;
             $this->enumSupport = $value['enum_support'];
             unset($value['enum_support']);
         }
-    
+
         if (array_key_exists('default_value_property_reader_support', $value)) {
             $this->_usedProperties['defaultValuePropertyReaderSupport'] = true;
             $this->defaultValuePropertyReaderSupport = $value['default_value_property_reader_support'];
             unset($value['default_value_property_reader_support']);
         }
-    
+
         if (array_key_exists('handlers', $value)) {
             $this->_usedProperties['handlers'] = true;
             $this->handlers = new \Symfony\Config\JmsSerializer\HandlersConfig($value['handlers']);
             unset($value['handlers']);
         }
-    
+
         if (array_key_exists('subscribers', $value)) {
             $this->_usedProperties['subscribers'] = true;
             $this->subscribers = new \Symfony\Config\JmsSerializer\SubscribersConfig($value['subscribers']);
             unset($value['subscribers']);
         }
-    
+
         if (array_key_exists('object_constructors', $value)) {
             $this->_usedProperties['objectConstructors'] = true;
             $this->objectConstructors = new \Symfony\Config\JmsSerializer\ObjectConstructorsConfig($value['object_constructors']);
             unset($value['object_constructors']);
         }
-    
+
         if (array_key_exists('property_naming', $value)) {
             $this->_usedProperties['propertyNaming'] = true;
             $this->propertyNaming = \is_array($value['property_naming']) ? new \Symfony\Config\JmsSerializer\PropertyNamingConfig($value['property_naming']) : $value['property_naming'];
             unset($value['property_naming']);
         }
-    
+
         if (array_key_exists('expression_evaluator', $value)) {
             $this->_usedProperties['expressionEvaluator'] = true;
             $this->expressionEvaluator = \is_array($value['expression_evaluator']) ? new \Symfony\Config\JmsSerializer\ExpressionEvaluatorConfig($value['expression_evaluator']) : $value['expression_evaluator'];
             unset($value['expression_evaluator']);
         }
-    
+
         if (array_key_exists('metadata', $value)) {
             $this->_usedProperties['metadata'] = true;
             $this->metadata = new \Symfony\Config\JmsSerializer\MetadataConfig($value['metadata']);
             unset($value['metadata']);
         }
-    
+
         if (array_key_exists('visitors', $value)) {
             $this->_usedProperties['visitors'] = true;
             $this->visitors = new \Symfony\Config\JmsSerializer\VisitorsConfig($value['visitors']);
             unset($value['visitors']);
         }
-    
+
         if (array_key_exists('default_context', $value)) {
             $this->_usedProperties['defaultContext'] = true;
             $this->defaultContext = new \Symfony\Config\JmsSerializer\DefaultContextConfig($value['default_context']);
             unset($value['default_context']);
         }
-    
+
         if (array_key_exists('instances', $value)) {
             $this->_usedProperties['instances'] = true;
             $this->instances = array_map(fn ($v) => new \Symfony\Config\JmsSerializer\InstancesConfig($v), $value['instances']);
             unset($value['instances']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
@@ -373,7 +373,7 @@ class JmsSerializerConfig implements \Symfony\Component\Config\Builder\ConfigBui
         if (isset($this->_usedProperties['instances'])) {
             $output['instances'] = array_map(fn ($v) => $v->toArray(), $this->instances);
         }
-    
+
         return $output;
     }
 

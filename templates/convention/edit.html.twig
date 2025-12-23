@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Convention {{ convention.code }} - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<link rel="stylesheet" href="{{ asset('css/form.css') }}">
+{% endblock %}
+
+{% block body %}
+<div class="content-area">
+    <div class="page-header">
+        <a href="{{ path('app_convention_show', {'id': convention.id}) }}" class="back-link">
+            <i data-lucide="arrow-left"></i>
+            Retour à la convention
+        </a>
+        <div class="page-title">
+            <h2>Modifier la convention {{ convention.code }}</h2>
+            <p>Statut actuel : <span class="badge badge-{{ convention.statutBadgeClass }}">{{ convention.statutLabel }}</span></p>
+        </div>
+    </div>
+
+    {{ include('convention/_form.html.twig', {'button_label': 'Enregistrer les modifications'}) }}
+</div>
+{% endblock %}

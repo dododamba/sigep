@@ -13,7 +13,7 @@ class DirectoryConfig
     private $path;
     private $namespacePrefix;
     private $_usedProperties = [];
-    
+
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -23,10 +23,10 @@ class DirectoryConfig
     {
         $this->_usedProperties['path'] = true;
         $this->path = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @param ParamConfigurator|mixed $value
      * @return $this
@@ -35,10 +35,10 @@ class DirectoryConfig
     {
         $this->_usedProperties['namespacePrefix'] = true;
         $this->namespacePrefix = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('path', $value)) {
@@ -46,18 +46,18 @@ class DirectoryConfig
             $this->path = $value['path'];
             unset($value['path']);
         }
-    
+
         if (array_key_exists('namespace_prefix', $value)) {
             $this->_usedProperties['namespacePrefix'] = true;
             $this->namespacePrefix = $value['namespace_prefix'];
             unset($value['namespace_prefix']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
@@ -67,7 +67,7 @@ class DirectoryConfig
         if (isset($this->_usedProperties['namespacePrefix'])) {
             $output['namespace_prefix'] = $this->namespacePrefix;
         }
-    
+
         return $output;
     }
 

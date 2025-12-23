@@ -14,13 +14,7 @@ class WebController extends AbstractController
         return $this->redirectToRoute('app_login');
     }
     
-   
-    #[Route('/conventions', name: 'app_conventions')]
-    public function conventions(): Response
-    {
-        return $this->render('conventions/index.html.twig');
-    }
-
+  
      #[Route('/roles', name: 'app_roles')]
     public function roles(RoleRepository $roleRepository): Response
     {

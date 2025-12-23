@@ -1,0 +1,558 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouvel Audit/Contrôle - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .form-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .form-section {
+        padding: 32px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .form-section:last-child { border-bottom: none; }
+
+    .section-header {
+        margin-bottom: 24px;
+        display: flex;
+        align-items: flex-start;
+        gap: 16px;
+    }
+
+    .section-icon {
+        width: 44px;
+        height: 44px;
+        background: var(--bg-tertiary);
+        color: var(--tchad-blue);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .section-title h3 {
+        font-size: 1.15rem;
+        font-weight: 600;
+        margin-bottom: 4px;
+    }
+
+    .section-title p {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+    }
+
+    .full-width { grid-column: span 2; }
+
+    .form-group { margin-bottom: 0; }
+
+    .form-label {
+        display: block;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: var(--text-primary);
+    }
+
+    .required {
+        color: var(--danger);
+        margin-left: 2px;
+    }
+
+    .form-input,
+    .form-select,
+    .form-textarea {
+        width: 100%;
+        padding: 12px 16px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-family: inherit;
+        font-size: 0.95rem;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .form-input:focus,
+    .form-select:focus,
+    .form-textarea:focus {
+        outline: none;
+        border-color: var(--tchad-blue);
+        box-shadow: 0 0 0 3px rgba(0, 38, 100, 0.1);
+    }
+
+    .form-help {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        margin-top: 6px;
+    }
+
+    .form-error {
+        color: var(--danger);
+        font-size: 0.85rem;
+        margin-top: 6px;
+    }
+
+    /* File Upload Zone */
+    .file-upload-container {
+        border: 2px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        background: var(--bg-primary);
+        transition: all 0.2s ease;
+    }
+
+    .file-upload-container:hover {
+        border-color: var(--tchad-blue);
+        background: rgba(0, 38, 100, 0.02);
+    }
+
+    .file-upload-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+
+    .file-upload-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--tchad-blue);
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .file-upload-info h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+
+    .file-upload-info p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+
+    .file-input-wrapper {
+        position: relative;
+    }
+
+    .file-input-wrapper input[type="file"] {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        cursor: pointer;
+    }
+
+    .file-input-wrapper input[type="file"]::file-selector-button {
+        padding: 8px 16px;
+        background: var(--tchad-gold);
+        color: var(--tchad-blue);
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        margin-right: 12px;
+    }
+
+    .file-input-wrapper input[type="file"]::file-selector-button:hover {
+        background: #e6b800;
+    }
+
+    .file-preview-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        gap: 12px;
+        margin-top: 12px;
+    }
+
+    .file-preview-item {
+        position: relative;
+        padding: 8px;
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        text-align: center;
+        font-size: 0.75rem;
+        background: var(--bg-secondary);
+    }
+
+    .file-preview-item i {
+        width: 32px;
+        height: 32px;
+        color: var(--text-muted);
+    }
+
+    /* Action Bar */
+    .action-bar {
+        background: var(--bg-tertiary);
+        padding: 24px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .action-info {
+        font-size: 0.85rem;
+        color: var(--text-muted);
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        border: none;
+        text-decoration: none;
+    }
+
+    .btn-secondary {
+        background: white;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+        background: var(--bg-tertiary);
+        border-color: var(--text-muted);
+    }
+
+    .btn-primary {
+        background: var(--accent-gradient);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    @media (max-width: 768px) {
+        .form-grid {
+            grid-template-columns: 1fr;
+        }
+        .full-width {
+            grid-column: span 1;
+        }
+        .action-bar {
+            flex-direction: column;
+        }
+        .action-buttons {
+            width: 100%;
+            flex-direction: column;
+        }
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content-area">
+    <div class="page-header">
+        <div class="page-header-left">
+            <a href="{{ path('app_audit_index') }}" class="back-link">
+                <i data-lucide="arrow-left"></i>
+                Retour aux audits
+            </a>
+            <h2>
+                <span class="page-header-icon">
+                    <i data-lucide="clipboard-check"></i>
+                </span>
+                Nouvel Audit/Contrôle
+            </h2>
+            <p>Enregistrer un nouvel audit ou contrôle de projet avec documents justificatifs</p>
+        </div>
+    </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                <i data-lucide="{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" class="alert-close" onclick="this.parentElement.remove()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form, {'attr': {'class': 'form-card', 'novalidate': 'novalidate'}}) }}
+
+        {# Section 1: Identification #}
+        <div class="form-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="file-text"></i>
+                </div>
+                <div class="section-title">
+                    <h3>Identification de l'Audit</h3>
+                    <p>Informations de base sur l'audit ou le contrôle effectué</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(form.projet, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.projet, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.projet, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.type, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.type, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.type, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.titre, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.titre, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.titre, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.dateAudit, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.dateAudit, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.dateAudit, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.auditeur, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.auditeur, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.auditeur, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.organisme, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.organisme, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.organisme, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.dateDebut, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.dateDebut, {'attr': {'class': 'form-error'}}) }}
+                    {% if form.dateDebut.vars.help is defined %}
+                        <div class="form-help">{{ form.dateDebut.vars.help }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.dateFin, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.dateFin, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.dateFin, {'attr': {'class': 'form-error'}}) }}
+                </div>
+            </div>
+        </div>
+
+        {# Section 2: Contenu de l'Audit #}
+        <div class="form-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="file-check"></i>
+                </div>
+                <div class="section-title">
+                    <h3>Contenu et Résultats</h3>
+                    <p>Objectifs, résultats et recommandations de l'audit</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    {{ form_label(form.objectifs, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.objectifs, {'attr': {'class': 'form-textarea', 'rows': 3}}) }}
+                    {{ form_errors(form.objectifs, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.resultat, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.resultat, {'attr': {'class': 'form-textarea', 'rows': 4}}) }}
+                    {{ form_errors(form.resultat, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.recommandations, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.recommandations, {'attr': {'class': 'form-textarea', 'rows': 4}}) }}
+                    {{ form_errors(form.recommandations, {'attr': {'class': 'form-error'}}) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.observations, null, {'label_attr': {'class': 'form-label'}}) }}
+                    {{ form_widget(form.observations, {'attr': {'class': 'form-textarea', 'rows': 3}}) }}
+                    {{ form_errors(form.observations, {'attr': {'class': 'form-error'}}) }}
+                </div>
+            </div>
+        </div>
+
+        {# Section 3: Documents et Photos #}
+        <div class="form-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="paperclip"></i>
+                </div>
+                <div class="section-title">
+                    <h3>Pièces Justificatives</h3>
+                    <p>Documents officiels et photos de l'audit</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <div class="file-upload-container">
+                        <div class="file-upload-header">
+                            <div class="file-upload-icon">
+                                <i data-lucide="file-text"></i>
+                            </div>
+                            <div class="file-upload-info">
+                                <h4>Documents Justificatifs</h4>
+                                <p>Rapports d'audit, PV, certifications, etc.</p>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper">
+                            {{ form_widget(form.documentsFiles, {'attr': {'class': 'form-input'}}) }}
+                        </div>
+                        {{ form_errors(form.documentsFiles, {'attr': {'class': 'form-error'}}) }}
+                        {% if form.documentsFiles.vars.help is defined %}
+                            <div class="form-help">
+                                <i data-lucide="info"></i>
+                                {{ form.documentsFiles.vars.help }}
+                            </div>
+                        {% endif %}
+                        <div id="documentsPreview" class="file-preview-grid"></div>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="file-upload-container">
+                        <div class="file-upload-header">
+                            <div class="file-upload-icon" style="background: var(--tchad-gold); color: var(--tchad-blue);">
+                                <i data-lucide="camera"></i>
+                            </div>
+                            <div class="file-upload-info">
+                                <h4>Photos</h4>
+                                <p>Photos prises lors de l'audit ou du contrôle</p>
+                            </div>
+                        </div>
+                        <div class="file-input-wrapper">
+                            {{ form_widget(form.photosFiles, {'attr': {'class': 'form-input'}}) }}
+                        </div>
+                        {{ form_errors(form.photosFiles, {'attr': {'class': 'form-error'}}) }}
+                        {% if form.photosFiles.vars.help is defined %}
+                            <div class="form-help">
+                                <i data-lucide="info"></i>
+                                {{ form.photosFiles.vars.help }}
+                            </div>
+                        {% endif %}
+                        <div id="photosPreview" class="file-preview-grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Action Bar #}
+        <div class="action-bar">
+            <div class="action-info">
+                <i data-lucide="shield-check"></i>
+                Les informations saisies seront vérifiées et validées
+            </div>
+            <div class="action-buttons">
+                <a href="{{ path('app_audit_index') }}" class="btn btn-secondary">
+                    <i data-lucide="x"></i>
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i data-lucide="save"></i>
+                    Enregistrer l'audit
+                </button>
+            </div>
+        </div>
+
+        {{ form_row(form._token) }}
+    {{ form_end(form, {'render_rest': false}) }}
+</div>
+
+<script>
+lucide.createIcons();
+
+// Preview des documents
+document.querySelector('input[name="{{ form.documentsFiles.vars.full_name }}"]')?.addEventListener('change', function(e) {
+    const preview = document.getElementById('documentsPreview');
+    preview.innerHTML = '';
+    
+    Array.from(e.target.files).forEach(file => {
+        const item = document.createElement('div');
+        item.className = 'file-preview-item';
+        item.innerHTML = `
+            <i data-lucide="file"></i>
+            <div>${file.name.substring(0, 15)}...</div>
+            <small>${(file.size / 1024).toFixed(1)} KB</small>
+        `;
+        preview.appendChild(item);
+    });
+    
+    lucide.createIcons();
+});
+
+// Preview des photos
+document.querySelector('input[name="{{ form.photosFiles.vars.full_name }}"]')?.addEventListener('change', function(e) {
+    const preview = document.getElementById('photosPreview');
+    preview.innerHTML = '';
+    
+    Array.from(e.target.files).forEach(file => {
+        const item = document.createElement('div');
+        item.className = 'file-preview-item';
+        
+        if (file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                item.innerHTML = `
+                    <img src="${event.target.result}" style="width: 100%; height: 80px; object-fit: cover; border-radius: 6px;">
+                    <div style="margin-top: 4px;">${file.name.substring(0, 12)}...</div>
+                `;
+            };
+            reader.readAsDataURL(file);
+        } else {
+            item.innerHTML = `
+                <i data-lucide="image"></i>
+                <div>${file.name.substring(0, 15)}...</div>
+            `;
+        }
+        
+        preview.appendChild(item);
+    });
+    
+    lucide.createIcons();
+});
+</script>
+{% endblock %}

@@ -65,10 +65,22 @@
                 <span>Financements</span>
             </a>
 
-            <a href="{{ path('app_conventions') }}"
-               class="nav-item {{ currentRoute starts with 'app_conventions' ? 'active' }}">
+             <a href="{{ path('app_decaissement_index') }}"
+               class="nav-item {{ currentRoute starts with 'app_decaissement_index' ? 'active' }}">
+                <i class="ri-bank-line"></i>
+                <span>Decaissements</span>
+            </a>
+
+            <a href="{{ path('app_convention_index') }}"
+            class="nav-item {{ currentRoute starts with 'app_convention' ? 'active' }}">
                 <i class="ri-file-list-3-line"></i>
                 <span>Conventions</span>
+            </a>
+
+            <a href="{{ path('app_audit_index') }}"
+            class="nav-item {{ currentRoute starts with 'app_audit' ? 'active' }}">
+                <i class="ri-file-list-3-line"></i>
+                <span>Audits</span>
             </a>
         </div>
 

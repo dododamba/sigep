@@ -14,7 +14,7 @@ class XmlDeserializationConfig
     private $externalEntities;
     private $options;
     private $_usedProperties = [];
-    
+
     /**
      * @param ParamConfigurator|list<ParamConfigurator|mixed> $value
      *
@@ -24,10 +24,10 @@ class XmlDeserializationConfig
     {
         $this->_usedProperties['doctypeWhitelist'] = true;
         $this->doctypeWhitelist = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default false
      * @param ParamConfigurator|bool $value
@@ -37,10 +37,10 @@ class XmlDeserializationConfig
     {
         $this->_usedProperties['externalEntities'] = true;
         $this->externalEntities = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default 0
      * @param ParamConfigurator|mixed $value
@@ -50,10 +50,10 @@ class XmlDeserializationConfig
     {
         $this->_usedProperties['options'] = true;
         $this->options = $value;
-    
+
         return $this;
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('doctype_whitelist', $value)) {
@@ -61,24 +61,24 @@ class XmlDeserializationConfig
             $this->doctypeWhitelist = $value['doctype_whitelist'];
             unset($value['doctype_whitelist']);
         }
-    
+
         if (array_key_exists('external_entities', $value)) {
             $this->_usedProperties['externalEntities'] = true;
             $this->externalEntities = $value['external_entities'];
             unset($value['external_entities']);
         }
-    
+
         if (array_key_exists('options', $value)) {
             $this->_usedProperties['options'] = true;
             $this->options = $value['options'];
             unset($value['options']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
@@ -91,7 +91,7 @@ class XmlDeserializationConfig
         if (isset($this->_usedProperties['options'])) {
             $output['options'] = $this->options;
         }
-    
+
         return $output;
     }
 

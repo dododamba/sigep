@@ -1,0 +1,571 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Audit {{ audit.reference }} - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+{{ parent() }}
+<style>
+    /* Réutiliser les styles de new.html.twig */
+    .form-card { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-sm); }
+    .form-section { padding: 32px; border-bottom: 1px solid var(--border-color); }
+    .form-section:last-child { border-bottom: none; }
+    .section-header { margin-bottom: 24px; display: flex; align-items: flex-start; gap: 16px; }
+    .section-icon { width: 44px; height: 44px; background: var(--bg-tertiary); color: var(--tchad-blue); border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .section-title h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 4px; }
+    .section-title p { font-size: 0.85rem; color: var(--text-muted); }
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .full-width { grid-column: span 2; }
+    .form-label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 8px; }
+    .form-input, .form-select, .form-textarea { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 10px; background: var(--bg-primary); color: var(--text-primary); font-family: inherit; font-size: 0.95rem; transition: border-color 0.2s; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { outline: none; border-color: var(--tchad-blue); box-shadow: 0 0 0 3px rgba(0, 38, 100, 0.1); }
+    .form-help { font-size: 0.8rem; color: var(--text-muted); margin-top: 6px; }
+    .form-error { color: var(--danger); font-size: 0.85rem; margin-top: 6px; }
+    
+    /* Fichiers existants */
+    .existing-files {
+        margin-top: 16px;
+        padding: 16px;
+        background: var(--bg-secondary);
+        border-radius: 10px;
+        border: 1px solid var(--border-color);
+    }
+    
+    .existing-files-header {
+        font-weight: 600;
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: var(--text-primary);
+    }
+    
+    .files-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 12px;
+    }
+    
+    .file-item {
+        position: relative;
+        padding: 12px;
+        background: var(--bg-primary);
+        border: 1px solid var(--border-color);
+        border-radius: 8px;
+        transition: all 0.2s;
+    }
+    
+    .file-item:hover {
+        border-color: var(--tchad-blue);
+        box-shadow: var(--shadow-sm);
+    }
+    
+    .file-item-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 8px;
+        color: var(--tchad-blue);
+    }
+    
+    .file-item-name {
+        font-size: 0.8rem;
+        color: var(--text-primary);
+        margin-bottom: 8px;
+        word-break: break-word;
+    }
+    
+    .file-item-actions {
+        display: flex;
+        gap: 6px;
+    }
+    
+    .file-item-btn {
+        flex: 1;
+        padding: 6px;
+        border: none;
+        border-radius: 6px;
+        font-size: 0.75rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 4px;
+        transition: all 0.2s;
+    }
+    
+    .file-item-btn.view {
+        background: var(--tchad-blue);
+        color: white;
+    }
+    
+    .file-item-btn.view:hover {
+        background: #003a8c;
+    }
+    
+    .file-item-btn.delete {
+        background: var(--danger);
+        color: white;
+    }
+    
+    .file-item-btn.delete:hover {
+        background: #dc2626;
+    }
+    
+    .photo-item {
+        position: relative;
+    }
+    
+    .photo-item img {
+        width: 100%;
+        height: 120px;
+        object-fit: cover;
+        border-radius: 8px;
+        margin-bottom: 8px;
+    }
+    
+    .file-upload-container {
+        border: 2px dashed var(--border-color);
+        border-radius: 12px;
+        padding: 24px;
+        background: var(--bg-primary);
+        transition: all 0.2s;
+    }
+    
+    .file-upload-container:hover {
+        border-color: var(--tchad-blue);
+        background: rgba(0, 38, 100, 0.02);
+    }
+    
+    .file-upload-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .file-upload-icon {
+        width: 40px;
+        height: 40px;
+        background: var(--tchad-blue);
+        color: white;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .file-upload-info h4 {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 2px;
+    }
+    
+    .file-upload-info p {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+    }
+    
+    .action-bar {
+        background: var(--bg-tertiary);
+        padding: 24px 32px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        border-top: 1px solid var(--border-color);
+    }
+    
+    .action-buttons {
+        display: flex;
+        gap: 12px;
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        cursor: pointer;
+        transition: all 0.2s;
+        border: none;
+        text-decoration: none;
+    }
+    
+    .btn-secondary {
+        background: white;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+    
+    .btn-primary {
+        background: var(--accent-gradient);
+        color: white;
+        box-shadow: var(--shadow-md);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .status-badge.planifie { background: rgba(245, 158, 11, 0.1); color: #d97706; }
+    .status-badge.en_cours { background: rgba(59, 130, 246, 0.1); color: #2563eb; }
+    .status-badge.termine { background: rgba(16, 185, 129, 0.1); color: #059669; }
+    
+    @media (max-width: 768px) {
+        .form-grid { grid-template-columns: 1fr; }
+        .full-width { grid-column: span 1; }
+        .files-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="content-area">
+    <div class="page-header">
+        <div class="page-header-left">
+            <a href="{{ path('app_audit_show', {'id': audit.id}) }}" class="back-link">
+                <i data-lucide="arrow-left"></i>
+                Retour à l'audit
+            </a>
+            <h2>
+                <span class="page-header-icon">
+                    <i data-lucide="edit"></i>
+                </span>
+                Modifier l'Audit {{ audit.reference }}
+            </h2>
+            <p>
+                Statut actuel : 
+                <span class="status-badge {{ audit.statut }}">
+                    {{ audit.statutLabel }}
+                </span>
+            </p>
+        </div>
+    </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                <i data-lucide="{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}"></i>
+                {{ message }}
+                <button type="button" class="alert-close" onclick="this.parentElement.remove()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    {{ form_start(form, {'attr': {'class': 'form-card'}}) }}
+
+        {# Section 1: Identification #}
+        <div class="form-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="file-text"></i>
+                </div>
+                <div class="section-title">
+                    <h3>Identification de l'Audit</h3>
+                    <p>Informations de base</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(form.projet) }}
+                    {{ form_widget(form.projet, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.projet) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.type) }}
+                    {{ form_widget(form.type, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.type) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.titre) }}
+                    {{ form_widget(form.titre, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.titre) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.dateAudit) }}
+                    {{ form_widget(form.dateAudit, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.dateAudit) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.auditeur) }}
+                    {{ form_widget(form.auditeur, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.auditeur) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.organisme) }}
+                    {{ form_widget(form.organisme, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.organisme) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.dateDebut) }}
+                    {{ form_widget(form.dateDebut, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.dateDebut) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.dateFin) }}
+                    {{ form_widget(form.dateFin, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.dateFin) }}
+                </div>
+            </div>
+        </div>
+
+        {# Section 2: Contenu #}
+        <div class="form-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="file-check"></i>
+                </div>
+                <div class="section-title">
+                    <h3>Contenu et Résultats</h3>
+                    <p>Objectifs, résultats et recommandations</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    {{ form_label(form.objectifs) }}
+                    {{ form_widget(form.objectifs, {'attr': {'class': 'form-textarea', 'rows': 3}}) }}
+                    {{ form_errors(form.objectifs) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.resultat) }}
+                    {{ form_widget(form.resultat, {'attr': {'class': 'form-textarea', 'rows': 4}}) }}
+                    {{ form_errors(form.resultat) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.recommandations) }}
+                    {{ form_widget(form.recommandations, {'attr': {'class': 'form-textarea', 'rows': 4}}) }}
+                    {{ form_errors(form.recommandations) }}
+                </div>
+
+                <div class="form-group full-width">
+                    {{ form_label(form.observations) }}
+                    {{ form_widget(form.observations, {'attr': {'class': 'form-textarea', 'rows': 3}}) }}
+                    {{ form_errors(form.observations) }}
+                </div>
+            </div>
+        </div>
+
+        {# Section 3: Évaluation (si admin) #}
+        {% if form.statut is defined %}
+        <div class="form-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="star"></i>
+                </div>
+                <div class="section-title">
+                    <h3>Évaluation et Statut</h3>
+                    <p>Note, niveau et statut de l'audit</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    {{ form_label(form.statut) }}
+                    {{ form_widget(form.statut, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.statut) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.niveau) }}
+                    {{ form_widget(form.niveau, {'attr': {'class': 'form-select'}}) }}
+                    {{ form_errors(form.niveau) }}
+                </div>
+
+                <div class="form-group">
+                    {{ form_label(form.score) }}
+                    {{ form_widget(form.score, {'attr': {'class': 'form-input'}}) }}
+                    {{ form_errors(form.score) }}
+                    {% if form.score.vars.help is defined %}
+                        <div class="form-help">{{ form.score.vars.help }}</div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        {# Section 4: Documents existants #}
+        {% if audit.nombreDocuments > 0 or audit.nombrePhotos > 0 %}
+        <div class="form-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="folder"></i>
+                </div>
+                <div class="section-title">
+                    <h3>Fichiers Existants</h3>
+                    <p>Gérer les documents et photos déjà enregistrés</p>
+                </div>
+            </div>
+
+            {% if audit.nombreDocuments > 0 %}
+            <div class="existing-files">
+                <div class="existing-files-header">
+                    <i data-lucide="file-text"></i>
+                    Documents ({{ audit.nombreDocuments }})
+                </div>
+                <div class="files-grid">
+                    {% for i, document in audit.documents %}
+                    <div class="file-item">
+                        <div class="file-item-icon">
+                            <i data-lucide="file"></i>
+                        </div>
+                        <div class="file-item-name">{{ document }}</div>
+                        <div class="file-item-actions">
+                            <a href="{{ asset('uploads/audits/documents/' ~ document) }}" target="_blank" class="file-item-btn view">
+                                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                                Voir
+                            </a>
+                            <form method="POST" action="{{ path('app_audit_delete_document', {'id': audit.id, 'index': i}) }}" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-doc' ~ audit.id) }}">
+                                <button type="submit" class="file-item-btn delete" onclick="return confirm('Supprimer ce document ?')">
+                                    <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                                    Suppr.
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            {% if audit.nombrePhotos > 0 %}
+            <div class="existing-files" style="margin-top: 20px;">
+                <div class="existing-files-header">
+                    <i data-lucide="image"></i>
+                    Photos ({{ audit.nombrePhotos }})
+                </div>
+                <div class="files-grid">
+                    {% for i, photo in audit.photos %}
+                    <div class="file-item photo-item">
+                        <img src="{{ asset('uploads/audits/photos/' ~ photo) }}" alt="Photo {{ i + 1 }}">
+                        <div class="file-item-actions">
+                            <a href="{{ asset('uploads/audits/photos/' ~ photo) }}" target="_blank" class="file-item-btn view">
+                                <i data-lucide="maximize-2" style="width: 14px; height: 14px;"></i>
+                                Ouvrir
+                            </a>
+                            <form method="POST" action="{{ path('app_audit_delete_photo', {'id': audit.id, 'index': i}) }}" style="display: inline;">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete-photo' ~ audit.id) }}">
+                                <button type="submit" class="file-item-btn delete" onclick="return confirm('Supprimer cette photo ?')">
+                                    <i data-lucide="trash-2" style="width: 14px; height: 14px;"></i>
+                                    Suppr.
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        {# Section 5: Ajouter de nouveaux fichiers #}
+        <div class="form-section">
+            <div class="section-header">
+                <div class="section-icon">
+                    <i data-lucide="upload"></i>
+                </div>
+                <div class="section-title">
+                    <h3>Ajouter de Nouveaux Fichiers</h3>
+                    <p>Compléter avec de nouveaux documents et photos</p>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <div class="file-upload-container">
+                        <div class="file-upload-header">
+                            <div class="file-upload-icon">
+                                <i data-lucide="file-plus"></i>
+                            </div>
+                            <div class="file-upload-info">
+                                <h4>Nouveaux Documents</h4>
+                                <p>Ajouter d'autres documents justificatifs</p>
+                            </div>
+                        </div>
+                        {{ form_widget(form.documentsFiles, {'attr': {'class': 'form-input'}}) }}
+                        {{ form_errors(form.documentsFiles) }}
+                        {% if form.documentsFiles.vars.help is defined %}
+                            <div class="form-help">{{ form.documentsFiles.vars.help }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <div class="file-upload-container">
+                        <div class="file-upload-header">
+                            <div class="file-upload-icon" style="background: var(--tchad-gold); color: var(--tchad-blue);">
+                                <i data-lucide="camera"></i>
+                            </div>
+                            <div class="file-upload-info">
+                                <h4>Nouvelles Photos</h4>
+                                <p>Ajouter d'autres photos</p>
+                            </div>
+                        </div>
+                        {{ form_widget(form.photosFiles, {'attr': {'class': 'form-input'}}) }}
+                        {{ form_errors(form.photosFiles) }}
+                        {% if form.photosFiles.vars.help is defined %}
+                            <div class="form-help">{{ form.photosFiles.vars.help }}</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Action Bar #}
+        <div class="action-bar">
+            <div class="action-info">
+                <i data-lucide="info"></i>
+                Dernière modification : {{ audit.updatedAt|date('d/m/Y à H:i') }}
+            </div>
+            <div class="action-buttons">
+                <a href="{{ path('app_audit_show', {'id': audit.id}) }}" class="btn btn-secondary">
+                    <i data-lucide="x"></i>
+                    Annuler
+                </a>
+                <button type="submit" class="btn btn-primary">
+                    <i data-lucide="save"></i>
+                    Enregistrer les modifications
+                </button>
+            </div>
+        </div>
+
+        {{ form_row(form._token) }}
+    {{ form_end(form, {'render_rest': false}) }}
+</div>
+
+<script>
+lucide.createIcons();
+</script>
+{% endblock %}

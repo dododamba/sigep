@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+{% block title %}Convention {{ convention.code }} - SIGEP Tchad{% endblock %}
+{% block body %}
+<div class="content-area">
+    <div class="page-header">
+        <a href="{{ path('app_convention_index') }}" class="back-link">
+            <i data-lucide="arrow-left"></i> Retour aux conventions
+        </a>
+    </div>
+
+    <div class="detail-card">
+        <div class="detail-header">
+            <div>
+                <h3>{{ convention.code }}</h3>
+                <p>{{ convention.intitule }}</p>
+            </div>
+            <span class="badge badge-{{ convention.statutBadgeClass }}">{{ convention.statutLabel }}</span>
+        </div>
+
+        <div class="detail-section">
+            <h4>Informations principales</h4>
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span class="detail-label">Partenaire</span>
+                    <span class="detail-value">{{ convention.partenaire }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Type</span>
+                    <span class="detail-value">{{ convention.typeLabel }}</span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Montant Global</span>
+                    <span class="detail-value"><strong>{{ convention.montantFormate }}</strong></span>
+                </div>
+                <div class="detail-item">
+                    <span class="detail-label">Contrepartie État</span>
+                    <span class="detail-value">{{ convention.contrepartieEtatFormate }}</span>
+                </div>
+            </div>
+        </div>
+
+        {% if convention.description %}
+        <div class="detail-section">
+            <h4>Description</h4>
+            <p>{{ convention.description }}</p>
+        </div>
+        {% endif %}
+
+        <div class="detail-section">
+            <h4>Actions</h4>
+            <div class="action-buttons">
+                {% if convention.isModifiable() %}
+                <a href="{{ path('app_convention_edit', {'id': convention.id}) }}" class="btn btn-primary">
+                    <i data-lucide="edit"></i> Modifier
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

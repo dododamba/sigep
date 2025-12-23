@@ -22,7 +22,7 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
     private $metadata;
     private $mappings;
     private $_usedProperties = [];
-    
+
     /**
      * @default '_name'
      * @param ParamConfigurator|mixed $value
@@ -32,10 +32,10 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
     {
         $this->_usedProperties['defaultFilenameAttributeSuffix'] = true;
         $this->defaultFilenameAttributeSuffix = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -45,10 +45,10 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
     {
         $this->_usedProperties['dbDriver'] = true;
         $this->dbDriver = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default 'file_system'
      * @param ParamConfigurator|mixed $value
@@ -58,10 +58,10 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
     {
         $this->_usedProperties['storage'] = true;
         $this->storage = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default false
      * @param ParamConfigurator|bool $value
@@ -71,10 +71,10 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
     {
         $this->_usedProperties['useFlysystemToResolveUri'] = true;
         $this->useFlysystemToResolveUri = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * twig requires templating
      * @default true
@@ -85,10 +85,10 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
     {
         $this->_usedProperties['twig'] = true;
         $this->twig = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default true
      * @param ParamConfigurator|mixed $value
@@ -98,10 +98,10 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
     {
         $this->_usedProperties['form'] = true;
         $this->form = $value;
-    
+
         return $this;
     }
-    
+
     /**
      * @default {"cache":"file","type":"attribute","file_cache":{"dir":"%kernel.cache_dir%\/vich_uploader"},"auto_detection":true,"directories":[]}
     */
@@ -113,10 +113,10 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "metadata()" has already been initialized. You cannot pass values the second time you call metadata().');
         }
-    
+
         return $this->metadata;
     }
-    
+
     public function mappings(string $id, array $value = []): \Symfony\Config\VichUploader\MappingsConfig
     {
         if (!isset($this->mappings[$id])) {
@@ -125,15 +125,15 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
         } elseif (1 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "mappings()" has already been initialized. You cannot pass values the second time you call mappings().');
         }
-    
+
         return $this->mappings[$id];
     }
-    
+
     public function getExtensionAlias(): string
     {
         return 'vich_uploader';
     }
-    
+
     public function __construct(array $value = [])
     {
         if (array_key_exists('default_filename_attribute_suffix', $value)) {
@@ -141,54 +141,54 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
             $this->defaultFilenameAttributeSuffix = $value['default_filename_attribute_suffix'];
             unset($value['default_filename_attribute_suffix']);
         }
-    
+
         if (array_key_exists('db_driver', $value)) {
             $this->_usedProperties['dbDriver'] = true;
             $this->dbDriver = $value['db_driver'];
             unset($value['db_driver']);
         }
-    
+
         if (array_key_exists('storage', $value)) {
             $this->_usedProperties['storage'] = true;
             $this->storage = $value['storage'];
             unset($value['storage']);
         }
-    
+
         if (array_key_exists('use_flysystem_to_resolve_uri', $value)) {
             $this->_usedProperties['useFlysystemToResolveUri'] = true;
             $this->useFlysystemToResolveUri = $value['use_flysystem_to_resolve_uri'];
             unset($value['use_flysystem_to_resolve_uri']);
         }
-    
+
         if (array_key_exists('twig', $value)) {
             $this->_usedProperties['twig'] = true;
             $this->twig = $value['twig'];
             unset($value['twig']);
         }
-    
+
         if (array_key_exists('form', $value)) {
             $this->_usedProperties['form'] = true;
             $this->form = $value['form'];
             unset($value['form']);
         }
-    
+
         if (array_key_exists('metadata', $value)) {
             $this->_usedProperties['metadata'] = true;
             $this->metadata = new \Symfony\Config\VichUploader\MetadataConfig($value['metadata']);
             unset($value['metadata']);
         }
-    
+
         if (array_key_exists('mappings', $value)) {
             $this->_usedProperties['mappings'] = true;
             $this->mappings = array_map(fn ($v) => new \Symfony\Config\VichUploader\MappingsConfig($v), $value['mappings']);
             unset($value['mappings']);
         }
-    
+
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-    
+
     public function toArray(): array
     {
         $output = [];
@@ -216,7 +216,7 @@ class VichUploaderConfig implements \Symfony\Component\Config\Builder\ConfigBuil
         if (isset($this->_usedProperties['mappings'])) {
             $output['mappings'] = array_map(fn ($v) => $v->toArray(), $this->mappings);
         }
-    
+
         return $output;
     }
 
