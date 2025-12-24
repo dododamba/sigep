@@ -139,25 +139,37 @@ class __TwigTemplate_76b549e96d8c4d166cce3c150455244d extends Template
                 <span>Tableau de bord</span>
             </a>
 
-            <a href=\"";
+              <a href=\"";
         // line 63
-        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_partners");
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_top_management_dashboard");
         yield "\"
                class=\"nav-item ";
         // line 64
-        yield (((is_string($_v2 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 64, $this->source); })())) && is_string($_v3 = "app_partners") && str_starts_with($_v2, $_v3))) ? ("active") : (""));
+        yield (((is_string($_v2 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 64, $this->source); })())) && is_string($_v3 = "app_top_management_dashboard") && str_starts_with($_v2, $_v3))) ? ("active") : (""));
+        yield "\">
+                <i class=\"ri-dashboard-3-line\"></i>
+                <span>Tableau de bord top management</span>
+            </a>
+
+            <a href=\"";
+        // line 69
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_partners");
+        yield "\"
+               class=\"nav-item ";
+        // line 70
+        yield (((is_string($_v4 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 70, $this->source); })())) && is_string($_v5 = "app_partners") && str_starts_with($_v4, $_v5))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-shake-hands-line\"></i>
                 <span>Partenaires</span>
             </a>
 
             <a href=\"";
-        // line 69
+        // line 75
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_institutions");
         yield "\"
                class=\"nav-item ";
-        // line 70
-        yield (((is_string($_v4 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 70, $this->source); })())) && is_string($_v5 = "app_institutions") && str_starts_with($_v4, $_v5))) ? ("active") : (""));
+        // line 76
+        yield (((is_string($_v6 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 76, $this->source); })())) && is_string($_v7 = "app_institutions") && str_starts_with($_v6, $_v7))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-building-4-line\"></i>
                 <span>Institutions</span>
@@ -169,60 +181,60 @@ class __TwigTemplate_76b549e96d8c4d166cce3c150455244d extends Template
             <div class=\"nav-section-title\">Projets & Finances</div>
 
             <a href=\"";
-        // line 80
+        // line 86
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects");
         yield "\"
                class=\"nav-item ";
-        // line 81
-        yield (((is_string($_v6 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 81, $this->source); })())) && is_string($_v7 = "app_projects") && str_starts_with($_v6, $_v7))) ? ("active") : (""));
+        // line 87
+        yield (((is_string($_v8 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 87, $this->source); })())) && is_string($_v9 = "app_projects") && str_starts_with($_v8, $_v9))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-briefcase-4-line\"></i>
                 <span>Projets</span>
             </a>
 
             <a href=\"";
-        // line 86
+        // line 92
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_financements");
         yield "\"
                class=\"nav-item ";
-        // line 87
-        yield (((is_string($_v8 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 87, $this->source); })())) && is_string($_v9 = "app_financements") && str_starts_with($_v8, $_v9))) ? ("active") : (""));
+        // line 93
+        yield (((is_string($_v10 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 93, $this->source); })())) && is_string($_v11 = "app_financements") && str_starts_with($_v10, $_v11))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-funds-line\"></i>
                 <span>Financements</span>
             </a>
 
             <a href=\"";
-        // line 92
+        // line 98
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_decaissement_index");
         yield "\"
                class=\"nav-item ";
-        // line 93
-        yield (((is_string($_v10 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 93, $this->source); })())) && is_string($_v11 = "app_decaissement_index") && str_starts_with($_v10, $_v11))) ? ("active") : (""));
+        // line 99
+        yield (((is_string($_v12 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 99, $this->source); })())) && is_string($_v13 = "app_decaissement_index") && str_starts_with($_v12, $_v13))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-exchange-dollar-line\"></i>
                 <span>Décaissements</span>
             </a>
 
             <a href=\"";
-        // line 98
+        // line 104
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_convention_index");
         yield "\"
                class=\"nav-item ";
-        // line 99
-        yield (((is_string($_v12 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 99, $this->source); })())) && is_string($_v13 = "app_convention") && str_starts_with($_v12, $_v13))) ? ("active") : (""));
+        // line 105
+        yield (((is_string($_v14 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 105, $this->source); })())) && is_string($_v15 = "app_convention") && str_starts_with($_v14, $_v15))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-file-text-line\"></i>
                 <span>Conventions</span>
             </a>
 
             <a href=\"";
-        // line 104
+        // line 110
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_audit_index");
         yield "\"
                class=\"nav-item ";
-        // line 105
-        yield (((is_string($_v14 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 105, $this->source); })())) && is_string($_v15 = "app_audit") && str_starts_with($_v14, $_v15))) ? ("active") : (""));
+        // line 111
+        yield (((is_string($_v16 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 111, $this->source); })())) && is_string($_v17 = "app_audit") && str_starts_with($_v16, $_v17))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-search-eye-line\"></i>
                 <span>Audits</span>
@@ -234,36 +246,36 @@ class __TwigTemplate_76b549e96d8c4d166cce3c150455244d extends Template
             <div class=\"nav-section-title\">Gestion des utilisateurs</div>
 
             <a href=\"";
-        // line 115
+        // line 121
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_user_index");
         yield "\"
                class=\"nav-item ";
-        // line 116
-        yield ((((is_string($_v16 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 116, $this->source); })())) && is_string($_v17 = "app_user") && str_starts_with($_v16, $_v17)) || (is_string($_v18 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 116, $this->source); })())) && is_string($_v19 = "app_user") && str_starts_with($_v18, $_v19)))) ? ("active") : (""));
+        // line 122
+        yield ((((is_string($_v18 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 122, $this->source); })())) && is_string($_v19 = "app_user") && str_starts_with($_v18, $_v19)) || (is_string($_v20 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 122, $this->source); })())) && is_string($_v21 = "app_user") && str_starts_with($_v20, $_v21)))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-group-line\"></i>
                 <span>Utilisateurs</span>
             </a>
 
             <a href=\"";
-        // line 121
+        // line 127
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_roles");
         yield "\"
                class=\"nav-item ";
-        // line 122
-        yield (((is_string($_v20 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 122, $this->source); })())) && is_string($_v21 = "app_roles") && str_starts_with($_v20, $_v21))) ? ("active") : (""));
+        // line 128
+        yield (((is_string($_v22 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 128, $this->source); })())) && is_string($_v23 = "app_roles") && str_starts_with($_v22, $_v23))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-shield-keyhole-line\"></i>
                 <span>Rôles & permissions</span>
             </a>
 
             <a href=\"";
-        // line 127
+        // line 133
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_login_history");
         yield "\"
                class=\"nav-item ";
-        // line 128
-        yield (((is_string($_v22 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 128, $this->source); })())) && is_string($_v23 = "app_login_history") && str_starts_with($_v22, $_v23))) ? ("active") : (""));
+        // line 134
+        yield (((is_string($_v24 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 134, $this->source); })())) && is_string($_v25 = "app_login_history") && str_starts_with($_v24, $_v25))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-time-line\"></i>
                 <span>Historiques de connexion</span>
@@ -275,19 +287,19 @@ class __TwigTemplate_76b549e96d8c4d166cce3c150455244d extends Template
             <div class=\"nav-section-title\">Compte</div>
 
             <a href=\"";
-        // line 138
+        // line 144
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_profile");
         yield "\"
                class=\"nav-item ";
-        // line 139
-        yield (((is_string($_v24 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 139, $this->source); })())) && is_string($_v25 = "app_profile") && str_starts_with($_v24, $_v25))) ? ("active") : (""));
+        // line 145
+        yield (((is_string($_v26 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 145, $this->source); })())) && is_string($_v27 = "app_profile") && str_starts_with($_v26, $_v27))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-user-settings-line\"></i>
                 <span>Mon profil</span>
             </a>
 
             <a href=\"";
-        // line 144
+        // line 150
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_logout");
         yield "\" class=\"nav-item\">
                 <i class=\"ri-logout-circle-r-line\"></i>
@@ -325,7 +337,7 @@ class __TwigTemplate_76b549e96d8c4d166cce3c150455244d extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  291 => 144,  283 => 139,  279 => 138,  266 => 128,  262 => 127,  254 => 122,  250 => 121,  242 => 116,  238 => 115,  225 => 105,  221 => 104,  213 => 99,  209 => 98,  201 => 93,  197 => 92,  189 => 87,  185 => 86,  177 => 81,  173 => 80,  160 => 70,  156 => 69,  148 => 64,  144 => 63,  136 => 58,  132 => 57,  117 => 44,  113 => 42,  108 => 39,  106 => 35,  103 => 34,  101 => 33,  98 => 32,  94 => 30,  88 => 28,  86 => 27,  79 => 25,  70 => 20,  53 => 6,  47 => 2,  45 => 1,);
+        return array (  303 => 150,  295 => 145,  291 => 144,  278 => 134,  274 => 133,  266 => 128,  262 => 127,  254 => 122,  250 => 121,  237 => 111,  233 => 110,  225 => 105,  221 => 104,  213 => 99,  209 => 98,  201 => 93,  197 => 92,  189 => 87,  185 => 86,  172 => 76,  168 => 75,  160 => 70,  156 => 69,  148 => 64,  144 => 63,  136 => 58,  132 => 57,  117 => 44,  113 => 42,  108 => 39,  106 => 35,  103 => 34,  101 => 33,  98 => 32,  94 => 30,  88 => 28,  86 => 27,  79 => 25,  70 => 20,  53 => 6,  47 => 2,  45 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -390,6 +402,12 @@ class __TwigTemplate_76b549e96d8c4d166cce3c150455244d extends Template
                class=\"nav-item {{ currentRoute starts with 'app_dashboard' ? 'active' }}\">
                 <i class=\"ri-dashboard-3-line\"></i>
                 <span>Tableau de bord</span>
+            </a>
+
+              <a href=\"{{ path('app_top_management_dashboard') }}\"
+               class=\"nav-item {{ currentRoute starts with 'app_top_management_dashboard' ? 'active' }}\">
+                <i class=\"ri-dashboard-3-line\"></i>
+                <span>Tableau de bord top management</span>
             </a>
 
             <a href=\"{{ path('app_partners') }}\"

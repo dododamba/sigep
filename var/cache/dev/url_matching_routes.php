@@ -53,6 +53,9 @@ return [
         '/register-as-partner' => [[['_route' => 'app_register_as_partner', '_controller' => 'App\\Controller\\SecurityController::registerAsPartner'], null, null, null, false, false, null]],
         '/login' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],
         '/logout' => [[['_route' => 'app_logout', '_controller' => 'App\\Controller\\SecurityController::logout'], null, null, null, false, false, null]],
+        '/top-management' => [[['_route' => 'app_top_management_dashboard', '_controller' => 'App\\Controller\\TopManagementController::dashboard'], null, ['GET' => 0], null, true, false, null]],
+        '/top-management/api/kpis' => [[['_route' => 'app_top_management_api_kpis', '_controller' => 'App\\Controller\\TopManagementController::apiKpis'], null, ['GET' => 0], null, false, false, null]],
+        '/top-management/api/charts' => [[['_route' => 'app_top_management_api_charts', '_controller' => 'App\\Controller\\TopManagementController::apiCharts'], null, ['GET' => 0], null, false, false, null]],
         '/user' => [[['_route' => 'app_user_index', '_controller' => 'App\\Controller\\UserController::index'], null, ['GET' => 0], null, true, false, null]],
         '/user/api/list' => [[['_route' => 'app_user_api_list', '_controller' => 'App\\Controller\\UserController::apiList'], null, ['GET' => 0], null, false, false, null]],
         '/user/new' => [[['_route' => 'app_user_new', '_controller' => 'App\\Controller\\UserController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
@@ -140,18 +143,22 @@ return [
                         .'|(*:823)'
                     .')'
                 .')'
+                .'|/top\\-management/(?'
+                    .'|project/([^/]++)(*:869)'
+                    .'|financing/([^/]++)(*:895)'
+                .')'
                 .'|/user/(?'
                     .'|([^/]++)(?'
-                        .'|(*:853)'
+                        .'|(*:924)'
                         .'|/(?'
-                            .'|edit(*:869)'
-                            .'|toggle\\-status(*:891)'
+                            .'|edit(*:940)'
+                            .'|toggle\\-status(*:962)'
                         .')'
-                        .'|(*:900)'
+                        .'|(*:971)'
                     .')'
                     .'|api/(?'
-                        .'|([^/]++)(*:924)'
-                        .'|stats(*:937)'
+                        .'|([^/]++)(*:995)'
+                        .'|stats(*:1008)'
                     .')'
                 .')'
             .')/?$}sDu',
@@ -197,12 +204,14 @@ return [
         797 => [[['_route' => 'app_projects_update_progress', '_controller' => 'App\\Controller\\ProjectController::updateProgress'], ['id'], ['POST' => 0], null, false, false, null]],
         814 => [[['_route' => 'app_projects_duplicate', '_controller' => 'App\\Controller\\ProjectController::duplicate'], ['id'], ['POST' => 0], null, false, false, null]],
         823 => [[['_route' => 'app_projects_delete', '_controller' => 'App\\Controller\\ProjectController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
-        853 => [[['_route' => 'app_user_show', '_controller' => 'App\\Controller\\UserController::show'], ['id'], ['GET' => 0], null, false, true, null]],
-        869 => [[['_route' => 'app_user_edit', '_controller' => 'App\\Controller\\UserController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        891 => [[['_route' => 'app_user_toggle_status', '_controller' => 'App\\Controller\\UserController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
-        900 => [[['_route' => 'app_user_delete', '_controller' => 'App\\Controller\\UserController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
-        924 => [[['_route' => 'app_user_api_show', '_controller' => 'App\\Controller\\UserController::apiShow'], ['id'], ['GET' => 0], null, false, true, null]],
-        937 => [
+        869 => [[['_route' => 'app_top_management_project_detail', '_controller' => 'App\\Controller\\TopManagementController::projectDetail'], ['id'], ['GET' => 0], null, false, true, null]],
+        895 => [[['_route' => 'app_top_management_financing_detail', '_controller' => 'App\\Controller\\TopManagementController::financingDetail'], ['id'], ['GET' => 0], null, false, true, null]],
+        924 => [[['_route' => 'app_user_show', '_controller' => 'App\\Controller\\UserController::show'], ['id'], ['GET' => 0], null, false, true, null]],
+        940 => [[['_route' => 'app_user_edit', '_controller' => 'App\\Controller\\UserController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        962 => [[['_route' => 'app_user_toggle_status', '_controller' => 'App\\Controller\\UserController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
+        971 => [[['_route' => 'app_user_delete', '_controller' => 'App\\Controller\\UserController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
+        995 => [[['_route' => 'app_user_api_show', '_controller' => 'App\\Controller\\UserController::apiShow'], ['id'], ['GET' => 0], null, false, true, null]],
+        1008 => [
             [['_route' => 'app_user_api_stats', '_controller' => 'App\\Controller\\UserController::apiStats'], [], ['GET' => 0], null, false, false, null],
             [null, null, null, null, false, false, 0],
         ],

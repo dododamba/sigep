@@ -1,0 +1,5 @@
+# Routes pour le Top Management Dashboard
+top_management:
+    resource: App\Controller\TopManagementController
+    type: annotation
+    prefix: /top-management

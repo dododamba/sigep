@@ -60,6 +60,12 @@
                 <span>Tableau de bord</span>
             </a>
 
+              <a href="{{ path('app_top_management_dashboard') }}"
+               class="nav-item {{ currentRoute starts with 'app_top_management_dashboard' ? 'active' }}">
+                <i class="ri-dashboard-3-line"></i>
+                <span>Tableau de bord top management</span>
+            </a>
+
             <a href="{{ path('app_partners') }}"
                class="nav-item {{ currentRoute starts with 'app_partners' ? 'active' }}">
                 <i class="ri-shake-hands-line"></i>
