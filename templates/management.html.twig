@@ -1401,7 +1401,11 @@
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
+    {% include "partials/header-management.html.twig" %}
+    <!-- MAIN CONTENT -->
+<main class="main-content">
    {% block body %}{% endblock %}
+</main>
 
          {% block javascripts %}{% endblock %}
 </body>

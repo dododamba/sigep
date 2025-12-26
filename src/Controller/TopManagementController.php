@@ -95,6 +95,248 @@ class TopManagementController extends AbstractController
         ]);
     }
 
+
+
+        /**
+     * Récupère les détails complets de financement d'un projet
+     * 
+     * @param Project $project Le projet dont on veut les détails de financement
+     * @return array Tableau contenant toutes les informations de financement
+     */
+    private function getProjectFinancingDetails($project): array
+    {
+        // Récupérer tous les financements du projet
+        $financements = $project->getFinancements();
+        
+        // Initialisation des totaux
+        $totalEngage = 0;
+        $totalDecaisse = 0;
+        $totalRestant = 0;
+        
+        // Répartition par bailleur
+        $repartitionBailleur = [];
+        
+        // Répartition par type
+        $repartitionType = [];
+        
+        // Répartition par statut
+        $repartitionStatut = [];
+        
+        // Liste détaillée des financements
+        $financementsDetails = [];
+        
+        // Traiter chaque financement
+        foreach ($financements as $financement) {
+            $montantEngage = (float) $financement->getMontantEngage();
+            $montantDecaisse = (float) $financement->getMontantDecaisse();
+            $montantRestant = $montantEngage - $montantDecaisse;
+            
+            // Accumuler les totaux
+            $totalEngage += $montantEngage;
+            $totalDecaisse += $montantDecaisse;
+            $totalRestant += $montantRestant;
+            
+            // Bailleur
+            $bailleurName = $financement->getBailleur() ? $financement->getBailleur()->getName() : 'Non défini';
+            if (!isset($repartitionBailleur[$bailleurName])) {
+                $repartitionBailleur[$bailleurName] = [
+                    'count' => 0,
+                    'engage' => 0,
+                    'decaisse' => 0,
+                    'restant' => 0,
+                    'taux' => 0
+                ];
+            }
+            $repartitionBailleur[$bailleurName]['count']++;
+            $repartitionBailleur[$bailleurName]['engage'] += $montantEngage;
+            $repartitionBailleur[$bailleurName]['decaisse'] += $montantDecaisse;
+            $repartitionBailleur[$bailleurName]['restant'] += $montantRestant;
+            
+            // Type
+            $type = $financement->getTypeLabel();
+            if (!isset($repartitionType[$type])) {
+                $repartitionType[$type] = [
+                    'count' => 0,
+                    'engage' => 0,
+                    'decaisse' => 0
+                ];
+            }
+            $repartitionType[$type]['count']++;
+            $repartitionType[$type]['engage'] += $montantEngage;
+            $repartitionType[$type]['decaisse'] += $montantDecaisse;
+            
+            // Statut
+            $statut = $financement->getStatutLabel();
+            if (!isset($repartitionStatut[$statut])) {
+                $repartitionStatut[$statut] = [
+                    'count' => 0,
+                    'engage' => 0
+                ];
+            }
+            $repartitionStatut[$statut]['count']++;
+            $repartitionStatut[$statut]['engage'] += $montantEngage;
+            
+            // Détails du financement
+            $financementsDetails[] = [
+                'id' => $financement->getId(),
+                'numeroConvention' => $financement->getNumeroConvention(),
+                'bailleur' => $bailleurName,
+                'bailleurAcronyme' => $financement->getBailleur() ? $financement->getBailleur()->getAcronym() : null,
+                'type' => $type,
+                'typeKey' => $financement->getType(),
+                'montantEngage' => $montantEngage,
+                'montantDecaisse' => $montantDecaisse,
+                'montantRestant' => $montantRestant,
+                'tauxDecaissement' => $financement->getTauxDecaissement(),
+                'dateSignature' => $financement->getDateSignature(),
+                'dateEcheance' => $financement->getDateEcheance(),
+                'dateEntreeVigueur' => $financement->getDateEntreeVigueur(),
+                'statut' => $statut,
+                'statutKey' => $financement->getStatut(),
+                'tauxInteret' => $financement->getTauxInteret(),
+                'dureeFinancement' => $financement->getDureeFinancement(),
+                'differeRemboursement' => $financement->getDiffereRemboursement(),
+                'conditions' => $financement->getConditions(),
+                'contrepartieNationale' => (float) $financement->getContrepartieNationale(),
+                'isActif' => $financement->isActif(),
+                'isExpired' => $financement->isExpired(),
+                'isApproachingDeadline' => $financement->isApproachingDeadline(),
+                'notes' => $financement->getNotes()
+            ];
+        }
+        
+        // Calculer les taux de décaissement par bailleur
+        foreach ($repartitionBailleur as $bailleur => &$data) {
+            if ($data['engage'] > 0) {
+                $data['taux'] = round(($data['decaisse'] / $data['engage']) * 100, 2);
+            }
+        }
+        
+        // Taux de décaissement global
+        $tauxDecaissementGlobal = $totalEngage > 0 
+            ? round(($totalDecaisse / $totalEngage) * 100, 2) 
+            : 0;
+        
+        // Nombre de financements
+        $nombreFinancements = count($financements);
+        
+        // Financement moyen
+        $financementMoyen = $nombreFinancements > 0 
+            ? round($totalEngage / $nombreFinancements, 2) 
+            : 0;
+        
+        // Identifier le principal bailleur (celui qui a engagé le plus)
+        $principalBailleur = null;
+        $maxEngage = 0;
+        foreach ($repartitionBailleur as $bailleur => $data) {
+            if ($data['engage'] > $maxEngage) {
+                $maxEngage = $data['engage'];
+                $principalBailleur = [
+                    'nom' => $bailleur,
+                    'montantEngage' => $data['engage'],
+                    'pourcentage' => $totalEngage > 0 ? round(($data['engage'] / $totalEngage) * 100, 2) : 0
+                ];
+            }
+        }
+        
+        // Financements actifs vs inactifs
+        $financementsActifs = array_filter($financementsDetails, fn($f) => $f['isActif']);
+        $nombreActifs = count($financementsActifs);
+        $nombreInactifs = $nombreFinancements - $nombreActifs;
+        
+        // Financements expirés
+        $financementsExpires = array_filter($financementsDetails, fn($f) => $f['isExpired']);
+        $nombreExpires = count($financementsExpires);
+        
+        // Financements proches de l'échéance
+        $financementsProchesEcheance = array_filter($financementsDetails, fn($f) => $f['isApproachingDeadline']);
+        $nombreProchesEcheance = count($financementsProchesEcheance);
+        
+        // Calcul du budget total du projet pour comparaison
+        $budgetProjet = (float) $project->getBudgetTotal();
+        $tauxCouvertureFinancement = $budgetProjet > 0 
+            ? round(($totalEngage / $budgetProjet) * 100, 2) 
+            : 0;
+        
+        // Déficit ou excédent de financement
+        $deficitExcedent = $totalEngage - $budgetProjet;
+        
+        // Retourner toutes les données
+        return [
+            // Résumé général
+            'resume' => [
+                'nombreFinancements' => $nombreFinancements,
+                'nombreActifs' => $nombreActifs,
+                'nombreInactifs' => $nombreInactifs,
+                'nombreExpires' => $nombreExpires,
+                'nombreProchesEcheance' => $nombreProchesEcheance,
+                'totalEngage' => $totalEngage,
+                'totalDecaisse' => $totalDecaisse,
+                'totalRestant' => $totalRestant,
+                'tauxDecaissementGlobal' => $tauxDecaissementGlobal,
+                'financementMoyen' => $financementMoyen,
+                'budgetProjet' => $budgetProjet,
+                'tauxCouvertureFinancement' => $tauxCouvertureFinancement,
+                'deficitExcedent' => $deficitExcedent,
+                'situationFinancement' => $deficitExcedent >= 0 ? 'Couvert' : 'Déficit'
+            ],
+            
+            // Principal bailleur
+            'principalBailleur' => $principalBailleur,
+            
+            // Liste détaillée des financements
+            'financements' => $financementsDetails,
+            
+            // Répartitions
+            'repartitionBailleur' => $repartitionBailleur,
+            'repartitionType' => $repartitionType,
+            'repartitionStatut' => $repartitionStatut,
+            
+            // Alertes et recommandations
+            'alertes' => [
+                'financementsExpires' => $financementsExpires,
+                'financementsProchesEcheance' => $financementsProchesEcheance,
+                'deficitFinancement' => $deficitExcedent < 0,
+                'montantDeficit' => $deficitExcedent < 0 ? abs($deficitExcedent) : 0,
+                'faibleTauxDecaissement' => $tauxDecaissementGlobal < 50,
+            ],
+            
+            // Informations projet
+            'projet' => [
+                'id' => $project->getId(),
+                'name' => $project->getName(),
+                'code' => $project->getCode(),
+                'budgetTotal' => $budgetProjet,
+                'montantDecaisseProjet' => (float) $project->getMontantDecaisse(),
+            ]
+        ];
+    }
+
+    /**
+     * Route pour obtenir les détails de financement d'un projet (JSON)
+     * 
+     * @Route("/project/{id}/financing-details", name="app_top_management_project_financing_details", methods=["GET"])
+     */
+    public function projectFinancingDetailsApi(int $id): JsonResponse
+    {
+        $project = $this->projectRepository->find($id);
+        
+        if (!$project) {
+            return $this->json([
+                'success' => false,
+                'message' => 'Projet non trouvé'
+            ], Response::HTTP_NOT_FOUND);
+        }
+        
+        $financingDetails = $this->getProjectFinancingDetails($project);
+        
+        return $this->json([
+            'success' => true,
+            'data' => $financingDetails
+        ]);
+    }
+
+ 
     /**
      * Détails d'un projet
      */
@@ -107,6 +349,8 @@ class TopManagementController extends AbstractController
             throw $this->createNotFoundException('Projet non trouvé');
         }
         
+        $financingDetails = $this->getProjectFinancingDetails($project);
+
         // Décaissements du projet
         $decaissements = $this->decaissementRepository->findByProject($id);
         
@@ -133,6 +377,7 @@ class TopManagementController extends AbstractController
             'decaissements' => $decaissements,
             'audits' => $audits,
             'metrics' => $metrics,
+            'financingDetails' => $financingDetails,
             'monthlyProgress' => $monthlyProgress,
         ]);
     }

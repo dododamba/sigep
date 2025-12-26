@@ -1455,15 +1455,22 @@ class __TwigTemplate_4004cc110899b0a2defd069fe9ffcd02 extends Template
         // line 1402
         yield "</head>
 <body>
-   ";
+    ";
         // line 1404
-        yield from $this->unwrap()->yieldBlock('body', $context, $blocks);
+        yield from $this->load("partials/header-management.html.twig", 1404)->unwrap()->yield($context);
         // line 1405
-        yield "
-         ";
-        // line 1406
-        yield from $this->unwrap()->yieldBlock('javascripts', $context, $blocks);
+        yield "    <!-- MAIN CONTENT -->
+<main class=\"main-content\">
+   ";
         // line 1407
+        yield from $this->unwrap()->yieldBlock('body', $context, $blocks);
+        // line 1408
+        yield "</main>
+
+         ";
+        // line 1410
+        yield from $this->unwrap()->yieldBlock('javascripts', $context, $blocks);
+        // line 1411
         yield "</body>
 </html>
 ";
@@ -1506,7 +1513,7 @@ class __TwigTemplate_4004cc110899b0a2defd069fe9ffcd02 extends Template
         yield from [];
     }
 
-    // line 1404
+    // line 1407
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -1522,7 +1529,7 @@ class __TwigTemplate_4004cc110899b0a2defd069fe9ffcd02 extends Template
         yield from [];
     }
 
-    // line 1406
+    // line 1410
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -1549,9 +1556,17 @@ class __TwigTemplate_4004cc110899b0a2defd069fe9ffcd02 extends Template
     /**
      * @codeCoverageIgnore
      */
+    public function isTraitable(): bool
+    {
+        return false;
+    }
+
+    /**
+     * @codeCoverageIgnore
+     */
     public function getDebugInfo(): array
     {
-        return array (  1526 => 1406,  1510 => 1404,  1494 => 1401,  1477 => 7,  1467 => 1407,  1465 => 1406,  1462 => 1405,  1460 => 1404,  1456 => 1402,  1454 => 1401,  59 => 8,  57 => 7,  49 => 1,);
+        return array (  1533 => 1410,  1517 => 1407,  1501 => 1401,  1484 => 7,  1474 => 1411,  1472 => 1410,  1468 => 1408,  1466 => 1407,  1462 => 1405,  1460 => 1404,  1456 => 1402,  1454 => 1401,  59 => 8,  57 => 7,  49 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -2959,7 +2974,11 @@ class __TwigTemplate_4004cc110899b0a2defd069fe9ffcd02 extends Template
     {% block stylesheets %}{% endblock %}
 </head>
 <body>
+    {% include \"partials/header-management.html.twig\" %}
+    <!-- MAIN CONTENT -->
+<main class=\"main-content\">
    {% block body %}{% endblock %}
+</main>
 
          {% block javascripts %}{% endblock %}
 </body>

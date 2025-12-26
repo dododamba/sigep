@@ -14,38 +14,7 @@
 {% endblock %}
 
 {% block body %}
-<!-- ============================================
-     HEADER - Style Armoirie du Tchad
-     ============================================ -->
-<header class="header">
-    <div class="header-content">
-        <div class="header-brand">
-            <div class="logo-container">
-                <div class="logo-emblem">
-                    <img src="{{ asset('logo.png') }}" alt="Armoirie du Tchad" onerror="this.style.display='none'">
-                </div>
-                <div class="brand-text">
-                    <h1 class="brand-name">SIGEP</h1>
-                    <span class="brand-subtitle">République du Tchad</span>
-                </div>
-            </div>
-        </div>
 
-      
-        <div class="header-user">
-            <div class="user-avatar">
-                <i data-lucide="user"></i>
-            </div>
-            <div class="user-info">
-                <span class="user-name">{{ app.user ? app.user.firstname ~ ' ' ~ app.user.lastname : 'Manager' }}</span>
-                <span class="user-role">Top Management</span>
-            </div>
-        </div>
-    </div>
-</header>
-
-<!-- MAIN CONTENT -->
-<main class="main-content">
     <!-- Page Title -->
     <div class="page-title">
         <h1>Dashboard Top Management</h1>
@@ -455,7 +424,7 @@
         </div>
     </section>
 
-</main>
+
 {% endblock %}
 
 {% block javascripts %}

@@ -1,11 +1,11 @@
 {# Template de détail d'un projet - Dashboard Top Management #}
 {% extends 'management.html.twig' %}
 
-{% block title %}{{ project.titre }} - Détail Projet - SIGEP Tchad{% endblock %}
+{% block title %}{{ project.name }} - Détail Projet - SIGEP Tchad{% endblock %}
 
 {% block stylesheets %}
     {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/project_details.css') }}">
 {% endblock %}
 
 {% block body %}
@@ -17,11 +17,11 @@
                 <i data-lucide="arrow-left"></i>
                 Retour au dashboard
             </a>
-            <h1 class="project-title">{{ project.titre }}</h1>
+            <h1 class="project-title">{{ project.name }}</h1>
             <span class="project-code">{{ project.code }}</span>
         </div>
         <div class="header-right">
-            <span class="badge badge-{{ project.statut }}">{{ project.statutLabel }}</span>
+            <span class="badge badge-{{ project.status }}">{{ project.status }}</span>
             <span class="risk-badge risk-{{ metrics.riskLevel|lower }}">
                 Risque: {{ metrics.riskLevel }}
             </span>
@@ -101,7 +101,7 @@
                     </div>
                     <div class="info-group">
                         <label>Secteur</label>
-                        <value><span class="badge badge-sector">{{ project.secteur }}</span></value>
+                        <value><span class="badge badge-sector">{{ project.sector }}</span></value>
                     </div>
                     <div class="info-group">
                         <label>Période</label>
@@ -124,40 +124,320 @@
             </section>
 
             {# Financements #}
-            <section class="info-card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i data-lucide="wallet"></i>
-                        Financements
-                    </h3>
+          <div class="financing-details-page">
+
+
+    <!-- Résumé Global -->
+    <section class="financing-summary">
+        <h2 class="section-title">
+            <i data-lucide="wallet"></i>
+            Résumé Global du Financement
+        </h2>
+
+        <div class="summary-grid">
+            <!-- Budget Total vs Financement -->
+            <div class="summary-card card-primary">
+                <div class="card-icon">
+                    <i data-lucide="banknote"></i>
                 </div>
-                <div class="card-body">
-                    {% if financingDetails is not empty %}
-                        <div class="financing-list">
-                            {% for financing in financingDetails %}
-                            <div class="financing-item">
-                                <div class="financing-header">
-                                    <strong>{{ financing.sourceFinancement }}</strong>
-                                    <span class="financing-amount">{{ financing.montantTotal|number_format(0, ',', ' ') }} FCFA</span>
-                                </div>
-                                <div class="financing-details">
-                                    <span class="financing-type">{{ financing.typeFinancement }}</span>
-                                    {% if financing.numeroConvention %}
-                                        <span class="financing-ref">Convention: {{ financing.numeroConvention }}</span>
-                                    {% endif %}
-                                </div>
-                                <a href="{{ path('app_top_management_financing_detail', {id: financing.id}) }}" class="financing-link">
-                                    Voir détails
-                                    <i data-lucide="arrow-right"></i>
-                                </a>
+                <div class="card-content">
+                    <span class="card-label">Budget Total du Projet</span>
+                    <span class="card-value">{{ (financingDetails.resume.budgetProjet / 1000000000)|number_format(2, '.', ' ') }} Mds</span>
+                    <span class="card-sublabel">{{ financingDetails.resume.budgetProjet|number_format(0, ',', ' ') }} FCFA</span>
+                </div>
+            </div>
+
+            <!-- Total Engagé -->
+            <div class="summary-card card-gold">
+                <div class="card-icon">
+                    <i data-lucide="trending-up"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Total Engagé</span>
+                    <span class="card-value">{{ (financingDetails.resume.totalEngage / 1000000000)|number_format(2, '.', ' ') }} Mds</span>
+                    <span class="card-sublabel">
+                        Couverture : {{ financingDetails.resume.tauxCouvertureFinancement }}%
+                    </span>
+                </div>
+            </div>
+
+            <!-- Total Décaissé -->
+            <div class="summary-card card-success">
+                <div class="card-icon">
+                    <i data-lucide="check-circle"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Total Décaissé</span>
+                    <span class="card-value">{{ (financingDetails.resume.totalDecaisse / 1000000000)|number_format(2, '.', ' ') }} Mds</span>
+                    <span class="card-sublabel">
+                        Taux : {{ financingDetails.resume.tauxDecaissementGlobal }}%
+                    </span>
+                </div>
+            </div>
+
+            <!-- Montant Restant -->
+            <div class="summary-card card-warning">
+                <div class="card-icon">
+                    <i data-lucide="alert-circle"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Montant Restant</span>
+                    <span class="card-value">{{ (financingDetails.resume.totalRestant / 1000000000)|number_format(2, '.', ' ') }} Mds</span>
+                    <span class="card-sublabel">
+                        À décaisser
+                    </span>
+                </div>
+            </div>
+
+            <!-- Nombre de Conventions -->
+            <div class="summary-card card-info">
+                <div class="card-icon">
+                    <i data-lucide="file-text"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Conventions</span>
+                    <span class="card-value">{{ financingDetails.resume.nombreFinancements }}</span>
+                    <span class="card-sublabel">
+                        {{ financingDetails.resume.nombreActifs }} actives • {{ financingDetails.resume.nombreInactifs }} inactives
+                    </span>
+                </div>
+            </div>
+
+            <!-- Situation -->
+            <div class="summary-card {% if financingDetails.resume.situationFinancement == 'Couvert' %}card-success{% else %}card-danger{% endif %}">
+                <div class="card-icon">
+                    <i data-lucide="{% if financingDetails.resume.situationFinancement == 'Couvert' %}shield-check{% else %}shield-alert{% endif %}"></i>
+                </div>
+                <div class="card-content">
+                    <span class="card-label">Situation</span>
+                    <span class="card-value">{{ financingDetails.resume.situationFinancement }}</span>
+                    <span class="card-sublabel">
+                        {% if financingDetails.resume.deficitExcedent < 0 %}
+                            Déficit : {{ (financingDetails.resume.deficitExcedent / 1000000)|abs|number_format(0) }} M FCFA
+                        {% else %}
+                            Excédent : {{ (financingDetails.resume.deficitExcedent / 1000000)|number_format(0) }} M FCFA
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alertes -->
+    {% if financingDetails.alertes.deficitFinancement or financingDetails.alertes.financementsExpires|length > 0 or financingDetails.alertes.financementsProchesEcheance|length > 0 or financingDetails.alertes.faibleTauxDecaissement %}
+    <section class="alerts-section">
+        <h2 class="section-title">
+            <i data-lucide="alert-triangle"></i>
+            Alertes et Recommandations
+        </h2>
+
+        <div class="alerts-grid">
+            {% if financingDetails.alertes.deficitFinancement %}
+            <div class="alert alert-danger">
+                <div class="alert-icon">
+                    <i data-lucide="alert-octagon"></i>
+                </div>
+                <div class="alert-content">
+                    <strong>Déficit de Financement</strong>
+                    <p>Le projet présente un déficit de financement de <strong>{{ (financingDetails.alertes.montantDeficit / 1000000)|number_format(0) }} M FCFA</strong></p>
+                    <p class="alert-recommendation">🎯 Recommandation : Rechercher des financements complémentaires</p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if financingDetails.alertes.financementsExpires|length > 0 %}
+            <div class="alert alert-danger">
+                <div class="alert-icon">
+                    <i data-lucide="x-circle"></i>
+                </div>
+                <div class="alert-content">
+                    <strong>Financements Expirés</strong>
+                    <p><strong>{{ financingDetails.alertes.financementsExpires|length }}</strong> convention(s) ont dépassé leur date d'échéance</p>
+                    <p class="alert-recommendation">🎯 Recommandation : Négocier une extension ou clôturer</p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if financingDetails.alertes.financementsProchesEcheance|length > 0 %}
+            <div class="alert alert-warning">
+                <div class="alert-icon">
+                    <i data-lucide="clock"></i>
+                </div>
+                <div class="alert-content">
+                    <strong>Échéances Proches</strong>
+                    <p><strong>{{ financingDetails.alertes.financementsProchesEcheance|length }}</strong> convention(s) arrivent à échéance dans moins de 90 jours</p>
+                    <p class="alert-recommendation">🎯 Recommandation : Planifier la clôture ou l'extension</p>
+                </div>
+            </div>
+            {% endif %}
+
+            {% if financingDetails.alertes.faibleTauxDecaissement %}
+            <div class="alert alert-info">
+                <div class="alert-icon">
+                    <i data-lucide="trending-down"></i>
+                </div>
+                <div class="alert-content">
+                    <strong>Faible Taux de Décaissement</strong>
+                    <p>Le taux de décaissement global est de <strong>{{ financingDetails.resume.tauxDecaissementGlobal }}%</strong> (inférieur à 50%)</p>
+                    <p class="alert-recommendation">🎯 Recommandation : Accélérer l'exécution du projet</p>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Principal Bailleur -->
+    {% if financingDetails.principalBailleur %}
+    <section class="principal-bailleur-section">
+        <h2 class="section-title">
+            <i data-lucide="star"></i>
+            Principal Bailleur de Fonds
+        </h2>
+
+        <div class="principal-bailleur-card">
+            <div class="bailleur-info">
+                <div class="bailleur-name">{{ financingDetails.principalBailleur.nom }}</div>
+                <div class="bailleur-stats">
+                    <div class="stat">
+                        <span class="stat-label">Montant Engagé</span>
+                        <span class="stat-value">{{ (financingDetails.principalBailleur.montantEngage / 1000000000)|number_format(2) }} Mds FCFA</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Part du Financement</span>
+                        <span class="stat-value">{{ financingDetails.principalBailleur.pourcentage }}%</span>
+                    </div>
+                </div>
+            </div>
+            <div class="bailleur-visual">
+                <div class="percentage-circle" data-percentage="{{ financingDetails.principalBailleur.pourcentage }}">
+                    <span class="percentage-text">{{ financingDetails.principalBailleur.pourcentage }}%</span>
+                </div>
+            </div>
+        </div>
+    </section>
+    {% endif %}
+
+    <!-- Liste des Financements -->
+    <section class="financements-list-section">
+        <h2 class="section-title">
+            <i data-lucide="list"></i>
+            Liste des Financements ({{ financingDetails.resume.nombreFinancements }})
+        </h2>
+
+        <div class="financements-table-container">
+            <table class="financements-table">
+                <thead>
+                    <tr>
+                        <th>Convention</th>
+                        <th>Bailleur</th>
+                        <th>Type</th>
+                        <th>Montant Engagé</th>
+                        <th>Décaissé</th>
+                        <th>Restant</th>
+                        <th>Taux</th>
+                        <th>Échéance</th>
+                        <th>Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for financement in financingDetails.financements %}
+                    <tr class="{% if financement.isExpired %}row-expired{% elseif financement.isApproachingDeadline %}row-warning{% endif %}">
+                        <td>
+                            <div class="convention-cell">
+                                <strong>{{ financement.numeroConvention }}</strong>
+                                {% if financement.isExpired %}
+                                    <span class="badge badge-danger">Expiré</span>
+                                {% elseif financement.isApproachingDeadline %}
+                                    <span class="badge badge-warning">Proche échéance</span>
+                                {% endif %}
                             </div>
-                            {% endfor %}
-                        </div>
-                    {% else %}
-                        <p class="empty-message">Aucun financement enregistré</p>
-                    {% endif %}
+                        </td>
+                        <td>
+                            <div class="bailleur-cell">
+                                {% if financement.bailleurAcronyme %}
+                                    <span class="bailleur-acronym">{{ financement.bailleurAcronyme }}</span>
+                                {% endif %}
+                                {{ financement.bailleur }}
+                            </div>
+                        </td>
+                        <td>
+                            <span class="type-badge type-{{ financement.typeKey }}">{{ financement.type }}</span>
+                        </td>
+                        <td class="amount-cell">
+                            <strong>{{ (financement.montantEngage / 1000000)|number_format(1) }} M</strong>
+                            <small>FCFA</small>
+                        </td>
+                        <td class="amount-cell">
+                            {{ (financement.montantDecaisse / 1000000)|number_format(1) }} M
+                        </td>
+                        <td class="amount-cell">
+                            {{ (financement.montantRestant / 1000000)|number_format(1) }} M
+                        </td>
+                        <td class="progress-cell">
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: {{ financement.tauxDecaissement }}%; background: {% if financement.tauxDecaissement >= 70 %}#10b981{% elseif financement.tauxDecaissement >= 40 %}#f59e0b{% else %}#ef4444{% endif %};"></div>
+                            </div>
+                            <span class="progress-text">{{ financement.tauxDecaissement }}%</span>
+                        </td>
+                        <td>
+                            {% if financement.dateEcheance %}
+                                {{ financement.dateEcheance|date('d/m/Y') }}
+                            {% else %}
+                                <span class="text-muted">Non défini</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="status-badge status-{{ financement.statutKey }}">
+                                {{ financement.statut }}
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <!-- Graphiques de Répartition -->
+    <section class="charts-section">
+        <h2 class="section-title">
+            <i data-lucide="pie-chart"></i>
+            Répartition du Financement
+        </h2>
+
+        <div class="charts-grid">
+            <!-- Répartition par Bailleur -->
+            <div class="chart-card">
+                <h3 class="chart-title">Par Bailleur</h3>
+                <canvas id="bailleurChart"></canvas>
+                <div class="chart-legend">
+                    {% for bailleur, data in financingDetails.repartitionBailleur %}
+                    <div class="legend-item">
+                        <span class="legend-label">{{ bailleur }}</span>
+                        <span class="legend-value">{{ (data.engage / 1000000)|number_format(0) }} M FCFA ({{ data.taux }}%)</span>
+                    </div>
+                    {% endfor %}
                 </div>
-            </section>
+            </div>
+
+            <!-- Répartition par Type -->
+            <div class="chart-card">
+                <h3 class="chart-title">Par Type de Financement</h3>
+                <canvas id="typeChart"></canvas>
+                <div class="chart-legend">
+                    {% for type, data in financingDetails.repartitionType %}
+                    <div class="legend-item">
+                        <span class="legend-label">{{ type }}</span>
+                        <span class="legend-value">{{ data.count }} convention(s) - {{ (data.engage / 1000000)|number_format(0) }} M FCFA</span>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
 
             {# Audits et Contrôles #}
             {% if audits is not empty %}
@@ -212,9 +492,9 @@
                     </h3>
                 </div>
                 <div class="card-body">
-                    {% if disbursements is not empty %}
+                    {% if decaissements is not empty %}
                         <div class="disbursement-list">
-                            {% for disbursement in disbursements|slice(0, 10) %}
+                            {% for disbursement in decaissements|slice(0, 10) %}
                             <div class="disbursement-item">
                                 <div class="disbursement-header">
                                     <span class="disbursement-date">{{ disbursement.dateDecaissement ? disbursement.dateDecaissement|date('d/m/Y') : 'N/A' }}</span>
@@ -295,6 +575,8 @@
     {{ parent() }}
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
     <script>
         lucide.createIcons();
 
@@ -336,5 +618,85 @@
                 }
             });
         }
+
+           // Initialize icons
+        lucide.createIcons();
+
+        // Colors
+        const colors = ['#004d99', '#daa520', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6'];
+
+        // Bailleur Chart
+        new Chart(document.getElementById('bailleurChart'), {
+            type: 'doughnut',
+            data: {
+                labels: [
+                    {% for bailleur, data in financingDetails.repartitionBailleur %}
+                        '{{ bailleur }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    data: [
+                        {% for bailleur, data in financingDetails.repartitionBailleur %}
+                            {{ data.engage }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: colors
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = (context.raw / 1000000).toFixed(0);
+                                return context.label + ': ' + value + ' M FCFA';
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        // Type Chart
+        new Chart(document.getElementById('typeChart'), {
+            type: 'pie',
+            data: {
+                labels: [
+                    {% for type, data in financingDetails.repartitionType %}
+                        '{{ type }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    data: [
+                        {% for type, data in financingDetails.repartitionType %}
+                            {{ data.engage }},
+                        {% endfor %}
+                    ],
+                    backgroundColor: colors
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                const value = (context.raw / 1000000).toFixed(0);
+                                return context.label + ': ' + value + ' M FCFA';
+                            }
+                        }
+                    }
+                }
+            }
+        });
     </script>
 {% endblock %}
