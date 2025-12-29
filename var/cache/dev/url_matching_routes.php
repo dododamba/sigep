@@ -15,6 +15,10 @@ return [
         '/financements/export/json' => [[['_route' => 'app_financements_export_json', '_controller' => 'App\\Controller\\FinancementController::exportJson'], null, ['GET' => 0], null, false, false, null]],
         '/institutions/api/search' => [[['_route' => 'app_institutions_api_search', '_controller' => 'App\\Controller\\InstitutionController::apiSearch'], null, ['GET' => 0], null, false, false, null]],
         '/institutions/api/stats' => [[['_route' => 'app_institutions_api_stats', '_controller' => 'App\\Controller\\InstitutionController::apiStats'], null, ['GET' => 0], null, false, false, null]],
+        '/admin/roles/api/search' => [[['_route' => 'app_roles_api_search', '_controller' => 'App\\Controller\\RoleController::apiSearch'], null, ['GET' => 0], null, false, false, null]],
+        '/admin/roles/api/stats' => [[['_route' => 'app_roles_api_stats', '_controller' => 'App\\Controller\\RoleController::apiStats'], null, ['GET' => 0], null, false, false, null]],
+        '/admin/roles/api/active' => [[['_route' => 'app_roles_api_active', '_controller' => 'App\\Controller\\RoleController::apiActive'], null, ['GET' => 0], null, false, false, null]],
+        '/admin/roles/export/json' => [[['_route' => 'app_roles_export_json', '_controller' => 'App\\Controller\\RoleController::exportJson'], null, ['GET' => 0], null, false, false, null]],
         '/audits' => [[['_route' => 'app_audit_index', '_controller' => 'App\\Controller\\AuditController::index'], null, ['GET' => 0], null, true, false, null]],
         '/audits/nouveau' => [[['_route' => 'app_audit_new', '_controller' => 'App\\Controller\\AuditController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/conventions' => [[['_route' => 'app_convention_index', '_controller' => 'App\\Controller\\ConventionController::index'], null, ['GET' => 0], null, true, false, null]],
@@ -48,8 +52,8 @@ return [
         '/projects/api/stats' => [[['_route' => 'app_projects_api_stats', '_controller' => 'App\\Controller\\ProjectController::apiStats'], null, ['GET' => 0], null, false, false, null]],
         '/projects/api/budget-by-sector' => [[['_route' => 'app_projects_api_budget_sector', '_controller' => 'App\\Controller\\ProjectController::apiBudgetBySector'], null, ['GET' => 0], null, false, false, null]],
         '/projects/export/json' => [[['_route' => 'app_projects_export_json', '_controller' => 'App\\Controller\\ProjectController::exportJson'], null, ['GET' => 0], null, false, false, null]],
-        '/admin/role' => [[['_route' => 'app_role_index', '_controller' => 'App\\Controller\\RoleController::index'], null, ['GET' => 0], null, false, false, null]],
-        '/admin/role/new' => [[['_route' => 'app_role_new', '_controller' => 'App\\Controller\\RoleController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        '/admin/roles' => [[['_route' => 'app_roles', '_controller' => 'App\\Controller\\RoleController::index'], null, ['GET' => 0], null, false, false, null]],
+        '/admin/roles/new' => [[['_route' => 'app_roles_new', '_controller' => 'App\\Controller\\RoleController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/register-as-partner' => [[['_route' => 'app_register_as_partner', '_controller' => 'App\\Controller\\SecurityController::registerAsPartner'], null, null, null, false, false, null]],
         '/login' => [[['_route' => 'app_login', '_controller' => 'App\\Controller\\SecurityController::login'], null, null, null, false, false, null]],
         '/logout' => [[['_route' => 'app_logout', '_controller' => 'App\\Controller\\SecurityController::logout'], null, null, null, false, false, null]],
@@ -60,7 +64,6 @@ return [
         '/user/api/list' => [[['_route' => 'app_user_api_list', '_controller' => 'App\\Controller\\UserController::apiList'], null, ['GET' => 0], null, false, false, null]],
         '/user/new' => [[['_route' => 'app_user_new', '_controller' => 'App\\Controller\\UserController::new'], null, ['GET' => 0, 'POST' => 1], null, false, false, null]],
         '/' => [[['_route' => 'app_web', '_controller' => 'App\\Controller\\WebController::index'], null, null, null, false, false, null]],
-        '/roles' => [[['_route' => 'app_roles', '_controller' => 'App\\Controller\\WebController::roles'], null, null, null, false, false, null]],
         '/login-history' => [[['_route' => 'app_login_history', '_controller' => 'App\\Controller\\WebController::loginHistory'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
@@ -77,88 +80,96 @@ return [
                             .'|supprimer(*:145)'
                         .')'
                     .')'
-                    .'|dmin/role/([^/]++)(?'
-                        .'|(*:176)'
-                        .'|/edit(*:189)'
-                        .'|(*:197)'
+                    .'|dmin/roles/(?'
+                        .'|(\\d+)(*:174)'
+                        .'|([^/]++)(?'
+                            .'|/(?'
+                                .'|edit(*:201)'
+                                .'|toggle\\-status(*:223)'
+                                .'|duplicate(*:240)'
+                                .'|permissions(*:259)'
+                            .')'
+                            .'|(*:268)'
+                        .')'
+                        .'|permissions\\-matrix(*:296)'
                     .')'
                 .')'
                 .'|/conventions/(?'
                     .'|([^/]++)(?'
-                        .'|(*:234)'
+                        .'|(*:333)'
                         .'|/(?'
-                            .'|modifier(*:254)'
+                            .'|modifier(*:353)'
                             .'|su(?'
-                                .'|pprimer(*:274)'
-                                .'|spendre(*:289)'
+                                .'|pprimer(*:373)'
+                                .'|spendre(*:388)'
                             .')'
-                            .'|cloturer(*:306)'
-                            .'|reactiver(*:323)'
-                            .'|annuler(*:338)'
+                            .'|cloturer(*:405)'
+                            .'|reactiver(*:422)'
+                            .'|annuler(*:437)'
                         .')'
                     .')'
-                    .'|dashboard(*:357)'
+                    .'|dashboard(*:456)'
                 .')'
                 .'|/decaissements/([^/]++)(?'
-                    .'|(*:392)'
+                    .'|(*:491)'
                     .'|/(?'
-                        .'|modifier(*:412)'
-                        .'|supprimer(*:429)'
-                        .'|valider(*:444)'
-                        .'|executer(*:460)'
-                        .'|rejeter(*:475)'
-                        .'|annuler(*:490)'
+                        .'|modifier(*:511)'
+                        .'|supprimer(*:528)'
+                        .'|valider(*:543)'
+                        .'|executer(*:559)'
+                        .'|rejeter(*:574)'
+                        .'|annuler(*:589)'
                     .')'
                 .')'
                 .'|/financements/([^/]++)(?'
-                    .'|/edit(*:530)'
-                    .'|(*:538)'
-                    .'|(*:546)'
+                    .'|/edit(*:629)'
+                    .'|(*:637)'
+                    .'|(*:645)'
                 .')'
                 .'|/institutions/([^/]++)(?'
                     .'|/(?'
-                        .'|edit(*:588)'
-                        .'|toggle\\-status(*:610)'
+                        .'|edit(*:687)'
+                        .'|toggle\\-status(*:709)'
                     .')'
-                    .'|(*:619)'
-                    .'|(*:627)'
+                    .'|(*:718)'
+                    .'|(*:726)'
                 .')'
                 .'|/p(?'
                     .'|artners/([^/]++)(?'
-                        .'|(*:660)'
+                        .'|(*:759)'
                         .'|/(?'
-                            .'|edit(*:676)'
-                            .'|toggle\\-status(*:698)'
+                            .'|edit(*:775)'
+                            .'|toggle\\-status(*:797)'
                         .')'
-                        .'|(*:707)'
+                        .'|(*:806)'
                     .')'
                     .'|rojects/([^/]++)(?'
-                        .'|(*:735)'
+                        .'|(*:834)'
                         .'|/(?'
-                            .'|edit(*:751)'
-                            .'|toggle\\-status(*:773)'
-                            .'|update\\-progress(*:797)'
-                            .'|duplicate(*:814)'
+                            .'|edit(*:850)'
+                            .'|toggle\\-status(*:872)'
+                            .'|update\\-progress(*:896)'
+                            .'|duplicate(*:913)'
                         .')'
-                        .'|(*:823)'
+                        .'|(*:922)'
                     .')'
                 .')'
                 .'|/top\\-management/(?'
-                    .'|project/([^/]++)(*:869)'
-                    .'|financing/([^/]++)(*:895)'
+                    .'|project/([^/]++)(*:968)'
+                    .'|financing/([^/]++)(*:994)'
                 .')'
                 .'|/user/(?'
                     .'|([^/]++)(?'
-                        .'|(*:924)'
+                        .'|(*:1023)'
                         .'|/(?'
-                            .'|edit(*:940)'
-                            .'|toggle\\-status(*:962)'
+                            .'|edit(*:1040)'
+                            .'|toggle\\-status(*:1063)'
                         .')'
-                        .'|(*:971)'
+                        .'|(*:1073)'
                     .')'
                     .'|api/(?'
-                        .'|([^/]++)(*:995)'
-                        .'|stats(*:1008)'
+                        .'|([^/]++)(*:1098)'
+                        .'|stats(*:1112)'
                     .')'
                 .')'
             .')/?$}sDu',
@@ -169,49 +180,53 @@ return [
         108 => [[['_route' => 'app_audit_show', '_controller' => 'App\\Controller\\AuditController::show'], ['id'], ['GET' => 0], null, false, true, null]],
         128 => [[['_route' => 'app_audit_edit', '_controller' => 'App\\Controller\\AuditController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
         145 => [[['_route' => 'app_audit_delete', '_controller' => 'App\\Controller\\AuditController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
-        176 => [[['_route' => 'app_role_show', '_controller' => 'App\\Controller\\RoleController::show'], ['id'], ['GET' => 0], null, false, true, null]],
-        189 => [[['_route' => 'app_role_edit', '_controller' => 'App\\Controller\\RoleController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        197 => [[['_route' => 'app_role_delete', '_controller' => 'App\\Controller\\RoleController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
-        234 => [[['_route' => 'app_convention_show', '_controller' => 'App\\Controller\\ConventionController::show'], ['id'], ['GET' => 0], null, false, true, null]],
-        254 => [[['_route' => 'app_convention_edit', '_controller' => 'App\\Controller\\ConventionController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        274 => [[['_route' => 'app_convention_delete', '_controller' => 'App\\Controller\\ConventionController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
-        289 => [[['_route' => 'app_convention_suspend', '_controller' => 'App\\Controller\\ConventionController::suspend'], ['id'], ['POST' => 0], null, false, false, null]],
-        306 => [[['_route' => 'app_convention_close', '_controller' => 'App\\Controller\\ConventionController::close'], ['id'], ['POST' => 0], null, false, false, null]],
-        323 => [[['_route' => 'app_convention_reactivate', '_controller' => 'App\\Controller\\ConventionController::reactivate'], ['id'], ['POST' => 0], null, false, false, null]],
-        338 => [[['_route' => 'app_convention_cancel', '_controller' => 'App\\Controller\\ConventionController::cancel'], ['id'], ['POST' => 0], null, false, false, null]],
-        357 => [[['_route' => 'app_convention_dashboard', '_controller' => 'App\\Controller\\ConventionController::dashboard'], [], ['GET' => 0], null, false, false, null]],
-        392 => [[['_route' => 'app_decaissement_show', '_controller' => 'App\\Controller\\DecaissementController::show'], ['id'], ['GET' => 0], null, false, true, null]],
-        412 => [[['_route' => 'app_decaissement_edit', '_controller' => 'App\\Controller\\DecaissementController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        429 => [[['_route' => 'app_decaissement_delete', '_controller' => 'App\\Controller\\DecaissementController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
-        444 => [[['_route' => 'app_decaissement_validate', '_controller' => 'App\\Controller\\DecaissementController::validate'], ['id'], ['POST' => 0], null, false, false, null]],
-        460 => [[['_route' => 'app_decaissement_execute', '_controller' => 'App\\Controller\\DecaissementController::execute'], ['id'], ['POST' => 0], null, false, false, null]],
-        475 => [[['_route' => 'app_decaissement_reject', '_controller' => 'App\\Controller\\DecaissementController::reject'], ['id'], ['POST' => 0], null, false, false, null]],
-        490 => [[['_route' => 'app_decaissement_cancel', '_controller' => 'App\\Controller\\DecaissementController::cancel'], ['id'], ['POST' => 0], null, false, false, null]],
-        530 => [[['_route' => 'app_financements_edit', '_controller' => 'App\\Controller\\FinancementController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        538 => [[['_route' => 'app_financements_delete', '_controller' => 'App\\Controller\\FinancementController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
-        546 => [[['_route' => 'app_financements_show', '_controller' => 'App\\Controller\\FinancementController::show'], ['slug'], ['GET' => 0], null, false, true, null]],
-        588 => [[['_route' => 'app_institutions_edit', '_controller' => 'App\\Controller\\InstitutionController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        610 => [[['_route' => 'app_institutions_toggle_status', '_controller' => 'App\\Controller\\InstitutionController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
-        619 => [[['_route' => 'app_institutions_delete', '_controller' => 'App\\Controller\\InstitutionController::delete'], ['id'], ['POST' => 0, 'DELETE' => 1], null, false, true, null]],
-        627 => [[['_route' => 'app_institutions_show', '_controller' => 'App\\Controller\\InstitutionController::show'], ['slug'], ['GET' => 0], null, false, true, null]],
-        660 => [[['_route' => 'app_partners_show', '_controller' => 'App\\Controller\\PartnerController::show'], ['slug'], ['GET' => 0], null, false, true, null]],
-        676 => [[['_route' => 'app_partners_edit', '_controller' => 'App\\Controller\\PartnerController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        698 => [[['_route' => 'app_partners_toggle_status', '_controller' => 'App\\Controller\\PartnerController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
-        707 => [[['_route' => 'app_partners_delete', '_controller' => 'App\\Controller\\PartnerController::delete'], ['id'], ['POST' => 0, 'DELETE' => 1], null, false, true, null]],
-        735 => [[['_route' => 'app_projects_show', '_controller' => 'App\\Controller\\ProjectController::show'], ['slug'], ['GET' => 0], null, false, true, null]],
-        751 => [[['_route' => 'app_projects_edit', '_controller' => 'App\\Controller\\ProjectController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        773 => [[['_route' => 'app_projects_toggle_status', '_controller' => 'App\\Controller\\ProjectController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
-        797 => [[['_route' => 'app_projects_update_progress', '_controller' => 'App\\Controller\\ProjectController::updateProgress'], ['id'], ['POST' => 0], null, false, false, null]],
-        814 => [[['_route' => 'app_projects_duplicate', '_controller' => 'App\\Controller\\ProjectController::duplicate'], ['id'], ['POST' => 0], null, false, false, null]],
-        823 => [[['_route' => 'app_projects_delete', '_controller' => 'App\\Controller\\ProjectController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
-        869 => [[['_route' => 'app_top_management_project_detail', '_controller' => 'App\\Controller\\TopManagementController::projectDetail'], ['id'], ['GET' => 0], null, false, true, null]],
-        895 => [[['_route' => 'app_top_management_financing_detail', '_controller' => 'App\\Controller\\TopManagementController::financingDetail'], ['id'], ['GET' => 0], null, false, true, null]],
-        924 => [[['_route' => 'app_user_show', '_controller' => 'App\\Controller\\UserController::show'], ['id'], ['GET' => 0], null, false, true, null]],
-        940 => [[['_route' => 'app_user_edit', '_controller' => 'App\\Controller\\UserController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
-        962 => [[['_route' => 'app_user_toggle_status', '_controller' => 'App\\Controller\\UserController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
-        971 => [[['_route' => 'app_user_delete', '_controller' => 'App\\Controller\\UserController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
-        995 => [[['_route' => 'app_user_api_show', '_controller' => 'App\\Controller\\UserController::apiShow'], ['id'], ['GET' => 0], null, false, true, null]],
-        1008 => [
+        174 => [[['_route' => 'app_roles_show', '_controller' => 'App\\Controller\\RoleController::show'], ['id'], ['GET' => 0], null, false, true, null]],
+        201 => [[['_route' => 'app_roles_edit', '_controller' => 'App\\Controller\\RoleController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        223 => [[['_route' => 'app_roles_toggle_status', '_controller' => 'App\\Controller\\RoleController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
+        240 => [[['_route' => 'app_roles_duplicate', '_controller' => 'App\\Controller\\RoleController::duplicate'], ['id'], ['POST' => 0], null, false, false, null]],
+        259 => [[['_route' => 'app_roles_api_permissions', '_controller' => 'App\\Controller\\RoleController::apiPermissions'], ['id'], ['GET' => 0], null, false, false, null]],
+        268 => [[['_route' => 'app_roles_delete', '_controller' => 'App\\Controller\\RoleController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
+        296 => [[['_route' => 'app_roles_permissions_matrix', '_controller' => 'App\\Controller\\RoleController::permissionsMatrix'], [], ['GET' => 0], null, false, false, null]],
+        333 => [[['_route' => 'app_convention_show', '_controller' => 'App\\Controller\\ConventionController::show'], ['id'], ['GET' => 0], null, false, true, null]],
+        353 => [[['_route' => 'app_convention_edit', '_controller' => 'App\\Controller\\ConventionController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        373 => [[['_route' => 'app_convention_delete', '_controller' => 'App\\Controller\\ConventionController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
+        388 => [[['_route' => 'app_convention_suspend', '_controller' => 'App\\Controller\\ConventionController::suspend'], ['id'], ['POST' => 0], null, false, false, null]],
+        405 => [[['_route' => 'app_convention_close', '_controller' => 'App\\Controller\\ConventionController::close'], ['id'], ['POST' => 0], null, false, false, null]],
+        422 => [[['_route' => 'app_convention_reactivate', '_controller' => 'App\\Controller\\ConventionController::reactivate'], ['id'], ['POST' => 0], null, false, false, null]],
+        437 => [[['_route' => 'app_convention_cancel', '_controller' => 'App\\Controller\\ConventionController::cancel'], ['id'], ['POST' => 0], null, false, false, null]],
+        456 => [[['_route' => 'app_convention_dashboard', '_controller' => 'App\\Controller\\ConventionController::dashboard'], [], ['GET' => 0], null, false, false, null]],
+        491 => [[['_route' => 'app_decaissement_show', '_controller' => 'App\\Controller\\DecaissementController::show'], ['id'], ['GET' => 0], null, false, true, null]],
+        511 => [[['_route' => 'app_decaissement_edit', '_controller' => 'App\\Controller\\DecaissementController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        528 => [[['_route' => 'app_decaissement_delete', '_controller' => 'App\\Controller\\DecaissementController::delete'], ['id'], ['POST' => 0], null, false, false, null]],
+        543 => [[['_route' => 'app_decaissement_validate', '_controller' => 'App\\Controller\\DecaissementController::validate'], ['id'], ['POST' => 0], null, false, false, null]],
+        559 => [[['_route' => 'app_decaissement_execute', '_controller' => 'App\\Controller\\DecaissementController::execute'], ['id'], ['POST' => 0], null, false, false, null]],
+        574 => [[['_route' => 'app_decaissement_reject', '_controller' => 'App\\Controller\\DecaissementController::reject'], ['id'], ['POST' => 0], null, false, false, null]],
+        589 => [[['_route' => 'app_decaissement_cancel', '_controller' => 'App\\Controller\\DecaissementController::cancel'], ['id'], ['POST' => 0], null, false, false, null]],
+        629 => [[['_route' => 'app_financements_edit', '_controller' => 'App\\Controller\\FinancementController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        637 => [[['_route' => 'app_financements_delete', '_controller' => 'App\\Controller\\FinancementController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
+        645 => [[['_route' => 'app_financements_show', '_controller' => 'App\\Controller\\FinancementController::show'], ['slug'], ['GET' => 0], null, false, true, null]],
+        687 => [[['_route' => 'app_institutions_edit', '_controller' => 'App\\Controller\\InstitutionController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        709 => [[['_route' => 'app_institutions_toggle_status', '_controller' => 'App\\Controller\\InstitutionController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
+        718 => [[['_route' => 'app_institutions_delete', '_controller' => 'App\\Controller\\InstitutionController::delete'], ['id'], ['POST' => 0, 'DELETE' => 1], null, false, true, null]],
+        726 => [[['_route' => 'app_institutions_show', '_controller' => 'App\\Controller\\InstitutionController::show'], ['slug'], ['GET' => 0], null, false, true, null]],
+        759 => [[['_route' => 'app_partners_show', '_controller' => 'App\\Controller\\PartnerController::show'], ['slug'], ['GET' => 0], null, false, true, null]],
+        775 => [[['_route' => 'app_partners_edit', '_controller' => 'App\\Controller\\PartnerController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        797 => [[['_route' => 'app_partners_toggle_status', '_controller' => 'App\\Controller\\PartnerController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
+        806 => [[['_route' => 'app_partners_delete', '_controller' => 'App\\Controller\\PartnerController::delete'], ['id'], ['POST' => 0, 'DELETE' => 1], null, false, true, null]],
+        834 => [[['_route' => 'app_projects_show', '_controller' => 'App\\Controller\\ProjectController::show'], ['slug'], ['GET' => 0], null, false, true, null]],
+        850 => [[['_route' => 'app_projects_edit', '_controller' => 'App\\Controller\\ProjectController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        872 => [[['_route' => 'app_projects_toggle_status', '_controller' => 'App\\Controller\\ProjectController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
+        896 => [[['_route' => 'app_projects_update_progress', '_controller' => 'App\\Controller\\ProjectController::updateProgress'], ['id'], ['POST' => 0], null, false, false, null]],
+        913 => [[['_route' => 'app_projects_duplicate', '_controller' => 'App\\Controller\\ProjectController::duplicate'], ['id'], ['POST' => 0], null, false, false, null]],
+        922 => [[['_route' => 'app_projects_delete', '_controller' => 'App\\Controller\\ProjectController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
+        968 => [[['_route' => 'app_top_management_project_detail', '_controller' => 'App\\Controller\\TopManagementController::projectDetail'], ['id'], ['GET' => 0], null, false, true, null]],
+        994 => [[['_route' => 'app_top_management_financing_detail', '_controller' => 'App\\Controller\\TopManagementController::financingDetail'], ['id'], ['GET' => 0], null, false, true, null]],
+        1023 => [[['_route' => 'app_user_show', '_controller' => 'App\\Controller\\UserController::show'], ['id'], ['GET' => 0], null, false, true, null]],
+        1040 => [[['_route' => 'app_user_edit', '_controller' => 'App\\Controller\\UserController::edit'], ['id'], ['GET' => 0, 'POST' => 1], null, false, false, null]],
+        1063 => [[['_route' => 'app_user_toggle_status', '_controller' => 'App\\Controller\\UserController::toggleStatus'], ['id'], ['POST' => 0], null, false, false, null]],
+        1073 => [[['_route' => 'app_user_delete', '_controller' => 'App\\Controller\\UserController::delete'], ['id'], ['POST' => 0], null, false, true, null]],
+        1098 => [[['_route' => 'app_user_api_show', '_controller' => 'App\\Controller\\UserController::apiShow'], ['id'], ['GET' => 0], null, false, true, null]],
+        1112 => [
             [['_route' => 'app_user_api_stats', '_controller' => 'App\\Controller\\UserController::apiStats'], [], ['GET' => 0], null, false, false, null],
             [null, null, null, null, false, false, 0],
         ],

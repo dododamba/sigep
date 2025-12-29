@@ -1,5 +1,215 @@
 {% extends 'base.html.twig' %}
 {% block title %}Convention {{ convention.code }} - SIGEP Tchad{% endblock %}
+{% block stylesheets %}
+<style>
+/* ===============================
+   Variables couleurs et typographie
+   =============================== */
+:root {
+    --primary-color: #004d99;
+    --secondary-color: #f0f4f8;
+    --accent-color: #daa520;
+    --text-color: #333;
+    --text-light: #666;
+    --bg-card: #fff;
+    --border-radius: 12px;
+    --transition-speed: 0.3s;
+    --badge-success: #28a745;
+    --badge-warning: #ffc107;
+    --badge-danger: #dc3545;
+    --badge-info: #17a2b8;
+    --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ===============================
+   Global Styles
+   =============================== */
+body {
+    font-family: var(--font-family);
+    color: var(--text-color);
+    background-color: var(--secondary-color);
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: var(--primary-color);
+    transition: color var(--transition-speed);
+}
+
+a:hover {
+    color: darken(var(--primary-color), 10%);
+}
+
+/* ===============================
+   Content Area
+   =============================== */
+.content-area {
+    max-width: 900px;
+    margin: 2rem auto;
+    padding: 1rem;
+}
+
+/* ===============================
+   Page Header
+   =============================== */
+.page-header {
+    margin-bottom: 1.5rem;
+}
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.back-link i {
+    margin-right: 0.5rem;
+    font-size: 1.2rem;
+}
+
+/* ===============================
+   Detail Card
+   =============================== */
+.detail-card {
+    background-color: var(--bg-card);
+    border-radius: var(--border-radius);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    padding: 1.5rem;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.detail-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* ===============================
+   Detail Header
+   =============================== */
+.detail-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.detail-header h3 {
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.detail-header p {
+    margin: 0;
+    color: var(--text-light);
+}
+
+/* ===============================
+   Badges
+   =============================== */
+.badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 8px;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.badge-success { background-color: var(--badge-success); }
+.badge-warning { background-color: var(--badge-warning); }
+.badge-danger { background-color: var(--badge-danger); }
+.badge-info { background-color: var(--badge-info); }
+
+/* ===============================
+   Detail Section
+   =============================== */
+.detail-section {
+    margin-top: 1.5rem;
+}
+
+.detail-section h4 {
+    margin-bottom: 0.75rem;
+    font-size: 1.2rem;
+    color: var(--primary-color);
+}
+
+/* ===============================
+   Detail Grid
+   =============================== */
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem 2rem;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+}
+
+.detail-label {
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+.detail-value {
+    font-size: 1rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+}
+
+/* ===============================
+   Action Buttons
+   =============================== */
+.action-buttons {
+    margin-top: 1rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: var(--border-radius);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color var(--transition-speed), transform var(--transition-speed);
+}
+
+.btn i {
+    font-size: 1rem;
+}
+
+/* Primary Button */
+.btn-primary {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #003366;
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .detail-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+}
+
+</style>
+{% endblock %}
 {% block body %}
 <div class="content-area">
     <div class="page-header">

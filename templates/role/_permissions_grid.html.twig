@@ -1,0 +1,224 @@
+{# Grille de permissions réutilisable #}
+<div class="permissions-grid">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h5 class="mb-0">
+                <i data-lucide="key"></i>
+                Permissions du Rôle
+            </h5>
+            <small>Cochez les permissions que vous souhaitez accorder à ce rôle</small>
+        </div>
+        <div class="card-body">
+            <!-- Sélection rapide -->
+            <div class="mb-4 p-3 bg-light rounded">
+                <div class="row g-2">
+                    <div class="col-auto">
+                        <strong>Actions rapides :</strong>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="selectAllPermissions()">
+                            <i data-lucide="check-square"></i> Tout sélectionner
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-sm btn-outline-secondary" onclick="deselectAllPermissions()">
+                            <i data-lucide="square"></i> Tout désélectionner
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button type="button" class="btn btn-sm btn-outline-info" onclick="selectReadOnlyPermissions()">
+                            <i data-lucide="eye"></i> Lecture seule
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tableau des permissions -->
+            <div class="table-responsive">
+                <table class="table table-bordered permissions-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 25%;">Module / Entité</th>
+                            {% for actionKey, actionLabel in actions %}
+                                <th class="text-center" style="width: {{ 75 / actions|length }}%;">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <i data-lucide="{{ getActionIcon(actionKey) }}" style="width: 20px; height: 20px;"></i>
+                                        <span>{{ actionLabel }}</span>
+                                    </div>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entityKey, entityLabel in entities %}
+                            <tr>
+                                <td>
+                                    <strong class="text-primary">
+                                        <i data-lucide="{{ getEntityIcon(entityKey) }}"></i>
+                                        {{ entityLabel }}
+                                    </strong>
+                                </td>
+                                {% for actionKey, actionLabel in actions %}
+                                    <td class="text-center">
+                                        <div class="form-check d-inline-block">
+                                            <input 
+                                                class="form-check-input permission-checkbox" 
+                                                type="checkbox" 
+                                                name="permissions[{{ entityKey }}][{{ actionKey }}]"
+                                                id="perm_{{ entityKey }}_{{ actionKey }}"
+                                                value="1"
+                                                data-entity="{{ entityKey }}"
+                                                data-action="{{ actionKey }}"
+                                                {% if role and role.hasPermission(entityKey, actionKey) %}checked{% endif %}
+                                            >
+                                            <label class="form-check-label" for="perm_{{ entityKey }}_{{ actionKey }}">
+                                                <span class="visually-hidden">{{ entityLabel }} - {{ actionLabel }}</span>
+                                            </label>
+                                        </div>
+                                    </td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Résumé des permissions -->
+            <div class="mt-4 p-3 bg-light rounded">
+                <div class="row">
+                    <div class="col-md-4">
+                        <strong>Total permissions :</strong>
+                        <span id="total-permissions" class="badge bg-primary ms-2">0</span>
+                    </div>
+                    <div class="col-md-4">
+                        <strong>Pourcentage :</strong>
+                        <span id="percentage-permissions" class="badge bg-info ms-2">0%</span>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="progress">
+                            <div id="progress-permissions" class="progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.permissions-table {
+    font-size: 0.9rem;
+}
+
+.permissions-table thead th {
+    background: #f8f9fa;
+    font-weight: 600;
+    vertical-align: middle;
+}
+
+.permissions-table tbody td {
+    vertical-align: middle;
+}
+
+.form-check-input {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.form-check-input:checked {
+    background-color: #004d99;
+    border-color: #004d99;
+}
+</style>
+
+<script>
+// Fonctions de sélection des permissions
+function selectAllPermissions() {
+    document.querySelectorAll('.permission-checkbox').forEach(cb => cb.checked = true);
+    updatePermissionsSummary();
+    lucide.createIcons();
+}
+
+function deselectAllPermissions() {
+    document.querySelectorAll('.permission-checkbox').forEach(cb => cb.checked = false);
+    updatePermissionsSummary();
+    lucide.createIcons();
+}
+
+function selectReadOnlyPermissions() {
+    deselectAllPermissions();
+    document.querySelectorAll('.permission-checkbox[data-action="view"]').forEach(cb => cb.checked = true);
+    updatePermissionsSummary();
+    lucide.createIcons();
+}
+
+// Mise à jour du résumé des permissions
+function updatePermissionsSummary() {
+    const total = document.querySelectorAll('.permission-checkbox').length;
+    const checked = document.querySelectorAll('.permission-checkbox:checked').length;
+    const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
+
+    document.getElementById('total-permissions').textContent = checked + ' / ' + total;
+    document.getElementById('percentage-permissions').textContent = percentage + '%';
+    document.getElementById('progress-permissions').style.width = percentage + '%';
+}
+
+// Initialiser et écouter les changements
+document.addEventListener('DOMContentLoaded', function() {
+    updatePermissionsSummary();
+    
+    document.querySelectorAll('.permission-checkbox').forEach(checkbox => {
+        checkbox.addEventListener('change', updatePermissionsSummary);
+    });
+});
+</script>
+
+{# Helper functions for icons #}
+{% set actionIcons = {
+    'view': 'eye',
+    'create': 'plus-circle',
+    'edit': 'edit',
+    'delete': 'trash-2',
+    'export': 'download'
+} %}
+
+{% set entityIcons = {
+    'project': 'folder',
+    'financement': 'dollar-sign',
+    'convention': 'file-text',
+    'decaissement': 'credit-card',
+    'audit': 'clipboard-check',
+    'institution': 'building',
+    'partner': 'users',
+    'user': 'user',
+    'dashboard': 'layout-dashboard',
+    'top_management': 'crown'
+} %}
+
+{% macro getActionIcon(action) %}
+    {% set icons = {
+        'view': 'eye',
+        'create': 'plus-circle',
+        'edit': 'edit',
+        'delete': 'trash-2',
+        'export': 'download'
+    } %}
+    {{ icons[action]|default('circle') }}
+{% endmacro %}
+
+{% macro getEntityIcon(entity) %}
+    {% set icons = {
+        'project': 'folder',
+        'financement': 'dollar-sign',
+        'convention': 'file-text',
+        'decaissement': 'credit-card',
+        'audit': 'clipboard-check',
+        'institution': 'building',
+        'partner': 'users',
+        'user': 'user',
+        'dashboard': 'layout-dashboard',
+        'top_management': 'crown'
+    } %}
+    {{ icons[entity]|default('circle') }}
+{% endmacro %}

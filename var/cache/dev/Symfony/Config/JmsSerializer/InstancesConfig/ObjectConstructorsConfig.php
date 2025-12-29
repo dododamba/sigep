@@ -13,7 +13,7 @@ class ObjectConstructorsConfig
 {
     private $doctrine;
     private $_usedProperties = [];
-
+    
     /**
      * @default {"enabled":true,"fallback_strategy":"null"}
     */
@@ -25,10 +25,10 @@ class ObjectConstructorsConfig
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "doctrine()" has already been initialized. You cannot pass values the second time you call doctrine().');
         }
-
+    
         return $this->doctrine;
     }
-
+    
     public function __construct(array $value = [])
     {
         if (array_key_exists('doctrine', $value)) {
@@ -36,19 +36,19 @@ class ObjectConstructorsConfig
             $this->doctrine = new \Symfony\Config\JmsSerializer\InstancesConfig\ObjectConstructors\DoctrineConfig($value['doctrine']);
             unset($value['doctrine']);
         }
-
+    
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-
+    
     public function toArray(): array
     {
         $output = [];
         if (isset($this->_usedProperties['doctrine'])) {
             $output['doctrine'] = $this->doctrine->toArray();
         }
-
+    
         return $output;
     }
 

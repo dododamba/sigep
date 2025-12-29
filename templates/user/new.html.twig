@@ -172,9 +172,9 @@
         <div class="d-flex align-items-center gap-2">
             <i data-lucide="info" style="width: 20px; height: 20px;"></i>
             <div>
-                <strong>Institution :</strong> {{ institution.nom }}
-                {% if institution.sigle %}
-                    ({{ institution.sigle }})
+                <strong>Institution :</strong> {{ institution.name }}
+                {% if institution.acronym %}
+                    ({{ institution.acronym }})
                 {% endif %}
                 <br>
                 <small>L'utilisateur sera automatiquement rattaché à cette institution</small>

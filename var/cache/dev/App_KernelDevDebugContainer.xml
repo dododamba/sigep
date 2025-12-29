@@ -442,6 +442,8 @@
     <service id="App\Controller\RoleController" class="App\Controller\RoleController" public="true" autowire="true" autoconfigure="true">
       <tag name="controller.service_arguments"/>
       <tag name="container.service_subscriber"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="App\Repository\RoleRepository"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.QaaoWjx.App\Controller\RoleController"/>
       </call>
@@ -483,21 +485,6 @@
       </call>
     </service>
     <service id="App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true">
-      <tag name="doctrine.fixture.orm"/>
-    </service>
-    <service id="App\DataFixtures\AuditFixtures" class="App\DataFixtures\AuditFixtures" autowire="true" autoconfigure="true">
-      <tag name="doctrine.fixture.orm"/>
-    </service>
-    <service id="App\DataFixtures\ConventionFixtures" class="App\DataFixtures\ConventionFixtures" autowire="true" autoconfigure="true">
-      <tag name="doctrine.fixture.orm"/>
-    </service>
-    <service id="App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" autoconfigure="true">
-      <tag name="doctrine.fixture.orm"/>
-    </service>
-    <service id="App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" autoconfigure="true">
-      <tag name="doctrine.fixture.orm"/>
-    </service>
-    <service id="App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
       <argument type="service" id="security.user_password_hasher"/>
     </service>
@@ -583,10 +570,23 @@
     <service id="App\Security\EmailVerifier" class="App\Security\EmailVerifier" autowire="true" autoconfigure="true">
       <tag name="container.error" message="Cannot autowire service &quot;App\Security\EmailVerifier&quot;: argument &quot;$verifyEmailHelper&quot; of method &quot;__construct()&quot; has type &quot;SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface&quot; but this class was not found."/>
     </service>
+    <service id="App\Security\Voter\RolePermissionVoter" class="App\Security\Voter\RolePermissionVoter" autowire="true" autoconfigure="true">
+      <tag name="security.voter"/>
+    </service>
     <service id="App\Security\WebAuthentificatorAuthenticator" class="App\Security\WebAuthentificatorAuthenticator" autowire="true" autoconfigure="true">
       <argument type="service" id="router.default"/>
     </service>
+    <service id="App\Service\PermissionChecker" class="App\Service\PermissionChecker" autowire="true" autoconfigure="true">
+      <argument type="service" id="security.helper"/>
+    </service>
+    <service id="App\Service\RolePermissionChecker" class="App\Service\RolePermissionChecker" autowire="true" autoconfigure="true">
+      <tag name="container.error" message="Cannot autowire service &quot;App\Service\RolePermissionChecker&quot;: argument &quot;$security&quot; of method &quot;__construct()&quot; has type &quot;Symfony\Component\Security\Core\Security&quot; but this class was not found."/>
+    </service>
     <service id="App\Service\Slugger" class="App\Service\Slugger" autowire="true" autoconfigure="true"/>
+    <service id="App\Twig\Extension\PermissionExtension" class="App\Twig\Extension\PermissionExtension" autowire="true" autoconfigure="true">
+      <tag name="twig.extension"/>
+      <argument type="service" id="App\Service\PermissionChecker"/>
+    </service>
     <service id="argument_metadata_factory" class="Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactory"/>
     <service id="argument_resolver.backed_enum_resolver" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">
       <tag priority="100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\BackedEnumValueResolver">controller.argument_value_resolver</tag>
@@ -614,7 +614,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.eeHPLQK"/>
+      <argument type="service" id=".service_locator.PVirhNS"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3488,7 +3488,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.eeHPLQK"/>
+      <argument type="service" id=".service_locator.PVirhNS"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -5469,6 +5469,9 @@
       </call>
       <call method="addExtension">
         <argument type="service" id="twig.extension.security"/>
+      </call>
+      <call method="addExtension">
+        <argument type="service" id="App\Twig\Extension\PermissionExtension"/>
       </call>
       <call method="addExtension">
         <argument type="service" id="doctrine.twig.doctrine_extension"/>
@@ -8405,26 +8408,6 @@
             <argument key="fixture" type="service" id="App\DataFixtures\AppFixtures"/>
             <argument key="groups" type="collection"/>
           </argument>
-          <argument type="collection">
-            <argument key="fixture" type="service" id="App\DataFixtures\AuditFixtures"/>
-            <argument key="groups" type="collection"/>
-          </argument>
-          <argument type="collection">
-            <argument key="fixture" type="service" id="App\DataFixtures\ConventionFixtures"/>
-            <argument key="groups" type="collection"/>
-          </argument>
-          <argument type="collection">
-            <argument key="fixture" type="service" id="App\DataFixtures\InstitutionFixtures"/>
-            <argument key="groups" type="collection"/>
-          </argument>
-          <argument type="collection">
-            <argument key="fixture" type="service" id="App\DataFixtures\ProjectFixtures"/>
-            <argument key="groups" type="collection"/>
-          </argument>
-          <argument type="collection">
-            <argument key="fixture" type="service" id="App\DataFixtures\UserFixtures"/>
-            <argument key="groups" type="collection"/>
-          </argument>
         </argument>
       </call>
     </service>
@@ -8556,16 +8539,6 @@
     <service id=".abstract.instanceof.App\Controller\WebController" class="App\Controller\WebController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AuditFixtures" class="App\DataFixtures\AuditFixtures" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\DataFixtures\AuditFixtures" class="App\DataFixtures\AuditFixtures" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\ConventionFixtures" class="App\DataFixtures\ConventionFixtures" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\DataFixtures\ConventionFixtures" class="App\DataFixtures\ConventionFixtures" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\DataFixtures\InstitutionFixtures" class="App\DataFixtures\InstitutionFixtures" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\DataFixtures\ProjectFixtures" class="App\DataFixtures\ProjectFixtures" autowire="true" autoconfigure="true" abstract="true"/>
-    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" abstract="true"/>
-    <service id=".abstract.instanceof.App\DataFixtures\UserFixtures" class="App\DataFixtures\UserFixtures" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\AuditType" class="App\Form\AuditType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\AuditType" class="App\Form\AuditType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\ConventionType" class="App\Form\ConventionType" autowire="true" abstract="true"/>
@@ -8610,6 +8583,10 @@
     <service id=".abstract.instanceof.App\Repository\TypePartnerRepository" class="App\Repository\TypePartnerRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\Security\Core\Authorization\Voter\VoterInterface.0.App\Security\Voter\RolePermissionVoter" class="App\Security\Voter\RolePermissionVoter" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Security\Voter\RolePermissionVoter" class="App\Security\Voter\RolePermissionVoter" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Twig\Extension\ExtensionInterface.0.App\Twig\Extension\PermissionExtension" class="App\Twig\Extension\PermissionExtension" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Twig\Extension\PermissionExtension" class="App\Twig\Extension\PermissionExtension" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Vich\UploaderBundle\Naming\NamerInterface.0.Vich\UploaderBundle\Naming\UniqidNamer" class="Vich\UploaderBundle\Naming\UniqidNamer" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.Vich\UploaderBundle\Naming\UniqidNamer" class="Vich\UploaderBundle\Naming\UniqidNamer" abstract="true"/>
     <service id=".instanceof.Vich\UploaderBundle\Naming\NamerInterface.0.Vich\UploaderBundle\Naming\PropertyNamer" class="Vich\UploaderBundle\Naming\PropertyNamer" autowire="true" abstract="true"/>
@@ -9467,24 +9444,6 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.P.blNFL" method="withContext"/>
     </service>
-    <service id=".service_locator.2xhCPME" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="roleRepository" type="service_closure" id="App\Repository\RoleRepository"/>
-      </argument>
-    </service>
-    <service id=".service_locator.2xhCPME.App\Controller\RoleController::index()" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\RoleController::index()"/>
-      <argument>App\Controller\RoleController::index()</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.2xhCPME" method="withContext"/>
-    </service>
-    <service id=".service_locator.P.blNFL.App\Controller\RoleController::new()" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator_context" id="App\Controller\RoleController::new()"/>
-      <argument>App\Controller\RoleController::new()</argument>
-      <argument type="service" id="service_container"/>
-      <factory service=".service_locator.P.blNFL" method="withContext"/>
-    </service>
     <service id=".service_locator.pVdAH_Q" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
@@ -9497,24 +9456,35 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.pVdAH_Q" method="withContext"/>
     </service>
-    <service id=".service_locator.l4yMAbu" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="role" type="service_closure" id=".errored..service_locator.l4yMAbu.App\Entity\Role"/>
-        <argument key="entityManager" type="service_closure" id="doctrine.orm.default_entity_manager"/>
-      </argument>
-    </service>
-    <service id=".service_locator.l4yMAbu.App\Controller\RoleController::edit()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.pVdAH_Q.App\Controller\RoleController::edit()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\RoleController::edit()"/>
       <argument>App\Controller\RoleController::edit()</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.l4yMAbu" method="withContext"/>
+      <factory service=".service_locator.pVdAH_Q" method="withContext"/>
     </service>
-    <service id=".service_locator.l4yMAbu.App\Controller\RoleController::delete()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.pVdAH_Q.App\Controller\RoleController::delete()" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\RoleController::delete()"/>
       <argument>App\Controller\RoleController::delete()</argument>
       <argument type="service" id="service_container"/>
-      <factory service=".service_locator.l4yMAbu" method="withContext"/>
+      <factory service=".service_locator.pVdAH_Q" method="withContext"/>
+    </service>
+    <service id=".service_locator.pVdAH_Q.App\Controller\RoleController::toggleStatus()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\RoleController::toggleStatus()"/>
+      <argument>App\Controller\RoleController::toggleStatus()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.pVdAH_Q" method="withContext"/>
+    </service>
+    <service id=".service_locator.pVdAH_Q.App\Controller\RoleController::duplicate()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\RoleController::duplicate()"/>
+      <argument>App\Controller\RoleController::duplicate()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.pVdAH_Q" method="withContext"/>
+    </service>
+    <service id=".service_locator.pVdAH_Q.App\Controller\RoleController::apiPermissions()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\RoleController::apiPermissions()"/>
+      <argument>App\Controller\RoleController::apiPermissions()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.pVdAH_Q" method="withContext"/>
     </service>
     <service id=".service_locator.mXDaS5b" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
@@ -9595,15 +9565,6 @@
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.bTA9FKH" method="withContext"/>
     </service>
-    <service id=".errored.REyH2XG" class="App\Controller\RoleRepository">
-      <tag name="container.error" message="Cannot determine controller argument for &quot;App\Controller\WebController::roles()&quot;: the $roleRepository argument is type-hinted with the non-existent class or interface: &quot;App\Controller\RoleRepository&quot;. Did you forget to add a use statement?"/>
-    </service>
-    <service id=".service_locator.2oscVQ4" class="Symfony\Component\DependencyInjection\ServiceLocator">
-      <tag name="container.service_locator"/>
-      <argument type="collection">
-        <argument key="roleRepository" type="service_closure" id=".errored.REyH2XG"/>
-      </argument>
-    </service>
     <service id=".errored.mU_kUNL" class="App\Controller\LoginHistoryRepository">
       <tag name="container.error" message="Cannot determine controller argument for &quot;App\Controller\WebController::loginHistory()&quot;: the $loginHistoryRepository argument is type-hinted with the non-existent class or interface: &quot;App\Controller\LoginHistoryRepository&quot;. Did you forget to add a use statement?"/>
     </service>
@@ -9613,7 +9574,7 @@
         <argument key="loginHistoryRepository" type="service_closure" id=".errored.mU_kUNL"/>
       </argument>
     </service>
-    <service id=".service_locator.eeHPLQK" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.PVirhNS" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
@@ -9648,11 +9609,12 @@
         <argument key="App\Controller\PartnerController::toggleStatus" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::toggleStatus()"/>
         <argument key="App\Controller\ProfileController::profileUpdate" type="service_closure" id=".service_locator.gigYcBf.App\Controller\ProfileController::profileUpdate()"/>
         <argument key="App\Controller\ProfileController::deleteAvatar" type="service_closure" id=".service_locator.P.blNFL.App\Controller\ProfileController::deleteAvatar()"/>
-        <argument key="App\Controller\RoleController::index" type="service_closure" id=".service_locator.2xhCPME.App\Controller\RoleController::index()"/>
-        <argument key="App\Controller\RoleController::new" type="service_closure" id=".service_locator.P.blNFL.App\Controller\RoleController::new()"/>
         <argument key="App\Controller\RoleController::show" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::show()"/>
-        <argument key="App\Controller\RoleController::edit" type="service_closure" id=".service_locator.l4yMAbu.App\Controller\RoleController::edit()"/>
-        <argument key="App\Controller\RoleController::delete" type="service_closure" id=".service_locator.l4yMAbu.App\Controller\RoleController::delete()"/>
+        <argument key="App\Controller\RoleController::edit" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::edit()"/>
+        <argument key="App\Controller\RoleController::delete" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::delete()"/>
+        <argument key="App\Controller\RoleController::toggleStatus" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::toggleStatus()"/>
+        <argument key="App\Controller\RoleController::duplicate" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::duplicate()"/>
+        <argument key="App\Controller\RoleController::apiPermissions" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::apiPermissions()"/>
         <argument key="App\Controller\SecurityController::login" type="service_closure" id=".service_locator.mXDaS5b.App\Controller\SecurityController::login()"/>
         <argument key="App\Controller\UserController::index" type="service_closure" id=".service_locator.XuyFcm..App\Controller\UserController::index()"/>
         <argument key="App\Controller\UserController::apiList" type="service_closure" id=".service_locator.bTA9FKH.App\Controller\UserController::apiList()"/>
@@ -9662,7 +9624,6 @@
         <argument key="App\Controller\UserController::toggleStatus" type="service_closure" id=".service_locator.hKA2je_.App\Controller\UserController::toggleStatus()"/>
         <argument key="App\Controller\UserController::apiShow" type="service_closure" id=".service_locator.hKA2je_.App\Controller\UserController::apiShow()"/>
         <argument key="App\Controller\UserController::apiStats" type="service_closure" id=".service_locator.bTA9FKH.App\Controller\UserController::apiStats()"/>
-        <argument key="App\Controller\WebController::roles" type="service_closure" id=".service_locator.2oscVQ4"/>
         <argument key="App\Controller\WebController::loginHistory" type="service_closure" id=".service_locator.kjAHTcj"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.4wc4Ag1.kernel::loadRoutes()"/>
@@ -9694,11 +9655,12 @@
         <argument key="App\Controller\PartnerController:toggleStatus" type="service_closure" id=".service_locator.cvAK_XJ.App\Controller\PartnerController::toggleStatus()"/>
         <argument key="App\Controller\ProfileController:profileUpdate" type="service_closure" id=".service_locator.gigYcBf.App\Controller\ProfileController::profileUpdate()"/>
         <argument key="App\Controller\ProfileController:deleteAvatar" type="service_closure" id=".service_locator.P.blNFL.App\Controller\ProfileController::deleteAvatar()"/>
-        <argument key="App\Controller\RoleController:index" type="service_closure" id=".service_locator.2xhCPME.App\Controller\RoleController::index()"/>
-        <argument key="App\Controller\RoleController:new" type="service_closure" id=".service_locator.P.blNFL.App\Controller\RoleController::new()"/>
         <argument key="App\Controller\RoleController:show" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::show()"/>
-        <argument key="App\Controller\RoleController:edit" type="service_closure" id=".service_locator.l4yMAbu.App\Controller\RoleController::edit()"/>
-        <argument key="App\Controller\RoleController:delete" type="service_closure" id=".service_locator.l4yMAbu.App\Controller\RoleController::delete()"/>
+        <argument key="App\Controller\RoleController:edit" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::edit()"/>
+        <argument key="App\Controller\RoleController:delete" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::delete()"/>
+        <argument key="App\Controller\RoleController:toggleStatus" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::toggleStatus()"/>
+        <argument key="App\Controller\RoleController:duplicate" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::duplicate()"/>
+        <argument key="App\Controller\RoleController:apiPermissions" type="service_closure" id=".service_locator.pVdAH_Q.App\Controller\RoleController::apiPermissions()"/>
         <argument key="App\Controller\SecurityController:login" type="service_closure" id=".service_locator.mXDaS5b.App\Controller\SecurityController::login()"/>
         <argument key="App\Controller\UserController:index" type="service_closure" id=".service_locator.XuyFcm..App\Controller\UserController::index()"/>
         <argument key="App\Controller\UserController:apiList" type="service_closure" id=".service_locator.bTA9FKH.App\Controller\UserController::apiList()"/>
@@ -9708,7 +9670,6 @@
         <argument key="App\Controller\UserController:toggleStatus" type="service_closure" id=".service_locator.hKA2je_.App\Controller\UserController::toggleStatus()"/>
         <argument key="App\Controller\UserController:apiShow" type="service_closure" id=".service_locator.hKA2je_.App\Controller\UserController::apiShow()"/>
         <argument key="App\Controller\UserController:apiStats" type="service_closure" id=".service_locator.bTA9FKH.App\Controller\UserController::apiStats()"/>
-        <argument key="App\Controller\WebController:roles" type="service_closure" id=".service_locator.2oscVQ4"/>
         <argument key="App\Controller\WebController:loginHistory" type="service_closure" id=".service_locator.kjAHTcj"/>
       </argument>
     </service>
@@ -9879,6 +9840,10 @@
     </service>
     <service id=".debug.security.voter.security.access.simple_role_voter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
       <argument type="service" id="security.access.simple_role_voter"/>
+      <argument type="service" id="debug.event_dispatcher"/>
+    </service>
+    <service id=".debug.security.voter.App\Security\Voter\RolePermissionVoter" class="Symfony\Component\Security\Core\Authorization\Voter\TraceableVoter">
+      <argument type="service" id="App\Security\Voter\RolePermissionVoter"/>
       <argument type="service" id="debug.event_dispatcher"/>
     </service>
     <service id="security.listener.csrf_protection" class="Symfony\Component\Security\Http\EventListener\CsrfProtectionListener">
@@ -10348,6 +10313,7 @@
       <argument type="iterator">
         <argument type="service" id=".debug.security.voter.security.access.authenticated_voter"/>
         <argument type="service" id=".debug.security.voter.security.access.simple_role_voter"/>
+        <argument type="service" id=".debug.security.voter.App\Security\Voter\RolePermissionVoter"/>
       </argument>
       <argument type="service">
         <service class="Symfony\Component\Security\Core\Authorization\Strategy\AffirmativeStrategy">
@@ -10439,9 +10405,6 @@
     </service>
     <service id=".errored..service_locator.pVdAH_Q.App\Entity\Role" class="App\Entity\Role">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.pVdAH_Q&quot;: it needs an instance of &quot;App\Entity\Role&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
-    </service>
-    <service id=".errored..service_locator.l4yMAbu.App\Entity\Role" class="App\Entity\Role">
-      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.l4yMAbu&quot;: it needs an instance of &quot;App\Entity\Role&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
     </service>
     <service id=".errored..service_locator.hKA2je_.App\Entity\User" class="App\Entity\User">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.hKA2je_&quot;: it needs an instance of &quot;App\Entity\User&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
@@ -11636,7 +11599,7 @@
     <service id="Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface" alias="webpack_encore.entrypoint_lookup[_default]"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.eeHPLQK"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.PVirhNS"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="jms_serializer.authorization_checker" alias="security.authorization_checker" public="true"/>
@@ -11682,9 +11645,7 @@
     <service id=".service_locator.63DXeBg" alias=".service_locator.cvAK_XJ"/>
     <service id=".service_locator.RbXSRxP" alias=".service_locator.gigYcBf"/>
     <service id=".service_locator.4KsIGyf" alias=".service_locator.P.blNFL"/>
-    <service id=".service_locator.jf8JxuJ" alias=".service_locator.2xhCPME"/>
     <service id=".service_locator.Hwcehuq" alias=".service_locator.pVdAH_Q"/>
-    <service id=".service_locator.C5hKwa7" alias=".service_locator.l4yMAbu"/>
     <service id=".service_locator...2Ndi3" alias=".service_locator.mXDaS5b"/>
     <service id=".service_locator.4RP1qKr" alias=".service_locator.XuyFcm."/>
     <service id=".service_locator.qIDYkpc" alias=".service_locator.bTA9FKH"/>

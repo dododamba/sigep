@@ -6,6 +6,8 @@ use App\Repository\InstitutionRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\String\Slugger\AsciiSlugger;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: InstitutionRepository::class)]
 #[ORM\HasLifecycleCallbacks]

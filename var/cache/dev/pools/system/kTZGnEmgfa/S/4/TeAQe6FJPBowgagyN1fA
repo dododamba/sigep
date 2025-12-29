@@ -1,3 +1,0 @@
-<?php //ux.twig_component.component_properties
-
-return [PHP_INT_MAX, []];

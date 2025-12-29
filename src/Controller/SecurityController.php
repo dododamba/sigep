@@ -28,6 +28,10 @@ class SecurityController extends AbstractController
     {
 
          if ($this->getUser()) {
+             if ($this->getUser()->hasRole('ROLE_TOP_MANAGEMENT')) {
+                 return $this->redirectToRoute('app_top_management_dashboard');
+             }
+
              return $this->redirectToRoute('app_dashboard');
          }
 

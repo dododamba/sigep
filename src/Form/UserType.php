@@ -127,7 +127,7 @@ class UserType extends AbstractType
             ->add('institution', EntityType::class, [
                 'label' => 'Institution',
                 'class' => Institution::class,
-                'choice_label' => 'nom',
+                'choice_label' => 'name',
                 'placeholder' => 'Sélectionner une institution',
                 'required' => false,
                 'disabled' => $institution !== null, // Désactivé si l'institution est déjà définie

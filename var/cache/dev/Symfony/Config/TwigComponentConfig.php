@@ -17,7 +17,7 @@ class TwigComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
     private $profiler;
     private $controllersJson;
     private $_usedProperties = [];
-
+    
     /**
      * @template TValue
      * @param TValue $value
@@ -30,20 +30,20 @@ class TwigComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
         if (!\is_array($value)) {
             $this->_usedProperties['defaults'] = true;
             $this->defaults[$namespace] = $value;
-
+    
             return $this;
         }
-
+    
         if (!isset($this->defaults[$namespace]) || !$this->defaults[$namespace] instanceof \Symfony\Config\TwigComponent\DefaultsConfig) {
             $this->_usedProperties['defaults'] = true;
             $this->defaults[$namespace] = new \Symfony\Config\TwigComponent\DefaultsConfig($value);
         } elseif (1 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "defaults()" has already been initialized. You cannot pass values the second time you call defaults().');
         }
-
+    
         return $this->defaults[$namespace];
     }
-
+    
     /**
      * Defaults to `components`
      * @default null
@@ -54,10 +54,10 @@ class TwigComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
     {
         $this->_usedProperties['anonymousTemplateDirectory'] = true;
         $this->anonymousTemplateDirectory = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * Enables the profiler for Twig Component (in debug mode)
      * @default '%kernel.debug%'
@@ -68,10 +68,10 @@ class TwigComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
     {
         $this->_usedProperties['profiler'] = true;
         $this->profiler = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -82,15 +82,15 @@ class TwigComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
     {
         $this->_usedProperties['controllersJson'] = true;
         $this->controllersJson = $value;
-
+    
         return $this;
     }
-
+    
     public function getExtensionAlias(): string
     {
         return 'twig_component';
     }
-
+    
     public function __construct(array $value = [])
     {
         if (array_key_exists('defaults', $value)) {
@@ -98,30 +98,30 @@ class TwigComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
             $this->defaults = array_map(fn ($v) => \is_array($v) ? new \Symfony\Config\TwigComponent\DefaultsConfig($v) : $v, $value['defaults']);
             unset($value['defaults']);
         }
-
+    
         if (array_key_exists('anonymous_template_directory', $value)) {
             $this->_usedProperties['anonymousTemplateDirectory'] = true;
             $this->anonymousTemplateDirectory = $value['anonymous_template_directory'];
             unset($value['anonymous_template_directory']);
         }
-
+    
         if (array_key_exists('profiler', $value)) {
             $this->_usedProperties['profiler'] = true;
             $this->profiler = $value['profiler'];
             unset($value['profiler']);
         }
-
+    
         if (array_key_exists('controllers_json', $value)) {
             $this->_usedProperties['controllersJson'] = true;
             $this->controllersJson = $value['controllers_json'];
             unset($value['controllers_json']);
         }
-
+    
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-
+    
     public function toArray(): array
     {
         $output = [];
@@ -137,7 +137,7 @@ class TwigComponentConfig implements \Symfony\Component\Config\Builder\ConfigBui
         if (isset($this->_usedProperties['controllersJson'])) {
             $output['controllers_json'] = $this->controllersJson;
         }
-
+    
         return $output;
     }
 

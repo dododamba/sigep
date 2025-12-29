@@ -1,0 +1,350 @@
+{% extends 'base.html.twig' %}
+{% import _self as icons %}
+
+{% block title %}Matrice des Permissions - SIGEP Tchad{% endblock %}
+
+{% block body %}
+<div class="permissions-matrix-page">
+    <!-- Header -->
+    <div class="page-header mb-4">
+        <div class="row align-items-center">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_roles') }}">Rôles</a></li>
+                        <li class="breadcrumb-item active">Matrice des permissions</li>
+                    </ol>
+                </nav>
+                <h1 class="page-title">
+                    <i data-lucide="grid"></i>
+                    Matrice des Permissions
+                </h1>
+                <p class="text-muted">Vue d'ensemble des permissions par rôle et module</p>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('app_roles') }}" class="btn btn-outline-secondary">
+                    <i data-lucide="arrow-left"></i>
+                    Retour aux rôles
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Légende -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-auto">
+                    <strong>Légende :</strong>
+                </div>
+                <div class="col-auto">
+                    <span class="permission-badge granted">
+                        <i data-lucide="check" style="width: 14px; height: 14px;"></i>
+                        Autorisé
+                    </span>
+                </div>
+                <div class="col-auto">
+                    <span class="permission-badge denied">
+                        <i data-lucide="x" style="width: 14px; height: 14px;"></i>
+                        Refusé
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Matrice des Permissions -->
+    <div class="card">
+        <div class="card-header">
+            <h5 class="mb-0">
+                <i data-lucide="table"></i>
+                Matrice Complète des Permissions
+                <span class="badge bg-primary float-end">{{ roles|length }} rôles</span>
+            </h5>
+        </div>
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-bordered permissions-matrix-table mb-0">
+                    <thead class="sticky-top">
+                        <tr>
+                            <th class="entity-column">Module / Entité</th>
+                            <th class="action-column">Action</th>
+                            {% for role in roles %}
+                                <th class="role-column text-center">
+                                    <div class="role-header">
+                                        <i data-lucide="shield" style="width: 16px; height: 16px;"></i>
+                                        <div class="role-name">{{ role.name }}</div>
+                                        <small class="text-muted d-block">{{ role.code }}</small>
+                                        <div class="mt-1">
+                                            <span class="badge bg-primary">{{ role.permissionsCount }}</span>
+                                        </div>
+                                    </div>
+                                </th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entityKey, entityData in matrix %}
+                            {% set entityActionsCount = actions|length %}
+                            {% for actionKey, actionLabel in actions %}
+                                <tr class="{% if loop.first %}entity-start{% endif %}">
+                                    {% if loop.first %}
+                                        <td class="entity-cell" rowspan="{{ entityActionsCount }}">
+                                            <div class="entity-info">
+                                            <i data-lucide="{{ icons.getEntityIcon(entityKey) }}"></i>
+                                                <strong>{{ entityData.label }}</strong>
+                                            </div>
+                                        </td>
+                                    {% endif %}
+                                    <td class="action-cell">
+                                        <div class="action-info">
+                                            <i data-lucide="{{ icons.getActionIcon(actionKey) }}"></i>
+                                            {{ actionLabel }}
+                                        </div>
+                                    </td>
+                                    {% for role in roles %}
+                                        <td class="permission-cell text-center">
+                                            {% if entityData.roles[role.id][actionKey] %}
+                                                <i data-lucide="check-circle" class="icon-granted"></i>
+                                            {% else %}
+                                                <i data-lucide="x-circle" class="icon-denied"></i>
+                                            {% endif %}
+                                        </td>
+                                    {% endfor %}
+                                </tr>
+                            {% endfor %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistiques par rôle -->
+    <div class="row mt-4">
+        {% for role in roles %}
+            <div class="col-md-4 mb-3">
+                <div class="card role-stats-card">
+                    <div class="card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <div class="role-icon me-3">
+                                <i data-lucide="shield"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">{{ role.name }}</h6>
+                                <small class="text-muted">{{ role.code }}</small>
+                            </div>
+                        </div>
+                        
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between mb-1">
+                                <small>Permissions accordées</small>
+                                <strong>{{ role.permissionsCount }} / {{ (entities|length * actions|length) }}</strong>
+                            </div>
+                            <div class="progress" style="height: 8px;">
+                                <div class="progress-bar bg-success" 
+                                     style="width: {{ role.permissionsPercentage }}%">
+                                </div>
+                            </div>
+                            <small class="text-muted">{{ role.permissionsPercentage }}%</small>
+                        </div>
+                        
+                        <div class="mt-3">
+                            <a href="{{ path('app_roles_show', {id: role.id}) }}" 
+                               class="btn btn-sm btn-outline-primary w-100">
+                                <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                                Voir les détails
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<style>
+.permissions-matrix-table {
+    font-size: 0.85rem;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.permissions-matrix-table thead {
+    background: white;
+    z-index: 100;
+}
+
+.permissions-matrix-table th {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    vertical-align: middle;
+}
+
+.entity-column {
+    min-width: 200px;
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    background: white;
+}
+
+.action-column {
+    min-width: 150px;
+    position: sticky;
+    left: 200px;
+    z-index: 10;
+    background: white;
+}
+
+.role-column {
+    min-width: 120px;
+}
+
+.role-header {
+    padding: 0.5rem;
+}
+
+.role-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+}
+
+.entity-cell {
+    background: #f8f9fa;
+    font-weight: 600;
+    vertical-align: middle;
+    position: sticky;
+    left: 0;
+    z-index: 5;
+}
+
+.action-cell {
+    background: #ffffff;
+    position: sticky;
+    left: 200px;
+    z-index: 5;
+    border-right: 2px solid #dee2e6;
+}
+
+.entity-info, .action-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.permission-cell {
+    background: white;
+}
+
+.entity-start .entity-cell {
+    border-top: 3px solid #004d99;
+}
+
+.icon-granted {
+    color: #10b981;
+    width: 24px;
+    height: 24px;
+}
+
+.icon-denied {
+    color: #e5e7eb;
+    width: 24px;
+    height: 24px;
+}
+
+.permission-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.permission-badge.granted {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.permission-badge.denied {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.role-stats-card {
+    border-left: 4px solid #004d99;
+}
+
+.role-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #004d99, #0066cc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .permissions-matrix-table {
+        font-size: 0.75rem;
+    }
+    
+    .role-column {
+        min-width: 100px;
+    }
+    
+    .entity-column {
+        min-width: 150px;
+    }
+    
+    .action-column {
+        min-width: 120px;
+        left: 150px;
+    }
+    
+    .action-cell {
+        left: 150px;
+    }
+}
+</style>
+
+{% macro getEntityIcon(entity) %}
+    {% set icons = {
+        'project': 'folder',
+        'financement': 'dollar-sign',
+        'convention': 'file-text',
+        'decaissement': 'credit-card',
+        'audit': 'clipboard-check',
+        'institution': 'building',
+        'partner': 'users',
+        'user': 'user',
+        'dashboard': 'layout-dashboard',
+        'top_management': 'crown'
+    } %}
+    {{ icons[entity]|default('circle') }}
+{% endmacro %}
+
+{% macro getActionIcon(action) %}
+    {% set icons = {
+        'view': 'eye',
+        'create': 'plus-circle',
+        'edit': 'edit',
+        'delete': 'trash-2',
+        'export': 'download'
+    } %}
+    {{ icons[action]|default('circle') }}
+{% endmacro %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
+{% endblock %}

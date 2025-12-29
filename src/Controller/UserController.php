@@ -19,7 +19,7 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 #[Route('/user')]
-#[IsGranted('ROLE_ADMIN')]
+//#[IsGranted('ROLE_ADMIN')]
 class UserController extends AbstractController
 {
     public function __construct(

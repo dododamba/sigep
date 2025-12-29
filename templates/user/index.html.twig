@@ -316,9 +316,9 @@
             <div class="d-flex align-items-center gap-3">
                 <i data-lucide="building" style="width: 48px; height: 48px;"></i>
                 <div>
-                    <h4 class="mb-1" style="font-weight: 600;">{{ institution.nom }}</h4>
+                    <h4 class="mb-1" style="font-weight: 600;">{{ institution.name }}</h4>
                     <p class="mb-0" style="opacity: 0.9;">
-                        {{ institution.sigle ? institution.sigle ~ ' - ' : '' }}{{ institution.type }}
+                        {{ institution.acronym ? institution.acronym ~ ' - ' : '' }}{{ institution.typeInstitution.name }}
                     </p>
                 </div>
             </div>

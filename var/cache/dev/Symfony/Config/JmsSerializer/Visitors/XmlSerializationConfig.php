@@ -16,7 +16,7 @@ class XmlSerializationConfig
     private $defaultRootName;
     private $defaultRootNs;
     private $_usedProperties = [];
-
+    
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -26,10 +26,10 @@ class XmlSerializationConfig
     {
         $this->_usedProperties['version'] = true;
         $this->version = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -39,10 +39,10 @@ class XmlSerializationConfig
     {
         $this->_usedProperties['encoding'] = true;
         $this->encoding = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * @default false
      * @param ParamConfigurator|bool $value
@@ -52,10 +52,10 @@ class XmlSerializationConfig
     {
         $this->_usedProperties['formatOutput'] = true;
         $this->formatOutput = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * @default null
      * @param ParamConfigurator|mixed $value
@@ -65,10 +65,10 @@ class XmlSerializationConfig
     {
         $this->_usedProperties['defaultRootName'] = true;
         $this->defaultRootName = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * @param ParamConfigurator|mixed $value
      * @return $this
@@ -77,10 +77,10 @@ class XmlSerializationConfig
     {
         $this->_usedProperties['defaultRootNs'] = true;
         $this->defaultRootNs = $value;
-
+    
         return $this;
     }
-
+    
     public function __construct(array $value = [])
     {
         if (array_key_exists('version', $value)) {
@@ -88,36 +88,36 @@ class XmlSerializationConfig
             $this->version = $value['version'];
             unset($value['version']);
         }
-
+    
         if (array_key_exists('encoding', $value)) {
             $this->_usedProperties['encoding'] = true;
             $this->encoding = $value['encoding'];
             unset($value['encoding']);
         }
-
+    
         if (array_key_exists('format_output', $value)) {
             $this->_usedProperties['formatOutput'] = true;
             $this->formatOutput = $value['format_output'];
             unset($value['format_output']);
         }
-
+    
         if (array_key_exists('default_root_name', $value)) {
             $this->_usedProperties['defaultRootName'] = true;
             $this->defaultRootName = $value['default_root_name'];
             unset($value['default_root_name']);
         }
-
+    
         if (array_key_exists('default_root_ns', $value)) {
             $this->_usedProperties['defaultRootNs'] = true;
             $this->defaultRootNs = $value['default_root_ns'];
             unset($value['default_root_ns']);
         }
-
+    
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-
+    
     public function toArray(): array
     {
         $output = [];
@@ -136,7 +136,7 @@ class XmlSerializationConfig
         if (isset($this->_usedProperties['defaultRootNs'])) {
             $output['default_root_ns'] = $this->defaultRootNs;
         }
-
+    
         return $output;
     }
 

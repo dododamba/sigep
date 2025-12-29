@@ -20,10 +20,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(length: 180, unique: true)]
     private ?string $email = null;
-
-    #[ORM\Column]
-    private array $roles = [];
-
     /**
      * @var string The hashed password
      */
@@ -75,12 +71,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\JoinColumn(nullable: true, onDelete: 'SET NULL')]
     private ?Institution $institution = null;
 
+    #[ORM\ManyToOne(targetEntity: Role::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Role $role = null;
+        
+    #[ORM\Column(type: 'json')]
+    private array $roles = [];
+
     public function __construct()
     {
         $this->setSlug('uuid-' . uniqid()); // Utilisation d'uniqid() au lieu de str_randomize()
         $this->createdAt = new \DateTimeImmutable();
+        $this->isVerified = false;
     }
 
+
+ 
     public function getFullName(): string
     {
         return trim(($this->firstname ?? '') . ' ' . ($this->lastname ?? ''));
@@ -102,6 +108,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+
+
+      public function getRole(): ?Role
+    {
+        return $this->role;
+    }
+
+    public function setRole(?Role $role): self
+    {
+        $this->role = $role;
+        return $this;
+    }
+
+
     /**
      * A visual identifier that represents this user.
      *
@@ -112,25 +132,31 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
-    /**
+  /**
      * @see UserInterface
      */
-    public function getRoles(): array
-    {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        public function getRoles(): array
+        {
+            $roles = ['ROLE_USER'];
 
-        return array_unique($roles);
-    }
+            if ($this->role && $this->role->getIsActive()) {
+                $roles[] = $this->role->getCode();
+            }
+
+            return array_unique($roles);
+        }
 
 
 
-    public function setRoles(array $roles): static
-    {
-        $this->roles = $roles;
-        return $this;
-    }
+
+    public function setRoles(array $roles): self
+{
+    // Nettoyage + sécurité
+    $this->roles = array_values(array_unique($roles));
+
+    return $this;
+}
+
 
     /**
      * @see PasswordAuthenticatedUserInterface
@@ -403,4 +429,21 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->accessLevel === 'SUPER_ADMIN' || $this->hasRole('ROLE_SUPER_ADMIN');
     }
+
+
+    
+    /**
+     * Retourne toutes les permissions de l'utilisateur
+     */
+    public function getPermissions(): array
+    {
+        if ($this->role && $this->role->getIsActive()) {
+            return $this->role->getPermissions();
+        }
+
+        return [];
+    }
+
+
+  
 }

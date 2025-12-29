@@ -13,7 +13,7 @@ class TemplateParametersConfig
     private $columnFilter;
     private $_usedProperties = [];
     private $_extraKeys;
-
+    
     /**
      * Default class attribute to apply to the root table elements
      * @default 'table table-bordered'
@@ -24,10 +24,10 @@ class TemplateParametersConfig
     {
         $this->_usedProperties['className'] = true;
         $this->className = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * If and where to enable the DataTables Filter module
      * @default null
@@ -38,10 +38,10 @@ class TemplateParametersConfig
     {
         $this->_usedProperties['columnFilter'] = true;
         $this->columnFilter = $value;
-
+    
         return $this;
     }
-
+    
     public function __construct(array $value = [])
     {
         if (array_key_exists('className', $value)) {
@@ -49,17 +49,17 @@ class TemplateParametersConfig
             $this->className = $value['className'];
             unset($value['className']);
         }
-
+    
         if (array_key_exists('columnFilter', $value)) {
             $this->_usedProperties['columnFilter'] = true;
             $this->columnFilter = $value['columnFilter'];
             unset($value['columnFilter']);
         }
-
+    
         $this->_extraKeys = $value;
-
+    
     }
-
+    
     public function toArray(): array
     {
         $output = [];
@@ -69,10 +69,10 @@ class TemplateParametersConfig
         if (isset($this->_usedProperties['columnFilter'])) {
             $output['columnFilter'] = $this->columnFilter;
         }
-
+    
         return $output + $this->_extraKeys;
     }
-
+    
     /**
      * @param ParamConfigurator|mixed $value
      *
@@ -81,7 +81,7 @@ class TemplateParametersConfig
     public function set(string $key, mixed $value): static
     {
         $this->_extraKeys[$key] = $value;
-
+    
         return $this;
     }
 

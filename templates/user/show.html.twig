@@ -420,9 +420,9 @@
                     <div class="info-content">
                         <div class="info-label">Institution</div>
                         <div class="info-value">
-                            {{ user.institution.nom }}
-                            {% if user.institution.sigle %}
-                                <span class="badge bg-secondary">{{ user.institution.sigle }}</span>
+                            {{ user.institution.name }}
+                            {% if user.institution.acronym %}
+                                <span class="badge bg-secondary">{{ user.institution.acronym }}</span>
                             {% endif %}
                         </div>
                     </div>

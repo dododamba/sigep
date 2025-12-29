@@ -1,11 +1,192 @@
 {% extends 'base.html.twig' %}
+{% import _self as icons %}
 
-{% block title %}New Role{% endblock %}
+{% block title %}Nouveau Rôle - SIGEP Tchad{% endblock %}
 
 {% block body %}
-    <h1>Create new Role</h1>
+<div class="role-new-page">
+    <!-- Header -->
+    <div class="page-header mb-4">
+        <div class="row align-items-center">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_roles') }}">Rôles</a></li>
+                        <li class="breadcrumb-item active">Nouveau rôle</li>
+                    </ol>
+                </nav>
+                <h1 class="page-title">
+                    <i data-lucide="shield-plus"></i>
+                    Créer un Nouveau Rôle
+                </h1>
+            </div>
+            <div class="col-auto">
+                <a href="{{ path('app_roles') }}" class="btn btn-outline-secondary">
+                    <i data-lucide="arrow-left"></i>
+                    Retour à la liste
+                </a>
+            </div>
+        </div>
+    </div>
 
-    {{ include('role/_form.html.twig') }}
+    <!-- Messages Flash -->
+    {% for message in app.flashes('error') %}
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i data-lucide="alert-circle"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
 
-    <a href="{{ path('app_role_index') }}">back to list</a>
+    {{ form_start(form, {'attr': {'class': 'role-form'}}) }}
+        <div class="row">
+            <!-- Informations du rôle -->
+            <div class="col-lg-4 mb-4">
+                <div class="card sticky-top" style="top: 20px;">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">
+                            <i data-lucide="info"></i>
+                            Informations du Rôle
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        {{ form_row(form.name) }}
+                        {{ form_row(form.code) }}
+                        {{ form_row(form.description) }}
+                        {{ form_row(form.priority) }}
+                        
+                        <div class="form-check form-switch mb-3">
+                            {{ form_widget(form.isActive) }}
+                            {{ form_label(form.isActive, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                            {% if form.isActive.vars.help %}
+                                <small class="form-text text-muted d-block">{{ form.isActive.vars.help }}</small>
+                            {% endif %}
+                        </div>
+
+                        <hr>
+
+                        <!-- Conseils -->
+                        <div class="alert alert-info">
+                            <strong><i data-lucide="lightbulb"></i> Conseils :</strong>
+                            <ul class="mb-0 mt-2">
+                                <li>Le code doit être unique</li>
+                                <li>Utilisez ROLE_ au début</li>
+                                <li>Priorité : 0 = faible, 100 = haute</li>
+                            </ul>
+                        </div>
+
+                        <!-- Boutons d'action -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i data-lucide="save"></i>
+                                Créer le Rôle
+                            </button>
+                            <a href="{{ path('app_roles') }}" class="btn btn-outline-secondary">
+                                <i data-lucide="x"></i>
+                                Annuler
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Permissions -->
+            <div class="col-lg-8 mb-4">
+                {% include 'role/_permissions_grid.html.twig' with {
+                    'role': role,
+                    'entities': entities,
+                    'actions': actions
+                } %}
+            </div>
+        </div>
+
+        {{ form_row(form._token) }}
+    {{ form_end(form, {'render_rest': false}) }}
+</div>
+
+<style>
+.role-form {
+    max-width: 100%;
+}
+
+.card {
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.form-control, .form-select {
+    border-radius: 6px;
+    border: 1px solid #d1d5db;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #004d99;
+    box-shadow: 0 0 0 3px rgba(0, 77, 153, 0.1);
+}
+
+.alert-info {
+    background: #e6f2ff;
+    border-color: #004d99;
+    color: #002a54;
+}
+
+.btn-primary {
+    background: #004d99;
+    border-color: #004d99;
+}
+
+.btn-primary:hover {
+    background: #003366;
+    border-color: #003366;
+}
+</style>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            lucide.createIcons();
+            
+            // Validation du code
+            const codeInput = document.getElementById('role_code');
+            if (codeInput) {
+                codeInput.addEventListener('input', function(e) {
+                    // Convertir en majuscules et remplacer les espaces par des underscores
+                    let value = e.target.value.toUpperCase().replace(/\s+/g, '_');
+                    
+                    // Ajouter ROLE_ si nécessaire
+                    if (!value.startsWith('ROLE_') && value.length > 0) {
+                        value = 'ROLE_' + value;
+                    }
+                    
+                    // Ne garder que les caractères valides
+                    value = value.replace(/[^A-Z_]/g, '');
+                    
+                    e.target.value = value;
+                });
+            }
+
+            // Génération automatique du code à partir du nom
+            const nameInput = document.getElementById('role_name');
+            if (nameInput && codeInput && !codeInput.value) {
+                nameInput.addEventListener('blur', function(e) {
+                    if (!codeInput.value && e.target.value) {
+                        const generatedCode = 'ROLE_' + e.target.value
+                            .toUpperCase()
+                            .replace(/[^A-Z0-9\s]/g, '')
+                            .replace(/\s+/g, '_');
+                        codeInput.value = generatedCode;
+                    }
+                });
+            }
+        });
+    </script>
 {% endblock %}

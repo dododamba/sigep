@@ -1,38 +1,407 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Role{% endblock %}
+{% block title %}{{ role.name }} - Détails du Rôle - SIGEP Tchad{% endblock %}
 
 {% block body %}
-    <h1>Role</h1>
+<div class="role-show-page">
+    <!-- Header -->
+    <div class="page-header mb-4">
+        <div class="row align-items-center">
+            <div class="col">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{{ path('app_roles') }}">Rôles</a></li>
+                        <li class="breadcrumb-item active">{{ role.name }}</li>
+                    </ol>
+                </nav>
+                <h1 class="page-title">
+                    <i data-lucide="shield"></i>
+                    {{ role.name }}
+                </h1>
+                <div class="mt-2">
+                    <code class="badge bg-light text-dark">{{ role.code }}</code>
+                    
+                    {% if role.isActive %}
+                        <span class="badge bg-success">Actif</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Inactif</span>
+                    {% endif %}
+                    
+                    {% if role.isSystem %}
+                        <span class="badge bg-warning">
+                            <i data-lucide="lock" style="width: 14px; height: 14px;"></i>
+                            Système
+                        </span>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-auto">
+                <div class="btn-group">
+                    {% if not role.isSystem %}
+                        <a href="{{ path('app_roles_edit', {id: role.id}) }}" class="btn btn-primary">
+                            <i data-lucide="edit"></i>
+                            Modifier
+                        </a>
+                    {% endif %}
+                    <a href="{{ path('app_roles') }}" class="btn btn-outline-secondary">
+                        <i data-lucide="arrow-left"></i>
+                        Retour
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ role.id }}</td>
-            </tr>
-            <tr>
-                <th>Name</th>
-                <td>{{ role.name }}</td>
-            </tr>
-            <tr>
-                <th>Slug</th>
-                <td>{{ role.slug }}</td>
-            </tr>
-            <tr>
-                <th>Created_at</th>
-                <td>{{ role.createdAt ? role.createdAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Deleted_at</th>
-                <td>{{ role.deletedAt ? role.deletedAt|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-        </tbody>
-    </table>
+    <!-- Messages Flash -->
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i data-lucide="check-circle"></i>
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    {% endfor %}
 
-    <a href="{{ path('app_role_index') }}">back to list</a>
+    <div class="row">
+        <!-- Informations générales -->
+        <div class="col-lg-4 mb-4">
+            <!-- Détails -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i data-lucide="info"></i>
+                        Informations Générales
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Nom :</dt>
+                        <dd class="col-sm-7">{{ role.name }}</dd>
+                        
+                        <dt class="col-sm-5">Code :</dt>
+                        <dd class="col-sm-7"><code>{{ role.code }}</code></dd>
+                        
+                        <dt class="col-sm-5">Priorité :</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-dark">{{ role.priority }}</span>
+                        </dd>
+                        
+                        <dt class="col-sm-5">Statut :</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge bg-{{ role.statusBadge }}">
+                                {{ role.statusLabel }}
+                            </span>
+                        </dd>
+                        
+                        <dt class="col-sm-5">Type :</dt>
+                        <dd class="col-sm-7">
+                            {% if role.isSystem %}
+                                <span class="badge bg-warning">Système</span>
+                            {% else %}
+                                <span class="badge bg-info">Personnalisé</span>
+                            {% endif %}
+                        </dd>
+                        
+                        <dt class="col-sm-12 mt-3">Description :</dt>
+                        <dd class="col-sm-12">
+                            {% if role.description %}
+                                {{ role.description }}
+                            {% else %}
+                                <em class="text-muted">Aucune description</em>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                </div>
+            </div>
 
-    <a href="{{ path('app_role_edit', {'id': role.id}) }}">edit</a>
+            <!-- Statistiques -->
+            <div class="card mb-3">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i data-lucide="bar-chart"></i>
+                        Statistiques
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="stat-item">
+                        <div class="stat-icon bg-primary">
+                            <i data-lucide="users"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-value">{{ role.usersCount }}</div>
+                            <div class="stat-label">Utilisateurs</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon bg-success">
+                            <i data-lucide="key"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-value">{{ role.permissionsCount }}</div>
+                            <div class="stat-label">Permissions</div>
+                        </div>
+                    </div>
+                    
+                    <div class="stat-item">
+                        <div class="stat-icon bg-info">
+                            <i data-lucide="percent"></i>
+                        </div>
+                        <div class="stat-details">
+                            <div class="stat-value">{{ role.permissionsPercentage }}%</div>
+                            <div class="stat-label">Couverture</div>
+                        </div>
+                    </div>
 
-    {{ include('role/_delete_form.html.twig') }}
+                    <div class="progress mt-3">
+                        <div class="progress-bar bg-success" 
+                             style="width: {{ role.permissionsPercentage }}%">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Historique -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i data-lucide="clock"></i>
+                        Historique
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-2">
+                        <i data-lucide="calendar"></i>
+                        <strong>Créé le :</strong><br>
+                        {{ role.createdAt|date('d/m/Y à H:i') }}
+                    </p>
+                    {% if role.updatedAt %}
+                        <p class="mb-0">
+                            <i data-lucide="refresh-cw"></i>
+                            <strong>Dernière modification :</strong><br>
+                            {{ role.updatedAt|date('d/m/Y à H:i') }}
+                        </p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Permissions détaillées -->
+        <div class="col-lg-8 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">
+                        <i data-lucide="key"></i>
+                        Permissions Accordées
+                        <span class="badge bg-primary float-end">{{ role.permissionsCount }}</span>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    {% set permissionsByEntity = role.permissionsByEntity %}
+                    
+                    {% if role.permissionsCount > 0 %}
+                        <div class="accordion" id="permissionsAccordion">
+                            {% for entityKey, entityData in permissionsByEntity %}
+                                {% set grantedCount = entityData.permissions|filter(p => p.granted)|length %}
+                                
+                                {% if grantedCount > 0 %}
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button {% if not loop.first %}collapsed{% endif %}" 
+                                                    type="button" 
+                                                    data-bs-toggle="collapse" 
+                                                    data-bs-target="#collapse-{{ entityKey }}">
+                                                <i data-lucide="{{ getEntityIcon(entityKey) }}" style="width: 20px; height: 20px;"></i>
+                                                <strong class="ms-2">{{ entityData.label }}</strong>
+                                                <span class="badge bg-primary ms-auto me-2">{{ grantedCount }} / {{ entityData.permissions|length }}</span>
+                                            </button>
+                                        </h2>
+                                        <div id="collapse-{{ entityKey }}" 
+                                             class="accordion-collapse collapse {% if loop.first %}show{% endif %}" 
+                                             data-bs-parent="#permissionsAccordion">
+                                            <div class="accordion-body">
+                                                <div class="row g-2">
+                                                    {% for actionKey, actionData in entityData.permissions %}
+                                                        {% if actionData.granted %}
+                                                            <div class="col-md-6">
+                                                                <div class="permission-badge granted">
+                                                                    <i data-lucide="check-circle" style="width: 16px; height: 16px;"></i>
+                                                                    {{ actionData.label }}
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <div class="text-center py-5">
+                            <i data-lucide="lock" style="width: 48px; height: 48px; color: #9ca3af;"></i>
+                            <p class="text-muted mt-3">Aucune permission accordée à ce rôle</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Utilisateurs assignés -->
+            {% if role.users|length > 0 %}
+                <div class="card mt-4">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i data-lucide="users"></i>
+                            Utilisateurs Assignés
+                            <span class="badge bg-primary float-end">{{ role.users|length }}</span>
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            {% for user in role.users|slice(0, 12) %}
+                                <div class="col-md-6">
+                                    <div class="user-item">
+                                        <div class="user-avatar">
+                                            {% if user.avatar %}
+                                                <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="{{ user.fullName }}">
+                                            {% else %}
+                                                <div class="avatar-placeholder">{{ user.initials }}</div>
+                                            {% endif %}
+                                        </div>
+                                        <div class="user-info">
+                                            <strong>{{ user.fullName }}</strong>
+                                            <br>
+                                            <small class="text-muted">{{ user.email }}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% if role.users|length > 12 %}
+                            <p class="text-center text-muted mt-3 mb-0">
+                                Et {{ role.users|length - 12 }} autre(s) utilisateur(s)...
+                            </p>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<style>
+.stat-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 0;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.stat-item:last-child {
+    border-bottom: none;
+}
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+}
+
+.stat-details {
+    flex: 1;
+}
+
+.stat-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.stat-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.permission-badge {
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.permission-badge.granted {
+    background: #d1fae5;
+    color: #065f46;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #004d99, #0066cc);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+.accordion-button:not(.collapsed) {
+    background-color: #f3f4f6;
+    color: #1f2937;
+}
+</style>
+
+{% macro getEntityIcon(entity) %}
+    {% set icons = {
+        'project': 'folder',
+        'financement': 'dollar-sign',
+        'convention': 'file-text',
+        'decaissement': 'credit-card',
+        'audit': 'clipboard-check',
+        'institution': 'building',
+        'partner': 'users',
+        'user': 'user',
+        'dashboard': 'layout-dashboard',
+        'top_management': 'crown'
+    } %}
+    {{ icons[entity]|default('circle') }}
+{% endmacro %}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        lucide.createIcons();
+    </script>
 {% endblock %}

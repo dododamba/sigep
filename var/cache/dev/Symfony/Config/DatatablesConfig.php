@@ -21,7 +21,7 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
     private $templateParameters;
     private $translationDomain;
     private $_usedProperties = [];
-
+    
     /**
      * Load i18n data from DataTables CDN or locally
      * @default true
@@ -32,10 +32,10 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
     {
         $this->_usedProperties['languageFromCdn'] = true;
         $this->languageFromCdn = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * Where to persist the current table state automatically
      * @default 'fragment'
@@ -46,10 +46,10 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
     {
         $this->_usedProperties['persistState'] = true;
         $this->persistState = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * Default HTTP method to be used for callbacks
      * @default 'POST'
@@ -60,10 +60,10 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
     {
         $this->_usedProperties['method'] = true;
         $this->method = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * @return $this
      */
@@ -71,10 +71,10 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
     {
         $this->_usedProperties['options'] = true;
         $this->options[$option] = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * Default service used to render templates, built-in TwigRenderer uses global Twig environment
      * @default 'Omines\\DataTablesBundle\\Twig\\TwigRenderer'
@@ -85,10 +85,10 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
     {
         $this->_usedProperties['renderer'] = true;
         $this->renderer = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * Default template to be used for DataTables HTML
      * @default '@DataTables/datatable_html.html.twig'
@@ -99,10 +99,10 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
     {
         $this->_usedProperties['template'] = true;
         $this->template = $value;
-
+    
         return $this;
     }
-
+    
     /**
      * Default parameters to be passed to the template
      * @default {"className":"table table-bordered","columnFilter":null}
@@ -115,10 +115,10 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
         } elseif (0 < \func_num_args()) {
             throw new InvalidConfigurationException('The node created by "templateParameters()" has already been initialized. You cannot pass values the second time you call templateParameters().');
         }
-
+    
         return $this->templateParameters;
     }
-
+    
     /**
      * Default translation domain to be used
      * @default 'messages'
@@ -129,15 +129,15 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
     {
         $this->_usedProperties['translationDomain'] = true;
         $this->translationDomain = $value;
-
+    
         return $this;
     }
-
+    
     public function getExtensionAlias(): string
     {
         return 'datatables';
     }
-
+    
     public function __construct(array $value = [])
     {
         if (array_key_exists('language_from_cdn', $value)) {
@@ -145,54 +145,54 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
             $this->languageFromCdn = $value['language_from_cdn'];
             unset($value['language_from_cdn']);
         }
-
+    
         if (array_key_exists('persist_state', $value)) {
             $this->_usedProperties['persistState'] = true;
             $this->persistState = $value['persist_state'];
             unset($value['persist_state']);
         }
-
+    
         if (array_key_exists('method', $value)) {
             $this->_usedProperties['method'] = true;
             $this->method = $value['method'];
             unset($value['method']);
         }
-
+    
         if (array_key_exists('options', $value)) {
             $this->_usedProperties['options'] = true;
             $this->options = $value['options'];
             unset($value['options']);
         }
-
+    
         if (array_key_exists('renderer', $value)) {
             $this->_usedProperties['renderer'] = true;
             $this->renderer = $value['renderer'];
             unset($value['renderer']);
         }
-
+    
         if (array_key_exists('template', $value)) {
             $this->_usedProperties['template'] = true;
             $this->template = $value['template'];
             unset($value['template']);
         }
-
+    
         if (array_key_exists('template_parameters', $value)) {
             $this->_usedProperties['templateParameters'] = true;
             $this->templateParameters = new \Symfony\Config\Datatables\TemplateParametersConfig($value['template_parameters']);
             unset($value['template_parameters']);
         }
-
+    
         if (array_key_exists('translation_domain', $value)) {
             $this->_usedProperties['translationDomain'] = true;
             $this->translationDomain = $value['translation_domain'];
             unset($value['translation_domain']);
         }
-
+    
         if ([] !== $value) {
             throw new InvalidConfigurationException(sprintf('The following keys are not supported by "%s": ', __CLASS__).implode(', ', array_keys($value)));
         }
     }
-
+    
     public function toArray(): array
     {
         $output = [];
@@ -220,7 +220,7 @@ class DatatablesConfig implements \Symfony\Component\Config\Builder\ConfigBuilde
         if (isset($this->_usedProperties['translationDomain'])) {
             $output['translation_domain'] = $this->translationDomain;
         }
-
+    
         return $output;
     }
 
