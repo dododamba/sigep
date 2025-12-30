@@ -270,16 +270,112 @@ class __TwigTemplate_6119c04a081138896bb6194fceb2ff95 extends Template
                     </div>
 
                     <!-- Activity Log -->
-                    <div class=\"info-card\">
-                        <div class=\"card-title\">
-                            <span>Activité Récente</span>
-                            <i data-lucide=\"activity\" style=\"color: var(--tchad-blue);\"></i>
-                        </div>
-                       
+             <div class=\"info-card\">
+    <div class=\"card-title\">
+        <span>Activités récentes</span>
+        <i data-lucide=\"activity\" style=\"color: var(--tchad-blue);\"></i>
+    </div>
 
+    ";
+        // line 111
+        if ((($tmp =  !Twig\Extension\CoreExtension::testEmpty(CoreExtension::getAttribute($this->env, $this->source, (isset($context["user"]) || array_key_exists("user", $context) ? $context["user"] : (function () { throw new RuntimeError('Variable "user" does not exist.', 111, $this->source); })()), "getUserActivities", [], "any", false, false, false, 111))) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 112
+            yield "        <div class=\"timeline\">
+            ";
+            // line 113
+            $context['_parent'] = $context;
+            $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, (isset($context["user"]) || array_key_exists("user", $context) ? $context["user"] : (function () { throw new RuntimeError('Variable "user" does not exist.', 113, $this->source); })()), "getUserActivities", [], "any", false, false, false, 113));
+            foreach ($context['_seq'] as $context["_key"] => $context["activity"]) {
+                // line 114
+                yield "                <div class=\"timeline-item\">
 
-
+                    <!-- Date -->
+                    <div class=\"timeline-date\">
+                        ";
+                // line 118
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "createdAt", [], "any", false, false, false, 118), "d F Y, H:i"), "html", null, true);
+                yield "
+                        <span class=\"time-ago\">(";
+                // line 119
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "timeAgo", [], "any", false, false, false, 119), "html", null, true);
+                yield ")</span>
                     </div>
+
+                    <!-- Contenu principal -->
+                    <div class=\"timeline-content\">
+
+                        <!-- Type d'activité -->
+                        <div class=\"activity-type\">
+                            <span class=\"activity-icon ";
+                // line 127
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "activityType", [], "any", false, false, false, 127), "html", null, true);
+                yield "\">
+                                <i data-lucide=\"";
+                // line 128
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "activityIcon", [], "any", false, false, false, 128), "html", null, true);
+                yield "\"></i>
+                            </span>
+                            <strong>";
+                // line 130
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "activityTypeLabel", [], "any", false, false, false, 130), "html", null, true);
+                yield "</strong>
+                        </div>
+
+                        <!-- Description -->
+                        <p>";
+                // line 134
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "description", [], "any", false, false, false, 134), "html", null, true);
+                yield "</p>
+
+                        <!-- Métadonnées -->
+                        <div class=\"timeline-meta\">
+                            <span>";
+                // line 138
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "entityTypeLabel", [], "any", false, false, false, 138), "html", null, true);
+                yield "</span>
+                            •
+                            <span class=\"badge ";
+                // line 140
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "level", [], "any", false, false, false, 140), "html", null, true);
+                yield "\">
+                                ";
+                // line 141
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "levelLabel", [], "any", false, false, false, 141), "html", null, true);
+                yield "
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Action -->
+                    <div class=\"timeline-action\">
+                        <a href=\"";
+                // line 148
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_activity_show", ["id" => CoreExtension::getAttribute($this->env, $this->source, $context["activity"], "id", [], "any", false, false, false, 148)]), "html", null, true);
+                yield "\"
+                           title=\"Voir les détails\">
+                            <i data-lucide=\"eye\"></i>
+                        </a>
+                    </div>
+
+                </div>
+            ";
+            }
+            $_parent = $context['_parent'];
+            unset($context['_seq'], $context['_key'], $context['activity'], $context['_parent']);
+            $context = array_intersect_key($context, $_parent) + $_parent;
+            // line 156
+            yield "        </div>
+    ";
+        } else {
+            // line 158
+            yield "        <p style=\"color: var(--text-muted); padding: 1rem;\">
+            Aucune activité récente
+        </p>
+    ";
+        }
+        // line 162
+        yield "</div>
+
                 </div>
 
             </div>
@@ -291,7 +387,7 @@ class __TwigTemplate_6119c04a081138896bb6194fceb2ff95 extends Template
         yield from [];
     }
 
-    // line 121
+    // line 170
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -301,7 +397,7 @@ class __TwigTemplate_6119c04a081138896bb6194fceb2ff95 extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 122
+        // line 171
         yield "     
     ";
         
@@ -331,7 +427,7 @@ class __TwigTemplate_6119c04a081138896bb6194fceb2ff95 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  305 => 122,  295 => 121,  267 => 99,  263 => 97,  259 => 95,  257 => 94,  254 => 93,  252 => 92,  244 => 87,  237 => 83,  230 => 79,  210 => 62,  203 => 57,  199 => 55,  196 => 54,  190 => 52,  188 => 51,  183 => 50,  181 => 49,  173 => 44,  166 => 40,  159 => 36,  152 => 31,  148 => 29,  144 => 27,  142 => 26,  134 => 22,  126 => 19,  119 => 15,  116 => 14,  108 => 7,  98 => 6,  87 => 4,  77 => 3,  60 => 2,  43 => 1,);
+        return array (  401 => 171,  391 => 170,  377 => 162,  371 => 158,  367 => 156,  353 => 148,  343 => 141,  339 => 140,  334 => 138,  327 => 134,  320 => 130,  315 => 128,  311 => 127,  300 => 119,  296 => 118,  290 => 114,  286 => 113,  283 => 112,  281 => 111,  267 => 99,  263 => 97,  259 => 95,  257 => 94,  254 => 93,  252 => 92,  244 => 87,  237 => 83,  230 => 79,  210 => 62,  203 => 57,  199 => 55,  196 => 54,  190 => 52,  188 => 51,  183 => 50,  181 => 49,  173 => 44,  166 => 40,  159 => 36,  152 => 31,  148 => 29,  144 => 27,  142 => 26,  134 => 22,  126 => 19,  119 => 15,  116 => 14,  108 => 7,  98 => 6,  87 => 4,  77 => 3,  60 => 2,  43 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -440,16 +536,65 @@ class __TwigTemplate_6119c04a081138896bb6194fceb2ff95 extends Template
                     </div>
 
                     <!-- Activity Log -->
-                    <div class=\"info-card\">
-                        <div class=\"card-title\">
-                            <span>Activité Récente</span>
-                            <i data-lucide=\"activity\" style=\"color: var(--tchad-blue);\"></i>
-                        </div>
-                       
+             <div class=\"info-card\">
+    <div class=\"card-title\">
+        <span>Activités récentes</span>
+        <i data-lucide=\"activity\" style=\"color: var(--tchad-blue);\"></i>
+    </div>
 
+    {% if user.getUserActivities is not empty %}
+        <div class=\"timeline\">
+            {% for activity in user.getUserActivities %}
+                <div class=\"timeline-item\">
 
-
+                    <!-- Date -->
+                    <div class=\"timeline-date\">
+                        {{ activity.createdAt|date('d F Y, H:i') }}
+                        <span class=\"time-ago\">({{ activity.timeAgo }})</span>
                     </div>
+
+                    <!-- Contenu principal -->
+                    <div class=\"timeline-content\">
+
+                        <!-- Type d'activité -->
+                        <div class=\"activity-type\">
+                            <span class=\"activity-icon {{ activity.activityType }}\">
+                                <i data-lucide=\"{{ activity.activityIcon }}\"></i>
+                            </span>
+                            <strong>{{ activity.activityTypeLabel }}</strong>
+                        </div>
+
+                        <!-- Description -->
+                        <p>{{ activity.description }}</p>
+
+                        <!-- Métadonnées -->
+                        <div class=\"timeline-meta\">
+                            <span>{{ activity.entityTypeLabel }}</span>
+                            •
+                            <span class=\"badge {{ activity.level }}\">
+                                {{ activity.levelLabel }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Action -->
+                    <div class=\"timeline-action\">
+                        <a href=\"{{ path('app_activity_show', { id: activity.id }) }}\"
+                           title=\"Voir les détails\">
+                            <i data-lucide=\"eye\"></i>
+                        </a>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style=\"color: var(--text-muted); padding: 1rem;\">
+            Aucune activité récente
+        </p>
+    {% endif %}
+</div>
+
                 </div>
 
             </div>

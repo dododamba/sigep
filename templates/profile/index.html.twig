@@ -102,16 +102,65 @@
                     </div>
 
                     <!-- Activity Log -->
-                    <div class="info-card">
-                        <div class="card-title">
-                            <span>Activité Récente</span>
-                            <i data-lucide="activity" style="color: var(--tchad-blue);"></i>
-                        </div>
-                       
+             <div class="info-card">
+    <div class="card-title">
+        <span>Activités récentes</span>
+        <i data-lucide="activity" style="color: var(--tchad-blue);"></i>
+    </div>
 
+    {% if user.getUserActivities is not empty %}
+        <div class="timeline">
+            {% for activity in user.getUserActivities %}
+                <div class="timeline-item">
 
-
+                    <!-- Date -->
+                    <div class="timeline-date">
+                        {{ activity.createdAt|date('d F Y, H:i') }}
+                        <span class="time-ago">({{ activity.timeAgo }})</span>
                     </div>
+
+                    <!-- Contenu principal -->
+                    <div class="timeline-content">
+
+                        <!-- Type d'activité -->
+                        <div class="activity-type">
+                            <span class="activity-icon {{ activity.activityType }}">
+                                <i data-lucide="{{ activity.activityIcon }}"></i>
+                            </span>
+                            <strong>{{ activity.activityTypeLabel }}</strong>
+                        </div>
+
+                        <!-- Description -->
+                        <p>{{ activity.description }}</p>
+
+                        <!-- Métadonnées -->
+                        <div class="timeline-meta">
+                            <span>{{ activity.entityTypeLabel }}</span>
+                            •
+                            <span class="badge {{ activity.level }}">
+                                {{ activity.levelLabel }}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Action -->
+                    <div class="timeline-action">
+                        <a href="{{ path('app_activity_show', { id: activity.id }) }}"
+                           title="Voir les détails">
+                            <i data-lucide="eye"></i>
+                        </a>
+                    </div>
+
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p style="color: var(--text-muted); padding: 1rem;">
+            Aucune activité récente
+        </p>
+    {% endif %}
+</div>
+
                 </div>
 
             </div>

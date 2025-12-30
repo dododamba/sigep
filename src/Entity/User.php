@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -78,11 +79,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'json')]
     private array $roles = [];
 
+    #[ORM\OneToMany(targetEntity: UserActivity::class, mappedBy: 'user')]
+    private Collection $userActivities;
+
     public function __construct()
     {
         $this->setSlug('uuid-' . uniqid()); // Utilisation d'uniqid() au lieu de str_randomize()
         $this->createdAt = new \DateTimeImmutable();
         $this->isVerified = false;
+        $this->userActivities = new ArrayCollection();
     }
 
 
@@ -444,6 +449,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return [];
     }
 
+
+   public function getUserActivities(): Collection
+    {
+        return $this->userActivities;
+    }
+
+    public function addUserActivity(UserActivity $activity): static
+    {
+        if (!$this->userActivities->contains($activity)) {
+            $this->userActivities->add($activity);
+            $activity->setUser($this);
+        }
+
+        return $this;
+    }   
+
+    public function removeUserActivity(UserActivity $activity): static
+    {
+        if ($this->userActivities->removeElement($activity)) {
+            // set the owning side to null (unless already changed)
+            if ($activity->getUser() === $this) {
+                $activity->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+  
 
   
 }
