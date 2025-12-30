@@ -21,5 +21,33 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\ActivityLogger:
+        arguments:
+            $entityManager: '@doctrine.orm.entity_manager'
+            $requestStack: '@request_stack'
+            $security: '@security.helper'
+        tags: ['app.activity_logger']
+        public: true
+
+    # Alias pour faciliter l'injection
+    activity.logger:
+        alias: App\Service\ActivityLogger
+        public: true
+
+    # Listener d'événements pour logging automatique
+    App\EventListener\ActivitySubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+        arguments:
+            $activityLogger: '@App\Service\ActivityLogger'
+
+    # Command pour nettoyer les anciennes activités
+    App\Command\CleanupActivitiesCommand:
+        arguments:
+            $activityLogger: '@App\Service\ActivityLogger'
+        tags:
+            - { name: console.command, command: 'app:activities:cleanup' }
+
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

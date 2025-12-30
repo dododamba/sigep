@@ -261,11 +261,11 @@ class __TwigTemplate_7671c8f95b132bde099a25f308283168 extends Template
 
             <a href=\"";
         // line 129
-        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_login_history");
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_activity_index");
         yield "\"
                class=\"nav-item ";
         // line 130
-        yield (((is_string($_v22 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 130, $this->source); })())) && is_string($_v23 = "app_login_history") && str_starts_with($_v22, $_v23))) ? ("active") : (""));
+        yield (((is_string($_v22 = (isset($context["currentRoute"]) || array_key_exists("currentRoute", $context) ? $context["currentRoute"] : (function () { throw new RuntimeError('Variable "currentRoute" does not exist.', 130, $this->source); })())) && is_string($_v23 = "app_activity_index") && str_starts_with($_v22, $_v23))) ? ("active") : (""));
         yield "\">
                 <i class=\"ri-time-line\"></i>
                 <span>Historiques de connexion</span>
@@ -460,8 +460,8 @@ class __TwigTemplate_7671c8f95b132bde099a25f308283168 extends Template
                 <span>Rôles & permissions</span>
             </a>
 
-            <a href=\"{{ path('app_login_history') }}\"
-               class=\"nav-item {{ currentRoute starts with 'app_login_history' ? 'active' }}\">
+            <a href=\"{{ path('app_activity_index') }}\"
+               class=\"nav-item {{ currentRoute starts with 'app_activity_index' ? 'active' }}\">
                 <i class=\"ri-time-line\"></i>
                 <span>Historiques de connexion</span>
             </a>

@@ -1,0 +1,499 @@
+{# templates/activity/show.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'Activité - SIGEP Tchad{% endblock %}
+
+{% block stylesheets %}
+<style>
+    :root {
+        --bg-primary: #f0f4f8;
+        --bg-secondary: #ffffff;
+        --bg-tertiary: #e8eef4;
+        --text-primary: #1a2a3a;
+        --text-secondary: #4a5e73;
+        --text-muted: #7a8fa3;
+        --border-color: #d0dbe6;
+        
+        --tchad-blue: #002664;
+        --tchad-gold: #fecb00;
+        --tchad-red: #c60c30;
+        
+        --accent-primary: #002664;
+        --accent-gradient: linear-gradient(135deg, #002664 0%, #1a4a8a 50%, #2a5a9a 100%);
+        
+        --success: #10b981;
+        --warning: #f59e0b;
+        --danger: #ef4444;
+        --info: #3b82f6;
+        
+        --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+        --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+        --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+    }
+
+    .page-header {
+        background: var(--accent-gradient);
+        color: white;
+        padding: 2rem;
+        border-radius: 16px;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .page-header h1 {
+        font-size: 1.75rem;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .btn {
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 0.875rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        text-decoration: none;
+    }
+
+    .btn-secondary {
+        background: rgba(255, 255, 255, 0.2);
+        color: white;
+        backdrop-filter: blur(10px);
+    }
+
+    .btn-secondary:hover {
+        background: rgba(255, 255, 255, 0.3);
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 24px;
+        margin-bottom: 2rem;
+    }
+
+    .detail-card {
+        background: var(--bg-secondary);
+        border-radius: 16px;
+        padding: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .detail-card-header {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid var(--border-color);
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .detail-row {
+        padding: 14px 0;
+        border-bottom: 1px solid var(--border-color);
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 20px;
+    }
+
+    .detail-row:last-child {
+        border-bottom: none;
+    }
+
+    .detail-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-muted);
+        min-width: 140px;
+    }
+
+    .detail-value {
+        font-size: 0.875rem;
+        color: var(--text-primary);
+        flex: 1;
+        text-align: right;
+    }
+
+    .activity-type-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .activity-type-badge.login { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+    .activity-type-badge.logout { background: rgba(148, 163, 184, 0.1); color: var(--text-muted); }
+    .activity-type-badge.create { background: rgba(59, 130, 246, 0.1); color: var(--info); }
+    .activity-type-badge.update { background: rgba(245, 158, 11, 0.1); color: var(--warning); }
+    .activity-type-badge.delete { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+    .activity-type-badge.view { background: rgba(139, 92, 246, 0.1); color: #8b5cf6; }
+    .activity-type-badge.export { background: rgba(0, 38, 100, 0.1); color: var(--tchad-blue); }
+    .activity-type-badge.validate { background: rgba(16, 185, 129, 0.1); color: var(--success); }
+
+    .badge {
+        padding: 6px 14px;
+        border-radius: 12px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .badge.low {
+        background: rgba(148, 163, 184, 0.15);
+        color: var(--text-muted);
+    }
+
+    .badge.medium {
+        background: rgba(59, 130, 246, 0.15);
+        color: var(--info);
+    }
+
+    .badge.high {
+        background: rgba(245, 158, 11, 0.15);
+        color: var(--warning);
+    }
+
+    .badge.critical {
+        background: rgba(239, 68, 68, 0.15);
+        color: var(--danger);
+    }
+
+    .user-card {
+        background: var(--bg-tertiary);
+        border-radius: 12px;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .user-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 16px;
+        background: var(--accent-gradient);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 700;
+        font-size: 2rem;
+        margin: 0 auto 16px;
+    }
+
+    .user-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 4px;
+    }
+
+    .user-email {
+        font-size: 0.875rem;
+        color: var(--text-muted);
+        margin-bottom: 12px;
+    }
+
+    .user-role {
+        display: inline-block;
+        padding: 6px 12px;
+        background: rgba(254, 203, 0, 0.2);
+        color: #b8860b;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+    }
+
+    .metadata-section {
+        background: var(--bg-tertiary);
+        border-radius: 12px;
+        padding: 16px;
+        margin-top: 16px;
+    }
+
+    .metadata-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: 12px;
+    }
+
+    .metadata-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        border-bottom: 1px solid var(--border-color);
+        font-size: 0.813rem;
+    }
+
+    .metadata-item:last-child {
+        border-bottom: none;
+    }
+
+    .metadata-key {
+        color: var(--text-muted);
+    }
+
+    .metadata-value {
+        color: var(--text-primary);
+        font-weight: 500;
+    }
+
+    .changes-section {
+        margin-top: 16px;
+    }
+
+    .change-item {
+        background: var(--bg-tertiary);
+        border-radius: 8px;
+        padding: 12px;
+        margin-bottom: 8px;
+    }
+
+    .change-field {
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: 6px;
+        font-size: 0.875rem;
+    }
+
+    .change-values {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 0.813rem;
+    }
+
+    .change-old {
+        color: var(--danger);
+        text-decoration: line-through;
+    }
+
+    .change-new {
+        color: var(--success);
+        font-weight: 600;
+    }
+
+    @media (max-width: 768px) {
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .page-header {
+            flex-direction: column;
+            gap: 16px;
+            align-items: flex-start;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>
+            <i data-lucide="info"></i>
+            Détails de l'Activité
+        </h1>
+        <a href="{{ path('app_activity_index') }}" class="btn btn-secondary">
+            <i data-lucide="arrow-left"></i>
+            Retour à la liste
+        </a>
+    </div>
+
+    <!-- Details Grid -->
+    <div class="details-grid">
+        <!-- Main Details -->
+        <div class="detail-card">
+            <div class="detail-card-header">
+                <i data-lucide="file-text"></i>
+                Informations Principales
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">ID</span>
+                <span class="detail-value"><strong>#{{ activity.id }}</strong></span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Type d'activité</span>
+                <span class="detail-value">
+                    <span class="activity-type-badge {{ activity.activityType }}">
+                        <i data-lucide="{{ activity.activityIcon }}"></i>
+                        {{ activity.activityTypeLabel }}
+                    </span>
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Niveau d'importance</span>
+                <span class="detail-value">
+                    <span class="badge {{ activity.level }}">{{ activity.levelLabel }}</span>
+                </span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Description</span>
+                <span class="detail-value">{{ activity.description }}</span>
+            </div>
+
+            {% if activity.entityType %}
+            <div class="detail-row">
+                <span class="detail-label">Type d'entité</span>
+                <span class="detail-value">{{ activity.entityTypeLabel }}</span>
+            </div>
+            {% endif %}
+
+            {% if activity.entityName %}
+            <div class="detail-row">
+                <span class="detail-label">Nom de l'entité</span>
+                <span class="detail-value"><strong>{{ activity.entityName }}</strong></span>
+            </div>
+            {% endif %}
+
+            {% if activity.entityId %}
+            <div class="detail-row">
+                <span class="detail-label">ID de l'entité</span>
+                <span class="detail-value">#{{ activity.entityId }}</span>
+            </div>
+            {% endif %}
+
+            <div class="detail-row">
+                <span class="detail-label">Date et heure</span>
+                <span class="detail-value">{{ activity.createdAt|date('d/m/Y à H:i:s') }}</span>
+            </div>
+
+            <div class="detail-row">
+                <span class="detail-label">Il y a</span>
+                <span class="detail-value">{{ activity.timeAgo }}</span>
+            </div>
+
+            {% if activity.changes is not empty %}
+            <div class="changes-section">
+                <div class="metadata-title">
+                    <i data-lucide="edit-3"></i>
+                    Modifications Effectuées
+                </div>
+                {% for field, change in activity.changes %}
+                <div class="change-item">
+                    <div class="change-field">{{ field|title }}</div>
+                    <div class="change-values">
+                        <span class="change-old">{{ change.old }}</span>
+                        <i data-lucide="arrow-right" style="width: 16px; height: 16px;"></i>
+                        <span class="change-new">{{ change.new }}</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar -->
+        <div>
+            <!-- User Card -->
+            <div class="detail-card">
+                <div class="detail-card-header">
+                    <i data-lucide="user"></i>
+                    Utilisateur
+                </div>
+
+                <div class="user-card">
+                    <div class="user-avatar">
+                        {{ activity.user.firstname|first }}{{ activity.user.lastname|first }}
+                    </div>
+                    <div class="user-name">{{ activity.user.fullName }}</div>
+                    <div class="user-email">{{ activity.user.email }}</div>
+                    {% if activity.user.accessLevel %}
+                    <span class="user-role">{{ activity.user.accessLevel|upper }}</span>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Technical Details -->
+            <div class="detail-card" style="margin-top: 24px;">
+                <div class="detail-card-header">
+                    <i data-lucide="settings"></i>
+                    Informations Techniques
+                </div>
+
+                <div class="detail-row">
+                    <span class="detail-label">Adresse IP</span>
+                    <span class="detail-value">{{ activity.ipAddress }}</span>
+                </div>
+
+                {% if activity.route %}
+                <div class="detail-row">
+                    <span class="detail-label">Route</span>
+                    <span class="detail-value"><code>{{ activity.route }}</code></span>
+                </div>
+                {% endif %}
+
+                {% if activity.method %}
+                <div class="detail-row">
+                    <span class="detail-label">Méthode HTTP</span>
+                    <span class="detail-value"><strong>{{ activity.method }}</strong></span>
+                </div>
+                {% endif %}
+
+                {% if activity.duration %}
+                <div class="detail-row">
+                    <span class="detail-label">Durée</span>
+                    <span class="detail-value">{{ activity.duration }} ms</span>
+                </div>
+                {% endif %}
+
+                {% if activity.userAgent %}
+                <div class="detail-row">
+                    <span class="detail-label">User Agent</span>
+                    <span class="detail-value" style="font-size: 0.75rem; word-break: break-all;">
+                        {{ activity.userAgent }}
+                    </span>
+                </div>
+                {% endif %}
+            </div>
+
+            <!-- Metadata -->
+            {% if activity.metadata is not empty %}
+            <div class="metadata-section" style="margin-top: 24px;">
+                <div class="metadata-title">
+                    <i data-lucide="database"></i>
+                    Métadonnées Additionnelles
+                </div>
+                {% for key, value in activity.metadata %}
+                <div class="metadata-item">
+                    <span class="metadata-key">{{ key|title }}</span>
+                    <span class="metadata-value">{{ value }}</span>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        lucide.createIcons();
+    });
+</script>
+{% endblock %}

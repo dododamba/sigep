@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\String\Slugger\SluggerInterface;
+use App\Service\ActivityLogger;
+use App\Entity\UserActivity;
 
 #[Route('/partners')]
 class PartnerController extends AbstractController
@@ -22,7 +24,8 @@ class PartnerController extends AbstractController
         private EntityManagerInterface $entityManager,
         private PartnerRepository $partnerRepository,
         private TypePartnerRepository $typePartnerRepository,
-        private SluggerInterface $slugger
+        private SluggerInterface $slugger,
+        private ActivityLogger $activityLogger
     ) {}
 
     /**
@@ -55,6 +58,8 @@ class PartnerController extends AbstractController
             'byStatus' => $this->partnerRepository->countByStatus(),
             'byType' => $this->partnerRepository->countByType(),
         ];
+
+        $this->activityLogger->logCreate(UserActivity::ENTITY_PARTNER, $partners[0]->getId(), $partners[0]->getName());
 
         return $this->render('partner/index.html.twig', [
             'partners' => $partners,
@@ -102,8 +107,11 @@ class PartnerController extends AbstractController
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Le partenaire "' . $partner->getName() . '" a été créé avec succès.');
+            $this->activityLogger->logCreate( UserActivity::ENTITY_PARTNER, $partner->getId(), $partner->getName() );
             return $this->redirectToRoute('app_partners');
         }
+
+        $this->activityLogger->logCreate( UserActivity::ENTITY_PARTNER, 0, 'Création nouveau partenaire' );
 
         return $this->render('partner/new.html.twig', [
             'partner' => $partner,
@@ -120,9 +128,12 @@ class PartnerController extends AbstractController
         $partner = $this->partnerRepository->findBySlug($slug);
 
         if (!$partner) {
+            $this->addFlash('error', 'Partenaire non trouvé.');
+
             throw $this->createNotFoundException('Partenaire non trouvé.');
         }
 
+        $this->activityLogger->logCreate( UserActivity::ENTITY_PARTNER, $partner->getId(), $partner->getName() );
         return $this->render('partner/show.html.twig', [
             'partner' => $partner,
         ]);
@@ -165,7 +176,7 @@ class PartnerController extends AbstractController
             }
 
             $this->entityManager->flush();
-
+            $this->activityLogger->logCreate( UserActivity::ENTITY_PARTNER, $partner->getId(), $partner->getName() );
             $this->addFlash('success', 'Le partenaire "' . $partner->getName() . '" a été modifié avec succès.');
             return $this->redirectToRoute('app_partners');
         }

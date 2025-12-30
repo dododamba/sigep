@@ -317,6 +317,18 @@
     <service id="App\Entity" class="App\Entity" abstract="true">
       <tag name="container.excluded" source="in &quot;config/services.yaml&quot;"/>
     </service>
+    <service id="App\Command\CleanupActivitiesCommand" class="App\Command\CleanupActivitiesCommand" autowire="true" autoconfigure="true">
+      <tag name="console.command" command="app:activities:cleanup"/>
+      <tag name="console.command"/>
+      <tag name="container.no_preload"/>
+      <argument type="service" id="App\Service\ActivityLogger"/>
+      <call method="setName">
+        <argument>app:activities:cleanup</argument>
+      </call>
+      <call method="setDescription">
+        <argument>Nettoie les anciennes activités de la base de données</argument>
+      </call>
+    </service>
     <service id="App\Command\FixEmployeMigrationCommand" class="App\Command\FixEmployeMigrationCommand" autowire="true" autoconfigure="true">
       <tag name="console.command"/>
       <tag name="container.no_preload"/>
@@ -343,6 +355,15 @@
       </call>
       <call method="setDescription">
         <argument>Corrige et vérifie les relations User-Institution et User-Employe</argument>
+      </call>
+    </service>
+    <service id="App\Controller\ActivityController" class="App\Controller\ActivityController" public="true" autowire="true" autoconfigure="true">
+      <tag name="controller.service_arguments"/>
+      <tag name="container.service_subscriber"/>
+      <argument type="service" id="App\Repository\UserActivityRepository"/>
+      <argument type="service" id="App\Service\ActivityLogger"/>
+      <call method="setContainer">
+        <argument type="service" id=".service_locator.QaaoWjx.App\Controller\ActivityController"/>
       </call>
     </service>
     <service id="App\Controller\AuditController" class="App\Controller\AuditController" public="true" autowire="true" autoconfigure="true">
@@ -419,6 +440,7 @@
       <argument type="service" id="App\Repository\PartnerRepository"/>
       <argument type="service" id="App\Repository\TypePartnerRepository"/>
       <argument type="service" id="slugger"/>
+      <argument type="service" id="App\Service\ActivityLogger"/>
       <call method="setContainer">
         <argument type="service" id=".service_locator.QaaoWjx.App\Controller\PartnerController"/>
       </call>
@@ -487,6 +509,11 @@
     <service id="App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
       <argument type="service" id="security.user_password_hasher"/>
+    </service>
+    <service id="App\EventListener\ActivitySubscriber" class="App\EventListener\ActivitySubscriber" autowire="true" autoconfigure="true">
+      <tag name="kernel.event_subscriber"/>
+      <tag name="container.hot_path"/>
+      <argument type="service" id="App\Service\ActivityLogger"/>
     </service>
     <service id="App\Form\AuditType" class="App\Form\AuditType" autowire="true" autoconfigure="true">
       <tag name="form.type"/>
@@ -563,6 +590,10 @@
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
+    <service id="App\Repository\UserActivityRepository" class="App\Repository\UserActivityRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
     <service id="App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
@@ -575,6 +606,12 @@
     </service>
     <service id="App\Security\WebAuthentificatorAuthenticator" class="App\Security\WebAuthentificatorAuthenticator" autowire="true" autoconfigure="true">
       <argument type="service" id="router.default"/>
+    </service>
+    <service id="App\Service\ActivityLogger" class="App\Service\ActivityLogger" public="true" autowire="true" autoconfigure="true">
+      <tag name="app.activity_logger"/>
+      <argument type="service" id="doctrine.orm.default_entity_manager"/>
+      <argument type="service" id="request_stack"/>
+      <argument type="service" id="security.helper"/>
     </service>
     <service id="App\Service\PermissionChecker" class="App\Service\PermissionChecker" autowire="true" autoconfigure="true">
       <argument type="service" id="security.helper"/>
@@ -614,7 +651,7 @@
     </service>
     <service id="argument_resolver.service" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">
       <tag priority="-50" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\ServiceValueResolver">controller.argument_value_resolver</tag>
-      <argument type="service" id=".service_locator.PVirhNS"/>
+      <argument type="service" id=".service_locator.O_oMkbZ"/>
     </service>
     <service id="argument_resolver.default" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">
       <tag priority="-100" name="Symfony\Component\HttpKernel\Controller\ArgumentResolver\DefaultValueResolver">controller.argument_value_resolver</tag>
@@ -3019,6 +3056,38 @@
         <argument>0</argument>
       </call>
       <call method="addListener">
+        <argument>Symfony\Component\Security\Http\Event\LoginSuccessEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="App\EventListener\ActivitySubscriber"/>
+          <argument>onLoginSuccess</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListener">
+        <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="App\EventListener\ActivitySubscriber"/>
+          <argument>onLogout</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListener">
+        <argument>kernel.request</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="App\EventListener\ActivitySubscriber"/>
+          <argument>onKernelRequest</argument>
+        </argument>
+        <argument>10</argument>
+      </call>
+      <call method="addListener">
+        <argument>kernel.terminate</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="App\EventListener\ActivitySubscriber"/>
+          <argument>onKernelTerminate</argument>
+        </argument>
+        <argument>-10</argument>
+      </call>
+      <call method="addListener">
         <argument>kernel.controller_arguments</argument>
         <argument type="collection">
           <argument type="service_closure" id="argument_resolver.request_payload"/>
@@ -3488,7 +3557,7 @@
     </service>
     <service id="argument_resolver.not_tagged_controller" class="Symfony\Component\HttpKernel\Controller\ArgumentResolver\NotTaggedControllerValueResolver">
       <tag name="controller.argument_value_resolver" priority="-200"/>
-      <argument type="service" id=".service_locator.PVirhNS"/>
+      <argument type="service" id=".service_locator.O_oMkbZ"/>
     </service>
     <service id="routing.resolver" class="Symfony\Component\Config\Loader\LoaderResolver">
       <call method="addLoader">
@@ -4652,7 +4721,7 @@
     <service id="doctrine.orm.configuration" class="Doctrine\ORM\Configuration" abstract="true"/>
     <service id="doctrine.orm.entity_manager.abstract" class="Doctrine\ORM\EntityManager" lazy="true" abstract="true"/>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory">
-      <argument type="service" id=".service_locator.4.GK4LL"/>
+      <argument type="service" id=".service_locator.sQEKQTo"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -8489,12 +8558,17 @@
         <argument key="_default" type="service_closure" id="webpack_encore.entrypoint_lookup[_default]"/>
       </argument>
     </service>
+    <service id=".instanceof.Symfony\Component\Console\Command\Command.0.App\Command\CleanupActivitiesCommand" class="App\Command\CleanupActivitiesCommand" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Command\CleanupActivitiesCommand" class="App\Command\CleanupActivitiesCommand" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Console\Command\Command.0.App\Command\FixEmployeMigrationCommand" class="App\Command\FixEmployeMigrationCommand" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Command\FixEmployeMigrationCommand" class="App\Command\FixEmployeMigrationCommand" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Console\Command\Command.0.App\Command\FixUserEmployeRelationsCommand" class="App\Command\FixUserEmployeRelationsCommand" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Command\FixUserEmployeRelationsCommand" class="App\Command\FixUserEmployeRelationsCommand" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Console\Command\Command.0.App\Command\FixUserInstitutionCommand" class="App\Command\FixUserInstitutionCommand" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Command\FixUserInstitutionCommand" class="App\Command\FixUserInstitutionCommand" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\ActivityController" class="App\Controller\ActivityController" autowire="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\ActivityController" class="App\Controller\ActivityController" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Controller\ActivityController" class="App\Controller\ActivityController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Contracts\Service\ServiceSubscriberInterface.0.App\Controller\AuditController" class="App\Controller\AuditController" autowire="true" abstract="true"/>
     <service id=".instanceof.Symfony\Bundle\FrameworkBundle\Controller\AbstractController.0.App\Controller\AuditController" class="App\Controller\AuditController" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Controller\AuditController" class="App\Controller\AuditController" autowire="true" autoconfigure="true" abstract="true"/>
@@ -8539,6 +8613,8 @@
     <service id=".abstract.instanceof.App\Controller\WebController" class="App\Controller\WebController" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\EventDispatcher\EventSubscriberInterface.0.App\EventListener\ActivitySubscriber" class="App\EventListener\ActivitySubscriber" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\EventListener\ActivitySubscriber" class="App\EventListener\ActivitySubscriber" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\AuditType" class="App\Form\AuditType" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Form\AuditType" class="App\Form\AuditType" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Form\FormTypeInterface.0.App\Form\ConventionType" class="App\Form\ConventionType" autowire="true" abstract="true"/>
@@ -8581,6 +8657,8 @@
     <service id=".abstract.instanceof.App\Repository\TypeInstitutionRepository" class="App\Repository\TypeInstitutionRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TypePartnerRepository" class="App\Repository\TypePartnerRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\TypePartnerRepository" class="App\Repository\TypePartnerRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserActivityRepository" class="App\Repository\UserActivityRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\UserActivityRepository" class="App\Repository\UserActivityRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Symfony\Component\Security\Core\Authorization\Voter\VoterInterface.0.App\Security\Voter\RolePermissionVoter" class="App\Security\Voter\RolePermissionVoter" autowire="true" abstract="true"/>
@@ -9155,6 +9233,22 @@
         <argument>1024</argument>
       </call>
       <call method="addListener">
+        <argument>Symfony\Component\Security\Http\Event\LoginSuccessEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="App\EventListener\ActivitySubscriber"/>
+          <argument>onLoginSuccess</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListener">
+        <argument>Symfony\Component\Security\Http\Event\LogoutEvent</argument>
+        <argument type="collection">
+          <argument type="service_closure" id="App\EventListener\ActivitySubscriber"/>
+          <argument>onLogout</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListener">
         <argument>Symfony\Component\Security\Http\Event\CheckPassportEvent</argument>
         <argument type="collection">
           <argument type="service_closure" id="security.listener.check_authenticator_credentials"/>
@@ -9204,6 +9298,18 @@
       <argument>kernel::loadRoutes()</argument>
       <argument type="service" id="service_container"/>
       <factory service=".service_locator.4wc4Ag1" method="withContext"/>
+    </service>
+    <service id=".service_locator.qaRzevw" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator"/>
+      <argument type="collection">
+        <argument key="activity" type="service_closure" id=".errored..service_locator.qaRzevw.App\Entity\UserActivity"/>
+      </argument>
+    </service>
+    <service id=".service_locator.qaRzevw.App\Controller\ActivityController::show()" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\ActivityController::show()"/>
+      <argument>App\Controller\ActivityController::show()</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.qaRzevw" method="withContext"/>
     </service>
     <service id=".service_locator.l5xpj_O" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
@@ -9574,13 +9680,14 @@
         <argument key="loginHistoryRepository" type="service_closure" id=".errored.mU_kUNL"/>
       </argument>
     </service>
-    <service id=".service_locator.PVirhNS" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.O_oMkbZ" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
         <argument key="App\Kernel::registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
         <argument key="kernel::loadRoutes" type="service_closure" id=".service_locator.4wc4Ag1.kernel::loadRoutes()"/>
         <argument key="App\Kernel::loadRoutes" type="service_closure" id=".service_locator.4wc4Ag1.kernel::loadRoutes()"/>
+        <argument key="App\Controller\ActivityController::show" type="service_closure" id=".service_locator.qaRzevw.App\Controller\ActivityController::show()"/>
         <argument key="App\Controller\AuditController::new" type="service_closure" id=".service_locator.l5xpj_O.App\Controller\AuditController::new()"/>
         <argument key="App\Controller\AuditController::show" type="service_closure" id=".service_locator.Gfm9iFm.App\Controller\AuditController::show()"/>
         <argument key="App\Controller\AuditController::edit" type="service_closure" id=".service_locator.TDmwDGi.App\Controller\AuditController::edit()"/>
@@ -9627,6 +9734,7 @@
         <argument key="App\Controller\WebController::loginHistory" type="service_closure" id=".service_locator.kjAHTcj"/>
         <argument key="kernel:registerContainerConfiguration" type="service_closure" id=".service_locator.4wc4Ag1.kernel::registerContainerConfiguration()"/>
         <argument key="kernel:loadRoutes" type="service_closure" id=".service_locator.4wc4Ag1.kernel::loadRoutes()"/>
+        <argument key="App\Controller\ActivityController:show" type="service_closure" id=".service_locator.qaRzevw.App\Controller\ActivityController::show()"/>
         <argument key="App\Controller\AuditController:new" type="service_closure" id=".service_locator.l5xpj_O.App\Controller\AuditController::new()"/>
         <argument key="App\Controller\AuditController:show" type="service_closure" id=".service_locator.Gfm9iFm.App\Controller\AuditController::show()"/>
         <argument key="App\Controller\AuditController:edit" type="service_closure" id=".service_locator.TDmwDGi.App\Controller\AuditController::edit()"/>
@@ -9783,7 +9891,7 @@
         <argument key="turbo.doctrine.event_listener" type="service_closure" id="turbo.doctrine.event_listener"/>
       </argument>
     </service>
-    <service id=".service_locator.4.GK4LL" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.sQEKQTo" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\AuditRepository" type="service_closure" id="App\Repository\AuditRepository"/>
@@ -9798,6 +9906,7 @@
         <argument key="App\Repository\SectorInstitutionRepository" type="service_closure" id="App\Repository\SectorInstitutionRepository"/>
         <argument key="App\Repository\TypeInstitutionRepository" type="service_closure" id="App\Repository\TypeInstitutionRepository"/>
         <argument key="App\Repository\TypePartnerRepository" type="service_closure" id="App\Repository\TypePartnerRepository"/>
+        <argument key="App\Repository\UserActivityRepository" type="service_closure" id="App\Repository\UserActivityRepository"/>
         <argument key="App\Repository\UserRepository" type="service_closure" id="App\Repository\UserRepository"/>
       </argument>
     </service>
@@ -9937,6 +10046,12 @@
         <argument key="security.csrf.token_manager" type="service_closure" id="security.csrf.token_manager" on-invalid="ignore"/>
         <argument key="parameter_bag" type="service_closure" id="parameter_bag" on-invalid="ignore"/>
       </argument>
+    </service>
+    <service id=".service_locator.QaaoWjx.App\Controller\ActivityController" class="Symfony\Component\DependencyInjection\ServiceLocator">
+      <tag name="container.service_locator_context" id="App\Controller\ActivityController"/>
+      <argument>App\Controller\ActivityController</argument>
+      <argument type="service" id="service_container"/>
+      <factory service=".service_locator.QaaoWjx" method="withContext"/>
     </service>
     <service id=".service_locator.QaaoWjx.App\Controller\AuditController" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator_context" id="App\Controller\AuditController"/>
@@ -10273,6 +10388,7 @@
       <call method="allowControllers">
         <argument type="collection">
           <argument>App\Kernel</argument>
+          <argument>App\Controller\ActivityController</argument>
           <argument>App\Controller\AuditController</argument>
           <argument>App\Controller\ConventionController</argument>
           <argument>App\Controller\DashboardController</argument>
@@ -10379,6 +10495,9 @@
     <service id=".errored..service_locator.4wc4Ag1.Symfony\Component\Config\Loader\LoaderInterface" class="Symfony\Component\Config\Loader\LoaderInterface">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.4wc4Ag1&quot;: it needs an instance of &quot;Symfony\Component\Config\Loader\LoaderInterface&quot; but this type has been excluded from autowiring."/>
     </service>
+    <service id=".errored..service_locator.qaRzevw.App\Entity\UserActivity" class="App\Entity\UserActivity">
+      <tag name="container.error" message="Cannot autowire service &quot;.service_locator.qaRzevw&quot;: it needs an instance of &quot;App\Entity\UserActivity&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
+    </service>
     <service id=".errored..service_locator.Gfm9iFm.App\Entity\Audit" class="App\Entity\Audit">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.Gfm9iFm&quot;: it needs an instance of &quot;App\Entity\Audit&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
     </service>
@@ -10408,6 +10527,13 @@
     </service>
     <service id=".errored..service_locator.hKA2je_.App\Entity\User" class="App\Entity\User">
       <tag name="container.error" message="Cannot autowire service &quot;.service_locator.hKA2je_&quot;: it needs an instance of &quot;App\Entity\User&quot; but this type has been excluded in &quot;config/services.yaml&quot;."/>
+    </service>
+    <service id=".App\Command\CleanupActivitiesCommand.lazy" class="Symfony\Component\Console\Command\LazyCommand">
+      <argument>app:activities:cleanup</argument>
+      <argument type="collection"/>
+      <argument>Nettoie les anciennes activités de la base de données</argument>
+      <argument>false</argument>
+      <argument type="service_closure" id="App\Command\CleanupActivitiesCommand"/>
     </service>
     <service id=".App\Command\FixEmployeMigrationCommand.lazy" class="Symfony\Component\Console\Command\LazyCommand">
       <argument>app:fix-employe-migration</argument>
@@ -11095,8 +11221,9 @@
     </service>
     <service id="console.command_loader" class="Symfony\Component\Console\CommandLoader\ContainerCommandLoader" public="true">
       <tag name="container.no_preload"/>
-      <argument type="service" id=".service_locator.HVaicom"/>
+      <argument type="service" id=".service_locator.QZkKYEw"/>
       <argument type="collection">
+        <argument key="app:activities:cleanup">App\Command\CleanupActivitiesCommand</argument>
         <argument key="app:fix-employe-migration">App\Command\FixEmployeMigrationCommand</argument>
         <argument key="app:fix-user-institution">App\Command\FixUserInstitutionCommand</argument>
         <argument key="about">console.command.about</argument>
@@ -11217,9 +11344,10 @@
         <argument key="make:webhook">maker.auto_command.make_webhook</argument>
       </argument>
     </service>
-    <service id=".service_locator.HVaicom" class="Symfony\Component\DependencyInjection\ServiceLocator">
+    <service id=".service_locator.QZkKYEw" class="Symfony\Component\DependencyInjection\ServiceLocator">
       <tag name="container.service_locator"/>
       <argument type="collection">
+        <argument key="App\Command\CleanupActivitiesCommand" type="service_closure" id=".App\Command\CleanupActivitiesCommand.lazy"/>
         <argument key="App\Command\FixEmployeMigrationCommand" type="service_closure" id=".App\Command\FixEmployeMigrationCommand.lazy"/>
         <argument key="App\Command\FixUserInstitutionCommand" type="service_closure" id=".App\Command\FixUserInstitutionCommand.lazy"/>
         <argument key="console.command.about" type="service_closure" id=".console.command.about.lazy"/>
@@ -11354,6 +11482,7 @@
         <argument key="Vich\UploaderBundle\Twig\Extension\UploaderExtensionRuntime" type="service_closure" id="Vich\UploaderBundle\Twig\Extension\UploaderExtensionRuntime"/>
       </argument>
     </service>
+    <service id="activity.logger" alias="App\Service\ActivityLogger" public="true"/>
     <service id="App\Kernel" alias="kernel" public="true"/>
     <service id="Symfony\Component\DependencyInjection\ParameterBag\ContainerBagInterface" alias="parameter_bag"/>
     <service id="Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface" alias="parameter_bag"/>
@@ -11599,7 +11728,7 @@
     <service id="Symfony\WebpackEncoreBundle\Asset\EntrypointLookupInterface" alias="webpack_encore.entrypoint_lookup[_default]"/>
     <service id="container.env_var_processors_locator" alias=".service_locator.pRu6x_4" public="true"/>
     <service id="twig.loader.filesystem" alias="twig.loader.native_filesystem"/>
-    <service id="argument_resolver.controller_locator" alias=".service_locator.PVirhNS"/>
+    <service id="argument_resolver.controller_locator" alias=".service_locator.O_oMkbZ"/>
     <service id="doctrine.id_generator_locator" alias=".service_locator.BxSdgVt"/>
     <service id="twig.loader" alias="twig.loader.native_filesystem"/>
     <service id="jms_serializer.authorization_checker" alias="security.authorization_checker" public="true"/>
@@ -11634,6 +11763,7 @@
     <service id="jms_serializer.handler_registry" alias="jms_serializer.traceable_handler_registry"/>
     <service id="jms_serializer.metadata.file_locator" alias="jms_serializer.metadata.traceable_file_locator"/>
     <service id=".service_locator.diNoEIK" alias=".service_locator.4wc4Ag1"/>
+    <service id=".service_locator.nL0vOna" alias=".service_locator.qaRzevw"/>
     <service id=".service_locator.81kwtpj" alias=".service_locator.l5xpj_O"/>
     <service id=".service_locator.znT7ey_" alias=".service_locator.Gfm9iFm"/>
     <service id=".service_locator.yl1ky5I" alias=".service_locator.TDmwDGi"/>
