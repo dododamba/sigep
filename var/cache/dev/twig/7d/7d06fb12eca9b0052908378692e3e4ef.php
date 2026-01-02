@@ -261,7 +261,7 @@ class __TwigTemplate_614149e946add39d0b842d31f0f68c3f extends Template
                         <label>Institution Responsable</label>
                         <value>";
         // line 100
-        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 100, $this->source); })()), "institution", [], "any", false, false, false, 100)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 100, $this->source); })()), "institution", [], "any", false, false, false, 100), "nom", [], "any", false, false, false, 100), "html", null, true)) : ("Non définie"));
+        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 100, $this->source); })()), "institution", [], "any", false, false, false, 100)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 100, $this->source); })()), "institution", [], "any", false, false, false, 100), "name", [], "any", false, false, false, 100), "html", null, true)) : ("Non définie"));
         yield "</value>
                     </div>
                     <div class=\"info-group\">
@@ -885,19 +885,19 @@ $context["financement"], "isApproachingDeadline", [], "any", false, false, false
                             <div class=\"audit-content\">
                                 <h5>";
                 // line 457
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "typeAudit", [], "any", false, false, false, 457), "html", null, true);
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "type", [], "any", false, false, false, 457), "html", null, true);
                 yield "</h5>
                                 <p>";
                 // line 458
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::slice($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "conclusion", [], "any", false, false, false, 458), 0, 100), "html", null, true);
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::slice($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "observations", [], "any", false, false, false, 458), 0, 100), "html", null, true);
                 yield "...</p>
                                 ";
                 // line 459
-                if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "recommendations", [], "any", false, false, false, 459)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+                if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "recommandations", [], "any", false, false, false, 459)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
                     // line 460
                     yield "                                    <span class=\"audit-tag\">";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::length($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "recommendations", [], "any", false, false, false, 460)), "html", null, true);
-                    yield " recommandation(s)</span>
+                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::length($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "recommandations", [], "any", false, false, false, 460)), "html", null, true);
+                    yield " recommandations(s)</span>
                                 ";
                 }
                 // line 462
@@ -959,7 +959,7 @@ $context["financement"], "isApproachingDeadline", [], "any", false, false, false
                                 <div class=\"disbursement-header\">
                                     <span class=\"disbursement-date\">";
                 // line 500
-                yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "dateDecaissement", [], "any", false, false, false, 500)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "dateDecaissement", [], "any", false, false, false, 500), "d/m/Y"), "html", null, true)) : ("N/A"));
+                yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "dateExecution", [], "any", false, false, false, 500)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "dateExecution", [], "any", false, false, false, 500), "d/m/Y"), "html", null, true)) : ("N/A"));
                 yield "</span>
                                     <span class=\"disbursement-amount\">";
                 // line 501
@@ -995,7 +995,7 @@ $context["financement"], "isApproachingDeadline", [], "any", false, false, false
 
                         ";
             // line 513
-            if ((Twig\Extension\CoreExtension::length($this->env->getCharset(), (isset($context["disbursements"]) || array_key_exists("disbursements", $context) ? $context["disbursements"] : (function () { throw new RuntimeError('Variable "disbursements" does not exist.', 513, $this->source); })())) > 10)) {
+            if ((Twig\Extension\CoreExtension::length($this->env->getCharset(), (isset($context["decaissements"]) || array_key_exists("decaissements", $context) ? $context["decaissements"] : (function () { throw new RuntimeError('Variable "decaissements" does not exist.', 513, $this->source); })())) > 10)) {
                 // line 514
                 yield "                        <div class=\"card-footer\">
                             <a href=\"";
@@ -1004,7 +1004,7 @@ $context["financement"], "isApproachingDeadline", [], "any", false, false, false
                 yield "\" class=\"btn-link-full\">
                                 Voir tous les décaissements (";
                 // line 516
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::length($this->env->getCharset(), (isset($context["disbursements"]) || array_key_exists("disbursements", $context) ? $context["disbursements"] : (function () { throw new RuntimeError('Variable "disbursements" does not exist.', 516, $this->source); })())), "html", null, true);
+                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::length($this->env->getCharset(), (isset($context["decaissements"]) || array_key_exists("decaissements", $context) ? $context["decaissements"] : (function () { throw new RuntimeError('Variable "decaissements" does not exist.', 516, $this->source); })())), "html", null, true);
                 yield ")
                                 <i data-lucide=\"arrow-right\"></i>
                             </a>
@@ -1420,7 +1420,7 @@ $context["financement"], "isApproachingDeadline", [], "any", false, false, false
                 <div class=\"card-body\">
                     <div class=\"info-group\">
                         <label>Institution Responsable</label>
-                        <value>{{ project.institution ? project.institution.nom : 'Non définie' }}</value>
+                        <value>{{ project.institution ? project.institution.name : 'Non définie' }}</value>
                     </div>
                     <div class=\"info-group\">
                         <label>Secteur</label>
@@ -1777,10 +1777,10 @@ $context["financement"], "isApproachingDeadline", [], "any", false, false, false
                         <div class=\"audit-item\">
                             <div class=\"audit-date\">{{ audit.dateAudit ? audit.dateAudit|date('d/m/Y') : 'N/A' }}</div>
                             <div class=\"audit-content\">
-                                <h5>{{ audit.typeAudit }}</h5>
-                                <p>{{ audit.conclusion|slice(0, 100) }}...</p>
-                                {% if audit.recommendations %}
-                                    <span class=\"audit-tag\">{{ audit.recommendations|length }} recommandation(s)</span>
+                                <h5>{{ audit.type }}</h5>
+                                <p>{{ audit.observations|slice(0, 100) }}...</p>
+                                {% if audit.recommandations %}
+                                    <span class=\"audit-tag\">{{ audit.recommandations|length }} recommandations(s)</span>
                                 {% endif %}
                             </div>
                         </div>
@@ -1820,7 +1820,7 @@ $context["financement"], "isApproachingDeadline", [], "any", false, false, false
                             {% for disbursement in decaissements|slice(0, 10) %}
                             <div class=\"disbursement-item\">
                                 <div class=\"disbursement-header\">
-                                    <span class=\"disbursement-date\">{{ disbursement.dateDecaissement ? disbursement.dateDecaissement|date('d/m/Y') : 'N/A' }}</span>
+                                    <span class=\"disbursement-date\">{{ disbursement.dateExecution ? disbursement.dateExecution|date('d/m/Y') : 'N/A' }}</span>
                                     <span class=\"disbursement-amount\">{{ disbursement.montant|number_format(0, ',', ' ') }} FCFA</span>
                                 </div>
                                 <div class=\"disbursement-meta\">
@@ -1833,10 +1833,10 @@ $context["financement"], "isApproachingDeadline", [], "any", false, false, false
                             {% endfor %}
                         </div>
 
-                        {% if disbursements|length > 10 %}
+                        {% if decaissements|length > 10 %}
                         <div class=\"card-footer\">
                             <a href=\"{{ path('app_decaissement_index', {project: project.id}) }}\" class=\"btn-link-full\">
-                                Voir tous les décaissements ({{ disbursements|length }})
+                                Voir tous les décaissements ({{ decaissements|length }})
                                 <i data-lucide=\"arrow-right\"></i>
                             </a>
                         </div>

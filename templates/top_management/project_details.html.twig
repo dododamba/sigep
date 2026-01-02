@@ -97,7 +97,7 @@
                 <div class="card-body">
                     <div class="info-group">
                         <label>Institution Responsable</label>
-                        <value>{{ project.institution ? project.institution.nom : 'Non définie' }}</value>
+                        <value>{{ project.institution ? project.institution.name : 'Non définie' }}</value>
                     </div>
                     <div class="info-group">
                         <label>Secteur</label>
@@ -454,10 +454,10 @@
                         <div class="audit-item">
                             <div class="audit-date">{{ audit.dateAudit ? audit.dateAudit|date('d/m/Y') : 'N/A' }}</div>
                             <div class="audit-content">
-                                <h5>{{ audit.typeAudit }}</h5>
-                                <p>{{ audit.conclusion|slice(0, 100) }}...</p>
-                                {% if audit.recommendations %}
-                                    <span class="audit-tag">{{ audit.recommendations|length }} recommandation(s)</span>
+                                <h5>{{ audit.type }}</h5>
+                                <p>{{ audit.observations|slice(0, 100) }}...</p>
+                                {% if audit.recommandations %}
+                                    <span class="audit-tag">{{ audit.recommandations|length }} recommandations(s)</span>
                                 {% endif %}
                             </div>
                         </div>
@@ -497,7 +497,7 @@
                             {% for disbursement in decaissements|slice(0, 10) %}
                             <div class="disbursement-item">
                                 <div class="disbursement-header">
-                                    <span class="disbursement-date">{{ disbursement.dateDecaissement ? disbursement.dateDecaissement|date('d/m/Y') : 'N/A' }}</span>
+                                    <span class="disbursement-date">{{ disbursement.dateExecution ? disbursement.dateExecution|date('d/m/Y') : 'N/A' }}</span>
                                     <span class="disbursement-amount">{{ disbursement.montant|number_format(0, ',', ' ') }} FCFA</span>
                                 </div>
                                 <div class="disbursement-meta">
@@ -510,10 +510,10 @@
                             {% endfor %}
                         </div>
 
-                        {% if disbursements|length > 10 %}
+                        {% if decaissements|length > 10 %}
                         <div class="card-footer">
                             <a href="{{ path('app_decaissement_index', {project: project.id}) }}" class="btn-link-full">
-                                Voir tous les décaissements ({{ disbursements|length }})
+                                Voir tous les décaissements ({{ decaissements|length }})
                                 <i data-lucide="arrow-right"></i>
                             </a>
                         </div>

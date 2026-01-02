@@ -57,7 +57,11 @@ class __TwigTemplate_a582a65661f7bcaf3e2a343e2d22ed1d extends Template
         yield from $this->unwrap()->yieldBlock('title', $context, $blocks);
         // line 8
         yield "    </title>
-    
+        <link rel=\"icon\" type=\"image/png\" href=\"";
+        // line 9
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("favicon.png"), "html", null, true);
+        yield "\"/>
+
     <!-- Google Fonts -->
     <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
     <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
@@ -1450,27 +1454,27 @@ class __TwigTemplate_a582a65661f7bcaf3e2a343e2d22ed1d extends Template
     </style>
 
     ";
-        // line 1401
-        yield from $this->unwrap()->yieldBlock('stylesheets', $context, $blocks);
         // line 1402
+        yield from $this->unwrap()->yieldBlock('stylesheets', $context, $blocks);
+        // line 1403
         yield "</head>
 <body>
     ";
-        // line 1404
-        yield from $this->load("partials/header-management.html.twig", 1404)->unwrap()->yield($context);
         // line 1405
+        yield from $this->load("partials/header-management.html.twig", 1405)->unwrap()->yield($context);
+        // line 1406
         yield "    <!-- MAIN CONTENT -->
 <main class=\"main-content\">
    ";
-        // line 1407
-        yield from $this->unwrap()->yieldBlock('body', $context, $blocks);
         // line 1408
+        yield from $this->unwrap()->yieldBlock('body', $context, $blocks);
+        // line 1409
         yield "</main>
 
          ";
-        // line 1410
-        yield from $this->unwrap()->yieldBlock('javascripts', $context, $blocks);
         // line 1411
+        yield from $this->unwrap()->yieldBlock('javascripts', $context, $blocks);
+        // line 1412
         yield "</body>
 </html>
 ";
@@ -1497,7 +1501,7 @@ class __TwigTemplate_a582a65661f7bcaf3e2a343e2d22ed1d extends Template
         yield from [];
     }
 
-    // line 1401
+    // line 1402
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -1513,7 +1517,7 @@ class __TwigTemplate_a582a65661f7bcaf3e2a343e2d22ed1d extends Template
         yield from [];
     }
 
-    // line 1407
+    // line 1408
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -1529,7 +1533,7 @@ class __TwigTemplate_a582a65661f7bcaf3e2a343e2d22ed1d extends Template
         yield from [];
     }
 
-    // line 1410
+    // line 1411
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -1566,7 +1570,7 @@ class __TwigTemplate_a582a65661f7bcaf3e2a343e2d22ed1d extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  1533 => 1410,  1517 => 1407,  1501 => 1401,  1484 => 7,  1474 => 1411,  1472 => 1410,  1468 => 1408,  1466 => 1407,  1462 => 1405,  1460 => 1404,  1456 => 1402,  1454 => 1401,  59 => 8,  57 => 7,  49 => 1,);
+        return array (  1537 => 1411,  1521 => 1408,  1505 => 1402,  1488 => 7,  1478 => 1412,  1476 => 1411,  1472 => 1409,  1470 => 1408,  1466 => 1406,  1464 => 1405,  1460 => 1403,  1458 => 1402,  62 => 9,  59 => 8,  57 => 7,  49 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -1579,7 +1583,8 @@ class __TwigTemplate_a582a65661f7bcaf3e2a343e2d22ed1d extends Template
     <title>
         {% block title %}SIGEP Tchad - Système Intégré de Gestion des Projets Publics{% endblock %}
     </title>
-    
+        <link rel=\"icon\" type=\"image/png\" href=\"{{ asset('favicon.png') }}\"/>
+
     <!-- Google Fonts -->
     <link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">
     <link rel=\"preconnect\" href=\"https://fonts.gstatic.com\" crossorigin>
