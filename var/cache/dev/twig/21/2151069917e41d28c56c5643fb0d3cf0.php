@@ -325,6 +325,6 @@ class __TwigTemplate_7d229f3dfae8e353b98dae30a44f107e extends Template
         </tbody>
     </table>
 {% endblock %}
-", "@VichUploader/Collector/mapping_collector.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\vich\\uploader-bundle\\templates\\Collector\\mapping_collector.html.twig");
+", "@VichUploader/Collector/mapping_collector.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\vich\\uploader-bundle\\templates\\Collector\\mapping_collector.html.twig");
     }
 }

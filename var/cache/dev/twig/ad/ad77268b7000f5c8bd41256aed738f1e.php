@@ -31,9 +31,7 @@ class __TwigTemplate_1208d42ad938cc74cd4f633eaed5dba5 extends Template
 
         $this->blocks = [
             'title' => [$this, 'block_title'],
-            'stylesheets' => [$this, 'block_stylesheets'],
             'body' => [$this, 'block_body'],
-            'javascripts' => [$this, 'block_javascripts'],
         ];
     }
 
@@ -49,6 +47,9 @@ class __TwigTemplate_1208d42ad938cc74cd4f633eaed5dba5 extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "project/new.html.twig"));
 
+        // line 5
+        $this->env->getRuntime("Symfony\\Component\\Form\\FormRenderer")->setTheme((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 5, $this->source); })()), ["bootstrap_5_layout.html.twig"], true);
+        // line 1
         $this->parent = $this->load("base.html.twig", 1);
         yield from $this->parent->unwrap()->yield($context, array_merge($this->blocks, $blocks));
         
@@ -73,28 +74,7 @@ class __TwigTemplate_1208d42ad938cc74cd4f633eaed5dba5 extends Template
         yield from [];
     }
 
-    // line 5
-    /**
-     * @return iterable<null|scalar|\Stringable>
-     */
-    public function block_stylesheets(array $context, array $blocks = []): iterable
-    {
-        $macros = $this->macros;
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "stylesheets"));
-
-        // line 6
-        yield "<link rel=\"stylesheet\" href=\"";
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("css/project-form.css"), "html", null, true);
-        yield "\">
-";
-        
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
-
-        yield from [];
-    }
-
-    // line 9
+    // line 7
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -104,659 +84,276 @@ class __TwigTemplate_1208d42ad938cc74cd4f633eaed5dba5 extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
-        // line 10
-        yield "<div class=\"content-area\">
-    <!-- Page Header -->
-    <div class=\"page-header\">
-        <div class=\"page-header-left\">
-            <h2>
-                <span class=\"page-header-icon\">
-                    <i data-lucide=\"folder-plus\"></i>
-                </span>
-                Nouveau Projet
-            </h2>
-            <p>Remplissez les informations pour créer un nouveau projet public</p>
-        </div>
-        <a href=\"";
-        // line 22
+        // line 8
+        yield "<!-- Toolbar -->
+<div id=\"kt_app_toolbar\" class=\"app-toolbar py-3 py-lg-6\">
+    <div id=\"kt_app_toolbar_container\" class=\"app-container container-xxl d-flex flex-stack\">
+        <div class=\"page-title d-flex flex-column justify-content-center flex-wrap me-3\">
+            <h1 class=\"page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0\">Nouveau Projet</h1>
+            <ul class=\"breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1\">
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"";
+        // line 15
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_dashboard");
+        yield "\" class=\"text-muted text-hover-primary\">Accueil</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"";
+        // line 21
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects");
-        yield "\" class=\"btn btn-outline\">
-            <i data-lucide=\"arrow-left\"></i>
-            Retour aux projets
-        </a>
-    </div>
-
-    <!-- Flash Messages -->
-    ";
-        // line 29
-        $context['_parent'] = $context;
-        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, (isset($context["app"]) || array_key_exists("app", $context) ? $context["app"] : (function () { throw new RuntimeError('Variable "app" does not exist.', 29, $this->source); })()), "flashes", [], "any", false, false, false, 29));
-        foreach ($context['_seq'] as $context["label"] => $context["messages"]) {
-            // line 30
-            yield "        ";
-            $context['_parent'] = $context;
-            $context['_seq'] = CoreExtension::ensureTraversable($context["messages"]);
-            foreach ($context['_seq'] as $context["_key"] => $context["message"]) {
-                // line 31
-                yield "            <div class=\"alert alert-";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["label"], "html", null, true);
-                yield "\">
-                <i data-lucide=\"";
-                // line 32
-                if (($context["label"] == "success")) {
-                    yield "check-circle";
-                } else {
-                    yield "alert-circle";
-                }
-                yield "\"></i>
-                ";
-                // line 33
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["message"], "html", null, true);
-                yield "
-            </div>
-        ";
-            }
-            $_parent = $context['_parent'];
-            unset($context['_seq'], $context['_key'], $context['message'], $context['_parent']);
-            $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 36
-            yield "    ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['label'], $context['messages'], $context['_parent']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 37
-        yield "
-    ";
-        // line 38
-        yield         $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderBlock((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 38, $this->source); })()), 'form_start', ["attr" => ["class" => "project-form", "novalidate" => "novalidate"]]);
-        yield "
-    
-    <!-- Section 1: Informations générales -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon blue\">
-                <i data-lucide=\"info\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Informations générales</h3>
-                <p>Définissez les caractéristiques principales du projet</p>
-            </div>
+        yield "\" class=\"text-muted text-hover-primary\">Projets</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">Création</li>
+            </ul>
         </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-grid\">
-                <div class=\"form-group full-width\">
-                    <label class=\"form-label\">
-                        Nom du projet <span class=\"required\">*</span>
-                    </label>
-                    ";
-        // line 57
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 57, $this->source); })()), "name", [], "any", false, false, false, 57), 'widget', ["attr" => ["placeholder" => "Ex: Route Nationale N'Djamena - Abéché"]]);
-        yield "
-                    ";
-        // line 58
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 58, $this->source); })()), "name", [], "any", false, false, false, 58), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">
-                        Code projet <span class=\"required\">*</span>
-                    </label>
-                    <div class=\"input-with-icon\">
-                        ";
-        // line 66
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 66, $this->source); })()), "code", [], "any", false, false, false, 66), 'widget');
-        yield "
-                        <i data-lucide=\"hash\" class=\"input-icon\"></i>
-                    </div>
-                    <span class=\"form-hint\">
-                        <i data-lucide=\"info\"></i>
-                        Format: PRJ-ANNÉE-NUMÉRO
-                    </span>
-                    ";
-        // line 73
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 73, $this->source); })()), "code", [], "any", false, false, false, 73), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">
-                        Localisation
-                    </label>
-                    <div class=\"input-with-icon\">
-                        ";
-        // line 81
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 81, $this->source); })()), "localisation", [], "any", false, false, false, 81), 'widget', ["attr" => ["placeholder" => "Ex: N'Djamena, Région du Lac..."]]);
-        yield "
-                        <i data-lucide=\"map-pin\" class=\"input-icon\"></i>
-                    </div>
-                    ";
-        // line 84
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 84, $this->source); })()), "localisation", [], "any", false, false, false, 84), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group full-width\">
-                    <label class=\"form-label\">
-                        Description
-                    </label>
-                    ";
-        // line 91
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 91, $this->source); })()), "description", [], "any", false, false, false, 91), 'widget', ["attr" => ["placeholder" => "Décrivez les objectifs et la portée du projet...", "rows" => 4]]);
-        yield "
-                    ";
-        // line 92
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 92, $this->source); })()), "description", [], "any", false, false, false, 92), 'errors');
-        yield "
-                </div>
-            </div>
-
-            <!-- Sector Selection -->
-            <div class=\"form-section-title\">
-                <label class=\"form-label\">Secteur d'activité <span class=\"required\">*</span></label>
-            </div>
-            <div class=\"sector-grid\">
-                ";
-        // line 101
-        $context['_parent'] = $context;
-        $context['_seq'] = CoreExtension::ensureTraversable((isset($context["sectors"]) || array_key_exists("sectors", $context) ? $context["sectors"] : (function () { throw new RuntimeError('Variable "sectors" does not exist.', 101, $this->source); })()));
-        foreach ($context['_seq'] as $context["label"] => $context["value"]) {
-            // line 102
-            yield "                    <label class=\"sector-option\" data-sector=\"";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["value"], "html", null, true);
-            yield "\">
-                        <input type=\"radio\" name=\"";
-            // line 103
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 103, $this->source); })()), "sector", [], "any", false, false, false, 103), "vars", [], "any", false, false, false, 103), "full_name", [], "any", false, false, false, 103), "html", null, true);
-            yield "\" value=\"";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["value"], "html", null, true);
-            yield "\" 
-                               ";
-            // line 104
-            if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 104, $this->source); })()), "sector", [], "any", false, false, false, 104), "vars", [], "any", false, false, false, 104), "value", [], "any", false, false, false, 104) == $context["value"])) {
-                yield "checked";
-            }
-            yield ">
-                        <div class=\"sector-icon ";
-            // line 105
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["value"], "html", null, true);
-            yield "\">
-                            <i data-lucide=\"";
-            // line 106
-            if (($context["value"] == "infrastructure")) {
-                yield "road";
-            } elseif (($context["value"] == "sante")) {
-                yield "heart-pulse";
-            } elseif (($context["value"] == "energie")) {
-                yield "zap";
-            } elseif (($context["value"] == "agriculture")) {
-                yield "wheat";
-            } elseif (($context["value"] == "education")) {
-                yield "graduation-cap";
-            } elseif (($context["value"] == "eau")) {
-                yield "droplets";
-            } else {
-                yield "folder";
-            }
-            yield "\"></i>
-                        </div>
-                        <span class=\"sector-label\">";
-            // line 108
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["label"], "html", null, true);
-            yield "</span>
-                    </label>
-                ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['label'], $context['value'], $context['_parent']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 111
-        yield "            </div>
-            ";
-        // line 112
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 112, $this->source); })()), "sector", [], "any", false, false, false, 112), 'errors');
-        yield "
-
-            <!-- Priority Selection -->
-            <div class=\"form-section-title\" style=\"margin-top: 32px;\">
-                <label class=\"form-label\">Priorité <span class=\"required\">*</span></label>
-            </div>
-            <div class=\"priority-options\">
-                ";
-        // line 119
-        $context['_parent'] = $context;
-        $context['_seq'] = CoreExtension::ensureTraversable((isset($context["priorities"]) || array_key_exists("priorities", $context) ? $context["priorities"] : (function () { throw new RuntimeError('Variable "priorities" does not exist.', 119, $this->source); })()));
-        foreach ($context['_seq'] as $context["label"] => $context["value"]) {
-            // line 120
-            yield "                    <label class=\"priority-option ";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["value"], "html", null, true);
-            yield "\" data-priority=\"";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["value"], "html", null, true);
-            yield "\">
-                        <input type=\"radio\" name=\"";
-            // line 121
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 121, $this->source); })()), "priorite", [], "any", false, false, false, 121), "vars", [], "any", false, false, false, 121), "full_name", [], "any", false, false, false, 121), "html", null, true);
-            yield "\" value=\"";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["value"], "html", null, true);
-            yield "\"
-                               ";
-            // line 122
-            if ((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 122, $this->source); })()), "priorite", [], "any", false, false, false, 122), "vars", [], "any", false, false, false, 122), "value", [], "any", false, false, false, 122) == $context["value"])) {
-                yield "checked";
-            }
-            yield ">
-                        <i data-lucide=\"";
-            // line 123
-            if (($context["value"] == "haute")) {
-                yield "alert-triangle";
-            } elseif (($context["value"] == "moyenne")) {
-                yield "minus-circle";
-            } else {
-                yield "check-circle";
-            }
-            yield "\"></i>
-                        ";
-            // line 124
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["label"], "html", null, true);
-            yield "
-                    </label>
-                ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['label'], $context['value'], $context['_parent']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 127
-        yield "            </div>
-            ";
-        // line 128
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 128, $this->source); })()), "priorite", [], "any", false, false, false, 128), 'errors');
-        yield "
-        </div>
-    </div>
-
-    <!-- Section 2: Planning -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon purple\">
-                <i data-lucide=\"calendar\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Planning du projet</h3>
-                <p>Définissez les dates et le statut du projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-grid three-cols\">
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Date de début</label>
-                    ";
-        // line 147
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 147, $this->source); })()), "dateDebut", [], "any", false, false, false, 147), 'widget');
-        yield "
-                    ";
-        // line 148
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 148, $this->source); })()), "dateDebut", [], "any", false, false, false, 148), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Date de fin prévue</label>
-                    ";
-        // line 153
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 153, $this->source); })()), "dateFin", [], "any", false, false, false, 153), 'widget');
-        yield "
-                    ";
-        // line 154
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 154, $this->source); })()), "dateFin", [], "any", false, false, false, 154), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Statut</label>
-                    ";
-        // line 159
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 159, $this->source); })()), "status", [], "any", false, false, false, 159), 'widget');
-        yield "
-                    ";
-        // line 160
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 160, $this->source); })()), "status", [], "any", false, false, false, 160), 'errors');
-        yield "
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Section 3: Finances -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon gold\">
-                <i data-lucide=\"wallet\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Informations financières</h3>
-                <p>Budget et sources de financement du projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-grid three-cols\">
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Budget total (Milliards FCFA)</label>
-                    <div class=\"input-with-suffix\">
-                        ";
-        // line 182
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 182, $this->source); })()), "budgetTotal", [], "any", false, false, false, 182), 'widget', ["attr" => ["placeholder" => "0.00"]]);
-        yield "
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    ";
-        // line 185
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 185, $this->source); })()), "budgetTotal", [], "any", false, false, false, 185), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Montant décaissé (Milliards FCFA)</label>
-                    <div class=\"input-with-suffix\">
-                        ";
-        // line 191
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 191, $this->source); })()), "montantDecaisse", [], "any", false, false, false, 191), 'widget', ["attr" => ["placeholder" => "0.00"]]);
-        yield "
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    ";
-        // line 194
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 194, $this->source); })()), "montantDecaisse", [], "any", false, false, false, 194), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Progression (%)</label>
-                    <div class=\"progress-input-wrapper\">
-                        ";
-        // line 200
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 200, $this->source); })()), "progress", [], "any", false, false, false, 200), 'widget', ["attr" => ["min" => 0, "max" => 100, "placeholder" => "0"]]);
-        yield "
-                        <div class=\"progress-preview\">
-                            <div class=\"progress-bar-mini\">
-                                <div class=\"progress-fill-mini\" id=\"progressPreview\" style=\"width: ";
-        // line 203
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, ($context["form"] ?? null), "progress", [], "any", false, true, false, 203), "vars", [], "any", false, true, false, 203), "value", [], "any", true, true, false, 203)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 203, $this->source); })()), "progress", [], "any", false, false, false, 203), "vars", [], "any", false, false, false, 203), "value", [], "any", false, false, false, 203), 0)) : (0)), "html", null, true);
-        yield "%\"></div>
-                            </div>
-                        </div>
-                    </div>
-                    ";
-        // line 207
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 207, $this->source); })()), "progress", [], "any", false, false, false, 207), 'errors');
-        yield "
-                </div>
-            </div>
-
-            <div class=\"form-divider\"></div>
-
-            <div class=\"form-grid three-cols\">
-                <div class=\"form-group span-3\">
-                    <label class=\"form-label\">Source de financement</label>
-                    ";
-        // line 216
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 216, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 216), 'widget', ["attr" => ["placeholder" => "Ex: Banque Mondiale, BAD, Budget National..."]]);
-        yield "
-                    ";
-        // line 217
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 217, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 217), 'errors');
-        yield "
-                </div>
-            </div>
-
-            <div class=\"form-grid three-cols\">
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Financement national</label>
-                    <div class=\"input-with-suffix\">
-                        ";
-        // line 225
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 225, $this->source); })()), "financementNational", [], "any", false, false, false, 225), 'widget', ["attr" => ["placeholder" => "0.00"]]);
-        yield "
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    ";
-        // line 228
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 228, $this->source); })()), "financementNational", [], "any", false, false, false, 228), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Financement partenaires</label>
-                    <div class=\"input-with-suffix\">
-                        ";
-        // line 234
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 234, $this->source); })()), "financementPartenaires", [], "any", false, false, false, 234), 'widget', ["attr" => ["placeholder" => "0.00"]]);
-        yield "
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    ";
-        // line 237
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 237, $this->source); })()), "financementPartenaires", [], "any", false, false, false, 237), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Autres financements</label>
-                    <div class=\"input-with-suffix\">
-                        ";
-        // line 243
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 243, $this->source); })()), "financementAutre", [], "any", false, false, false, 243), 'widget', ["attr" => ["placeholder" => "0.00"]]);
-        yield "
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    ";
-        // line 246
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 246, $this->source); })()), "financementAutre", [], "any", false, false, false, 246), 'errors');
-        yield "
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Section 4: Responsables -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon green\">
-                <i data-lucide=\"users\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Responsables et bénéficiaires</h3>
-                <p>Identifiez les parties prenantes du projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-grid\">
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Maître d'ouvrage</label>
-                    ";
-        // line 267
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 267, $this->source); })()), "maitreOuvrage", [], "any", false, false, false, 267), 'widget', ["attr" => ["placeholder" => "Ex: Ministère des Infrastructures"]]);
-        yield "
-                    ";
-        // line 268
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 268, $this->source); })()), "maitreOuvrage", [], "any", false, false, false, 268), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Chef de projet</label>
-                    ";
-        // line 273
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 273, $this->source); })()), "chefProjet", [], "any", false, false, false, 273), 'widget', ["attr" => ["placeholder" => "Nom du responsable"]]);
-        yield "
-                    ";
-        // line 274
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 274, $this->source); })()), "chefProjet", [], "any", false, false, false, 274), 'errors');
-        yield "
-                </div>
-                
-                <div class=\"form-group full-width\">
-                    <label class=\"form-label\">Bénéficiaires</label>
-                    ";
-        // line 279
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 279, $this->source); })()), "beneficiaires", [], "any", false, false, false, 279), 'widget', ["attr" => ["placeholder" => "Ex: 500,000 habitants"]]);
-        yield "
-                    ";
-        // line 280
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 280, $this->source); })()), "beneficiaires", [], "any", false, false, false, 280), 'errors');
-        yield "
-                </div>
-            </div>
-
-            ";
-        // line 284
-        if (CoreExtension::getAttribute($this->env, $this->source, ($context["form"] ?? null), "institution", [], "any", true, true, false, 284)) {
-            // line 285
-            yield "                <div class=\"form-grid\" style=\"margin-top: 24px;\">
-                    <div class=\"form-group\">
-                        <label class=\"form-label\">Institution responsable</label>
-                        ";
-            // line 288
-            yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 288, $this->source); })()), "institution", [], "any", false, false, false, 288), 'widget');
-            yield "
-                        ";
-            // line 289
-            yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 289, $this->source); })()), "institution", [], "any", false, false, false, 289), 'errors');
-            yield "
-                    </div>
-                    
-                    ";
-            // line 292
-            if (CoreExtension::getAttribute($this->env, $this->source, ($context["form"] ?? null), "partnerPrincipal", [], "any", true, true, false, 292)) {
-                // line 293
-                yield "                    <div class=\"form-group\">
-                        <label class=\"form-label\">Partenaire principal</label>
-                        ";
-                // line 295
-                yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 295, $this->source); })()), "partnerPrincipal", [], "any", false, false, false, 295), 'widget');
-                yield "
-                        ";
-                // line 296
-                yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 296, $this->source); })()), "partnerPrincipal", [], "any", false, false, false, 296), 'errors');
-                yield "
-                    </div>
-                    ";
-            }
-            // line 299
-            yield "                </div>
-            ";
-        }
-        // line 301
-        yield "        </div>
-    </div>
-
-    <!-- Section 5: Notes -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon gray\">
-                <i data-lucide=\"file-text\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Notes additionnelles</h3>
-                <p>Informations complémentaires sur le projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-group\">
-                ";
-        // line 317
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 317, $this->source); })()), "notes", [], "any", false, false, false, 317), 'widget', ["attr" => ["placeholder" => "Ajoutez des notes ou commentaires...", "rows" => 4]]);
-        yield "
-                ";
-        // line 318
-        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 318, $this->source); })()), "notes", [], "any", false, false, false, 318), 'errors');
-        yield "
-            </div>
-        </div>
-    </div>
-
-    <!-- Form Actions -->
-    <div class=\"form-actions\">
-        <div class=\"form-actions-left\">
+        <div class=\"d-flex align-items-center gap-2 gap-lg-3\">
             <a href=\"";
-        // line 326
+        // line 30
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects");
-        yield "\" class=\"btn btn-outline\">
-                <i data-lucide=\"x\"></i>
-                Annuler
+        yield "\" class=\"btn btn-sm btn-light\">
+                <i class=\"ki-outline ki-arrow-left fs-2\"></i> Retour
             </a>
         </div>
-        <div class=\"form-actions-right\">
-            <button type=\"submit\" class=\"btn btn-success btn-lg\">
-                <i data-lucide=\"check\"></i>
-                Créer le projet
-            </button>
-        </div>
     </div>
-
-    ";
-        // line 339
-        yield         $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderBlock((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 339, $this->source); })()), 'form_end');
-        yield "
 </div>
-";
+
+<!-- Content -->
+<div id=\"kt_app_content\" class=\"app-content flex-column-fluid\">
+    <div id=\"kt_app_content_container\" class=\"app-container container-xxl\">
+        ";
+        // line 40
+        yield         $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderBlock((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 40, $this->source); })()), 'form_start', ["attr" => ["class" => "form d-flex flex-column flex-lg-row", "novalidate" => "novalidate"]]);
+        yield "
         
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
+        <div class=\"d-flex flex-column flex-row-fluid gap-7 gap-lg-10\">
+            <div class=\"card card-flush py-4\">
+                <div class=\"card-header\">
+                    <div class=\"card-title\">
+                        <h2>Informations Générales</h2>
+                    </div>
+                </div>
+                <div class=\"card-body pt-0\">
+                    <div class=\"mb-10 fv-row\">
+                        ";
+        // line 51
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 51, $this->source); })()), "name", [], "any", false, false, false, 51), 'label', ["label_attr" => ["class" => "required form-label"], "label" => "Nom du projet"]);
+        yield "
+                        ";
+        // line 52
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 52, $this->source); })()), "name", [], "any", false, false, false, 52), 'widget', ["attr" => ["class" => "form-control form-control-solid", "placeholder" => "Ex: Construction de la route..."]]);
+        yield "
+                        ";
+        // line 53
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 53, $this->source); })()), "name", [], "any", false, false, false, 53), 'errors');
+        yield "
+                    </div>
+                    <div class=\"row\">
+                        <div class=\"col-md-6 mb-10 fv-row\">
+                            ";
+        // line 57
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 57, $this->source); })()), "code", [], "any", false, false, false, 57), 'label', ["label_attr" => ["class" => "required form-label"], "label" => "Code Projet"]);
+        yield "
+                            ";
+        // line 58
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 58, $this->source); })()), "code", [], "any", false, false, false, 58), 'widget', ["attr" => ["class" => "form-control form-control-solid"]]);
+        yield "
+                            ";
+        // line 59
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 59, $this->source); })()), "code", [], "any", false, false, false, 59), 'errors');
+        yield "
+                        </div>
+                        <div class=\"col-md-6 mb-10 fv-row\">
+                            ";
+        // line 62
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 62, $this->source); })()), "localisation", [], "any", false, false, false, 62), 'label', ["label_attr" => ["class" => "form-label"], "label" => "Localisation"]);
+        yield "
+                            ";
+        // line 63
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 63, $this->source); })()), "localisation", [], "any", false, false, false, 63), 'widget', ["attr" => ["class" => "form-control form-control-solid"]]);
+        yield "
+                            ";
+        // line 64
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 64, $this->source); })()), "localisation", [], "any", false, false, false, 64), 'errors');
+        yield "
+                        </div>
+                    </div>
+                    <div class=\"fv-row\">
+                        ";
+        // line 68
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 68, $this->source); })()), "description", [], "any", false, false, false, 68), 'label', ["label_attr" => ["class" => "form-label"], "label" => "Description"]);
+        yield "
+                        ";
+        // line 69
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 69, $this->source); })()), "description", [], "any", false, false, false, 69), 'widget', ["attr" => ["class" => "form-control form-control-solid", "rows" => 4]]);
+        yield "
+                        ";
+        // line 70
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 70, $this->source); })()), "description", [], "any", false, false, false, 70), 'errors');
+        yield "
+                    </div>
+                </div>
+            </div>
 
-        yield from [];
-    }
+            <div class=\"card card-flush py-4\">
+                <div class=\"card-header\">
+                    <div class=\"card-title\">
+                        <h2>Classification & Finance</h2>
+                    </div>
+                </div>
+                <div class=\"card-body pt-0\">
+                    <div class=\"row mb-10\">
+                        <div class=\"col-md-6 fv-row\">
+                            ";
+        // line 84
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 84, $this->source); })()), "sector", [], "any", false, false, false, 84), 'label', ["label_attr" => ["class" => "required form-label"], "label" => "Secteur"]);
+        yield "
+                            ";
+        // line 85
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 85, $this->source); })()), "sector", [], "any", false, false, false, 85), 'widget', ["attr" => ["class" => "form-select form-select-solid"]]);
+        yield "
+                            ";
+        // line 86
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 86, $this->source); })()), "sector", [], "any", false, false, false, 86), 'errors');
+        yield "
+                        </div>
+                        <div class=\"col-md-6 fv-row\">
+                            ";
+        // line 89
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 89, $this->source); })()), "priorite", [], "any", false, false, false, 89), 'label', ["label_attr" => ["class" => "required form-label"], "label" => "Priorité"]);
+        yield "
+                            ";
+        // line 90
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 90, $this->source); })()), "priorite", [], "any", false, false, false, 90), 'widget', ["attr" => ["class" => "form-select form-select-solid"]]);
+        yield "
+                            ";
+        // line 91
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 91, $this->source); })()), "priorite", [], "any", false, false, false, 91), 'errors');
+        yield "
+                        </div>
+                    </div>
+                    <div class=\"row\">
+                        <div class=\"col-md-4 fv-row\">
+                            ";
+        // line 96
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 96, $this->source); })()), "budgetTotal", [], "any", false, false, false, 96), 'label', ["label_attr" => ["class" => "form-label"], "label" => "Budget Total (FCFA)"]);
+        yield "
+                            ";
+        // line 97
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 97, $this->source); })()), "budgetTotal", [], "any", false, false, false, 97), 'widget', ["attr" => ["class" => "form-control form-control-solid"]]);
+        yield "
+                            ";
+        // line 98
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 98, $this->source); })()), "budgetTotal", [], "any", false, false, false, 98), 'errors');
+        yield "
+                        </div>
+                        <div class=\"col-md-4 fv-row\">
+                            ";
+        // line 101
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 101, $this->source); })()), "montantDecaisse", [], "any", false, false, false, 101), 'label', ["label_attr" => ["class" => "form-label"], "label" => "Montant Décaissé (FCFA)"]);
+        yield "
+                            ";
+        // line 102
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 102, $this->source); })()), "montantDecaisse", [], "any", false, false, false, 102), 'widget', ["attr" => ["class" => "form-control form-control-solid"]]);
+        yield "
+                            ";
+        // line 103
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 103, $this->source); })()), "montantDecaisse", [], "any", false, false, false, 103), 'errors');
+        yield "
+                        </div>
+                        <div class=\"col-md-4 fv-row\">
+                            ";
+        // line 106
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 106, $this->source); })()), "progress", [], "any", false, false, false, 106), 'label', ["label_attr" => ["class" => "form-label"], "label" => "Progression (%)"]);
+        yield "
+                            ";
+        // line 107
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 107, $this->source); })()), "progress", [], "any", false, false, false, 107), 'widget', ["attr" => ["class" => "form-control form-control-solid"]]);
+        yield "
+                            ";
+        // line 108
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 108, $this->source); })()), "progress", [], "any", false, false, false, 108), 'errors');
+        yield "
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-    // line 343
-    /**
-     * @return iterable<null|scalar|\Stringable>
-     */
-    public function block_javascripts(array $context, array $blocks = []): iterable
-    {
-        $macros = $this->macros;
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
+            <div class=\"card card-flush py-4\">
+                <div class=\"card-header\">
+                    <div class=\"card-title\">
+                        <h2>Responsables & Institutions</h2>
+                    </div>
+                </div>
+                <div class=\"card-body pt-0\">
+                    <div class=\"fv-row mb-10\">
+                        ";
+        // line 122
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 122, $this->source); })()), "institution", [], "any", false, false, false, 122), 'label', ["label_attr" => ["class" => "form-label"], "label" => "Institution Responsable"]);
+        yield "
+                        ";
+        // line 123
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 123, $this->source); })()), "institution", [], "any", false, false, false, 123), 'widget', ["attr" => ["class" => "form-select form-select-solid"]]);
+        yield "
+                        ";
+        // line 124
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 124, $this->source); })()), "institution", [], "any", false, false, false, 124), 'errors');
+        yield "
+                    </div>
+                    <div class=\"row\">
+                        <div class=\"col-md-6 fv-row\">
+                            ";
+        // line 128
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 128, $this->source); })()), "maitreOuvrage", [], "any", false, false, false, 128), 'label', ["label_attr" => ["class" => "form-label"], "label" => "Maître d'ouvrage"]);
+        yield "
+                            ";
+        // line 129
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 129, $this->source); })()), "maitreOuvrage", [], "any", false, false, false, 129), 'widget', ["attr" => ["class" => "form-control form-control-solid"]]);
+        yield "
+                            ";
+        // line 130
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 130, $this->source); })()), "maitreOuvrage", [], "any", false, false, false, 130), 'errors');
+        yield "
+                        </div>
+                        <div class=\"col-md-6 fv-row\">
+                            ";
+        // line 133
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 133, $this->source); })()), "chefProjet", [], "any", false, false, false, 133), 'label', ["label_attr" => ["class" => "form-label"], "label" => "Chef de projet"]);
+        yield "
+                            ";
+        // line 134
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 134, $this->source); })()), "chefProjet", [], "any", false, false, false, 134), 'widget', ["attr" => ["class" => "form-control form-control-solid"]]);
+        yield "
+                            ";
+        // line 135
+        yield $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->searchAndRenderBlock(CoreExtension::getAttribute($this->env, $this->source, (isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 135, $this->source); })()), "chefProjet", [], "any", false, false, false, 135), 'errors');
+        yield "
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        // line 344
-        yield "<script>
-    lucide.createIcons();
-
-    // Sector selection
-    document.querySelectorAll('.sector-option').forEach(option => {
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.sector-option').forEach(o => o.classList.remove('selected'));
-            this.classList.add('selected');
-            this.querySelector('input').checked = true;
-        });
-        
-        // Initialize selected state
-        if (option.querySelector('input').checked) {
-            option.classList.add('selected');
-        }
-    });
-
-    // Priority selection
-    document.querySelectorAll('.priority-option').forEach(option => {
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.priority-option').forEach(o => o.classList.remove('selected'));
-            this.classList.add('selected');
-            this.querySelector('input').checked = true;
-        });
-        
-        // Initialize selected state
-        if (option.querySelector('input').checked) {
-            option.classList.add('selected');
-        }
-    });
-
-    // Progress preview
-    const progressInput = document.querySelector('input[name\$=\"[progress]\"]');
-    if (progressInput) {
-        progressInput.addEventListener('input', function() {
-            const value = Math.min(100, Math.max(0, this.value || 0));
-            document.getElementById('progressPreview').style.width = value + '%';
-        });
-    }
-</script>
+            <div class=\"d-flex justify-content-end\">
+                <a href=\"";
+        // line 142
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects");
+        yield "\" class=\"btn btn-light me-5\">Annuler</a>
+                <button type=\"submit\" class=\"btn btn-primary\">
+                    <span class=\"indicator-label\">Créer le projet</span>
+                </button>
+            </div>
+        </div>
+        ";
+        // line 148
+        yield         $this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderBlock((isset($context["form"]) || array_key_exists("form", $context) ? $context["form"] : (function () { throw new RuntimeError('Variable "form" does not exist.', 148, $this->source); })()), 'form_end');
+        yield "
+    </div>
+</div>
 ";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
@@ -785,7 +382,7 @@ class __TwigTemplate_1208d42ad938cc74cd4f633eaed5dba5 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  720 => 344,  710 => 343,  699 => 339,  683 => 326,  672 => 318,  668 => 317,  650 => 301,  646 => 299,  640 => 296,  636 => 295,  632 => 293,  630 => 292,  624 => 289,  620 => 288,  615 => 285,  613 => 284,  606 => 280,  602 => 279,  594 => 274,  590 => 273,  582 => 268,  578 => 267,  554 => 246,  548 => 243,  539 => 237,  533 => 234,  524 => 228,  518 => 225,  507 => 217,  503 => 216,  491 => 207,  484 => 203,  478 => 200,  469 => 194,  463 => 191,  454 => 185,  448 => 182,  423 => 160,  419 => 159,  411 => 154,  407 => 153,  399 => 148,  395 => 147,  373 => 128,  370 => 127,  361 => 124,  351 => 123,  345 => 122,  339 => 121,  332 => 120,  328 => 119,  318 => 112,  315 => 111,  306 => 108,  287 => 106,  283 => 105,  277 => 104,  271 => 103,  266 => 102,  262 => 101,  250 => 92,  246 => 91,  236 => 84,  230 => 81,  219 => 73,  209 => 66,  198 => 58,  194 => 57,  172 => 38,  169 => 37,  163 => 36,  154 => 33,  146 => 32,  141 => 31,  136 => 30,  132 => 29,  122 => 22,  108 => 10,  98 => 9,  87 => 6,  77 => 5,  60 => 3,  43 => 1,);
+        return array (  353 => 148,  344 => 142,  334 => 135,  330 => 134,  326 => 133,  320 => 130,  316 => 129,  312 => 128,  305 => 124,  301 => 123,  297 => 122,  280 => 108,  276 => 107,  272 => 106,  266 => 103,  262 => 102,  258 => 101,  252 => 98,  248 => 97,  244 => 96,  236 => 91,  232 => 90,  228 => 89,  222 => 86,  218 => 85,  214 => 84,  197 => 70,  193 => 69,  189 => 68,  182 => 64,  178 => 63,  174 => 62,  168 => 59,  164 => 58,  160 => 57,  153 => 53,  149 => 52,  145 => 51,  131 => 40,  118 => 30,  106 => 21,  97 => 15,  88 => 8,  78 => 7,  61 => 3,  53 => 1,  51 => 5,  41 => 1,);
     }
 
     public function getSourceContext(): Source
@@ -794,386 +391,153 @@ class __TwigTemplate_1208d42ad938cc74cd4f633eaed5dba5 extends Template
 
 {% block title %}Nouveau Projet - SIGEP Tchad{% endblock %}
 
-{% block stylesheets %}
-<link rel=\"stylesheet\" href=\"{{ asset('css/project-form.css') }}\">
-{% endblock %}
+{% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {% block body %}
-<div class=\"content-area\">
-    <!-- Page Header -->
-    <div class=\"page-header\">
-        <div class=\"page-header-left\">
-            <h2>
-                <span class=\"page-header-icon\">
-                    <i data-lucide=\"folder-plus\"></i>
-                </span>
-                Nouveau Projet
-            </h2>
-            <p>Remplissez les informations pour créer un nouveau projet public</p>
+<!-- Toolbar -->
+<div id=\"kt_app_toolbar\" class=\"app-toolbar py-3 py-lg-6\">
+    <div id=\"kt_app_toolbar_container\" class=\"app-container container-xxl d-flex flex-stack\">
+        <div class=\"page-title d-flex flex-column justify-content-center flex-wrap me-3\">
+            <h1 class=\"page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0\">Nouveau Projet</h1>
+            <ul class=\"breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1\">
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"{{ path('app_dashboard') }}\" class=\"text-muted text-hover-primary\">Accueil</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"{{ path('app_projects') }}\" class=\"text-muted text-hover-primary\">Projets</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">Création</li>
+            </ul>
         </div>
-        <a href=\"{{ path('app_projects') }}\" class=\"btn btn-outline\">
-            <i data-lucide=\"arrow-left\"></i>
-            Retour aux projets
-        </a>
-    </div>
-
-    <!-- Flash Messages -->
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class=\"alert alert-{{ label }}\">
-                <i data-lucide=\"{% if label == 'success' %}check-circle{% else %}alert-circle{% endif %}\"></i>
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endfor %}
-
-    {{ form_start(form, {'attr': {'class': 'project-form', 'novalidate': 'novalidate'}}) }}
-    
-    <!-- Section 1: Informations générales -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon blue\">
-                <i data-lucide=\"info\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Informations générales</h3>
-                <p>Définissez les caractéristiques principales du projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-grid\">
-                <div class=\"form-group full-width\">
-                    <label class=\"form-label\">
-                        Nom du projet <span class=\"required\">*</span>
-                    </label>
-                    {{ form_widget(form.name, {'attr': {'placeholder': 'Ex: Route Nationale N\\'Djamena - Abéché'}}) }}
-                    {{ form_errors(form.name) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">
-                        Code projet <span class=\"required\">*</span>
-                    </label>
-                    <div class=\"input-with-icon\">
-                        {{ form_widget(form.code) }}
-                        <i data-lucide=\"hash\" class=\"input-icon\"></i>
-                    </div>
-                    <span class=\"form-hint\">
-                        <i data-lucide=\"info\"></i>
-                        Format: PRJ-ANNÉE-NUMÉRO
-                    </span>
-                    {{ form_errors(form.code) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">
-                        Localisation
-                    </label>
-                    <div class=\"input-with-icon\">
-                        {{ form_widget(form.localisation, {'attr': {'placeholder': 'Ex: N\\'Djamena, Région du Lac...'}}) }}
-                        <i data-lucide=\"map-pin\" class=\"input-icon\"></i>
-                    </div>
-                    {{ form_errors(form.localisation) }}
-                </div>
-                
-                <div class=\"form-group full-width\">
-                    <label class=\"form-label\">
-                        Description
-                    </label>
-                    {{ form_widget(form.description, {'attr': {'placeholder': 'Décrivez les objectifs et la portée du projet...', 'rows': 4}}) }}
-                    {{ form_errors(form.description) }}
-                </div>
-            </div>
-
-            <!-- Sector Selection -->
-            <div class=\"form-section-title\">
-                <label class=\"form-label\">Secteur d'activité <span class=\"required\">*</span></label>
-            </div>
-            <div class=\"sector-grid\">
-                {% for label, value in sectors %}
-                    <label class=\"sector-option\" data-sector=\"{{ value }}\">
-                        <input type=\"radio\" name=\"{{ form.sector.vars.full_name }}\" value=\"{{ value }}\" 
-                               {% if form.sector.vars.value == value %}checked{% endif %}>
-                        <div class=\"sector-icon {{ value }}\">
-                            <i data-lucide=\"{% if value == 'infrastructure' %}road{% elseif value == 'sante' %}heart-pulse{% elseif value == 'energie' %}zap{% elseif value == 'agriculture' %}wheat{% elseif value == 'education' %}graduation-cap{% elseif value == 'eau' %}droplets{% else %}folder{% endif %}\"></i>
-                        </div>
-                        <span class=\"sector-label\">{{ label }}</span>
-                    </label>
-                {% endfor %}
-            </div>
-            {{ form_errors(form.sector) }}
-
-            <!-- Priority Selection -->
-            <div class=\"form-section-title\" style=\"margin-top: 32px;\">
-                <label class=\"form-label\">Priorité <span class=\"required\">*</span></label>
-            </div>
-            <div class=\"priority-options\">
-                {% for label, value in priorities %}
-                    <label class=\"priority-option {{ value }}\" data-priority=\"{{ value }}\">
-                        <input type=\"radio\" name=\"{{ form.priorite.vars.full_name }}\" value=\"{{ value }}\"
-                               {% if form.priorite.vars.value == value %}checked{% endif %}>
-                        <i data-lucide=\"{% if value == 'haute' %}alert-triangle{% elseif value == 'moyenne' %}minus-circle{% else %}check-circle{% endif %}\"></i>
-                        {{ label }}
-                    </label>
-                {% endfor %}
-            </div>
-            {{ form_errors(form.priorite) }}
-        </div>
-    </div>
-
-    <!-- Section 2: Planning -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon purple\">
-                <i data-lucide=\"calendar\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Planning du projet</h3>
-                <p>Définissez les dates et le statut du projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-grid three-cols\">
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Date de début</label>
-                    {{ form_widget(form.dateDebut) }}
-                    {{ form_errors(form.dateDebut) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Date de fin prévue</label>
-                    {{ form_widget(form.dateFin) }}
-                    {{ form_errors(form.dateFin) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Statut</label>
-                    {{ form_widget(form.status) }}
-                    {{ form_errors(form.status) }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Section 3: Finances -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon gold\">
-                <i data-lucide=\"wallet\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Informations financières</h3>
-                <p>Budget et sources de financement du projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-grid three-cols\">
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Budget total (Milliards FCFA)</label>
-                    <div class=\"input-with-suffix\">
-                        {{ form_widget(form.budgetTotal, {'attr': {'placeholder': '0.00'}}) }}
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    {{ form_errors(form.budgetTotal) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Montant décaissé (Milliards FCFA)</label>
-                    <div class=\"input-with-suffix\">
-                        {{ form_widget(form.montantDecaisse, {'attr': {'placeholder': '0.00'}}) }}
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    {{ form_errors(form.montantDecaisse) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Progression (%)</label>
-                    <div class=\"progress-input-wrapper\">
-                        {{ form_widget(form.progress, {'attr': {'min': 0, 'max': 100, 'placeholder': '0'}}) }}
-                        <div class=\"progress-preview\">
-                            <div class=\"progress-bar-mini\">
-                                <div class=\"progress-fill-mini\" id=\"progressPreview\" style=\"width: {{ form.progress.vars.value|default(0) }}%\"></div>
-                            </div>
-                        </div>
-                    </div>
-                    {{ form_errors(form.progress) }}
-                </div>
-            </div>
-
-            <div class=\"form-divider\"></div>
-
-            <div class=\"form-grid three-cols\">
-                <div class=\"form-group span-3\">
-                    <label class=\"form-label\">Source de financement</label>
-                    {{ form_widget(form.sourceFinancement, {'attr': {'placeholder': 'Ex: Banque Mondiale, BAD, Budget National...'}}) }}
-                    {{ form_errors(form.sourceFinancement) }}
-                </div>
-            </div>
-
-            <div class=\"form-grid three-cols\">
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Financement national</label>
-                    <div class=\"input-with-suffix\">
-                        {{ form_widget(form.financementNational, {'attr': {'placeholder': '0.00'}}) }}
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    {{ form_errors(form.financementNational) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Financement partenaires</label>
-                    <div class=\"input-with-suffix\">
-                        {{ form_widget(form.financementPartenaires, {'attr': {'placeholder': '0.00'}}) }}
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    {{ form_errors(form.financementPartenaires) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Autres financements</label>
-                    <div class=\"input-with-suffix\">
-                        {{ form_widget(form.financementAutre, {'attr': {'placeholder': '0.00'}}) }}
-                        <span class=\"input-suffix\">Mds</span>
-                    </div>
-                    {{ form_errors(form.financementAutre) }}
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Section 4: Responsables -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon green\">
-                <i data-lucide=\"users\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Responsables et bénéficiaires</h3>
-                <p>Identifiez les parties prenantes du projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-grid\">
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Maître d'ouvrage</label>
-                    {{ form_widget(form.maitreOuvrage, {'attr': {'placeholder': 'Ex: Ministère des Infrastructures'}}) }}
-                    {{ form_errors(form.maitreOuvrage) }}
-                </div>
-                
-                <div class=\"form-group\">
-                    <label class=\"form-label\">Chef de projet</label>
-                    {{ form_widget(form.chefProjet, {'attr': {'placeholder': 'Nom du responsable'}}) }}
-                    {{ form_errors(form.chefProjet) }}
-                </div>
-                
-                <div class=\"form-group full-width\">
-                    <label class=\"form-label\">Bénéficiaires</label>
-                    {{ form_widget(form.beneficiaires, {'attr': {'placeholder': 'Ex: 500,000 habitants'}}) }}
-                    {{ form_errors(form.beneficiaires) }}
-                </div>
-            </div>
-
-            {% if form.institution is defined %}
-                <div class=\"form-grid\" style=\"margin-top: 24px;\">
-                    <div class=\"form-group\">
-                        <label class=\"form-label\">Institution responsable</label>
-                        {{ form_widget(form.institution) }}
-                        {{ form_errors(form.institution) }}
-                    </div>
-                    
-                    {% if form.partnerPrincipal is defined %}
-                    <div class=\"form-group\">
-                        <label class=\"form-label\">Partenaire principal</label>
-                        {{ form_widget(form.partnerPrincipal) }}
-                        {{ form_errors(form.partnerPrincipal) }}
-                    </div>
-                    {% endif %}
-                </div>
-            {% endif %}
-        </div>
-    </div>
-
-    <!-- Section 5: Notes -->
-    <div class=\"form-card\">
-        <div class=\"form-card-header\">
-            <div class=\"form-card-icon gray\">
-                <i data-lucide=\"file-text\"></i>
-            </div>
-            <div class=\"form-card-title\">
-                <h3>Notes additionnelles</h3>
-                <p>Informations complémentaires sur le projet</p>
-            </div>
-        </div>
-        <div class=\"form-card-body\">
-            <div class=\"form-group\">
-                {{ form_widget(form.notes, {'attr': {'placeholder': 'Ajoutez des notes ou commentaires...', 'rows': 4}}) }}
-                {{ form_errors(form.notes) }}
-            </div>
-        </div>
-    </div>
-
-    <!-- Form Actions -->
-    <div class=\"form-actions\">
-        <div class=\"form-actions-left\">
-            <a href=\"{{ path('app_projects') }}\" class=\"btn btn-outline\">
-                <i data-lucide=\"x\"></i>
-                Annuler
+        <div class=\"d-flex align-items-center gap-2 gap-lg-3\">
+            <a href=\"{{ path('app_projects') }}\" class=\"btn btn-sm btn-light\">
+                <i class=\"ki-outline ki-arrow-left fs-2\"></i> Retour
             </a>
         </div>
-        <div class=\"form-actions-right\">
-            <button type=\"submit\" class=\"btn btn-success btn-lg\">
-                <i data-lucide=\"check\"></i>
-                Créer le projet
-            </button>
-        </div>
     </div>
+</div>
 
-    {{ form_end(form) }}
+<!-- Content -->
+<div id=\"kt_app_content\" class=\"app-content flex-column-fluid\">
+    <div id=\"kt_app_content_container\" class=\"app-container container-xxl\">
+        {{ form_start(form, {'attr': {'class': 'form d-flex flex-column flex-lg-row', 'novalidate': 'novalidate'}}) }}
+        
+        <div class=\"d-flex flex-column flex-row-fluid gap-7 gap-lg-10\">
+            <div class=\"card card-flush py-4\">
+                <div class=\"card-header\">
+                    <div class=\"card-title\">
+                        <h2>Informations Générales</h2>
+                    </div>
+                </div>
+                <div class=\"card-body pt-0\">
+                    <div class=\"mb-10 fv-row\">
+                        {{ form_label(form.name, 'Nom du projet', {'label_attr': {'class': 'required form-label'}}) }}
+                        {{ form_widget(form.name, {'attr': {'class': 'form-control form-control-solid', 'placeholder': 'Ex: Construction de la route...'}}) }}
+                        {{ form_errors(form.name) }}
+                    </div>
+                    <div class=\"row\">
+                        <div class=\"col-md-6 mb-10 fv-row\">
+                            {{ form_label(form.code, 'Code Projet', {'label_attr': {'class': 'required form-label'}}) }}
+                            {{ form_widget(form.code, {'attr': {'class': 'form-control form-control-solid'}}) }}
+                            {{ form_errors(form.code) }}
+                        </div>
+                        <div class=\"col-md-6 mb-10 fv-row\">
+                            {{ form_label(form.localisation, 'Localisation', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.localisation, {'attr': {'class': 'form-control form-control-solid'}}) }}
+                            {{ form_errors(form.localisation) }}
+                        </div>
+                    </div>
+                    <div class=\"fv-row\">
+                        {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.description, {'attr': {'class': 'form-control form-control-solid', 'rows': 4}}) }}
+                        {{ form_errors(form.description) }}
+                    </div>
+                </div>
+            </div>
+
+            <div class=\"card card-flush py-4\">
+                <div class=\"card-header\">
+                    <div class=\"card-title\">
+                        <h2>Classification & Finance</h2>
+                    </div>
+                </div>
+                <div class=\"card-body pt-0\">
+                    <div class=\"row mb-10\">
+                        <div class=\"col-md-6 fv-row\">
+                            {{ form_label(form.sector, 'Secteur', {'label_attr': {'class': 'required form-label'}}) }}
+                            {{ form_widget(form.sector, {'attr': {'class': 'form-select form-select-solid'}}) }}
+                            {{ form_errors(form.sector) }}
+                        </div>
+                        <div class=\"col-md-6 fv-row\">
+                            {{ form_label(form.priorite, 'Priorité', {'label_attr': {'class': 'required form-label'}}) }}
+                            {{ form_widget(form.priorite, {'attr': {'class': 'form-select form-select-solid'}}) }}
+                            {{ form_errors(form.priorite) }}
+                        </div>
+                    </div>
+                    <div class=\"row\">
+                        <div class=\"col-md-4 fv-row\">
+                            {{ form_label(form.budgetTotal, 'Budget Total (FCFA)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.budgetTotal, {'attr': {'class': 'form-control form-control-solid'}}) }}
+                            {{ form_errors(form.budgetTotal) }}
+                        </div>
+                        <div class=\"col-md-4 fv-row\">
+                            {{ form_label(form.montantDecaisse, 'Montant Décaissé (FCFA)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.montantDecaisse, {'attr': {'class': 'form-control form-control-solid'}}) }}
+                            {{ form_errors(form.montantDecaisse) }}
+                        </div>
+                        <div class=\"col-md-4 fv-row\">
+                            {{ form_label(form.progress, 'Progression (%)', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.progress, {'attr': {'class': 'form-control form-control-solid'}}) }}
+                            {{ form_errors(form.progress) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=\"card card-flush py-4\">
+                <div class=\"card-header\">
+                    <div class=\"card-title\">
+                        <h2>Responsables & Institutions</h2>
+                    </div>
+                </div>
+                <div class=\"card-body pt-0\">
+                    <div class=\"fv-row mb-10\">
+                        {{ form_label(form.institution, 'Institution Responsable', {'label_attr': {'class': 'form-label'}}) }}
+                        {{ form_widget(form.institution, {'attr': {'class': 'form-select form-select-solid'}}) }}
+                        {{ form_errors(form.institution) }}
+                    </div>
+                    <div class=\"row\">
+                        <div class=\"col-md-6 fv-row\">
+                            {{ form_label(form.maitreOuvrage, 'Maître d\\'ouvrage', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.maitreOuvrage, {'attr': {'class': 'form-control form-control-solid'}}) }}
+                            {{ form_errors(form.maitreOuvrage) }}
+                        </div>
+                        <div class=\"col-md-6 fv-row\">
+                            {{ form_label(form.chefProjet, 'Chef de projet', {'label_attr': {'class': 'form-label'}}) }}
+                            {{ form_widget(form.chefProjet, {'attr': {'class': 'form-control form-control-solid'}}) }}
+                            {{ form_errors(form.chefProjet) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class=\"d-flex justify-content-end\">
+                <a href=\"{{ path('app_projects') }}\" class=\"btn btn-light me-5\">Annuler</a>
+                <button type=\"submit\" class=\"btn btn-primary\">
+                    <span class=\"indicator-label\">Créer le projet</span>
+                </button>
+            </div>
+        </div>
+        {{ form_end(form) }}
+    </div>
 </div>
 {% endblock %}
-
-{% block javascripts %}
-<script>
-    lucide.createIcons();
-
-    // Sector selection
-    document.querySelectorAll('.sector-option').forEach(option => {
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.sector-option').forEach(o => o.classList.remove('selected'));
-            this.classList.add('selected');
-            this.querySelector('input').checked = true;
-        });
-        
-        // Initialize selected state
-        if (option.querySelector('input').checked) {
-            option.classList.add('selected');
-        }
-    });
-
-    // Priority selection
-    document.querySelectorAll('.priority-option').forEach(option => {
-        option.addEventListener('click', function() {
-            document.querySelectorAll('.priority-option').forEach(o => o.classList.remove('selected'));
-            this.classList.add('selected');
-            this.querySelector('input').checked = true;
-        });
-        
-        // Initialize selected state
-        if (option.querySelector('input').checked) {
-            option.classList.add('selected');
-        }
-    });
-
-    // Progress preview
-    const progressInput = document.querySelector('input[name\$=\"[progress]\"]');
-    if (progressInput) {
-        progressInput.addEventListener('input', function() {
-            const value = Math.min(100, Math.max(0, this.value || 0));
-            document.getElementById('progressPreview').style.width = value + '%';
-        });
-    }
-</script>
-{% endblock %}
-", "project/new.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\project\\new.html.twig");
+", "project/new.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\project\\new.html.twig");
     }
 }

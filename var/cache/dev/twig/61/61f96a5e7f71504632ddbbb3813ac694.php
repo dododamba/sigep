@@ -195,6 +195,6 @@ class __TwigTemplate_c84c6d6a7a5289dcc997314d21c78e30 extends Template
     {{ include('convention/_form.html.twig', {'button_label': 'Enregistrer les modifications'}) }}
 </div>
 {% endblock %}
-", "convention/edit.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\convention\\edit.html.twig");
+", "convention/edit.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\convention\\edit.html.twig");
     }
 }

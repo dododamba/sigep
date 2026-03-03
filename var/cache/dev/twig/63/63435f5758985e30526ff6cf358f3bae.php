@@ -135,6 +135,6 @@ unset($context[$key]);
 <turbo-stream action=\"replace\" targets=\"{{ target }}\"{% if morph %} method=\"morph\"{% endif %} {{- attributes }}>
     <template>{% block content %}{% endblock %}</template>
 </turbo-stream>
-", "@Turbo/components/Stream/Replace.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\symfony\\ux-turbo\\templates\\components\\Stream\\Replace.html.twig");
+", "@Turbo/components/Stream/Replace.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\symfony\\ux-turbo\\templates\\components\\Stream\\Replace.html.twig");
     }
 }

@@ -126,6 +126,15 @@ class Project
     #[ORM\JoinTable(name: 'project_partner')]
     private Collection $partners;
 
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: Audit::class, cascade: ['persist', 'remove'])]
+    private Collection $audits;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: CallForTender::class, cascade: ['persist', 'remove'])]
+    private Collection $callForTenders;
+
+    #[ORM\OneToMany(mappedBy: 'project', targetEntity: ProjectImage::class, cascade: ['persist', 'remove'])]
+    private Collection $images;
+
     public function __construct()
     {
         $this->createdAt = new \DateTime();
@@ -134,6 +143,9 @@ class Project
         $this->progress = 0;
         $this->financements = new ArrayCollection();
         $this->partners = new ArrayCollection();
+        $this->audits = new ArrayCollection();
+        $this->callForTenders = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     #[ORM\PrePersist]
@@ -461,6 +473,98 @@ class Project
         $this->partners = $partners;
         return $this;
     }
+
+    /**
+     * @return Collection<int, Audit>
+     */
+    public function getAudits(): Collection
+    {
+        return $this->audits;
+    }
+
+    public function addAudit(Audit $audit): static
+    {
+        if (!$this->audits->contains($audit)) {
+            $this->audits->add($audit);
+            $audit->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAudit(Audit $audit): static
+    {
+        if ($this->audits->removeElement($audit)) {
+            // set the owning side to null (unless already changed)
+            if ($audit->getProject() === $this) {
+                $audit->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, CallForTender>
+     */
+    public function getCallForTenders(): Collection
+    {
+        return $this->callForTenders;
+    }
+
+    public function addCallForTender(CallForTender $callForTender): static
+    {
+        if (!$this->callForTenders->contains($callForTender)) {
+            $this->callForTenders->add($callForTender);
+            $callForTender->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCallForTender(CallForTender $callForTender): static
+    {
+        if ($this->callForTenders->removeElement($callForTender)) {
+            // set the owning side to null (unless already changed)
+            if ($callForTender->getProject() === $this) {
+                $callForTender->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, ProjectImage>
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(ProjectImage $image): static
+    {
+        if (!$this->images->contains($image)) {
+            $this->images->add($image);
+            $image->setProject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(ProjectImage $image): static
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getProject() === $this) {
+                $image->setProject(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 
     // Helper methods
     public function getTauxDecaissement(): float

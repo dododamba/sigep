@@ -65,6 +65,6 @@ class __TwigTemplate_baa97562a1c025715f4c90ccab143cb4 extends Template
 
     public function getSourceContext(): Source
     {
-        return new Source("", "security/new-password.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\security\\new-password.html.twig");
+        return new Source("", "security/new-password.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\security\\new-password.html.twig");
     }
 }

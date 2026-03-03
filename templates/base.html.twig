@@ -1,58 +1,107 @@
 <!DOCTYPE html>
-<html lang="fr">
-<head>
-   <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIGEP Tchad - Système Intégré de Gestion des Projets Publics</title>
-    <link rel="icon" type="image/png" href="{{ asset('favicon.png') }}"/>
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+<html lang="en">
+	<head>
+		<base href=""/>
+		<title>
+			{% block title %}Metronic
+			{% endblock %}
+		</title>
+		<meta charset="utf-8"/>
+		<meta
+		name="viewport" content="width=device-width, initial-scale=1"/>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-    <!-- Lucide Icons -->
-    <script src="https://unpkg.com/lucide@latest"></script>
-    
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    
-    <link rel="stylesheet" href="{{ asset('css/styles.css') }}">
-    <style>
-    .nav-item.active {
-    background: var(--gold-gradient);
-    color: var(--tchad-blue);
-    box-shadow: var(--shadow-md);
-}
-    </style>
-    {% block stylesheets %} {% endblock %}
-</head>
-<body  x-data="dashboard()">
-    <!-- Sidebar -->
-    {% include "partials/sidebare.html.twig" %}
-  
-    <main class="main-content">
-        
-        {% include "partials/header.html.twig" %}
+		<!-- Fonts -->
+		<link
+		rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700"/>
 
-    <div class="content-area">  
-		    {% block body %}{% endblock %}
-    </div>
-     
-      {% include "partials/footer.html.twig" %}
-       
-    </main>
+		<!-- Vendor Styles -->
+		<link href="{{ asset('assets/plugins/custom/fullcalendar/fullcalendar.bundle.css') }}" rel="stylesheet"/>
+		<link
+		href="{{ asset('assets/plugins/custom/datatables/datatables.bundle.css') }}" rel="stylesheet"/>
 
-    {% block modal %}{% endblock %}
-
-    <script src="https://unpkg.com/lucide@latest"></script>
-	{% block javascripts %}
+		<!-- Global Styles -->
+		<link href="{{ asset('assets/plugins/global/plugins.bundle.css') }}" rel="stylesheet"/>
+		<link href="{{ asset('assets/css/style.bundle.css') }}" rel="stylesheet"/> 
 		
-	{% endblock %}
-</body>
-</html>
+		<style>
+			:root {
+				--kt-primary: #002664;
+				--kt-primary-active: #001a4d;
+				--kt-primary-light: #e6ebf5;
+				--kt-primary-rgb: 0, 38, 100;
+			}
+
+			.btn.btn-primary {
+				background-color: var(--kt-primary) !important;
+				border-color: var(--kt-primary) !important;
+			}
+
+			.btn.btn-primary:hover:not(.btn-active),
+			.btn.btn-primary:focus:not(.btn-active),
+			.btn.btn-primary.active,
+			.btn.btn-primary:active,
+			.show > .btn.btn-primary.dropdown-toggle {
+				background-color: var(--kt-primary-active) !important;
+				border-color: var(--kt-primary-active) !important;
+			}
+
+			.text-primary {
+				color: var(--kt-primary) !important;
+			}
+
+			.bg-primary {
+				background-color: var(--kt-primary) !important;
+			}
+
+			.menu-state-primary .menu-item.here > .menu-link, 
+			.menu-state-primary .menu-item.show > .menu-link,
+			.menu-state-primary .menu-item .menu-link.active {
+				background-color: var(--kt-primary-light) !important;
+				color: var(--kt-primary) !important;
+			}
+		</style>
+
+		{% block stylesheets %}{% endblock %}
+		</head>
+
+		<body id="kt_app_body" data-kt-app-header-stacked="true" data-kt-app-header-primary-enabled="true" data-kt-app-header-secondary-enabled="true" class="app-default">
+			{% set currentRoute = app.request.attributes.get('_route') %}
+
+			<script>
+				var defaultThemeMode = "light";
+var themeMode;
+if (document.documentElement) {
+if (document.documentElement.hasAttribute("data-bs-theme-mode")) {
+themeMode = document.documentElement.getAttribute("data-bs-theme-mode");
+} else {
+if (localStorage.getItem("data-bs-theme") !== null) {
+themeMode = localStorage.getItem("data-bs-theme");
+} else {
+themeMode = defaultThemeMode;
+}
+}
+if (themeMode === "system") {
+themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+document.documentElement.setAttribute("data-bs-theme", themeMode);
+}
+			</script>
+
+			<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+				<div class="app-page flex-column flex-column-fluid" id="kt_app_page">
+
+					{% include 'layouts/_header.html.twig' %}
+					{% include 'layouts/_header_secondary.html.twig' %}
+
+					<div class="app-content flex-column-fluid"> {% block body %}{% endblock %}
+						</div>
+
+						{% include 'layouts/_footer.html.twig' %}
+					</div>
+				</div>
+
+				{% include 'layouts/_scripts.html.twig' %}
+				{% block javascripts %}{% endblock %}
+
+			</body>
+		</html>

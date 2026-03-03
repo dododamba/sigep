@@ -161,6 +161,6 @@ class __TwigTemplate_5183dc7d2a755c4957a747d36aacda39 extends Template
         {% endif %}
     {% endblock %}
 </{{ loadingTag }}>
-", "@LiveComponent/deferred.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\symfony\\ux-live-component\\templates\\deferred.html.twig");
+", "@LiveComponent/deferred.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\symfony\\ux-live-component\\templates\\deferred.html.twig");
     }
 }

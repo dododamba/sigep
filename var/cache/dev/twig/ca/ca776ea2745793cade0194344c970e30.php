@@ -93,6 +93,6 @@ class __TwigTemplate_54a90cf478bdf05b15fc1a7baaff7b88 extends Template
     {{ form_widget(form) }}
     <button class=\"btn\">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}
-", "role/_form.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\role\\_form.html.twig");
+", "role/_form.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\role\\_form.html.twig");
     }
 }

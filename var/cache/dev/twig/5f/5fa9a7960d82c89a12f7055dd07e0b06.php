@@ -665,6 +665,6 @@ class __TwigTemplate_8807d48e5c08b37825e07dd2f6745c5a extends Template
         </table>
     {%- endif -%}
 {%- endmacro -%}
-", "@JMSSerializer/Collector/panel.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\panel.html.twig");
+", "@JMSSerializer/Collector/panel.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\panel.html.twig");
     }
 }

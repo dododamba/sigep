@@ -1006,6 +1006,6 @@ class __TwigTemplate_2ee92388e2e67c672bf4f0e880c2793d extends Template
         lucide.createIcons();
     </script>
 {% endblock %}
-", "role/permissions_matrix.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\role\\permissions_matrix.html.twig");
+", "role/permissions_matrix.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\role\\permissions_matrix.html.twig");
     }
 }

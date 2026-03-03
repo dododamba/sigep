@@ -5,20 +5,37 @@ namespace App\Controller;
 use App\Entity\Project;
 use App\Form\ProjectType;
 use App\Repository\ProjectRepository;
+use App\Repository\CallForTenderRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\Routing\Annotation\Route;
+use App\Service\ProjectStatisticsService;
+use App\Repository\DecaissementRepository;
+use App\Repository\ConventionRepository;
+use App\Repository\AuditRepository;
+use App\Repository\ProjectImageRepository;
+use Symfony\Bundle\SecurityBundle\Security;
+
 
 #[Route('/projects')]
 class ProjectController extends AbstractController
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private ProjectRepository $projectRepository
-    ) {}
+        private ProjectRepository $projectRepository,
+        private Security $security,
+        private ProjectStatisticsService $projectStatisticsService,
+        private DecaissementRepository $decaissementRepository,
+        private ConventionRepository $conventionRepository,
+        private AuditRepository $auditRepository,
+        private CallForTenderRepository $callForTenderRepository,
+        private ProjectImageRepository $projectImageRepository
+    ) {
+    }
 
     /**
      * Liste des projets avec filtres et pagination
@@ -26,38 +43,35 @@ class ProjectController extends AbstractController
     #[Route('', name: 'app_projects', methods: ['GET'])]
     public function index(Request $request): Response
     {
+        $user = $this->security->getUser();
+        $institutionId = null;
+
+        if (!$this->security->isGranted('ROLE_SUPER_ADMIN') && $user && method_exists($user, 'getInstitution')) {
+            $institution = $user->getInstitution();
+            if ($institution) {
+                $institutionId = $institution->getId();
+            }
+        }
+
         $page = max(1, $request->query->getInt('page', 1));
         $limit = 10;
-        
+
         $search = $request->query->get('search');
         $status = $request->query->get('status');
         $sector = $request->query->get('sector');
         $priority = $request->query->get('priority');
 
-        $projects = $this->projectRepository->findPaginated($page, $limit, $search, $status, $sector, $priority);
-        $totalProjects = $this->projectRepository->countFiltered($search, $status, $sector, $priority);
+        $projects = $this->projectRepository->findPaginated($page, $limit, $search, $status, $sector, $priority, $institutionId);
+        $totalProjects = $this->projectRepository->countFiltered($search, $status, $sector, $priority, $institutionId);
         $totalPages = ceil($totalProjects / $limit);
 
-        // Statistiques
-        $stats = [
-            'total' => $this->projectRepository->count([]),
-            'enCours' => $this->projectRepository->count(['status' => Project::STATUS_EN_COURS]),
-            'enRetard' => $this->projectRepository->count(['status' => Project::STATUS_EN_RETARD]),
-            'termines' => $this->projectRepository->count(['status' => Project::STATUS_TERMINE]),
-            'planifies' => $this->projectRepository->count(['status' => Project::STATUS_PLANIFIE]),
-        ];
-
-        // Budget total
-        $budgetStats = $this->projectRepository->createQueryBuilder('p')
-            ->select('SUM(p.budgetTotal) as budget, SUM(p.montantDecaisse) as decaisse')
-            ->getQuery()
-            ->getSingleResult();
+        $dashboardStats = $this->projectStatisticsService->getDashboardStatistics($institutionId);
 
         return $this->render('project/index.html.twig', [
             'projects' => $projects,
-            'stats' => $stats,
-            'budgetTotal' => $budgetStats['budget'] ?? 0,
-            'montantDecaisse' => $budgetStats['decaisse'] ?? 0,
+            'stats' => $dashboardStats,
+            'budgetTotal' => $dashboardStats['budgetTotal'] ?? 0,
+            'montantDecaisse' => $dashboardStats['montantDecaisse'] ?? 0,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'totalProjects' => $totalProjects,
@@ -78,10 +92,10 @@ class ProjectController extends AbstractController
     public function new(Request $request): Response
     {
         $project = new Project();
-        
+
         // Générer un code automatique
         $project->setCode($this->projectRepository->generateNewCode());
-        
+
         $form = $this->createForm(ProjectType::class, $project);
         $form->handleRequest($request);
 
@@ -102,6 +116,7 @@ class ProjectController extends AbstractController
         ]);
     }
 
+
     /**
      * Affichage d'un projet
      */
@@ -109,13 +124,31 @@ class ProjectController extends AbstractController
     public function show(string $slug): Response
     {
         $project = $this->projectRepository->findBySlug($slug);
-        
+
         if (!$project) {
             throw $this->createNotFoundException('Projet non trouvé');
         }
 
+        if (!$this->security->isGranted('ROLE_SUPER_ADMIN')) {
+            $user = $this->security->getUser();
+            if ($user && method_exists($user, 'getInstitution')) {
+                if ($project->getInstitution() !== $user->getInstitution()) {
+                    throw new AccessDeniedHttpException('Accès refusé à ce projet.');
+                }
+            }
+        }
+
         return $this->render('project/show.html.twig', [
             'project' => $project,
+            'decaissements' => $this->decaissementRepository->findByProjet($project),
+            'conventions' => $this->conventionRepository->findByProject($project),
+            'audits' => $this->auditRepository->findByProject($project),
+            'callForTenders' => $this->callForTenderRepository->findByProject($project),
+            'images' => $this->projectImageRepository->findByProject($project),
+            'timelineEvents' => [
+                ['date' => $project->getCreatedAt(), 'title' => 'Projet créé', 'description' => 'Création initiale du projet.'],
+                // Placeholder for other events
+            ],
         ]);
     }
 
@@ -126,9 +159,18 @@ class ProjectController extends AbstractController
     public function edit(Request $request, int $id): Response
     {
         $project = $this->projectRepository->find($id);
-        
+
         if (!$project) {
             throw $this->createNotFoundException('Projet non trouvé');
+        }
+
+        if (!$this->security->isGranted('ROLE_SUPER_ADMIN')) {
+            $user = $this->security->getUser();
+            if ($user && method_exists($user, 'getInstitution')) {
+                if ($project->getInstitution() !== $user->getInstitution()) {
+                    throw new AccessDeniedHttpException('Accès refusé à ce projet.');
+                }
+            }
         }
 
         $form = $this->createForm(ProjectType::class, $project);
@@ -157,9 +199,18 @@ class ProjectController extends AbstractController
     public function delete(Request $request, int $id): Response
     {
         $project = $this->projectRepository->find($id);
-        
+
         if (!$project) {
             throw $this->createNotFoundException('Projet non trouvé');
+        }
+
+        if (!$this->security->isGranted('ROLE_SUPER_ADMIN')) {
+            $user = $this->security->getUser();
+            if ($user && method_exists($user, 'getInstitution')) {
+                if ($project->getInstitution() !== $user->getInstitution()) {
+                    throw new AccessDeniedHttpException('Accès refusé à ce projet.');
+                }
+            }
         }
 
         if ($this->isCsrfTokenValid('delete' . $project->getId(), $request->request->get('_token'))) {
@@ -180,14 +231,14 @@ class ProjectController extends AbstractController
     public function apiSearch(Request $request): JsonResponse
     {
         $query = $request->query->get('q', '');
-        
+
         if (strlen($query) < 2) {
             return $this->json([]);
         }
 
         $projects = $this->projectRepository->search($query);
-        
-        $results = array_map(function($project) {
+
+        $results = array_map(function ($project) {
             return [
                 'id' => $project->getId(),
                 'name' => $project->getName(),
@@ -209,7 +260,7 @@ class ProjectController extends AbstractController
     public function apiStats(): JsonResponse
     {
         $stats = $this->projectRepository->getStatistics();
-        
+
         return $this->json($stats);
     }
 
@@ -220,13 +271,13 @@ class ProjectController extends AbstractController
     public function toggleStatus(Request $request, int $id): JsonResponse
     {
         $project = $this->projectRepository->find($id);
-        
+
         if (!$project) {
             return $this->json(['error' => 'Projet non trouvé'], 404);
         }
 
         $newStatus = $request->request->get('status');
-        
+
         if (!in_array($newStatus, array_values(Project::getStatuses()))) {
             return $this->json(['error' => 'Statut invalide'], 400);
         }
@@ -248,24 +299,24 @@ class ProjectController extends AbstractController
     public function updateProgress(Request $request, int $id): JsonResponse
     {
         $project = $this->projectRepository->find($id);
-        
+
         if (!$project) {
             return $this->json(['error' => 'Projet non trouvé'], 404);
         }
 
         $progress = (int) $request->request->get('progress', 0);
-        
+
         if ($progress < 0 || $progress > 100) {
             return $this->json(['error' => 'La progression doit être entre 0 et 100'], 400);
         }
 
         $project->setProgress($progress);
-        
+
         // Mettre à jour automatiquement le statut si 100%
         if ($progress === 100 && $project->getStatus() !== Project::STATUS_TERMINE) {
             $project->setStatus(Project::STATUS_TERMINE);
         }
-        
+
         $this->entityManager->flush();
 
         return $this->json([
@@ -283,12 +334,12 @@ class ProjectController extends AbstractController
     public function apiBudgetBySector(): JsonResponse
     {
         $data = $this->projectRepository->getBudgetBySector();
-        
+
         $result = [];
         foreach ($data as $item) {
             $result[] = [
                 'sector' => $item['sector'],
-                'sectorLabel' => match($item['sector']) {
+                'sectorLabel' => match ($item['sector']) {
                     'infrastructure' => 'Infrastructure',
                     'sante' => 'Santé',
                     'energie' => 'Énergie',
@@ -312,7 +363,7 @@ class ProjectController extends AbstractController
     public function duplicate(Request $request, int $id): Response
     {
         $project = $this->projectRepository->find($id);
-        
+
         if (!$project) {
             throw $this->createNotFoundException('Projet non trouvé');
         }
@@ -349,8 +400,8 @@ class ProjectController extends AbstractController
     public function exportJson(): JsonResponse
     {
         $projects = $this->projectRepository->findAll();
-        
-        $data = array_map(function($project) {
+
+        $data = array_map(function ($project) {
             return [
                 'id' => $project->getId(),
                 'name' => $project->getName(),

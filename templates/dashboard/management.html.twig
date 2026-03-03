@@ -2,353 +2,361 @@
 
 {% block title %}Dashboard Top Management - SIGEP Tchad{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-{% endblock %}
-
 {% block body %}
-<div class="dashboard-container">
-    {# Header avec Armoirie et Filtres #}
-    <header class="header">
-        <div class="header-content">
-            <div class="header-brand">
-                <div class="logo-container">
-                    <div class="logo-emblem">
-                        <img src="{{ asset('logo.png') }}" alt="Armoirie du Tchad">
+<!-- Toolbar -->
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap gap-4">
+        <!-- Page Title -->
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Dashboard Top Management</h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="{{ path('app_dashboard') }}" class="text-muted text-hover-primary">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Management</li>
+            </ul>
+        </div>
+
+        <!-- Filters -->
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <form method="get" action="{{ path('app_dashboard') }}" class="d-flex align-items-center gap-2">
+                <div class="w-150px">
+                    <select name="year" id="filterYear" class="form-select form-select-sm form-select-solid" data-control="select2" data-placeholder="Année">
+                        <option value="">Toutes les années</option>
+                        {% for year in years|default([]) %}
+                            <option value="{{ year }}" {% if filters.year|default() == year %}selected{% endif %}>{{ year }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="w-200px">
+                    <select name="institution" id="filterInstitution" class="form-select form-select-sm form-select-solid" data-control="select2" data-placeholder="Institution">
+                        <option value="">Toutes les institutions</option>
+                        {% for institution in institutions|default([]) %}
+                            <option value="{{ institution.id }}" {% if filters.institution_id|default() == institution.id %}selected{% endif %}>
+                                {{ institution.nom }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-sm btn-primary">
+                    <i data-lucide="filter" class="me-1" style="width: 14px; height: 14px;"></i> Filtrer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Content -->
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        
+        <!-- KPIs Row -->
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <!-- Total Projects -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ kpis.totalProjects }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Projets Total</span>
+                        </div>
                     </div>
-                    <div class="brand-text">
-                        <h1 class="brand-name">SIGEP</h1>
-                        <span class="brand-subtitle">République du Tchad</span>
+                    <div class="card-body d-flex flex-column justify-content-end pe-0">
+                        <span class="fs-6 fw-bolder text-gray-800 d-block mb-2">Répartition</span>
+                        <div class="d-flex align-items-center">
+                            <span class="badge badge-light-success fs-7 fw-bold me-2">{{ kpis.activeProjects }} en cours</span>
+                            <span class="badge badge-light-primary fs-7 fw-bold">{{ kpis.completedProjects }} terminés</span>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="header-filters">
-                <form method="get" action="{{ path('app_dashboard_index') }}" class="filter-form">
-                    <div class="filter-group">
-                        <select name="year" id="filterYear" class="filter-select">
-                            <option value="">Toutes les années</option>
-                            {% for year in years %}
-                                <option value="{{ year }}" {% if filters.year == year %}selected{% endif %}>{{ year }}</option>
-                            {% endfor %}
-                        </select>
-                        <i data-lucide="calendar" class="filter-icon"></i>
+            <!-- Total Budget -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ (kpis.totalBudget / 1000000000)|number_format(1, ',', ' ') }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Budget Total (Mds FCFA)</span>
+                        </div>
                     </div>
-
-                    <div class="filter-group">
-                        <select name="institution" id="filterInstitution" class="filter-select">
-                            <option value="">Toutes les institutions</option>
-                            {% for institution in institutions %}
-                                <option value="{{ institution.id }}" {% if filters.institution_id == institution.id %}selected{% endif %}>
-                                    {{ institution.nom }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                        <i data-lucide="building" class="filter-icon"></i>
+                    <div class="card-body d-flex align-items-end pt-0">
+                        <div class="d-flex align-items-center flex-column mt-3 w-100">
+                            <div class="d-flex justify-content-between w-100 mt-auto mb-2">
+                                <span class="fw-semibold fs-7 text-gray-400">Total engagé</span>
+                                <span class="fw-bold fs-7">{{ (kpis.totalBudget / 1000000)|number_format(0, ',', ' ') }} M</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <button type="submit" class="btn-filter">
-                        <i data-lucide="filter"></i>
-                        Filtrer
-                    </button>
-                </form>
+                </div>
             </div>
 
-            <div class="header-user">
-                <div class="user-avatar">
-                    <i data-lucide="user"></i>
+            <!-- Disbursement Rate -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ kpis.disbursementRate }}%</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Taux de Décaissement</span>
+                        </div>
+                    </div>
+                    <div class="card-body pt-2 pb-4 d-flex align-items-center">
+                        <div class="d-flex flex-column content-justify-center w-100">
+                            <div class="d-flex justify-content-between w-100 mt-auto mb-2">
+                                <span class="fw-bold fs-7 text-gray-400">{{ (kpis.totalDisbursed / 1000000000)|number_format(1, ',', ' ') }} Mds décaissés</span>
+                            </div>
+                            <div class="h-8px mx-3 w-100 bg-light-success rounded">
+                                <div class="bg-success rounded h-8px" role="progressbar" style="width: {{ kpis.disbursementRate }}%;" aria-valuenow="{{ kpis.disbursementRate }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="user-info">
-                    <span class="user-name">{{ app.user.fullName }}</span>
-                    <span class="user-role">{{ app.user.accessLevelLabel }}</span>
+            </div>
+
+            <!-- Avg Physical Progress -->
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ kpis.avgPhysicalProgress }}%</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Réalisation Physique Moyenne</span>
+                        </div>
+                    </div>
+                    <div class="card-body d-flex align-items-end pt-0">
+                        <div class="d-flex align-items-center flex-column mt-3 w-100">
+                            <div class="d-flex justify-content-between w-100 mt-auto mb-2">
+                                <span class="fw-semibold fs-7 text-gray-400">Progression globale</span>
+                            </div>
+                            <div class="h-8px mx-3 w-100 bg-light-primary rounded">
+                                <div class="bg-primary rounded h-8px" role="progressbar" style="width: {{ kpis.avgPhysicalProgress }}%;" aria-valuenow="{{ kpis.avgPhysicalProgress }}" aria-valuemin="0" aria-valuemax="100"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </header>
 
-    {# Contenu Principal #}
-    <main class="main-content">
-        <div class="container-fluid">
-            {# Section KPIs #}
-            <section class="kpi-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i data-lucide="bar-chart-3"></i>
-                        Indicateurs Clés
-                    </h2>
-                </div>
-
-                <div class="kpi-grid">
-                    {% include 'components/_kpi_card.html.twig' with {
-                        icon: 'folder-kanban',
-                        value: kpis.totalProjects,
-                        label: 'Projets Total',
-                        sublabel: '<span>🟢 ' ~ kpis.activeProjects ~ ' en cours</span> <span>✅ ' ~ kpis.completedProjects ~ ' terminés</span>',
-                        trend: {direction: 'up', value: '+12%'},
-                        color: 'primary'
-                    } %}
-
-                    {% include 'components/_kpi_card.html.twig' with {
-                        icon: 'banknote',
-                        value: kpis.totalBudget,
-                        label: 'Budget Total (FCFA)',
-                        sublabel: '<span>💰 ' ~ (kpis.totalBudget|number_format(0, ',', ' ')) ~ '</span>',
-                        color: 'gold'
-                    } %}
-
-                    {% include 'components/_kpi_card.html.twig' with {
-                        icon: 'trending-up',
-                        value: kpis.disbursementRate,
-                        label: 'Taux de Décaissement (%)',
-                        sublabel: '<span>📊 ' ~ (kpis.totalDisbursed|number_format(0, ',', ' ')) ~ ' FCFA décaissés</span>',
-                        trend: {direction: kpis.disbursementRate > 50 ? 'up' : 'down', value: kpis.disbursementRate ~ '%'},
-                        color: kpis.disbursementRate > 70 ? 'success' : (kpis.disbursementRate > 50 ? 'warning' : 'danger')
-                    } %}
-
-                    {% include 'components/_kpi_card.html.twig' with {
-                        icon: 'activity',
-                        value: kpis.avgPhysicalProgress,
-                        label: 'Réalisation Physique Moyenne (%)',
-                        sublabel: '<span>📈 Progression globale</span>',
-                        trend: {direction: 'up', value: '+' ~ kpis.avgPhysicalProgress ~ '%'},
-                        color: 'success'
-                    } %}
-                </div>
-            </section>
-
-            {# Section Graphiques #}
-            <section class="charts-section">
-                <div class="charts-grid">
-                    {# Graphique Répartition par Secteur #}
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3 class="chart-title">
-                                <i data-lucide="pie-chart"></i>
-                                Répartition par Secteur
-                            </h3>
-                        </div>
-                        <div class="chart-body">
+        <!-- Charts Row -->
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <div class="col-xl-4">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Répartition par Secteur</span>
+                        </h3>
+                    </div>
+                    <div class="card-body pt-2">
+                        <div style="height: 300px;">
                             <canvas id="sectorChart"></canvas>
                         </div>
                     </div>
-
-                    {# Graphique Sources de Financement #}
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3 class="chart-title">
-                                <i data-lucide="wallet"></i>
-                                Sources de Financement
-                            </h3>
-                        </div>
-                        <div class="chart-body">
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Sources de Financement</span>
+                        </h3>
+                    </div>
+                    <div class="card-body pt-2">
+                        <div style="height: 300px;">
                             <canvas id="financingChart"></canvas>
                         </div>
                     </div>
-
-                    {# Graphique Statuts des Projets #}
-                    <div class="chart-card">
-                        <div class="chart-header">
-                            <h3 class="chart-title">
-                                <i data-lucide="check-circle"></i>
-                                Statuts des Projets
-                            </h3>
-                        </div>
-                        <div class="chart-body">
+                </div>
+            </div>
+            <div class="col-xl-4">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Statuts des Projets</span>
+                        </h3>
+                    </div>
+                    <div class="card-body pt-2">
+                        <div style="height: 300px;">
                             <canvas id="statusChart"></canvas>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
 
-                    {# Graphique Évolution Mensuelle #}
-                    <div class="chart-card full-width">
-                        <div class="chart-header">
-                            <h3 class="chart-title">
-                                <i data-lucide="trending-up"></i>
-                                Évolution Mensuelle
-                            </h3>
-                        </div>
-                        <div class="chart-body">
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <div class="col-12">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Évolution Mensuelle</span>
+                        </h3>
+                    </div>
+                    <div class="card-body pt-2">
+                        <div style="height: 350px;">
                             <canvas id="evolutionChart"></canvas>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </div>
 
-            {# Section Top Projets #}
-            <section class="projects-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i data-lucide="star"></i>
-                        Top Projets par Budget
-                    </h2>
-                    <a href="{{ path('app_project_index') }}" class="btn-link">
-                        Voir tous les projets
-                        <i data-lucide="arrow-right"></i>
-                    </a>
+        <!-- Top Projects Table -->
+        <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+            <div class="card-header pt-7">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold text-dark">Top Projets par Budget</span>
+                </h3>
+                <div class="card-toolbar">
+                    <a href="{{ path('app_project_index') }}" class="btn btn-sm btn-light-primary">Voir tous les projets</a>
                 </div>
-
-                <div class="table-container">
-                    <table class="data-table">
+            </div>
+            <div class="card-body pt-2">
+                <div class="table-responsive">
+                    <table class="table align-middle table-row-dashed fs-6 gy-3">
                         <thead>
-                            <tr>
-                                <th>Projet</th>
-                                <th>Institution</th>
-                                <th>Secteur</th>
-                                <th>Budget (FCFA)</th>
-                                <th>Progression</th>
-                                <th>Statut</th>
-                                <th>Actions</th>
+                            <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                                <th class="min-w-200px">Projet</th>
+                                <th class="min-w-150px">Institution</th>
+                                <th class="min-w-100px">Secteur</th>
+                                <th class="min-w-150px text-end">Budget (FCFA)</th>
+                                <th class="min-w-150px">Progression</th>
+                                <th class="min-w-100px text-end">Statut</th>
                             </tr>
                         </thead>
-                        <tbody>
+                        <tbody class="fw-semibold text-gray-600">
                             {% for project in topProjects %}
                             <tr>
                                 <td>
-                                    <div class="project-name">
-                                        <strong>{{ project.titre }}</strong>
-                                        <small>{{ project.code }}</small>
+                                    <div class="d-flex flex-column">
+                                        <a href="{{ path('app_dashboard_project_detail', {id: project.id}) }}" class="text-dark text-hover-primary fw-bold">{{ project.titre }}</a>
+                                        <span class="text-muted fs-7">{{ project.code }}</span>
                                     </div>
                                 </td>
                                 <td>{{ project.institution ? project.institution.nom : 'N/A' }}</td>
                                 <td>
-                                    <span class="badge badge-sector">{{ project.secteur }}</span>
+                                    <span class="badge badge-light-primary">{{ project.secteur }}</span>
                                 </td>
-                                <td class="text-right">
-                                    <strong>{{ project.budgetTotal|number_format(0, ',', ' ') }}</strong>
+                                <td class="text-end">
+                                    <span class="fw-bold">{{ project.budgetTotal|number_format(0, ',', ' ') }}</span>
                                 </td>
                                 <td>
-                                    <div class="progress-bar">
-                                        <div class="progress-fill" style="width: {{ project.tauxRealisation }}%"></div>
-                                        <span class="progress-text">{{ project.tauxRealisation }}%</span>
+                                    <div class="d-flex align-items-center w-100 flex-column mt-3">
+                                        <div class="d-flex justify-content-between w-100 mt-auto mb-2">
+                                            <span class="fw-bold fs-7">{{ project.tauxRealisation }}%</span>
+                                        </div>
+                                        <div class="h-5px mx-3 w-100 bg-light rounded">
+                                            <div class="bg-primary rounded h-5px" role="progressbar" style="width: {{ project.tauxRealisation }}%;"></div>
+                                        </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <span class="badge badge-{{ project.statut }}">
-                                        {{ project.statutLabel }}
-                                    </span>
-                                </td>
-                                <td>
-                                    <a href="{{ path('app_dashboard_project_detail', {id: project.id}) }}" class="btn-icon" title="Voir détails">
-                                        <i data-lucide="eye"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            {% else %}
-                            <tr>
-                                <td colspan="7" class="text-center">
-                                    <div class="empty-state">
-                                        <i data-lucide="folder-x"></i>
-                                        <p>Aucun projet trouvé</p>
-                                    </div>
+                                <td class="text-end">
+                                    <span class="badge badge-light-{{ project.statut|default('primary') }}">{{ project.statutLabel }}</span>
                                 </td>
                             </tr>
                             {% endfor %}
                         </tbody>
                     </table>
                 </div>
-            </section>
-
-            {# Section Projets Critiques #}
-            {% if criticalProjects is not empty %}
-            <section class="critical-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i data-lucide="alert-triangle"></i>
-                        Projets Critiques - Attention Requise
-                    </h2>
-                </div>
-
-                <div class="critical-grid">
-                    {% for project in criticalProjects|slice(0, 6) %}
-                    <div class="critical-card">
-                        <div class="critical-header">
-                            <h4>{{ project.titre }}</h4>
-                            <span class="risk-badge risk-{{ project.riskLevel|lower }}">
-                                {{ project.riskLevel }}
-                            </span>
-                        </div>
-                        <div class="critical-body">
-                            <div class="critical-metric">
-                                <span class="label">Progression</span>
-                                <span class="value">{{ project.tauxRealisation }}%</span>
-                            </div>
-                            <div class="critical-metric">
-                                <span class="label">Statut</span>
-                                <span class="value">{{ project.statutLabel }}</span>
-                            </div>
-                            {% if project.isDelayed %}
-                            <div class="critical-alert">
-                                <i data-lucide="clock"></i>
-                                Projet en retard
-                            </div>
-                            {% endif %}
-                        </div>
-                        <div class="critical-footer">
-                            <a href="{{ path('app_dashboard_project_detail', {id: project.id}) }}" class="btn-critical">
-                                Voir détails
-                                <i data-lucide="arrow-right"></i>
-                            </a>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
-            {% endif %}
-
-            {# Section Performance Institutionnelle #}
-            <section class="performance-section">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i data-lucide="award"></i>
-                        Performance par Institution
-                    </h2>
-                </div>
-
-                <div class="performance-grid">
-                    {% for perf in institutionPerformance|slice(0, 6) %}
-                    <div class="performance-card">
-                        <div class="performance-icon">
-                            <i data-lucide="building-2"></i>
-                        </div>
-                        <div class="performance-content">
-                            <h4>{{ perf.institution.nom }}</h4>
-                            <div class="performance-stats">
-                                <div class="stat">
-                                    <span class="stat-value">{{ perf.projectsCount }}</span>
-                                    <span class="stat-label">Projets</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-value">{{ perf.avgProgress }}%</span>
-                                    <span class="stat-label">Progression</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-value">{{ perf.successRate }}%</span>
-                                    <span class="stat-label">Taux de succès</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </section>
+            </div>
         </div>
-    </main>
+
+        <!-- Critical Projects -->
+        {% if criticalProjects is not empty %}
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <div class="col-12">
+                <div class="card card-flush">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Projets Critiques - Attention Requise</span>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-5">
+                            {% for project in criticalProjects|slice(0, 6) %}
+                            <div class="col-md-4">
+                                <div class="card border-dashed p-6">
+                                    <div class="d-flex flex-stack mb-5">
+                                        <div class="d-flex align-items-center">
+                                            <div class="symbol symbol-40px symbol-circle me-3">
+                                                <span class="symbol-label bg-light-danger">
+                                                    <i class="ki-outline ki-shield-cross fs-2 text-danger"></i>
+                                                </span>
+                                            </div>
+                                            <div class="d-flex flex-column">
+                                                <a href="{{ path('app_dashboard_project_detail', {id: project.id}) }}" class="fs-6 text-dark text-hover-primary fw-bold">{{ project.titre }}</a>
+                                                <span class="badge badge-light-danger fw-bold fs-8">{{ project.riskLevel }}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d-flex flex-stack flex-wrap mb-2">
+                                        <span class="fw-bold fs-7 text-gray-400">Progression</span>
+                                        <span class="fw-bold fs-7 text-gray-800">{{ project.tauxRealisation }}%</span>
+                                    </div>
+                                    <div class="h-6px bg-light-danger rounded mb-5">
+                                        <div class="bg-danger rounded h-6px" role="progressbar" style="width: {{ project.tauxRealisation }}%"></div>
+                                    </div>
+                                    <div class="d-flex flex-stack">
+                                        <span class="badge badge-light-warning fs-8">{{ project.statutLabel }}</span>
+                                        {% if project.isDelayed %}
+                                            <span class="text-danger fw-bold fs-8">En retard</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Institutional Performance -->
+        <div class="card card-flush h-md-100">
+            <div class="card-header pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold text-dark">Performance par Institution</span>
+                </h3>
+            </div>
+            <div class="card-body pt-2">
+                <div class="row g-5">
+                    {% for perf in institutionPerformance|slice(0, 6) %}
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-center border-dashed p-5 rounded">
+                            <div class="symbol symbol-50px me-5">
+                                <span class="symbol-label bg-light-primary">
+                                    <i class="ki-outline ki-bank fs-2x text-primary"></i>
+                                </span>
+                            </div>
+                            <div class="flex-grow-1">
+                                <a href="#" class="text-dark fw-bold text-hover-primary fs-6">{{ perf.institution.nom }}</a>
+                                <div class="d-flex align-items-center flex-wrap gap-2 mt-1">
+                                    <span class="badge badge-light-info fs-8">{{ perf.projectsCount }} projets</span>
+                                    <span class="badge badge-light-success fs-8">{{ perf.avgProgress }}% prog.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Initialiser Lucide Icons
-        lucide.createIcons();
+        // Initialiser Lucide Icons si disponibles
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
 
         // Configuration Chart.js par défaut
-        Chart.defaults.font.family = "'DM Sans', sans-serif";
+        Chart.defaults.font.family = "'Inter', sans-serif";
         Chart.defaults.color = '#4b5563';
 
         // Données des graphiques
@@ -376,7 +384,8 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: { usePointStyle: true, padding: 15 }
                         }
                     }
                 }
@@ -399,7 +408,8 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: { usePointStyle: true, padding: 15 }
                         }
                     }
                 }
@@ -421,16 +431,15 @@
                             statusData.termine || 0,
                             statusData.annule || 0
                         ],
-                        backgroundColor: ['#6b7280', '#004d99', '#f59e0b', '#10b981', '#ef4444']
+                        backgroundColor: ['#6b7280', '#004d99', '#f59e0b', '#10b981', '#ef4444'],
+                        borderRadius: 4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                        y: { beginAtZero: true }
                     }
                 }
             });
@@ -447,42 +456,18 @@
                         data: Object.values(evolutionData).map(d => d.projects),
                         borderColor: '#004d99',
                         backgroundColor: 'rgba(0, 77, 153, 0.1)',
-                        tension: 0.4
+                        tension: 0.4,
+                        fill: true
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     scales: {
-                        y: {
-                            beginAtZero: true
-                        }
+                        y: { beginAtZero: true }
                     }
                 }
             });
         }
-
-        // Animation des KPIs (counter)
-        document.querySelectorAll('[data-counter]').forEach(el => {
-            const target = parseInt(el.getAttribute('data-counter'));
-            let current = 0;
-            const increment = target / 50;
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= target) {
-                    el.textContent = target.toLocaleString('fr-FR');
-                    clearInterval(timer);
-                } else {
-                    el.textContent = Math.floor(current).toLocaleString('fr-FR');
-                }
-            }, 30);
-        });
-
-        // Auto-submit des filtres
-        document.querySelectorAll('.filter-select').forEach(select => {
-            select.addEventListener('change', () => {
-                select.closest('form').submit();
-            });
-        });
     </script>
 {% endblock %}

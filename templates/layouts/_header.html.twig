@@ -1,0 +1,23 @@
+<div id="kt_app_header" class="app-header">
+	<div class="app-header-primary" style="background-color: #002664; border-bottom: 4px solid #FECB00;">
+		<div
+			class="app-container container-xxl d-flex align-items-stretch justify-content-between">
+
+			<!-- Logo -->
+			<div class="d-flex align-items-center flex-grow-1 flex-lg-grow-0 me-7">
+				<button class="d-lg-none btn btn-icon btn-color-white bg-hover-white bg-hover-opacity-10 ms-n3 me-2" id="kt_header_secondary_toggle">
+					<i class="ki-duotone ki-abstract-14 fs-1"></i>
+				</button>
+
+				<a href="{{ path('app_dashboard') }}" class="d-flex align-items-center">
+					<img alt="Logo SIGEP" src="{{ asset('logo.png') }}" class="h-30px h-lg-40px"/>
+					<span class="text-white fw-bold fs-4 ms-3 d-none d-sm-inline">Système Intégrè de Gestion des Projets de l'Etat</span>
+				</a>
+			</div>
+
+			{% include 'layouts/_navbar.html.twig' %}
+
+		</div>
+	</div>
+	<div style="height: 4px; background-color: #C60C30;"></div>
+</div>

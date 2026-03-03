@@ -781,6 +781,6 @@ class __TwigTemplate_66f7c5c87751e35454f3a2d2fb4614be extends Template
     }
 </script>
 {% endblock %}
-", "institution/edit.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\institution\\edit.html.twig");
+", "institution/edit.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\institution\\edit.html.twig");
     }
 }

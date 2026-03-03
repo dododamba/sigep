@@ -431,6 +431,6 @@ class __TwigTemplate_5e5c86bbca4561938bbd697063f7cdad extends Template
 .jms-method-trace.label {
     background: #ebebeb;
 }
-", "@JMSSerializer/Collector/style/jms.css.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\style\\jms.css.twig");
+", "@JMSSerializer/Collector/style/jms.css.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\style\\jms.css.twig");
     }
 }

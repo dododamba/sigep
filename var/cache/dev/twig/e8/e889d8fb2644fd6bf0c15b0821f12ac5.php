@@ -279,6 +279,6 @@ class __TwigTemplate_68c77b0a9e6f3fd81cf0bb1dfa6e6275 extends Template
 
 </div>
 {% endblock %}
-", "security/register-as-partner.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\security\\register-as-partner.html.twig");
+", "security/register-as-partner.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\security\\register-as-partner.html.twig");
     }
 }

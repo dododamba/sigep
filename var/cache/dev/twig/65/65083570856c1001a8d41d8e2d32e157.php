@@ -162,6 +162,6 @@ class __TwigTemplate_0c92dbe6a2f0a03886242fbcfd41a3fd extends Template
     </div>
     {% endif %}
 </div>
-", "components/_kpi_card.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\components\\_kpi_card.html.twig");
+", "components/_kpi_card.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\components\\_kpi_card.html.twig");
     }
 }

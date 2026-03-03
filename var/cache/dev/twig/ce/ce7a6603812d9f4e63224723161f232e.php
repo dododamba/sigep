@@ -90,6 +90,6 @@ class __TwigTemplate_fcfca43ab9567c69fb97c1e47edc4641 extends Template
         return new Source("\$('#{{ datatable.name }}').on('stateLoaded.dt', function (e, settings, data) {
     \$('#{{ datatable.name }}-column-{{ column.index }}').val(data.columns[{{ column.index }}].search.search);
 });
-", "@DataTables/Filter/select.js.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\omines\\datatables-bundle\\src\\Resources\\views\\Filter\\select.js.twig");
+", "@DataTables/Filter/select.js.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\omines\\datatables-bundle\\src\\Resources\\views\\Filter\\select.js.twig");
     }
 }

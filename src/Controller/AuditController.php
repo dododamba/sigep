@@ -168,6 +168,44 @@ class AuditController extends AbstractController
         return $this->redirectToRoute('app_audit_index');
     }
 
+    #[Route('/{id}/document/{index}/supprimer', name: 'app_audit_delete_document', methods: ['POST'])]
+    public function deleteDocument(Request $request, Audit $audit, int $index): Response
+    {
+        if ($this->isCsrfTokenValid('delete-doc'.$audit->getId(), $request->request->get('_token'))) {
+            $documents = $audit->getDocuments();
+            if (isset($documents[$index])) {
+                $file = $this->getParameter('documents').'/'.$documents[$index];
+                if (file_exists($file)) {
+                    unlink($file);
+                }
+                unset($documents[$index]);
+                $audit->setDocuments(array_values($documents));
+                $this->entityManager->flush();
+                $this->addFlash('success', 'Document supprimé.');
+            }
+        }
+        return $this->redirectToRoute('app_audit_edit', ['id' => $audit->getId()]);
+    }
+
+    #[Route('/{id}/photo/{index}/supprimer', name: 'app_audit_delete_photo', methods: ['POST'])]
+    public function deletePhoto(Request $request, Audit $audit, int $index): Response
+    {
+        if ($this->isCsrfTokenValid('delete-photo'.$audit->getId(), $request->request->get('_token'))) {
+            $photos = $audit->getPhotos();
+            if (isset($photos[$index])) {
+                $file = $this->getParameter('images').'/'.$photos[$index];
+                if (file_exists($file)) {
+                    unlink($file);
+                }
+                unset($photos[$index]);
+                $audit->setPhotos(array_values($photos));
+                $this->entityManager->flush();
+                $this->addFlash('success', 'Photo supprimée.');
+            }
+        }
+        return $this->redirectToRoute('app_audit_edit', ['id' => $audit->getId()]);
+    }
+
     private function handleFileUpload($file, SluggerInterface $slugger, string $type = 'documents'): string
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
@@ -182,7 +220,7 @@ class AuditController extends AbstractController
             $file->move($directory, $newFilename);
             return $newFilename;
         } catch (FileException $e) {
-            throw new Exception('Erreur lors de l\'upload du fichier');
+            throw new \Exception('Erreur lors de l\'upload du fichier');
         }
     }
 

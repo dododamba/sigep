@@ -2,614 +2,153 @@
 
 {% block title %}Gestion des Financements - SIGEP Tchad{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/financement.css') }}">
-    <style>
-  /* ==========================================================
-   BOUTON MONTANT (TABLE)
-   ========================================================== */
-.amount-btn {
-    background: transparent;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-family: inherit;
-}
-
-.amount-btn .amount-value {
-    font-weight: 600;
-    color: #1f2937;
-    transition: color 0.2s ease;
-}
-
-.amount-btn .amount-unit {
-    font-size: 0.75rem;
-    color: #6b7280;
-}
-
-.amount-btn:hover .amount-value {
-    color: #2563eb;
-    text-decoration: underline;
-}
-
-.amount-btn:focus {
-    outline: none;
-}
-
-
-/* ==========================================================
-   MODAL – STRUCTURE GÉNÉRALE
-   ========================================================== */
-.modal {
-    position: fixed;
-    inset: 0;
-    z-index: 1000;
-    display: none;
-}
-
-.modal.show {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-/* ==========================================================
-   BACKDROP (FOND FLOUTÉ MAIS MODAL NET)
-   ========================================================== */
-.modal-backdrop {
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(2px);
-    z-index: 1;
-}
-
-
-/* ==========================================================
-   CONTENU DU MODAL (ANTI-FLOU)
-   ========================================================== */
-.modal-content {
-    position: relative;
-    z-index: 2;
-    background: #ffffff;
-    width: 100%;
-    max-width: 480px;
-    border-radius: 14px;
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-    padding: 24px;
-    animation: modalFadeUp 0.25s ease;
-    filter: none !important;
-    backdrop-filter: none !important;
-}
-
-
-/* ==========================================================
-   ANIMATION
-   ========================================================== */
-@keyframes modalFadeUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.98);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-
-/* ==========================================================
-   EN-TÊTE DU MODAL
-   ========================================================== */
-.modal-header {
-    text-align: center;
-    margin-bottom: 16px;
-}
-
-.modal-header h3 {
-    font-size: 1.25rem;
-    font-weight: 700;
-    margin-bottom: 8px;
-    color: #111827;
-}
-
-.modal-header p {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin: 2px 0;
-}
-
-
-/* ==========================================================
-   ICÔNE DU MODAL
-   ========================================================== */
-.modal-icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    background: #e0f2fe;
-    color: #0284c7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 12px auto;
-}
-
-.modal-icon svg {
-    width: 22px;
-    height: 22px;
-}
-
-
-/* ==========================================================
-   AFFICHAGE DU MONTANT
-   ========================================================== */
-.montant-display {
-    background: #f8fafc;
-    border-radius: 12px;
-    padding: 20px;
-    margin: 20px 0;
-    text-align: center;
-}
-
-#montantValeur {
-    display: block;
-    font-size: 2.2rem;
-    font-weight: 800;
-    color: #0f172a;
-    letter-spacing: 0.5px;
-}
-
-.montant-unite {
-    font-size: 0.85rem;
-    color: #64748b;
-    margin-top: 4px;
-    display: block;
-}
-
-
-/* ==========================================================
-   ACTIONS DU MODAL
-   ========================================================== */
-.modal-actions {
-    display: flex;
-    justify-content: center;
-    margin-top: 16px;
-}
-
-
-/* ==========================================================
-   CELLULE BAILLEUR (TABLE)
-   ========================================================== */
-.bailleur-cell {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    min-width: 220px;
-}
-
-/* Icône bailleur */
-.bailleur-icon {
-    width: 42px;
-    height: 42px;
-    min-width: 42px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 0.85rem;
-    color: #ffffff;
-    background: linear-gradient(135deg, #2563eb, #1e40af);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    text-transform: uppercase;
-}
-
-/* Informations bailleur */
-.bailleur-info {
-    display: flex;
-    flex-direction: column;
-    line-height: 1.2;
-}
-
-/* Nom bailleur */
-.bailleur-name {
-    font-weight: 600;
-    font-size: 0.9rem;
-    color: #111827;
-    white-space: nowrap;
-}
-
-/* Type bailleur */
-.bailleur-type {
-    font-size: 0.75rem;
-    color: #6b7280;
-}
-
-
-/* ==========================================================
-   COULEURS PAR TYPE DE BAILLEUR (OPTIONNEL)
-   ========================================================== */
-.bailleur-icon.national {
-    background: linear-gradient(135deg, #16a34a, #15803d);
-}
-
-.bailleur-icon.bm {
-    background: linear-gradient(135deg, #0284c7, #0369a1);
-}
-
-.bailleur-icon.bad {
-    background: linear-gradient(135deg, #f59e0b, #b45309);
-}
-
-.bailleur-icon.ue {
-    background: linear-gradient(135deg, #1e3a8a, #1e40af);
-}
-
-
-/* ==========================================================
-   RESPONSIVE
-   ========================================================== */
-@media (max-width: 480px) {
-    .modal-content {
-        margin: 0 12px;
-        padding: 20px;
-    }
-
-    #montantValeur {
-        font-size: 1.8rem;
-    }
-
-    .bailleur-name {
-        white-space: normal;
-    }
-}
-
-    </style>
-{% endblock %}
-
 {% block body %}
-<div class="content-area">
-    <!-- Page Header -->
-    <div class="page-header">
-        <div class="page-header-left">
-            <h1><i data-lucide="landmark"></i> Gestion des Financements</h1>
-            <p>Conventions et accords de financement</p>
+<!-- Toolbar -->
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Financements</h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="{{ path('app_dashboard') }}" class="text-muted text-hover-primary">Accueil</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Accords & Conventions</li>
+            </ul>
         </div>
-        <div class="page-header-right">
-            <a href="{{ path('app_financements_new') }}" class="btn btn-primary">
-                <i data-lucide="plus"></i>
-                Nouveau Financement
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <a href="{{ path('app_financements_new') }}" class="btn btn-sm btn-primary">
+                <i class="ki-outline ki-plus fs-2"></i> Nouveau Financement
             </a>
         </div>
     </div>
+</div>
 
-    <!-- Flash Messages -->
-    {% for message in app.flashes('success') %}
-        <div class="alert alert-success">
-            <i data-lucide="check-circle"></i>
-            {{ message }}
-        </div>
-    {% endfor %}
-
-    <!-- Stats Row -->
-    <div class="stats-row">
-        <div class="mini-stat">
-            <div class="mini-stat-icon blue">
-                <i data-lucide="file-text"></i>
-            </div>
-            <div class="mini-stat-content">
-                <span class="mini-stat-value">{{ stats.total }}</span>
-                <span class="mini-stat-label">Total conventions</span>
-            </div>
-        </div>
-        <div class="mini-stat">
-            <div class="mini-stat-icon green">
-                <i data-lucide="check-circle"></i>
-            </div>
-            <div class="mini-stat-content">
-                <span class="mini-stat-value">{{ stats.actifs }}</span>
-                <span class="mini-stat-label">Actifs</span>
-            </div>
-        </div>
-        <div class="mini-stat">
-            <div class="mini-stat-icon orange">
-                <i data-lucide="clock"></i>
-            </div>
-            <div class="mini-stat-content">
-                <span class="mini-stat-value">{{ stats.enNegociation }}</span>
-                <span class="mini-stat-label">En négociation</span>
-            </div>
-        </div>
-        <div class="mini-stat">
-            <div class="mini-stat-icon gold">
-                <i data-lucide="banknote"></i>
-            </div>
-            <div class="mini-stat-content">
-                <span class="mini-stat-value">{{ montantTotal|number_format(1, ',', ' ') }}</span>
-                <span class="mini-stat-label">Mds FCFA engagés</span>
-            </div>
-        </div>
-        <div class="mini-stat">
-            <div class="mini-stat-icon purple">
-                <i data-lucide="trending-up"></i>
-            </div>
-            <div class="mini-stat-content">
-                <span class="mini-stat-value">{{ montantDecaisse|number_format(1, ',', ' ') }}</span>
-                <span class="mini-stat-label">Mds FCFA décaissés</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Main Card -->
-    <div class="card">
-        <div class="card-header">
-            <h3><i data-lucide="list"></i> Liste des financements</h3>
-            <div class="card-actions">
-                <a href="{{ path('app_financements_export_json') }}" class="btn btn-outline btn-sm">
-                    <i data-lucide="download"></i>
-                    Exporter
-                </a>
-            </div>
-        </div>
-
-        <!-- Filters -->
-        <div class="filters-bar">
-            <form method="get" action="{{ path('app_financements') }}" class="filters-form">
-                <div class="search-box">
-                    <i data-lucide="search"></i>
-                    <input type="text" name="search" placeholder="Rechercher..." value="{{ search }}">
+<!-- Content -->
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        
+        <!-- Stats Widgets -->
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <div class="col-md-4">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ stats.total }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Total Conventions</span>
+                        </div>
+                    </div>
                 </div>
-                <select name="statut" class="filter-select" onchange="this.form.submit()">
-                    <option value="">Tous les statuts</option>
-                    {% for label, value in statuts %}
-                        <option value="{{ value }}" {{ statut == value ? 'selected' : '' }}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-                <select name="bailleur" class="filter-select" onchange="this.form.submit()">
-                    <option value="">Tous les bailleurs</option>
-                    {% for label, value in bailleurs %}
-                        <option value="{{ value }}" {{ bailleur == value ? 'selected' : '' }}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-                <select name="type" class="filter-select" onchange="this.form.submit()">
-                    <option value="">Tous les types</option>
-                    {% for label, value in types %}
-                        <option value="{{ value }}" {{ type == value ? 'selected' : '' }}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-                <button type="submit" class="btn btn-secondary btn-sm">
-                    <i data-lucide="filter"></i>
-                    Filtrer
-                </button>
-            </form>
-        </div>
-
-        <!-- Table -->
-        <div class="table-responsive">
-            <table class="data-table">
-                <thead>
-                    <tr>
-                        <th>Convention</th>
-                        <th>Bailleur</th>
-                        <th>Type</th>
-                        <th>Montant engagé</th>
-                        <th>Décaissement</th>
-                        <th>Échéance</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for financement in financements %}
-                    <tr>
-                        <td>
-                            <div class="convention-cell">
-                                <span class="convention-numero">{{ financement.numeroConvention }}</span>
-                                <span class="convention-date">Signé le {{ financement.dateSignature|date('d/m/Y') }}</span>
-                            </div>
-                        </td>
-                        <td>
-                            <div class="bailleur-cell">
-                                <div class="bailleur-icon {{ financement.bailleur }}">
-                                    {{ financement.bailleurShortName }}
-                                </div>
-                                <div class="bailleur-info">
-                                    <span class="bailleur-name">{{ financement.bailleur.name }}</span>
-                                    <span class="bailleur-type">{{ financement.bailleur.typePartner.name }}</span>
-                                </div>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="type-badge {{ financement.type }}">{{ financement.typeLabel }}</span>
-                        </td>
-                       <td class="amount-cell">
-    <button
-        type="button"
-        class="btn btn-xs btn-success"
-        onclick="openMontantModal(
-            '{{ financement.numeroConvention }}',
-            '{{ financement.bailleur.name }}',
-            '{{ financement.montantEngage|number_format(2, ',', ' ') }}'
-        )"
-    >
-       Voir le montant
-        
-    </button>
-</td>
-                        <td>
-                            <div class="progress-cell">
-                                <div class="progress-bar">
-                                    <div class="progress-fill {% if financement.tauxDecaissement >= 70 %}gold{% elseif financement.tauxDecaissement >= 50 %}green{% elseif financement.tauxDecaissement >= 25 %}blue{% else %}red{% endif %}" style="width: {{ financement.tauxDecaissement }}%"></div>
-                                </div>
-                                <span class="progress-value">{{ financement.tauxDecaissement }}%</span>
-                            </div>
-                        </td>
-                        <td>
-                            <span class="date-cell {% if financement.isExpired %}expired{% elseif financement.isApproachingDeadline %}warning{% endif %}">
-                                {{ financement.dateEcheance|date('d/m/Y') }}
-                            </span>
-                        </td>
-                        <td>
-                            <span class="status-badge {{ financement.statut }}">{{ financement.statutLabel }}</span>
-                        </td>
-                        <td>
-                            <div class="actions-group">
-                                <a href="{{ path('app_financements_show', {slug: financement.slug}) }}" class="action-btn" title="Voir">
-                                    <i data-lucide="eye"></i>
-                                </a>
-                                <a href="{{ path('app_financements_edit', {id: financement.id}) }}" class="action-btn" title="Modifier">
-                                    <i data-lucide="edit"></i>
-                                </a>
-                                <button type="button" class="action-btn danger" title="Supprimer" onclick="openDeleteModal({{ financement.id }}, '{{ financement.numeroConvention }}')">
-                                    <i data-lucide="trash-2"></i>
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                    {% else %}
-                    <tr>
-                        <td colspan="8">
-                            <div class="empty-state">
-                                <i data-lucide="inbox"></i>
-                                <p>Aucun financement trouvé</p>
-                                <a href="{{ path('app_financements_new') }}" class="btn btn-primary">
-                                    <i data-lucide="plus"></i>
-                                    Ajouter un financement
-                                </a>
-                            </div>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
-        <!-- Pagination -->
-        {% if totalPages > 1 %}
-        <div class="pagination-wrapper">
-            <div class="pagination-info">
-                Affichage {{ ((currentPage - 1) * 10) + 1 }} à {{ min(currentPage * 10, totalFinancements) }} sur {{ totalFinancements }} financements
             </div>
-            <div class="pagination">
-                {% if currentPage > 1 %}
-                    <a href="{{ path('app_financements', {page: currentPage - 1, search: search, statut: statut, bailleur: bailleur, type: type}) }}" class="pagination-btn">
-                        <i data-lucide="chevron-left"></i>
+            <div class="col-md-4">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-success me-2 lh-1 ls-n2">{{ stats.actifs }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Conventions Actives</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-primary me-2 lh-1 ls-n2">{{ montantTotal|number_format(1, ',', ' ') }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Engagé (Mds FCFA)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Card -->
+        <div class="card card-flush">
+            <div class="card-header border-0 pt-6">
+                <div class="card-title">
+                    <form method="get" action="{{ path('app_financements') }}" class="d-flex align-items-center position-relative my-1 gap-3">
+                        <div class="position-relative">
+                            <i class="ki-outline ki-magnifier fs-3 position-absolute ms-5 mt-4"></i>
+                            <input type="text" name="search" class="form-control form-control-solid w-250px ps-13" placeholder="Rechercher..." value="{{ search }}">
+                        </div>
+                        <select name="statut" class="form-select form-select-solid w-150px" onchange="this.form.submit()">
+                            <option value="">Tout statut</option>
+                            {% for label, value in statuts %}
+                                <option value="{{ value }}" {{ statut == value ? 'selected' : '' }}>{{ label }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                </div>
+                <div class="card-toolbar">
+                    <a href="{{ path('app_financements_export_json') }}" class="btn btn-light-primary btn-sm">
+                        <i class="ki-outline ki-exit-up fs-2"></i> Exporter
                     </a>
-                {% endif %}
-                
-                {% for i in max(1, currentPage - 2)..min(totalPages, currentPage + 2) %}
-                    <a href="{{ path('app_financements', {page: i, search: search, statut: statut, bailleur: bailleur, type: type}) }}" class="pagination-btn {{ i == currentPage ? 'active' : '' }}">{{ i }}</a>
-                {% endfor %}
-                
-                {% if currentPage < totalPages %}
-                    <a href="{{ path('app_financements', {page: currentPage + 1, search: search, statut: statut, bailleur: bailleur, type: type}) }}" class="pagination-btn">
-                        <i data-lucide="chevron-right"></i>
-                    </a>
-                {% endif %}
+                </div>
             </div>
-        </div>
-        {% endif %}
-    </div>
-</div>
-
-<!-- Delete Modal -->
-<div id="deleteModal" class="modal">
-    <div class="modal-backdrop" onclick="closeDeleteModal()"></div>
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal-icon danger">
-                <i data-lucide="alert-triangle"></i>
+            
+            <div class="card-body py-4">
+                <div class="table-responsive">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5">
+                        <thead>
+                            <tr class="text-start text-muted fw-bold fs-7 text-uppercase gs-0">
+                                <th>Convention</th>
+                                <th>Bailleur</th>
+                                <th>Type</th>
+                                <th class="text-end">Engagé</th>
+                                <th>Décaissement</th>
+                                <th class="text-center">Statut</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-gray-600 fw-semibold">
+                            {% for financement in financements %}
+                                <tr>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <span class="text-dark fw-bold">{{ financement.numeroConvention }}</span>
+                                            <span class="fs-7 text-muted">Signé le {{ financement.dateSignature|date('d/m/Y') }}</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="symbol symbol-35px symbol-circle me-3">
+                                                <span class="symbol-label bg-light-primary text-primary fw-bold">{{ financement.bailleurShortName }}</span>
+                                            </div>
+                                            <span class="text-gray-800 fw-bold">{{ financement.bailleur.name }}</span>
+                                        </div>
+                                    </td>
+                                    <td><span class="badge badge-light-primary">{{ financement.typeLabel }}</span></td>
+                                    <td class="text-end fw-bold text-dark">{{ (financement.montantEngage / 1000000)|number_format(1, ',', ' ') }} M</td>
+                                    <td>
+                                        <div class="d-flex flex-column w-100 me-2">
+                                            <div class="d-flex flex-stack mb-2">
+                                                <span class="text-muted me-2 fs-7 fw-bold">{{ financement.tauxDecaissement }}%</span>
+                                            </div>
+                                            <div class="progress h-6px w-100">
+                                                {% set progColor = financement.tauxDecaissement >= 70 ? 'success' : (financement.tauxDecaissement >= 40 ? 'warning' : 'danger') %}
+                                                <div class="progress-bar bg-{{ progColor }}" role="progressbar" style="width: {{ financement.tauxDecaissement }}%;"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="badge badge-light-{{ financement.statut == 'actif' ? 'success' : 'warning' }} fw-bold">{{ financement.statutLabel }}</span>
+                                    </td>
+                                    <td class="text-end">
+                                        <a href="{{ path('app_financements_show', {slug: financement.slug}) }}" class="btn btn-icon btn-bg-light btn-active-color-primary btn-sm">
+                                            <i class="ki-outline ki-eye fs-2"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% else %}
+                                <tr><td colspan="7" class="text-center">Aucun financement trouvé</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            <h3>Supprimer le financement</h3>
-            <p>Êtes-vous sûr de vouloir supprimer le financement <strong id="deleteConventionName"></strong> ?</p>
-            <p class="warning-text">Cette action est irréversible.</p>
-        </div>
-        <div class="modal-actions">
-            <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Annuler</button>
-            <form id="deleteForm" method="post" style="display: inline;">
-                <input type="hidden" name="_token" value="{{ csrf_token('delete') }}">
-                <button type="submit" class="btn btn-danger">
-                    <i data-lucide="trash-2"></i>
-                    Supprimer
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<!-- Montant Modal -->
-<div id="montantModal" class="modal">
-    <div class="modal-backdrop" onclick="closeMontantModal()"></div>
-
-    <div class="modal-content">
-        <div class="modal-header">
-            <div class="modal-icon blue">
-                <i data-lucide="banknote"></i>
-            </div>
-
-            <h3>Montant engagé</h3>
-
-            <p>
-                Convention :
-                <strong id="montantConvention"></strong>
-            </p>
-
-            <p>
-                Bailleur :
-                <strong id="montantBailleur"></strong>
-            </p>
-        </div>
-
-        <div class="modal-body">
-            <div class="montant-display">
-                <span id="montantValeur"></span>
-                <span class="montant-unite">Mds FCFA</span>
-            </div>
-        </div>
-
-        <div class="modal-actions">
-            <button class="btn btn-secondary" onclick="closeMontantModal()">
-                Fermer
-            </button>
         </div>
     </div>
 </div>
-
-{% endblock %}
-
-{% block javascripts %}
-    {{ parent() }}
-    <script>
-        lucide.createIcons();
-        
-        function openDeleteModal(id, numero) {
-            document.getElementById('deleteConventionName').textContent = numero;
-            document.getElementById('deleteForm').action = '/financements/' + id;
-            document.getElementById('deleteModal').classList.add('show');
-            lucide.createIcons();
-        }
-        
-        function closeDeleteModal() {
-            document.getElementById('deleteModal').classList.remove('show');
-        }
-
-        function openMontantModal(convention, bailleur, montant) {
-    document.getElementById('montantConvention').textContent = convention;
-    document.getElementById('montantBailleur').textContent = bailleur;
-    document.getElementById('montantValeur').textContent = montant;
-
-    document.getElementById('montantModal').classList.add('show');
-    lucide.createIcons();
-}
-
-function closeMontantModal() {
-    document.getElementById('montantModal').classList.remove('show');
-}
-    </script>
 {% endblock %}

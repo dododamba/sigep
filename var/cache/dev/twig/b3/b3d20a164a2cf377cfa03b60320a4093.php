@@ -1830,6 +1830,6 @@ class __TwigTemplate_63206f8316c2425aadda3a87c0dd1b6b extends Template
     });
 </script>
 {% endblock %}
-", "activity/index.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\activity\\index.html.twig");
+", "activity/index.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\activity\\index.html.twig");
     }
 }

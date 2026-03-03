@@ -36,7 +36,8 @@ class DashboardController extends AbstractController
         private InstitutionRepository $institutionRepository,
         private PartnerRepository $partnerRepository,
         private AuditRepository $auditRepository,
-    ) {}
+    ) {
+    }
 
     #[Route('/', name: 'app_dashboard', methods: ['GET'])]
     public function index(): Response
@@ -74,7 +75,7 @@ class DashboardController extends AbstractController
         // Financements
         $totalFinancements = $this->financementRepository->count([]);
         $financementsActifs = $this->financementRepository->count(['statut' => Financement::STATUT_ACTIF]);
-        
+
         $montantEngageTotal = $this->financementRepository->createQueryBuilder('f')
             ->select('SUM(f.montantEngage)')
             ->getQuery()
@@ -140,7 +141,7 @@ class DashboardController extends AbstractController
         // === STATISTIQUES INSTITUTIONS & PARTENAIRES ===
         $totalInstitutions = $this->institutionRepository->count([]);
         $institutionsActives = $this->institutionRepository->count(['status' => 'Actif']);
-        
+
         $totalPartners = $this->partnerRepository->count([]);
         $partnersActifs = $this->partnerRepository->count(['status' => 'Actif']);
 
@@ -225,23 +226,23 @@ class DashboardController extends AbstractController
                 'decaissementsExecutes' => $decaissementsExecutes,
                 'montantDecaissementsExecutes' => $montantDecaissementsExecutes,
             ],
-            
+
             // Données par secteur
             'sectorsData' => $sectorsData,
             'statsByStatus' => $statsByStatus,
             'statsByPriority' => $statsByPriority,
-            
+
             // Listes récentes
             'recentProjects' => $recentProjects,
             'recentDecaissements' => $recentDecaissements,
             'recentAudits' => $recentAudits,
             'projetsArisque' => $projetsArisque,
             'topPartners' => $topPartners,
-            
+
             // Évolution et activités
             'evolutionMensuelle' => $evolutionMensuelle,
             'activitesRecentes' => $activitesRecentes,
-            
+
             // Date actuelle
             'currentDate' => new \DateTime(),
         ]);
@@ -303,8 +304,8 @@ class DashboardController extends AbstractController
             $labels[] = $sectorLabels[$stat['sector']] ?? ucfirst($stat['sector']);
             $budgets[] = round((float) $stat['budget'] / 1000000000, 2); // En milliards
             $decaisses[] = round((float) $stat['decaisse'] / 1000000000, 2);
-            $tauxExecution[] = $stat['budget'] > 0 
-                ? round(($stat['decaisse'] / $stat['budget']) * 100, 1) 
+            $tauxExecution[] = $stat['budget'] > 0
+                ? round(($stat['decaisse'] / $stat['budget']) * 100, 1)
                 : 0;
         }
 
@@ -456,7 +457,7 @@ class DashboardController extends AbstractController
                 'icon' => 'check-circle',
                 'iconClass' => 'green',
                 'title' => 'Décaissement validé',
-                'description' => $dec->getProject() 
+                'description' => $dec->getProject()
                     ? $dec->getProject()->getName() . ' - ' . $this->formatMontant($dec->getMontant())
                     : 'Décaissement de ' . $this->formatMontant($dec->getMontant()),
                 'date' => $dec->getDateExecution() ?? $dec->getCreatedAt(),
@@ -476,7 +477,7 @@ class DashboardController extends AbstractController
                 'icon' => 'clipboard-check',
                 'iconClass' => 'blue',
                 'title' => 'Audit planifié',
-                'description' => $audit->getTitre() . ' - ' . $audit->getDateAudit()->format('d/m/Y'),
+                'description' => $audit->getTitle() . ' - ' . $audit->getDateAudit()->format('d/m/Y'),
                 'date' => $audit->getCreatedAt(),
             ];
         }
@@ -539,9 +540,18 @@ class DashboardController extends AbstractController
     private function getMoisFrancais(int $mois): string
     {
         $moisFr = [
-            1 => 'Jan', 2 => 'Fév', 3 => 'Mar', 4 => 'Avr',
-            5 => 'Mai', 6 => 'Juin', 7 => 'Juil', 8 => 'Août',
-            9 => 'Sep', 10 => 'Oct', 11 => 'Nov', 12 => 'Déc'
+            1 => 'Jan',
+            2 => 'Fév',
+            3 => 'Mar',
+            4 => 'Avr',
+            5 => 'Mai',
+            6 => 'Juin',
+            7 => 'Juil',
+            8 => 'Août',
+            9 => 'Sep',
+            10 => 'Oct',
+            11 => 'Nov',
+            12 => 'Déc'
         ];
         return $moisFr[$mois] ?? '';
     }

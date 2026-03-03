@@ -31,7 +31,6 @@ class __TwigTemplate_569030e87745e278ea931ac40f2ef073 extends Template
 
         $this->blocks = [
             'title' => [$this, 'block_title'],
-            'stylesheets' => [$this, 'block_stylesheets'],
             'body' => [$this, 'block_body'],
             'javascripts' => [$this, 'block_javascripts'],
         ];
@@ -67,7 +66,7 @@ class __TwigTemplate_569030e87745e278ea931ac40f2ef073 extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "title"));
 
         yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 3, $this->source); })()), "name", [], "any", false, false, false, 3), "html", null, true);
-        yield " - SIGEP Tchad";
+        yield " - Détails - SIGEP Tchad";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
 
@@ -78,529 +77,507 @@ class __TwigTemplate_569030e87745e278ea931ac40f2ef073 extends Template
     /**
      * @return iterable<null|scalar|\Stringable>
      */
-    public function block_stylesheets(array $context, array $blocks = []): iterable
-    {
-        $macros = $this->macros;
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "stylesheets"));
-
-        // line 6
-        yield "<link rel=\"stylesheet\" href=\"";
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("css/project-show.css"), "html", null, true);
-        yield "\">
-";
-        
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
-
-        yield from [];
-    }
-
-    // line 9
-    /**
-     * @return iterable<null|scalar|\Stringable>
-     */
     public function block_body(array $context, array $blocks = []): iterable
     {
         $macros = $this->macros;
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
+        // line 6
+        yield "<!-- Toolbar -->
+<div id=\"kt_app_toolbar\" class=\"app-toolbar py-3 py-lg-6\">
+    <div id=\"kt_app_toolbar_container\" class=\"app-container container-xxl d-flex flex-stack\">
+        <div class=\"page-title d-flex flex-column justify-content-center flex-wrap me-3\">
+            <h1 class=\"page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0\">";
         // line 10
-        yield "<div class=\"content-area\">
-    <!-- Page Header -->
-    <div class=\"page-header\">
-        <div class=\"page-header-left\">
-            <a href=\"";
-        // line 14
-        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects");
-        yield "\" class=\"back-link\">
-                <i data-lucide=\"arrow-left\"></i>
-                Retour aux projets
-            </a>
-        </div>
-        <div class=\"page-header-actions\">
-            <a href=\"";
-        // line 20
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects_edit", ["id" => CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 20, $this->source); })()), "id", [], "any", false, false, false, 20)]), "html", null, true);
-        yield "\" class=\"btn btn-primary\">
-                <i data-lucide=\"edit-3\"></i>
-                Modifier
-            </a>
-            <button type=\"button\" class=\"btn btn-danger-outline\" onclick=\"openDeleteModal()\">
-                <i data-lucide=\"trash-2\"></i>
-                Supprimer
-            </button>
-        </div>
-    </div>
-
-    <!-- Project Hero Card -->
-    <div class=\"project-hero\">
-        <div class=\"project-hero-header\">
-            <div class=\"project-icon-large ";
-        // line 34
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 34, $this->source); })()), "sector", [], "any", false, false, false, 34), "html", null, true);
-        yield "\">
-                <i data-lucide=\"";
-        // line 35
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 35, $this->source); })()), "sectorIcon", [], "any", false, false, false, 35), "html", null, true);
-        yield "\"></i>
-            </div>
-            <div class=\"project-hero-info\">
-                <div class=\"project-badges\">
-                    <span class=\"sector-badge ";
-        // line 39
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 39, $this->source); })()), "sector", [], "any", false, false, false, 39), "html", null, true);
-        yield "\">";
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 39, $this->source); })()), "sectorLabel", [], "any", false, false, false, 39), "html", null, true);
-        yield "</span>
-                    <span class=\"status-badge ";
-        // line 40
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 40, $this->source); })()), "status", [], "any", false, false, false, 40), "html", null, true);
-        yield "\">";
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 40, $this->source); })()), "statusLabel", [], "any", false, false, false, 40), "html", null, true);
-        yield "</span>
-                    <span class=\"priority-badge ";
-        // line 41
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 41, $this->source); })()), "priorite", [], "any", false, false, false, 41), "html", null, true);
-        yield "\">";
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 41, $this->source); })()), "prioriteLabel", [], "any", false, false, false, 41), "html", null, true);
-        yield "</span>
-                </div>
-                <h1>";
-        // line 43
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 43, $this->source); })()), "name", [], "any", false, false, false, 43), "html", null, true);
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 10, $this->source); })()), "name", [], "any", false, false, false, 10), "html", null, true);
         yield "</h1>
-                <div class=\"project-meta\">
-                    <span class=\"project-code\">
-                        <i data-lucide=\"hash\"></i>
-                        ";
-        // line 47
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 47, $this->source); })()), "code", [], "any", false, false, false, 47), "html", null, true);
-        yield "
-                    </span>
-                    ";
-        // line 49
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 49, $this->source); })()), "localisation", [], "any", false, false, false, 49)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 50
-            yield "                    <span class=\"project-location\">
-                        <i data-lucide=\"map-pin\"></i>
-                        ";
-            // line 52
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 52, $this->source); })()), "localisation", [], "any", false, false, false, 52), "html", null, true);
-            yield "
-                    </span>
-                    ";
-        }
-        // line 55
-        yield "                    ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 55, $this->source); })()), "maitreOuvrage", [], "any", false, false, false, 55)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 56
-            yield "                    <span class=\"project-owner\">
-                        <i data-lucide=\"building\"></i>
-                        ";
-            // line 58
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 58, $this->source); })()), "maitreOuvrage", [], "any", false, false, false, 58), "html", null, true);
-            yield "
-                    </span>
-                    ";
-        }
-        // line 61
-        yield "                </div>
-            </div>
-        </div>
-
-        <!-- Progress Section -->
-        <div class=\"project-progress-section\">
-            <div class=\"progress-header\">
-                <span class=\"progress-label\">Progression globale</span>
-                <span class=\"progress-value ";
-        // line 69
-        if ((CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 69, $this->source); })()), "progress", [], "any", false, false, false, 69) >= 80)) {
-            yield "green";
-        } elseif ((CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 69, $this->source); })()), "progress", [], "any", false, false, false, 69) >= 50)) {
-            yield "blue";
-        } elseif ((CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 69, $this->source); })()), "progress", [], "any", false, false, false, 69) >= 25)) {
-            yield "gold";
-        } else {
-            yield "red";
-        }
-        yield "\">";
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 69, $this->source); })()), "progress", [], "any", false, false, false, 69), "html", null, true);
-        yield "%</span>
-            </div>
-            <div class=\"progress-bar-large\">
-                <div class=\"progress-fill-large ";
-        // line 72
-        if ((CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 72, $this->source); })()), "progress", [], "any", false, false, false, 72) >= 80)) {
-            yield "green";
-        } elseif ((CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 72, $this->source); })()), "progress", [], "any", false, false, false, 72) >= 50)) {
-            yield "blue";
-        } elseif ((CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 72, $this->source); })()), "progress", [], "any", false, false, false, 72) >= 25)) {
-            yield "gold";
-        } else {
-            yield "red";
-        }
-        yield "\" 
-                     style=\"width: ";
-        // line 73
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 73, $this->source); })()), "progress", [], "any", false, false, false, 73), "html", null, true);
-        yield "%\"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stats Cards -->
-    <div class=\"stats-grid\">
-        <div class=\"stat-card\">
-            <div class=\"stat-icon blue\">
-                <i data-lucide=\"wallet\"></i>
-            </div>
-            <div class=\"stat-content\">
-                <span class=\"stat-value\">";
-        // line 85
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 85, $this->source); })()), "budgetTotal", [], "any", false, false, false, 85), 2, ",", " "), "html", null, true);
-        yield "</span>
-                <span class=\"stat-label\">Budget total (Mds FCFA)</span>
-            </div>
-        </div>
-        <div class=\"stat-card\">
-            <div class=\"stat-icon green\">
-                <i data-lucide=\"banknote\"></i>
-            </div>
-            <div class=\"stat-content\">
-                <span class=\"stat-value\">";
-        // line 94
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 94, $this->source); })()), "montantDecaisse", [], "any", false, false, false, 94), 2, ",", " "), "html", null, true);
-        yield "</span>
-                <span class=\"stat-label\">Montant décaissé (Mds FCFA)</span>
-            </div>
-        </div>
-        <div class=\"stat-card\">
-            <div class=\"stat-icon gold\">
-                <i data-lucide=\"percent\"></i>
-            </div>
-            <div class=\"stat-content\">
-                <span class=\"stat-value\">";
-        // line 103
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 103, $this->source); })()), "tauxDecaissement", [], "any", false, false, false, 103), "html", null, true);
-        yield "%</span>
-                <span class=\"stat-label\">Taux de décaissement</span>
-            </div>
-        </div>
-        <div class=\"stat-card\">
-            <div class=\"stat-icon purple\">
-                <i data-lucide=\"users\"></i>
-            </div>
-            <div class=\"stat-content\">
-                <span class=\"stat-value\">";
-        // line 112
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["project"] ?? null), "beneficiaires", [], "any", true, true, false, 112)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 112, $this->source); })()), "beneficiaires", [], "any", false, false, false, 112), "N/A")) : ("N/A")), "html", null, true);
-        yield "</span>
-                <span class=\"stat-label\">Bénéficiaires</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Details Grid -->
-    <div class=\"details-grid\">
-        <!-- Description -->
-        ";
-        // line 121
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 121, $this->source); })()), "description", [], "any", false, false, false, 121)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 122
-            yield "        <div class=\"detail-card full-width\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"file-text\"></i>
-                <h3>Description</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <p>";
-            // line 128
-            yield Twig\Extension\CoreExtension::nl2br($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 128, $this->source); })()), "description", [], "any", false, false, false, 128), "html", null, true));
-            yield "</p>
-            </div>
-        </div>
-        ";
-        }
-        // line 132
-        yield "
-        <!-- Dates -->
-        <div class=\"detail-card\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"calendar\"></i>
-                <h3>Planning</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Date de début</span>
-                    <span class=\"detail-value\">";
-        // line 142
-        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 142, $this->source); })()), "dateDebut", [], "any", false, false, false, 142)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 142, $this->source); })()), "dateDebut", [], "any", false, false, false, 142), "d/m/Y"), "html", null, true)) : ("Non définie"));
-        yield "</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Date de fin prévue</span>
-                    <span class=\"detail-value\">";
-        // line 146
-        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 146, $this->source); })()), "dateFin", [], "any", false, false, false, 146)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 146, $this->source); })()), "dateFin", [], "any", false, false, false, 146), "d/m/Y"), "html", null, true)) : ("Non définie"));
-        yield "</span>
-                </div>
-                ";
-        // line 148
-        if ((CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 148, $this->source); })()), "dateDebut", [], "any", false, false, false, 148) && CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 148, $this->source); })()), "dateFin", [], "any", false, false, false, 148))) {
-            // line 149
-            yield "                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Durée</span>
-                    <span class=\"detail-value\">
-                        ";
-            // line 152
-            $context["diff"] = CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 152, $this->source); })()), "dateFin", [], "any", false, false, false, 152), "diff", [CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 152, $this->source); })()), "dateDebut", [], "any", false, false, false, 152)], "method", false, false, false, 152);
-            // line 153
-            yield "                        ";
-            yield (((CoreExtension::getAttribute($this->env, $this->source, (isset($context["diff"]) || array_key_exists("diff", $context) ? $context["diff"] : (function () { throw new RuntimeError('Variable "diff" does not exist.', 153, $this->source); })()), "y", [], "any", false, false, false, 153) > 0)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape((CoreExtension::getAttribute($this->env, $this->source, (isset($context["diff"]) || array_key_exists("diff", $context) ? $context["diff"] : (function () { throw new RuntimeError('Variable "diff" does not exist.', 153, $this->source); })()), "y", [], "any", false, false, false, 153) . " an(s) "), "html", null, true)) : (""));
-            yield (((CoreExtension::getAttribute($this->env, $this->source, (isset($context["diff"]) || array_key_exists("diff", $context) ? $context["diff"] : (function () { throw new RuntimeError('Variable "diff" does not exist.', 153, $this->source); })()), "m", [], "any", false, false, false, 153) > 0)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape((CoreExtension::getAttribute($this->env, $this->source, (isset($context["diff"]) || array_key_exists("diff", $context) ? $context["diff"] : (function () { throw new RuntimeError('Variable "diff" does not exist.', 153, $this->source); })()), "m", [], "any", false, false, false, 153) . " mois"), "html", null, true)) : (""));
-            yield "
-                    </span>
-                </div>
-                ";
-        }
-        // line 157
-        yield "            </div>
-        </div>
-
-        <!-- Financement -->
-        <div class=\"detail-card\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"coins\"></i>
-                <h3>Financement</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Source</span>
-                    <span class=\"detail-value\">";
-        // line 169
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["project"] ?? null), "sourceFinancement", [], "any", true, true, false, 169)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 169, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 169), "Non spécifiée")) : ("Non spécifiée")), "html", null, true);
-        yield "</span>
-                </div>
-                ";
-        // line 171
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 171, $this->source); })()), "financementNational", [], "any", false, false, false, 171)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 172
-            yield "                <div class=\"detail-row\">
-                    <span class=\"detail-label\">National</span>
-                    <span class=\"detail-value\">";
-            // line 174
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 174, $this->source); })()), "financementNational", [], "any", false, false, false, 174), 2, ",", " "), "html", null, true);
-            yield " Mds FCFA</span>
-                </div>
-                ";
-        }
-        // line 177
-        yield "                ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 177, $this->source); })()), "financementPartenaires", [], "any", false, false, false, 177)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 178
-            yield "                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Partenaires</span>
-                    <span class=\"detail-value\">";
-            // line 180
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 180, $this->source); })()), "financementPartenaires", [], "any", false, false, false, 180), 2, ",", " "), "html", null, true);
-            yield " Mds FCFA</span>
-                </div>
-                ";
-        }
-        // line 183
-        yield "                ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 183, $this->source); })()), "financementAutre", [], "any", false, false, false, 183)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 184
-            yield "                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Autres</span>
-                    <span class=\"detail-value\">";
-            // line 186
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 186, $this->source); })()), "financementAutre", [], "any", false, false, false, 186), 2, ",", " "), "html", null, true);
-            yield " Mds FCFA</span>
-                </div>
-                ";
-        }
-        // line 189
-        yield "            </div>
-        </div>
-
-        <!-- Responsables -->
-        <div class=\"detail-card\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"users\"></i>
-                <h3>Responsables</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Maître d'ouvrage</span>
-                    <span class=\"detail-value\">";
-        // line 201
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["project"] ?? null), "maitreOuvrage", [], "any", true, true, false, 201)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 201, $this->source); })()), "maitreOuvrage", [], "any", false, false, false, 201), "Non défini")) : ("Non défini")), "html", null, true);
-        yield "</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Chef de projet</span>
-                    <span class=\"detail-value\">";
-        // line 205
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["project"] ?? null), "chefProjet", [], "any", true, true, false, 205)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 205, $this->source); })()), "chefProjet", [], "any", false, false, false, 205), "Non défini")) : ("Non défini")), "html", null, true);
-        yield "</span>
-                </div>
-                ";
-        // line 207
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 207, $this->source); })()), "institution", [], "any", false, false, false, 207)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 208
-            yield "                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Institution</span>
-                    <span class=\"detail-value\">";
-            // line 210
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 210, $this->source); })()), "institution", [], "any", false, false, false, 210), "name", [], "any", false, false, false, 210), "html", null, true);
-            yield "</span>
-                </div>
-                ";
-        }
-        // line 213
-        yield "                ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 213, $this->source); })()), "partnerPrincipal", [], "any", false, false, false, 213)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 214
-            yield "                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Partenaire principal</span>
-                    <span class=\"detail-value\">";
-            // line 216
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 216, $this->source); })()), "partnerPrincipal", [], "any", false, false, false, 216), "name", [], "any", false, false, false, 216), "html", null, true);
-            yield "</span>
-                </div>
-                ";
-        }
-        // line 219
-        yield "            </div>
-        </div>
-
-        <!-- Informations système -->
-        <div class=\"detail-card\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"info\"></i>
-                <h3>Informations système</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">ID</span>
-                    <span class=\"detail-value\">#";
-        // line 231
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 231, $this->source); })()), "id", [], "any", false, false, false, 231), "html", null, true);
-        yield "</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Slug</span>
-                    <span class=\"detail-value code\">";
-        // line 235
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 235, $this->source); })()), "slug", [], "any", false, false, false, 235), "html", null, true);
-        yield "</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Créé le</span>
-                    <span class=\"detail-value\">";
-        // line 239
-        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 239, $this->source); })()), "createdAt", [], "any", false, false, false, 239)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 239, $this->source); })()), "createdAt", [], "any", false, false, false, 239), "d/m/Y à H:i"), "html", null, true)) : ("N/A"));
-        yield "</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Dernière modification</span>
-                    <span class=\"detail-value\">";
-        // line 243
-        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 243, $this->source); })()), "updatedAt", [], "any", false, false, false, 243)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 243, $this->source); })()), "updatedAt", [], "any", false, false, false, 243), "d/m/Y à H:i"), "html", null, true)) : ("Jamais"));
-        yield "</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Notes -->
-        ";
-        // line 249
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 249, $this->source); })()), "notes", [], "any", false, false, false, 249)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 250
-            yield "        <div class=\"detail-card full-width\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"sticky-note\"></i>
-                <h3>Notes</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <p>";
-            // line 256
-            yield Twig\Extension\CoreExtension::nl2br($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 256, $this->source); })()), "notes", [], "any", false, false, false, 256), "html", null, true));
-            yield "</p>
-            </div>
-        </div>
-        ";
-        }
-        // line 260
-        yield "    </div>
-
-    <!-- Action Bar -->
-    <div class=\"action-bar\">
-        <a href=\"";
-        // line 264
+            <ul class=\"breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1\">
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"";
+        // line 13
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_dashboard");
+        yield "\" class=\"text-muted text-hover-primary\">Accueil</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"";
+        // line 19
         yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects");
-        yield "\" class=\"btn btn-outline\">
-            <i data-lucide=\"arrow-left\"></i>
-            Retour à la liste
-        </a>
-        <div class=\"action-bar-right\">
-            <form action=\"";
-        // line 269
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects_duplicate", ["id" => CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 269, $this->source); })()), "id", [], "any", false, false, false, 269)]), "html", null, true);
-        yield "\" method=\"POST\" style=\"display: inline;\">
-                <input type=\"hidden\" name=\"_token\" value=\"";
-        // line 270
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderCsrfToken(("duplicate" . CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 270, $this->source); })()), "id", [], "any", false, false, false, 270))), "html", null, true);
-        yield "\">
-                <button type=\"submit\" class=\"btn btn-secondary\">
-                    <i data-lucide=\"copy\"></i>
-                    Dupliquer
-                </button>
-            </form>
+        yield "\" class=\"text-muted text-hover-primary\">Projets</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">Fiche projet</li>
+            </ul>
+        </div>
+        <div class=\"d-flex align-items-center gap-2 gap-lg-3\">
             <a href=\"";
-        // line 276
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects_edit", ["id" => CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 276, $this->source); })()), "id", [], "any", false, false, false, 276)]), "html", null, true);
-        yield "\" class=\"btn btn-primary\">
-                <i data-lucide=\"edit-3\"></i>
-                Modifier
+        // line 28
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects_edit", ["id" => CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 28, $this->source); })()), "id", [], "any", false, false, false, 28)]), "html", null, true);
+        yield "\" class=\"btn btn-sm btn-primary\">
+                <i class=\"ki-outline ki-pencil fs-2\"></i> Modifier
             </a>
+            <button type=\"button\" class=\"btn btn-sm btn-light-danger\" data-bs-toggle=\"modal\" data-bs-target=\"#kt_modal_delete_project\">
+                <i class=\"ki-outline ki-trash fs-2\"></i> Supprimer
+            </button>
         </div>
     </div>
 </div>
 
-<!-- Delete Modal -->
-<div id=\"deleteModal\" class=\"modal\">
-    <div class=\"modal-backdrop\" onclick=\"closeDeleteModal()\"></div>
-    <div class=\"modal-content\">
-        <div class=\"modal-header\">
-            <div class=\"modal-icon danger\">
-                <i data-lucide=\"alert-triangle\"></i>
+<!-- Content -->
+<div id=\"kt_app_content\" class=\"app-content flex-column-fluid\">
+    <div id=\"kt_app_content_container\" class=\"app-container container-xxl\">
+        
+        <div class=\"d-flex flex-column flex-lg-row\">
+            <!-- Sidebar -->
+            <div class=\"flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-400px mb-10 mb-lg-0\">
+                <div class=\"card card-flush\">
+                    <div class=\"card-header\">
+                        <div class=\"card-title\">
+                            <h2>Statistiques du Projet</h2>
+                        </div>
+                    </div>
+                    <div class=\"card-body pt-0\">
+                        <div class=\"d-flex flex-center flex-column mb-10\">
+                            <div class=\"symbol symbol-100px symbol-circle mb-7\">
+                                <span class=\"symbol-label bg-light-primary text-primary fs-5x fw-bold\">";
+        // line 54
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::upper($this->env->getCharset(), Twig\Extension\CoreExtension::first($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 54, $this->source); })()), "name", [], "any", false, false, false, 54))), "html", null, true);
+        yield "</span>
+                            </div>
+                            <span class=\"fs-3 text-gray-800 fw-bold mb-1\">";
+        // line 56
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 56, $this->source); })()), "name", [], "any", false, false, false, 56), "html", null, true);
+        yield "</span>
+                            <div class=\"fs-5 fw-semibold text-muted mb-6\">";
+        // line 57
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 57, $this->source); })()), "sectorLabel", [], "any", false, false, false, 57), "html", null, true);
+        yield "</div>
+                        </div>
+
+                        <div class=\"d-flex flex-stack fs-4 py-3\">
+                            <div class=\"fw-bold\">Statut</div>
+                            ";
+        // line 62
+        $context["statusColor"] = (((CoreExtension::getAttribute($this->env, $this->source, ["termine" => "success", "en-cours" => "primary", "en-retard" => "danger", "planifie" => "info"], CoreExtension::getAttribute($this->env, $this->source,         // line 67
+(isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 67, $this->source); })()), "status", [], "any", false, false, false, 67), [], "array", true, true, false, 63) &&  !(null === CoreExtension::getAttribute($this->env, $this->source, ["termine" => "success", "en-cours" => "primary", "en-retard" => "danger", "planifie" => "info"], CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 67, $this->source); })()), "status", [], "any", false, false, false, 67), [], "array", false, false, false, 63)))) ? (CoreExtension::getAttribute($this->env, $this->source, ["termine" => "success", "en-cours" => "primary", "en-retard" => "danger", "planifie" => "info"], CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 67, $this->source); })()), "status", [], "any", false, false, false, 67), [], "array", false, false, false, 63)) : ("secondary"));
+        // line 68
+        yield "                            <div class=\"badge badge-light-";
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape((isset($context["statusColor"]) || array_key_exists("statusColor", $context) ? $context["statusColor"] : (function () { throw new RuntimeError('Variable "statusColor" does not exist.', 68, $this->source); })()), "html", null, true);
+        yield " fs-6\">";
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 68, $this->source); })()), "statusLabel", [], "any", false, false, false, 68), "html", null, true);
+        yield "</div>
+                        </div>
+                        <div class=\"separator separator-dashed my-3\"></div>
+                        <div class=\"d-flex flex-stack fs-4 py-3\">
+                            <div class=\"fw-bold\">Budget Total</div>
+                            <span class=\"text-gray-800 fw-bolder fs-5\">";
+        // line 73
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 73, $this->source); })()), "budgetTotal", [], "any", false, false, false, 73), 0, ",", " "), "html", null, true);
+        yield " FCFA</span>
+                        </div>
+                        <div class=\"separator separator-dashed my-3\"></div>
+                        <div class=\"d-flex flex-stack fs-4 py-3\">
+                            <div class=\"fw-bold\">Décaissé</div>
+                            <span class=\"text-gray-800 fw-bolder fs-5\">";
+        // line 78
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 78, $this->source); })()), "montantDecaisse", [], "any", false, false, false, 78), 0, ",", " "), "html", null, true);
+        yield " FCFA</span>
+                        </div>
+                        <div class=\"separator separator-dashed my-3\"></div>
+                        <div class=\"d-flex flex-column py-3\">
+                            <div class=\"fw-bold mb-2\">Progression</div>
+                            <div class=\"d-flex align-items-center\">
+                                <div class=\"progress h-8px w-100 me-2\">
+                                    <div class=\"progress-bar bg-primary\" role=\"progressbar\" style=\"width: ";
+        // line 85
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 85, $this->source); })()), "progress", [], "any", false, false, false, 85), "html", null, true);
+        yield "%;\"></div>
+                                </div>
+                                <span class=\"text-muted fs-7 fw-bold\">";
+        // line 87
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 87, $this->source); })()), "progress", [], "any", false, false, false, 87), "html", null, true);
+        yield "%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h3>Confirmer la suppression</h3>
-            <p>Êtes-vous sûr de vouloir supprimer le projet \"";
-        // line 293
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 293, $this->source); })()), "name", [], "any", false, false, false, 293), "html", null, true);
+
+            <!-- Content Area -->
+            <div class=\"flex-lg-row-fluid ms-lg-15\">
+                <!-- Navigation Tabs -->
+                <ul class=\"nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8\">
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4 active\" data-bs-toggle=\"tab\" href=\"#kt_project_overview\">Vue d'ensemble</a>
+                    </li>
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4\" data-bs-toggle=\"tab\" href=\"#kt_project_financements\">Financements</a>
+                    </li>
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4\" data-bs-toggle=\"tab\" href=\"#kt_project_decaissements\">Décaissements</a>
+                    </li>
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4\" data-bs-toggle=\"tab\" href=\"#kt_project_conventions\">Conventions</a>
+                    </li>
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4\" data-bs-toggle=\"tab\" href=\"#kt_project_audits\">Audits</a>
+                    </li>
+                </ul>
+
+                <div class=\"tab-content\" id=\"projectTabContent\">
+                    <!-- Overview Tab -->
+                    <div class=\"tab-pane fade show active\" id=\"kt_project_overview\" role=\"tabpanel\">
+                        <div class=\"card card-flush mb-5 mb-xl-10\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Informations Générales</h3>
+                            </div>
+                            <div class=\"card-body\">
+                                <div class=\"row mb-7\">
+                                    <label class=\"col-lg-4 fw-semibold text-muted\">Description</label>
+                                    <div class=\"col-lg-8\">
+                                        <span class=\"fw-bold fs-6 text-gray-800\">";
+        // line 126
+        yield Twig\Extension\CoreExtension::nl2br($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 126, $this->source); })()), "description", [], "any", false, false, false, 126), "html", null, true));
+        yield "</span>
+                                    </div>
+                                </div>
+                                <div class=\"row mb-7\">
+                                    <label class=\"col-lg-4 fw-semibold text-muted\">Institution Responsable</label>
+                                    <div class=\"col-lg-8\">
+                                        <span class=\"fw-bold fs-6 text-gray-800\">";
+        // line 132
+        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 132, $this->source); })()), "institution", [], "any", false, false, false, 132)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 132, $this->source); })()), "institution", [], "any", false, false, false, 132), "name", [], "any", false, false, false, 132), "html", null, true)) : ("N/A"));
+        yield "</span>
+                                    </div>
+                                </div>
+                                <div class=\"row mb-7\">
+                                    <label class=\"col-lg-4 fw-semibold text-muted\">Période</label>
+                                    <div class=\"col-lg-8\">
+                                        <span class=\"fw-bold fs-6 text-gray-800\">Du ";
+        // line 138
+        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 138, $this->source); })()), "dateDebut", [], "any", false, false, false, 138)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 138, $this->source); })()), "dateDebut", [], "any", false, false, false, 138), "d/m/Y"), "html", null, true)) : ("N/A"));
+        yield " au ";
+        yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 138, $this->source); })()), "dateFin", [], "any", false, false, false, 138)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 138, $this->source); })()), "dateFin", [], "any", false, false, false, 138), "d/m/Y"), "html", null, true)) : ("N/A"));
+        yield "</span>
+                                    </div>
+                                </div>
+                                <div class=\"row mb-7\">
+                                    <label class=\"col-lg-4 fw-semibold text-muted\">Localisation</label>
+                                    <div class=\"col-lg-8\">
+                                        <span class=\"fw-bold fs-6 text-gray-800\">";
+        // line 144
+        yield (((CoreExtension::getAttribute($this->env, $this->source, ($context["project"] ?? null), "localisation", [], "any", true, true, false, 144) &&  !(null === CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 144, $this->source); })()), "localisation", [], "any", false, false, false, 144)))) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 144, $this->source); })()), "localisation", [], "any", false, false, false, 144), "html", null, true)) : ("Non précisée"));
+        yield "</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financements Tab -->
+                    <div class=\"tab-pane fade\" id=\"kt_project_financements\" role=\"tabpanel\">
+                        <div class=\"card card-flush\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Financements associés</h3>
+                            </div>
+                            <div class=\"card-body pt-0\">
+                                <div class=\"table-responsive\">
+                                    <table class=\"table align-middle table-row-dashed fs-6 gy-5\">
+                                        <thead>
+                                            <tr class=\"text-start text-muted fw-bold fs-7 text-uppercase gs-0\">
+                                                <th>Bailleur</th>
+                                                <th>Type</th>
+                                                <th class=\"text-end\">Engagé</th>
+                                                <th class=\"text-end\">Décaissé</th>
+                                                <th class=\"text-end\">Taux</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=\"text-gray-600 fw-semibold\">
+                                            ";
+        // line 170
+        $context['_parent'] = $context;
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 170, $this->source); })()), "financements", [], "any", false, false, false, 170));
+        $context['_iterated'] = false;
+        foreach ($context['_seq'] as $context["_key"] => $context["financement"]) {
+            // line 171
+            yield "                                                <tr>
+                                                    <td>";
+            // line 172
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, $context["financement"], "bailleur", [], "any", false, false, false, 172), "name", [], "any", false, false, false, 172), "html", null, true);
+            yield "</td>
+                                                    <td>";
+            // line 173
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["financement"], "typeLabel", [], "any", false, false, false, 173), "html", null, true);
+            yield "</td>
+                                                    <td class=\"text-end\">";
+            // line 174
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, $context["financement"], "montantEngage", [], "any", false, false, false, 174), 0, ",", " "), "html", null, true);
+            yield "</td>
+                                                    <td class=\"text-end\">";
+            // line 175
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, $context["financement"], "montantDecaisse", [], "any", false, false, false, 175), 0, ",", " "), "html", null, true);
+            yield "</td>
+                                                    <td class=\"text-end\">
+                                                        <span class=\"badge badge-light-primary\">";
+            // line 177
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["financement"], "tauxDecaissement", [], "any", false, false, false, 177), "html", null, true);
+            yield "%</span>
+                                                    </td>
+                                                </tr>
+                                            ";
+            $context['_iterated'] = true;
+        }
+        // line 180
+        if (!$context['_iterated']) {
+            // line 181
+            yield "                                                <tr><td colspan=\"5\" class=\"text-center\">Aucun financement trouvé</td></tr>
+                                            ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_key'], $context['financement'], $context['_parent'], $context['_iterated']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 183
+        yield "                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Décaissements Tab -->
+                    <div class=\"tab-pane fade\" id=\"kt_project_decaissements\" role=\"tabpanel\">
+                        <div class=\"card card-flush\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Décaissements récents</h3>
+                            </div>
+                            <div class=\"card-body pt-0\">
+                                <div class=\"table-responsive\">
+                                    <table class=\"table align-middle table-row-dashed fs-6 gy-5\">
+                                        <thead>
+                                            <tr class=\"text-start text-muted fw-bold fs-7 text-uppercase gs-0\">
+                                                <th>Réf</th>
+                                                <th>Date</th>
+                                                <th class=\"text-end\">Montant</th>
+                                                <th class=\"text-center\">Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=\"text-gray-600 fw-semibold\">
+                                            ";
+        // line 208
+        $context['_parent'] = $context;
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 208, $this->source); })()), "decaissements", [], "any", false, false, false, 208));
+        $context['_iterated'] = false;
+        foreach ($context['_seq'] as $context["_key"] => $context["decaissement"]) {
+            // line 209
+            yield "                                                <tr>
+                                                    <td>";
+            // line 210
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["decaissement"], "reference", [], "any", false, false, false, 210), "html", null, true);
+            yield "</td>
+                                                    <td>";
+            // line 211
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, $context["decaissement"], "createdAt", [], "any", false, false, false, 211), "d/m/Y"), "html", null, true);
+            yield "</td>
+                                                    <td class=\"text-end\">";
+            // line 212
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, $context["decaissement"], "montant", [], "any", false, false, false, 212), 0, ",", " "), "html", null, true);
+            yield " FCFA</td>
+                                                    <td class=\"text-center\">
+                                                        <span class=\"badge badge-light-success\">";
+            // line 214
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["decaissement"], "statut", [], "any", false, false, false, 214), "html", null, true);
+            yield "</span>
+                                                    </td>
+                                                </tr>
+                                            ";
+            $context['_iterated'] = true;
+        }
+        // line 217
+        if (!$context['_iterated']) {
+            // line 218
+            yield "                                                <tr><td colspan=\"4\" class=\"text-center\">Aucun décaissement trouvé</td></tr>
+                                            ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_key'], $context['decaissement'], $context['_parent'], $context['_iterated']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 220
+        yield "                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conventions Tab -->
+                    <div class=\"tab-pane fade\" id=\"kt_project_conventions\" role=\"tabpanel\">
+                        <div class=\"card card-flush\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Conventions de financement</h3>
+                            </div>
+                            <div class=\"card-body pt-0\">
+                                <div class=\"table-responsive\">
+                                    <table class=\"table align-middle table-row-dashed fs-6 gy-5\">
+                                        <thead>
+                                            <tr class=\"text-start text-muted fw-bold fs-7 text-uppercase gs-0\">
+                                                <th>Code</th>
+                                                <th>Intitulé</th>
+                                                <th class=\"text-end\">Montant</th>
+                                                <th class=\"text-center\">Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=\"text-gray-600 fw-semibold\">
+                                            ";
+        // line 245
+        $context['_parent'] = $context;
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 245, $this->source); })()), "conventions", [], "any", false, false, false, 245));
+        $context['_iterated'] = false;
+        foreach ($context['_seq'] as $context["_key"] => $context["convention"]) {
+            // line 246
+            yield "                                                <tr>
+                                                    <td>";
+            // line 247
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["convention"], "code", [], "any", false, false, false, 247), "html", null, true);
+            yield "</td>
+                                                    <td>";
+            // line 248
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["convention"], "intitule", [], "any", false, false, false, 248), "html", null, true);
+            yield "</td>
+                                                    <td class=\"text-end\">";
+            // line 249
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, $context["convention"], "montantGlobal", [], "any", false, false, false, 249), 0, ",", " "), "html", null, true);
+            yield "</td>
+                                                    <td class=\"text-center\">
+                                                        <span class=\"badge badge-light-info\">";
+            // line 251
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["convention"], "statut", [], "any", false, false, false, 251), "html", null, true);
+            yield "</span>
+                                                    </td>
+                                                </tr>
+                                            ";
+            $context['_iterated'] = true;
+        }
+        // line 254
+        if (!$context['_iterated']) {
+            // line 255
+            yield "                                                <tr><td colspan=\"4\" class=\"text-center\">Aucune convention trouvée</td></tr>
+                                            ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_key'], $context['convention'], $context['_parent'], $context['_iterated']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 257
+        yield "                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audits Tab -->
+                    <div class=\"tab-pane fade\" id=\"kt_project_audits\" role=\"tabpanel\">
+                        <div class=\"card card-flush\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Missions d'audit</h3>
+                            </div>
+                            <div class=\"card-body pt-0\">
+                                <div class=\"table-responsive\">
+                                    <table class=\"table align-middle table-row-dashed fs-6 gy-5\">
+                                        <thead>
+                                            <tr class=\"text-start text-muted fw-bold fs-7 text-uppercase gs-0\">
+                                                <th>Titre</th>
+                                                <th>Date</th>
+                                                <th class=\"text-center\">Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=\"text-gray-600 fw-semibold\">
+                                            ";
+        // line 281
+        $context['_parent'] = $context;
+        $context['_seq'] = CoreExtension::ensureTraversable(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 281, $this->source); })()), "audits", [], "any", false, false, false, 281));
+        $context['_iterated'] = false;
+        foreach ($context['_seq'] as $context["_key"] => $context["audit"]) {
+            // line 282
+            yield "                                                <tr>
+                                                    <td>";
+            // line 283
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "title", [], "any", false, false, false, 283), "html", null, true);
+            yield "</td>
+                                                    <td>";
+            // line 284
+            yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "dateAudit", [], "any", false, false, false, 284)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "dateAudit", [], "any", false, false, false, 284), "d/m/Y"), "html", null, true)) : ("N/A"));
+            yield "</td>
+                                                    <td class=\"text-center\">
+                                                        <span class=\"badge badge-light-warning\">";
+            // line 286
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["audit"], "statut", [], "any", false, false, false, 286), "html", null, true);
+            yield "</span>
+                                                    </td>
+                                                </tr>
+                                            ";
+            $context['_iterated'] = true;
+        }
+        // line 289
+        if (!$context['_iterated']) {
+            // line 290
+            yield "                                                <tr><td colspan=\"3\" class=\"text-center\">Aucun audit trouvé</td></tr>
+                                            ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_key'], $context['audit'], $context['_parent'], $context['_iterated']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 292
+        yield "                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Modal -->
+        <div class=\"modal fade\" id=\"kt_modal_delete_project\" tabindex=\"-1\" aria-hidden=\"true\">
+            <div class=\"modal-dialog modal-dialog-centered mw-650px\">
+                <div class=\"modal-content\">
+                    <div class=\"modal-header\">
+                        <h2 class=\"fw-bold\">Confirmer la suppression</h2>
+                        <div class=\"btn btn-icon btn-sm btn-active-icon-primary\" data-bs-dismiss=\"modal\">
+                            <i class=\"ki-outline ki-cross fs-1\"></i>
+                        </div>
+                    </div>
+                    <div class=\"modal-body scroll-y mx-5 mx-xl-15 my-7\">
+                        <div class=\"text-center\">
+                            <i class=\"ki-outline ki-information-5 text-danger fs-5x mb-5\"></i>
+                            <p class=\"text-gray-700 fs-4 fw-semibold py-5\">Voulez-vous vraiment supprimer le projet \"";
+        // line 315
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 315, $this->source); })()), "name", [], "any", false, false, false, 315), "html", null, true);
         yield "\" ?</p>
-            <p class=\"warning-text\">Cette action est irréversible.</p>
-        </div>
-        <div class=\"modal-actions\">
-            <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeDeleteModal()\">Annuler</button>
-            <form action=\"";
-        // line 298
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects_delete", ["id" => CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 298, $this->source); })()), "id", [], "any", false, false, false, 298)]), "html", null, true);
-        yield "\" method=\"POST\" style=\"display: inline;\">
-                <input type=\"hidden\" name=\"_token\" value=\"";
-        // line 299
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderCsrfToken(("delete" . CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 299, $this->source); })()), "id", [], "any", false, false, false, 299))), "html", null, true);
+                        </div>
+                    </div>
+                    <div class=\"modal-footer flex-center\">
+                        <button type=\"button\" class=\"btn btn-light me-3\" data-bs-dismiss=\"modal\">Annuler</button>
+                        <form action=\"";
+        // line 320
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_projects_delete", ["id" => CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 320, $this->source); })()), "id", [], "any", false, false, false, 320)]), "html", null, true);
+        yield "\" method=\"post\">
+                            <input type=\"hidden\" name=\"_token\" value=\"";
+        // line 321
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->env->getRuntime('Symfony\Component\Form\FormRenderer')->renderCsrfToken(("delete" . CoreExtension::getAttribute($this->env, $this->source, (isset($context["project"]) || array_key_exists("project", $context) ? $context["project"] : (function () { throw new RuntimeError('Variable "project" does not exist.', 321, $this->source); })()), "id", [], "any", false, false, false, 321))), "html", null, true);
         yield "\">
-                <button type=\"submit\" class=\"btn btn-danger\">
-                    <i data-lucide=\"trash-2\"></i>
-                    Supprimer
-                </button>
-            </form>
+                            <button type=\"submit\" class=\"btn btn-danger\">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 ";
@@ -610,7 +587,7 @@ class __TwigTemplate_569030e87745e278ea931ac40f2ef073 extends Template
         yield from [];
     }
 
-    // line 310
+    // line 333
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -620,25 +597,12 @@ class __TwigTemplate_569030e87745e278ea931ac40f2ef073 extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 311
-        yield "<script>
-    lucide.createIcons();
-
-    function openDeleteModal() {
-        document.getElementById('deleteModal').classList.add('show');
-        lucide.createIcons();
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('show');
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeDeleteModal();
-        }
-    });
-</script>
+        // line 334
+        yield "    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        });
+    </script>
 ";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
@@ -667,340 +631,350 @@ class __TwigTemplate_569030e87745e278ea931ac40f2ef073 extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  624 => 311,  614 => 310,  596 => 299,  592 => 298,  584 => 293,  564 => 276,  555 => 270,  551 => 269,  543 => 264,  537 => 260,  530 => 256,  522 => 250,  520 => 249,  511 => 243,  504 => 239,  497 => 235,  490 => 231,  476 => 219,  470 => 216,  466 => 214,  463 => 213,  457 => 210,  453 => 208,  451 => 207,  446 => 205,  439 => 201,  425 => 189,  419 => 186,  415 => 184,  412 => 183,  406 => 180,  402 => 178,  399 => 177,  393 => 174,  389 => 172,  387 => 171,  382 => 169,  368 => 157,  359 => 153,  357 => 152,  352 => 149,  350 => 148,  345 => 146,  338 => 142,  326 => 132,  319 => 128,  311 => 122,  309 => 121,  297 => 112,  285 => 103,  273 => 94,  261 => 85,  246 => 73,  234 => 72,  218 => 69,  208 => 61,  202 => 58,  198 => 56,  195 => 55,  189 => 52,  185 => 50,  183 => 49,  178 => 47,  171 => 43,  164 => 41,  158 => 40,  152 => 39,  145 => 35,  141 => 34,  124 => 20,  115 => 14,  109 => 10,  99 => 9,  88 => 6,  78 => 5,  60 => 3,  43 => 1,);
+        return array (  601 => 334,  591 => 333,  572 => 321,  568 => 320,  560 => 315,  535 => 292,  528 => 290,  526 => 289,  518 => 286,  513 => 284,  509 => 283,  506 => 282,  501 => 281,  475 => 257,  468 => 255,  466 => 254,  458 => 251,  453 => 249,  449 => 248,  445 => 247,  442 => 246,  437 => 245,  410 => 220,  403 => 218,  401 => 217,  393 => 214,  388 => 212,  384 => 211,  380 => 210,  377 => 209,  372 => 208,  345 => 183,  338 => 181,  336 => 180,  328 => 177,  323 => 175,  319 => 174,  315 => 173,  311 => 172,  308 => 171,  303 => 170,  274 => 144,  263 => 138,  254 => 132,  245 => 126,  203 => 87,  198 => 85,  188 => 78,  180 => 73,  169 => 68,  167 => 67,  166 => 62,  158 => 57,  154 => 56,  149 => 54,  120 => 28,  108 => 19,  99 => 13,  93 => 10,  87 => 6,  77 => 5,  59 => 3,  42 => 1,);
     }
 
     public function getSourceContext(): Source
     {
         return new Source("{% extends 'base.html.twig' %}
 
-{% block title %}{{ project.name }} - SIGEP Tchad{% endblock %}
-
-{% block stylesheets %}
-<link rel=\"stylesheet\" href=\"{{ asset('css/project-show.css') }}\">
-{% endblock %}
+{% block title %}{{ project.name }} - Détails - SIGEP Tchad{% endblock %}
 
 {% block body %}
-<div class=\"content-area\">
-    <!-- Page Header -->
-    <div class=\"page-header\">
-        <div class=\"page-header-left\">
-            <a href=\"{{ path('app_projects') }}\" class=\"back-link\">
-                <i data-lucide=\"arrow-left\"></i>
-                Retour aux projets
-            </a>
+<!-- Toolbar -->
+<div id=\"kt_app_toolbar\" class=\"app-toolbar py-3 py-lg-6\">
+    <div id=\"kt_app_toolbar_container\" class=\"app-container container-xxl d-flex flex-stack\">
+        <div class=\"page-title d-flex flex-column justify-content-center flex-wrap me-3\">
+            <h1 class=\"page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0\">{{ project.name }}</h1>
+            <ul class=\"breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1\">
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"{{ path('app_dashboard') }}\" class=\"text-muted text-hover-primary\">Accueil</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"{{ path('app_projects') }}\" class=\"text-muted text-hover-primary\">Projets</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">Fiche projet</li>
+            </ul>
         </div>
-        <div class=\"page-header-actions\">
-            <a href=\"{{ path('app_projects_edit', {id: project.id}) }}\" class=\"btn btn-primary\">
-                <i data-lucide=\"edit-3\"></i>
-                Modifier
+        <div class=\"d-flex align-items-center gap-2 gap-lg-3\">
+            <a href=\"{{ path('app_projects_edit', {id: project.id}) }}\" class=\"btn btn-sm btn-primary\">
+                <i class=\"ki-outline ki-pencil fs-2\"></i> Modifier
             </a>
-            <button type=\"button\" class=\"btn btn-danger-outline\" onclick=\"openDeleteModal()\">
-                <i data-lucide=\"trash-2\"></i>
-                Supprimer
+            <button type=\"button\" class=\"btn btn-sm btn-light-danger\" data-bs-toggle=\"modal\" data-bs-target=\"#kt_modal_delete_project\">
+                <i class=\"ki-outline ki-trash fs-2\"></i> Supprimer
             </button>
-        </div>
-    </div>
-
-    <!-- Project Hero Card -->
-    <div class=\"project-hero\">
-        <div class=\"project-hero-header\">
-            <div class=\"project-icon-large {{ project.sector }}\">
-                <i data-lucide=\"{{ project.sectorIcon }}\"></i>
-            </div>
-            <div class=\"project-hero-info\">
-                <div class=\"project-badges\">
-                    <span class=\"sector-badge {{ project.sector }}\">{{ project.sectorLabel }}</span>
-                    <span class=\"status-badge {{ project.status }}\">{{ project.statusLabel }}</span>
-                    <span class=\"priority-badge {{ project.priorite }}\">{{ project.prioriteLabel }}</span>
-                </div>
-                <h1>{{ project.name }}</h1>
-                <div class=\"project-meta\">
-                    <span class=\"project-code\">
-                        <i data-lucide=\"hash\"></i>
-                        {{ project.code }}
-                    </span>
-                    {% if project.localisation %}
-                    <span class=\"project-location\">
-                        <i data-lucide=\"map-pin\"></i>
-                        {{ project.localisation }}
-                    </span>
-                    {% endif %}
-                    {% if project.maitreOuvrage %}
-                    <span class=\"project-owner\">
-                        <i data-lucide=\"building\"></i>
-                        {{ project.maitreOuvrage }}
-                    </span>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Progress Section -->
-        <div class=\"project-progress-section\">
-            <div class=\"progress-header\">
-                <span class=\"progress-label\">Progression globale</span>
-                <span class=\"progress-value {% if project.progress >= 80 %}green{% elseif project.progress >= 50 %}blue{% elseif project.progress >= 25 %}gold{% else %}red{% endif %}\">{{ project.progress }}%</span>
-            </div>
-            <div class=\"progress-bar-large\">
-                <div class=\"progress-fill-large {% if project.progress >= 80 %}green{% elseif project.progress >= 50 %}blue{% elseif project.progress >= 25 %}gold{% else %}red{% endif %}\" 
-                     style=\"width: {{ project.progress }}%\"></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Stats Cards -->
-    <div class=\"stats-grid\">
-        <div class=\"stat-card\">
-            <div class=\"stat-icon blue\">
-                <i data-lucide=\"wallet\"></i>
-            </div>
-            <div class=\"stat-content\">
-                <span class=\"stat-value\">{{ project.budgetTotal|number_format(2, ',', ' ') }}</span>
-                <span class=\"stat-label\">Budget total (Mds FCFA)</span>
-            </div>
-        </div>
-        <div class=\"stat-card\">
-            <div class=\"stat-icon green\">
-                <i data-lucide=\"banknote\"></i>
-            </div>
-            <div class=\"stat-content\">
-                <span class=\"stat-value\">{{ project.montantDecaisse|number_format(2, ',', ' ') }}</span>
-                <span class=\"stat-label\">Montant décaissé (Mds FCFA)</span>
-            </div>
-        </div>
-        <div class=\"stat-card\">
-            <div class=\"stat-icon gold\">
-                <i data-lucide=\"percent\"></i>
-            </div>
-            <div class=\"stat-content\">
-                <span class=\"stat-value\">{{ project.tauxDecaissement }}%</span>
-                <span class=\"stat-label\">Taux de décaissement</span>
-            </div>
-        </div>
-        <div class=\"stat-card\">
-            <div class=\"stat-icon purple\">
-                <i data-lucide=\"users\"></i>
-            </div>
-            <div class=\"stat-content\">
-                <span class=\"stat-value\">{{ project.beneficiaires|default('N/A') }}</span>
-                <span class=\"stat-label\">Bénéficiaires</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Details Grid -->
-    <div class=\"details-grid\">
-        <!-- Description -->
-        {% if project.description %}
-        <div class=\"detail-card full-width\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"file-text\"></i>
-                <h3>Description</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <p>{{ project.description|nl2br }}</p>
-            </div>
-        </div>
-        {% endif %}
-
-        <!-- Dates -->
-        <div class=\"detail-card\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"calendar\"></i>
-                <h3>Planning</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Date de début</span>
-                    <span class=\"detail-value\">{{ project.dateDebut ? project.dateDebut|date('d/m/Y') : 'Non définie' }}</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Date de fin prévue</span>
-                    <span class=\"detail-value\">{{ project.dateFin ? project.dateFin|date('d/m/Y') : 'Non définie' }}</span>
-                </div>
-                {% if project.dateDebut and project.dateFin %}
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Durée</span>
-                    <span class=\"detail-value\">
-                        {% set diff = project.dateFin.diff(project.dateDebut) %}
-                        {{ diff.y > 0 ? diff.y ~ ' an(s) ' : '' }}{{ diff.m > 0 ? diff.m ~ ' mois' : '' }}
-                    </span>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Financement -->
-        <div class=\"detail-card\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"coins\"></i>
-                <h3>Financement</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Source</span>
-                    <span class=\"detail-value\">{{ project.sourceFinancement|default('Non spécifiée') }}</span>
-                </div>
-                {% if project.financementNational %}
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">National</span>
-                    <span class=\"detail-value\">{{ project.financementNational|number_format(2, ',', ' ') }} Mds FCFA</span>
-                </div>
-                {% endif %}
-                {% if project.financementPartenaires %}
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Partenaires</span>
-                    <span class=\"detail-value\">{{ project.financementPartenaires|number_format(2, ',', ' ') }} Mds FCFA</span>
-                </div>
-                {% endif %}
-                {% if project.financementAutre %}
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Autres</span>
-                    <span class=\"detail-value\">{{ project.financementAutre|number_format(2, ',', ' ') }} Mds FCFA</span>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Responsables -->
-        <div class=\"detail-card\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"users\"></i>
-                <h3>Responsables</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Maître d'ouvrage</span>
-                    <span class=\"detail-value\">{{ project.maitreOuvrage|default('Non défini') }}</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Chef de projet</span>
-                    <span class=\"detail-value\">{{ project.chefProjet|default('Non défini') }}</span>
-                </div>
-                {% if project.institution %}
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Institution</span>
-                    <span class=\"detail-value\">{{ project.institution.name }}</span>
-                </div>
-                {% endif %}
-                {% if project.partnerPrincipal %}
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Partenaire principal</span>
-                    <span class=\"detail-value\">{{ project.partnerPrincipal.name }}</span>
-                </div>
-                {% endif %}
-            </div>
-        </div>
-
-        <!-- Informations système -->
-        <div class=\"detail-card\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"info\"></i>
-                <h3>Informations système</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">ID</span>
-                    <span class=\"detail-value\">#{{ project.id }}</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Slug</span>
-                    <span class=\"detail-value code\">{{ project.slug }}</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Créé le</span>
-                    <span class=\"detail-value\">{{ project.createdAt ? project.createdAt|date('d/m/Y à H:i') : 'N/A' }}</span>
-                </div>
-                <div class=\"detail-row\">
-                    <span class=\"detail-label\">Dernière modification</span>
-                    <span class=\"detail-value\">{{ project.updatedAt ? project.updatedAt|date('d/m/Y à H:i') : 'Jamais' }}</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- Notes -->
-        {% if project.notes %}
-        <div class=\"detail-card full-width\">
-            <div class=\"detail-card-header\">
-                <i data-lucide=\"sticky-note\"></i>
-                <h3>Notes</h3>
-            </div>
-            <div class=\"detail-card-body\">
-                <p>{{ project.notes|nl2br }}</p>
-            </div>
-        </div>
-        {% endif %}
-    </div>
-
-    <!-- Action Bar -->
-    <div class=\"action-bar\">
-        <a href=\"{{ path('app_projects') }}\" class=\"btn btn-outline\">
-            <i data-lucide=\"arrow-left\"></i>
-            Retour à la liste
-        </a>
-        <div class=\"action-bar-right\">
-            <form action=\"{{ path('app_projects_duplicate', {id: project.id}) }}\" method=\"POST\" style=\"display: inline;\">
-                <input type=\"hidden\" name=\"_token\" value=\"{{ csrf_token('duplicate' ~ project.id) }}\">
-                <button type=\"submit\" class=\"btn btn-secondary\">
-                    <i data-lucide=\"copy\"></i>
-                    Dupliquer
-                </button>
-            </form>
-            <a href=\"{{ path('app_projects_edit', {id: project.id}) }}\" class=\"btn btn-primary\">
-                <i data-lucide=\"edit-3\"></i>
-                Modifier
-            </a>
         </div>
     </div>
 </div>
 
-<!-- Delete Modal -->
-<div id=\"deleteModal\" class=\"modal\">
-    <div class=\"modal-backdrop\" onclick=\"closeDeleteModal()\"></div>
-    <div class=\"modal-content\">
-        <div class=\"modal-header\">
-            <div class=\"modal-icon danger\">
-                <i data-lucide=\"alert-triangle\"></i>
+<!-- Content -->
+<div id=\"kt_app_content\" class=\"app-content flex-column-fluid\">
+    <div id=\"kt_app_content_container\" class=\"app-container container-xxl\">
+        
+        <div class=\"d-flex flex-column flex-lg-row\">
+            <!-- Sidebar -->
+            <div class=\"flex-column flex-lg-row-auto w-100 w-lg-300px w-xl-400px mb-10 mb-lg-0\">
+                <div class=\"card card-flush\">
+                    <div class=\"card-header\">
+                        <div class=\"card-title\">
+                            <h2>Statistiques du Projet</h2>
+                        </div>
+                    </div>
+                    <div class=\"card-body pt-0\">
+                        <div class=\"d-flex flex-center flex-column mb-10\">
+                            <div class=\"symbol symbol-100px symbol-circle mb-7\">
+                                <span class=\"symbol-label bg-light-primary text-primary fs-5x fw-bold\">{{ project.name|first|upper }}</span>
+                            </div>
+                            <span class=\"fs-3 text-gray-800 fw-bold mb-1\">{{ project.name }}</span>
+                            <div class=\"fs-5 fw-semibold text-muted mb-6\">{{ project.sectorLabel }}</div>
+                        </div>
+
+                        <div class=\"d-flex flex-stack fs-4 py-3\">
+                            <div class=\"fw-bold\">Statut</div>
+                            {% set statusColor = {
+                                'termine': 'success',
+                                'en-cours': 'primary',
+                                'en-retard': 'danger',
+                                'planifie': 'info'
+                            }[project.status] ?? 'secondary' %}
+                            <div class=\"badge badge-light-{{ statusColor }} fs-6\">{{ project.statusLabel }}</div>
+                        </div>
+                        <div class=\"separator separator-dashed my-3\"></div>
+                        <div class=\"d-flex flex-stack fs-4 py-3\">
+                            <div class=\"fw-bold\">Budget Total</div>
+                            <span class=\"text-gray-800 fw-bolder fs-5\">{{ project.budgetTotal|number_format(0, ',', ' ') }} FCFA</span>
+                        </div>
+                        <div class=\"separator separator-dashed my-3\"></div>
+                        <div class=\"d-flex flex-stack fs-4 py-3\">
+                            <div class=\"fw-bold\">Décaissé</div>
+                            <span class=\"text-gray-800 fw-bolder fs-5\">{{ project.montantDecaisse|number_format(0, ',', ' ') }} FCFA</span>
+                        </div>
+                        <div class=\"separator separator-dashed my-3\"></div>
+                        <div class=\"d-flex flex-column py-3\">
+                            <div class=\"fw-bold mb-2\">Progression</div>
+                            <div class=\"d-flex align-items-center\">
+                                <div class=\"progress h-8px w-100 me-2\">
+                                    <div class=\"progress-bar bg-primary\" role=\"progressbar\" style=\"width: {{ project.progress }}%;\"></div>
+                                </div>
+                                <span class=\"text-muted fs-7 fw-bold\">{{ project.progress }}%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <h3>Confirmer la suppression</h3>
-            <p>Êtes-vous sûr de vouloir supprimer le projet \"{{ project.name }}\" ?</p>
-            <p class=\"warning-text\">Cette action est irréversible.</p>
+
+            <!-- Content Area -->
+            <div class=\"flex-lg-row-fluid ms-lg-15\">
+                <!-- Navigation Tabs -->
+                <ul class=\"nav nav-custom nav-tabs nav-line-tabs nav-line-tabs-2x border-0 fs-4 fw-semibold mb-8\">
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4 active\" data-bs-toggle=\"tab\" href=\"#kt_project_overview\">Vue d'ensemble</a>
+                    </li>
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4\" data-bs-toggle=\"tab\" href=\"#kt_project_financements\">Financements</a>
+                    </li>
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4\" data-bs-toggle=\"tab\" href=\"#kt_project_decaissements\">Décaissements</a>
+                    </li>
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4\" data-bs-toggle=\"tab\" href=\"#kt_project_conventions\">Conventions</a>
+                    </li>
+                    <li class=\"nav-item\">
+                        <a class=\"nav-link text-active-primary pb-4\" data-bs-toggle=\"tab\" href=\"#kt_project_audits\">Audits</a>
+                    </li>
+                </ul>
+
+                <div class=\"tab-content\" id=\"projectTabContent\">
+                    <!-- Overview Tab -->
+                    <div class=\"tab-pane fade show active\" id=\"kt_project_overview\" role=\"tabpanel\">
+                        <div class=\"card card-flush mb-5 mb-xl-10\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Informations Générales</h3>
+                            </div>
+                            <div class=\"card-body\">
+                                <div class=\"row mb-7\">
+                                    <label class=\"col-lg-4 fw-semibold text-muted\">Description</label>
+                                    <div class=\"col-lg-8\">
+                                        <span class=\"fw-bold fs-6 text-gray-800\">{{ project.description|nl2br }}</span>
+                                    </div>
+                                </div>
+                                <div class=\"row mb-7\">
+                                    <label class=\"col-lg-4 fw-semibold text-muted\">Institution Responsable</label>
+                                    <div class=\"col-lg-8\">
+                                        <span class=\"fw-bold fs-6 text-gray-800\">{{ project.institution ? project.institution.name : 'N/A' }}</span>
+                                    </div>
+                                </div>
+                                <div class=\"row mb-7\">
+                                    <label class=\"col-lg-4 fw-semibold text-muted\">Période</label>
+                                    <div class=\"col-lg-8\">
+                                        <span class=\"fw-bold fs-6 text-gray-800\">Du {{ project.dateDebut ? project.dateDebut|date('d/m/Y') : 'N/A' }} au {{ project.dateFin ? project.dateFin|date('d/m/Y') : 'N/A' }}</span>
+                                    </div>
+                                </div>
+                                <div class=\"row mb-7\">
+                                    <label class=\"col-lg-4 fw-semibold text-muted\">Localisation</label>
+                                    <div class=\"col-lg-8\">
+                                        <span class=\"fw-bold fs-6 text-gray-800\">{{ project.localisation ?? 'Non précisée' }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financements Tab -->
+                    <div class=\"tab-pane fade\" id=\"kt_project_financements\" role=\"tabpanel\">
+                        <div class=\"card card-flush\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Financements associés</h3>
+                            </div>
+                            <div class=\"card-body pt-0\">
+                                <div class=\"table-responsive\">
+                                    <table class=\"table align-middle table-row-dashed fs-6 gy-5\">
+                                        <thead>
+                                            <tr class=\"text-start text-muted fw-bold fs-7 text-uppercase gs-0\">
+                                                <th>Bailleur</th>
+                                                <th>Type</th>
+                                                <th class=\"text-end\">Engagé</th>
+                                                <th class=\"text-end\">Décaissé</th>
+                                                <th class=\"text-end\">Taux</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=\"text-gray-600 fw-semibold\">
+                                            {% for financement in project.financements %}
+                                                <tr>
+                                                    <td>{{ financement.bailleur.name }}</td>
+                                                    <td>{{ financement.typeLabel }}</td>
+                                                    <td class=\"text-end\">{{ financement.montantEngage|number_format(0, ',', ' ') }}</td>
+                                                    <td class=\"text-end\">{{ financement.montantDecaisse|number_format(0, ',', ' ') }}</td>
+                                                    <td class=\"text-end\">
+                                                        <span class=\"badge badge-light-primary\">{{ financement.tauxDecaissement }}%</span>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr><td colspan=\"5\" class=\"text-center\">Aucun financement trouvé</td></tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Décaissements Tab -->
+                    <div class=\"tab-pane fade\" id=\"kt_project_decaissements\" role=\"tabpanel\">
+                        <div class=\"card card-flush\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Décaissements récents</h3>
+                            </div>
+                            <div class=\"card-body pt-0\">
+                                <div class=\"table-responsive\">
+                                    <table class=\"table align-middle table-row-dashed fs-6 gy-5\">
+                                        <thead>
+                                            <tr class=\"text-start text-muted fw-bold fs-7 text-uppercase gs-0\">
+                                                <th>Réf</th>
+                                                <th>Date</th>
+                                                <th class=\"text-end\">Montant</th>
+                                                <th class=\"text-center\">Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=\"text-gray-600 fw-semibold\">
+                                            {% for decaissement in project.decaissements %}
+                                                <tr>
+                                                    <td>{{ decaissement.reference }}</td>
+                                                    <td>{{ decaissement.createdAt|date('d/m/Y') }}</td>
+                                                    <td class=\"text-end\">{{ decaissement.montant|number_format(0, ',', ' ') }} FCFA</td>
+                                                    <td class=\"text-center\">
+                                                        <span class=\"badge badge-light-success\">{{ decaissement.statut }}</span>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr><td colspan=\"4\" class=\"text-center\">Aucun décaissement trouvé</td></tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Conventions Tab -->
+                    <div class=\"tab-pane fade\" id=\"kt_project_conventions\" role=\"tabpanel\">
+                        <div class=\"card card-flush\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Conventions de financement</h3>
+                            </div>
+                            <div class=\"card-body pt-0\">
+                                <div class=\"table-responsive\">
+                                    <table class=\"table align-middle table-row-dashed fs-6 gy-5\">
+                                        <thead>
+                                            <tr class=\"text-start text-muted fw-bold fs-7 text-uppercase gs-0\">
+                                                <th>Code</th>
+                                                <th>Intitulé</th>
+                                                <th class=\"text-end\">Montant</th>
+                                                <th class=\"text-center\">Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=\"text-gray-600 fw-semibold\">
+                                            {% for convention in project.conventions %}
+                                                <tr>
+                                                    <td>{{ convention.code }}</td>
+                                                    <td>{{ convention.intitule }}</td>
+                                                    <td class=\"text-end\">{{ convention.montantGlobal|number_format(0, ',', ' ') }}</td>
+                                                    <td class=\"text-center\">
+                                                        <span class=\"badge badge-light-info\">{{ convention.statut }}</span>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr><td colspan=\"4\" class=\"text-center\">Aucune convention trouvée</td></tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Audits Tab -->
+                    <div class=\"tab-pane fade\" id=\"kt_project_audits\" role=\"tabpanel\">
+                        <div class=\"card card-flush\">
+                            <div class=\"card-header pt-5\">
+                                <h3 class=\"card-title fw-bold text-dark\">Missions d'audit</h3>
+                            </div>
+                            <div class=\"card-body pt-0\">
+                                <div class=\"table-responsive\">
+                                    <table class=\"table align-middle table-row-dashed fs-6 gy-5\">
+                                        <thead>
+                                            <tr class=\"text-start text-muted fw-bold fs-7 text-uppercase gs-0\">
+                                                <th>Titre</th>
+                                                <th>Date</th>
+                                                <th class=\"text-center\">Statut</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class=\"text-gray-600 fw-semibold\">
+                                            {% for audit in project.audits %}
+                                                <tr>
+                                                    <td>{{ audit.title }}</td>
+                                                    <td>{{ audit.dateAudit ? audit.dateAudit|date('d/m/Y') : 'N/A' }}</td>
+                                                    <td class=\"text-center\">
+                                                        <span class=\"badge badge-light-warning\">{{ audit.statut }}</span>
+                                                    </td>
+                                                </tr>
+                                            {% else %}
+                                                <tr><td colspan=\"3\" class=\"text-center\">Aucun audit trouvé</td></tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class=\"modal-actions\">
-            <button type=\"button\" class=\"btn btn-secondary\" onclick=\"closeDeleteModal()\">Annuler</button>
-            <form action=\"{{ path('app_projects_delete', {id: project.id}) }}\" method=\"POST\" style=\"display: inline;\">
-                <input type=\"hidden\" name=\"_token\" value=\"{{ csrf_token('delete' ~ project.id) }}\">
-                <button type=\"submit\" class=\"btn btn-danger\">
-                    <i data-lucide=\"trash-2\"></i>
-                    Supprimer
-                </button>
-            </form>
+
+        <!-- Delete Modal -->
+        <div class=\"modal fade\" id=\"kt_modal_delete_project\" tabindex=\"-1\" aria-hidden=\"true\">
+            <div class=\"modal-dialog modal-dialog-centered mw-650px\">
+                <div class=\"modal-content\">
+                    <div class=\"modal-header\">
+                        <h2 class=\"fw-bold\">Confirmer la suppression</h2>
+                        <div class=\"btn btn-icon btn-sm btn-active-icon-primary\" data-bs-dismiss=\"modal\">
+                            <i class=\"ki-outline ki-cross fs-1\"></i>
+                        </div>
+                    </div>
+                    <div class=\"modal-body scroll-y mx-5 mx-xl-15 my-7\">
+                        <div class=\"text-center\">
+                            <i class=\"ki-outline ki-information-5 text-danger fs-5x mb-5\"></i>
+                            <p class=\"text-gray-700 fs-4 fw-semibold py-5\">Voulez-vous vraiment supprimer le projet \"{{ project.name }}\" ?</p>
+                        </div>
+                    </div>
+                    <div class=\"modal-footer flex-center\">
+                        <button type=\"button\" class=\"btn btn-light me-3\" data-bs-dismiss=\"modal\">Annuler</button>
+                        <form action=\"{{ path('app_projects_delete', {id: project.id}) }}\" method=\"post\">
+                            <input type=\"hidden\" name=\"_token\" value=\"{{ csrf_token('delete' ~ project.id) }}\">
+                            <button type=\"submit\" class=\"btn btn-danger\">Supprimer</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
-<script>
-    lucide.createIcons();
-
-    function openDeleteModal() {
-        document.getElementById('deleteModal').classList.add('show');
-        lucide.createIcons();
-    }
-
-    function closeDeleteModal() {
-        document.getElementById('deleteModal').classList.remove('show');
-    }
-
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
-            closeDeleteModal();
-        }
-    });
-</script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') { lucide.createIcons(); }
+        });
+    </script>
 {% endblock %}
-", "project/show.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\project\\show.html.twig");
+", "project/show.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\project\\show.html.twig");
     }
 }

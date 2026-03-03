@@ -139,9 +139,10 @@ class ProjectRepository extends ServiceEntityRepository
         ?string $search = null,
         ?string $status = null,
         ?string $sector = null,
-        ?string $priority = null
+        ?string $priority = null,
+        ?int $institutionId = null
     ): array {
-        $qb = $this->createFilteredQueryBuilder($search, $status, $sector, $priority);
+        $qb = $this->createFilteredQueryBuilder($search, $status, $sector, $priority, $institutionId);
 
         return $qb
             ->orderBy('p.createdAt', 'DESC')
@@ -158,9 +159,10 @@ class ProjectRepository extends ServiceEntityRepository
         ?string $search = null,
         ?string $status = null,
         ?string $sector = null,
-        ?string $priority = null
+        ?string $priority = null,
+        ?int $institutionId = null
     ): int {
-        $qb = $this->createFilteredQueryBuilder($search, $status, $sector, $priority);
+        $qb = $this->createFilteredQueryBuilder($search, $status, $sector, $priority, $institutionId);
 
         return (int) $qb
             ->select('COUNT(p.id)')
@@ -175,7 +177,8 @@ class ProjectRepository extends ServiceEntityRepository
         ?string $search = null,
         ?string $status = null,
         ?string $sector = null,
-        ?string $priority = null
+        ?string $priority = null,
+        ?int $institutionId = null
     ): QueryBuilder {
         $qb = $this->createQueryBuilder('p');
 
@@ -197,6 +200,11 @@ class ProjectRepository extends ServiceEntityRepository
         if ($priority) {
             $qb->andWhere('p.priorite = :priority')
                ->setParameter('priority', $priority);
+        }
+        
+        if ($institutionId) {
+            $qb->andWhere('p.institution = :institutionId')
+               ->setParameter('institutionId', $institutionId);
         }
 
         return $qb;
@@ -392,6 +400,72 @@ class ProjectRepository extends ServiceEntityRepository
         }
 
         return "PRJ-{$year}-{$newNumber}";
+    }
+
+    /**
+     * Compte le nombre total de projets, facultativement filtré par institution.
+     */
+    public function countProjects(?int $institutionId = null): int
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)');
+
+        if ($institutionId) {
+            $qb->andWhere('p.institution = :institutionId')
+               ->setParameter('institutionId', $institutionId);
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Compte le nombre de projets par statut, facultativement filtré par institution.
+     */
+    public function countProjectsByStatus(string $status, ?int $institutionId = null): int
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->andWhere('p.status = :status')
+            ->setParameter('status', $status);
+
+        if ($institutionId) {
+            $qb->andWhere('p.institution = :institutionId')
+               ->setParameter('institutionId', $institutionId);
+        }
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    /**
+     * Calcule la somme du budget total des projets, facultativement filtré par institution.
+     */
+    public function getSumBudgetTotal(?int $institutionId = null): string
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('SUM(p.budgetTotal)');
+
+        if ($institutionId) {
+            $qb->andWhere('p.institution = :institutionId')
+               ->setParameter('institutionId', $institutionId);
+        }
+
+        return (string) ($qb->getQuery()->getSingleScalarResult() ?? '0');
+    }
+
+    /**
+     * Calcule la somme du montant décaissé des projets, facultativement filtré par institution.
+     */
+    public function getSumMontantDecaisse(?int $institutionId = null): string
+    {
+        $qb = $this->createQueryBuilder('p')
+            ->select('SUM(p.montantDecaisse)');
+
+        if ($institutionId) {
+            $qb->andWhere('p.institution = :institutionId')
+               ->setParameter('institutionId', $institutionId);
+        }
+
+        return (string) ($qb->getQuery()->getSingleScalarResult() ?? '0');
     }
 
 

@@ -1,430 +1,365 @@
-{% extends 'management.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}Dashboard Top Management - SIGEP Tchad{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Dashboard Armoirie CSS -->
-    <link rel="stylesheet" href="{{ asset('css/dashboard-armoirie.css') }}">
-{% endblock %}
-
 {% block body %}
-
-    <!-- Page Title -->
-    <div class="page-title">
-        <h1>Dashboard Top Management</h1>
-        <p>Vue stratégique et indicateurs de performance</p>
-        <div class="last-update">
-            <i data-lucide="clock"></i>
-            Dernière mise à jour : {{ "now"|date("d/m/Y à H:i") }}
+<!-- Toolbar -->
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack flex-wrap gap-4">
+        <!-- Page Title -->
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">Dashboard Top Management</h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="{{ path('app_dashboard') }}" class="text-muted text-hover-primary">Accueil</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Management Stratégique</li>
+            </ul>
         </div>
-    </div>
 
-    
-   <div class="header-filters">
-            <form method="get" action="{{ path('app_top_management_dashboard') }}" class="filter-form">
-                <div class="filter-group">
-                    <select name="year" id="filterYear" class="filter-select" onchange="this.form.submit()">
+        <!-- Filters -->
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <form method="get" action="{{ path('app_top_management_dashboard') }}" class="d-flex align-items-center gap-2">
+                <div class="w-150px">
+                    <select name="year" id="filterYear" class="form-select form-select-sm form-select-solid" onchange="this.form.submit()">
                         <option value="">Toutes les années</option>
                         {% for year in years %}
                             <option value="{{ year }}" {% if filters.year == year %}selected{% endif %}>{{ year }}</option>
                         {% endfor %}
                     </select>
-                    <i data-lucide="calendar" class="filter-icon"></i>
                 </div>
-
-                <div class="filter-group">
-                    <select name="institution" id="filterInstitution" class="filter-select" onchange="this.form.submit()">
+                <div class="w-200px">
+                    <select name="institution" id="filterInstitution" class="form-select form-select-sm form-select-solid" onchange="this.form.submit()">
                         <option value="">Toutes les institutions</option>
                         {% for institution in institutions %}
                             <option value="{{ institution.id }}" {% if filters.institution == institution.id %}selected{% endif %}>
-                                {{ institution.name }}
+                                {{ institution.nom|default(institution.name) }}
                             </option>
                         {% endfor %}
                     </select>
-                    <i data-lucide="building" class="filter-icon"></i>
                 </div>
             </form>
         </div>
+    </div>
+</div>
 
-    <!-- KPI CARDS -->
-    <section class="kpi-section">
-        <div class="kpi-grid">
-            <!-- KPI 1: Total Projets -->
-            <div class="kpi-card primary">
-                <div class="kpi-header">
-                    <div class="kpi-icon">
-                        <i data-lucide="folder-kanban"></i>
-                    </div>
-                    <div class="kpi-trend up">
-                        <i data-lucide="trending-up"></i>
-                        <span>+12%</span>
-                    </div>
-                </div>
-                <div class="kpi-body">
-                    <h3 class="kpi-value" data-count="{{ kpis.totalProjects }}">0</h3>
-                    <p class="kpi-label">Total Projets</p>
-                    <p class="kpi-sublabel">
-                        🟢 {{ kpis.activeProjects }} en cours • ✅ {{ kpis.completedProjects }} terminés
-                    </p>
-                </div>
-            </div>
-
-            <!-- KPI 2: Budget Total -->
-            <div class="kpi-card gold">
-                <div class="kpi-header">
-                    <div class="kpi-icon">
-                        <i data-lucide="banknote"></i>
-                    </div>
-                </div>
-                <div class="kpi-body">
-                    <h3 class="kpi-value">{{ (kpis.totalBudget / 1000000000)|number_format(1, '.', ' ') }}</h3>
-                    <p class="kpi-label">Budget Total (Mds FCFA)</p>
-                    <p class="kpi-sublabel">
-                        💰 {{ (kpis.totalBudget)|number_format(0, ',', ' ') }} FCFA
-                    </p>
-                </div>
-            </div>
-
-            <!-- KPI 3: Taux de Décaissement -->
-            <div class="kpi-card success">
-                <div class="kpi-header">
-                    <div class="kpi-icon">
-                        <i data-lucide="trending-up"></i>
-                    </div>
-                </div>
-                <div class="kpi-body">
-                    <h3 class="kpi-value" data-count="{{ kpis.disbursementRate }}">0</h3>
-                    <p class="kpi-label">Taux de Décaissement (%)</p>
-                    <p class="kpi-sublabel">
-                        {{ (kpis.totalDisbursed / 1000000000)|number_format(1, '.', ' ') }} Mds décaissés
-                    </p>
-                </div>
-            </div>
-
-            <!-- KPI 4: Réalisation Physique -->
-            <div class="kpi-card warning">
-                <div class="kpi-header">
-                    <div class="kpi-icon">
-                        <i data-lucide="activity"></i>
-                    </div>
-                </div>
-                <div class="kpi-body">
-                    <h3 class="kpi-value" data-count="{{ kpis.avgPhysicalProgress }}">0</h3>
-                    <p class="kpi-label">Réalisation Physique Moyenne (%)</p>
-                    <p class="kpi-sublabel">
-                        Progression globale des projets
-                    </p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- MÉTRIQUES MANAGEMENT -->
-    <section class="management-section">
-        <div class="section-header">
-            <h2 class="section-title">
-                <i data-lucide="briefcase"></i>
-                Métriques Top Management
-            </h2>
-        </div>
-
-        <div class="management-grid">
-            <div class="metric-card metric-gold">
-                <div class="metric-icon">
-                    <i data-lucide="wallet"></i>
-                </div>
-                <div class="metric-content">
-                    <span class="metric-label">Valeur du Portefeuille</span>
-                    <span class="metric-value">{{ (managementMetrics.portfolioValue / 1000000000)|number_format(1, '.', ' ') }} Mds</span>
-                    <span class="metric-sublabel">FCFA</span>
-                </div>
-            </div>
-
-            <div class="metric-card metric-success">
-                <div class="metric-icon">
-                    <i data-lucide="target"></i>
-                </div>
-                <div class="metric-content">
-                    <span class="metric-label">Efficacité du Financement</span>
-                    <span class="metric-value">{{ managementMetrics.fundingEfficiency }}%</span>
-                    <span class="metric-sublabel">Fonds activés / Budget</span>
-                </div>
-            </div>
-
-            <div class="metric-card metric-primary">
-                <div class="metric-icon">
-                    <i data-lucide="clock"></i>
-                </div>
-                <div class="metric-content">
-                    <span class="metric-label">Respect des Délais</span>
-                    <span class="metric-value">{{ managementMetrics.onTimeRate }}%</span>
-                    <span class="metric-sublabel">{{ managementMetrics.delayRate }}% en retard</span>
-                </div>
-            </div>
-
-            <div class="metric-card metric-warning">
-                <div class="metric-icon">
-                    <i data-lucide="building-2"></i>
-                </div>
-                <div class="metric-content">
-                    <span class="metric-label">Projets par Institution</span>
-                    <span class="metric-value">{{ managementMetrics.projectsPerInstitution }}</span>
-                    <span class="metric-sublabel">{{ managementMetrics.activeInstitutions }} institutions</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ANALYSE DES RISQUES -->
-    <section class="risk-section">
-        <div class="section-header">
-            <h2 class="section-title">
-                <i data-lucide="alert-triangle"></i>
-                Analyse des Risques Globaux
-            </h2>
-        </div>
-
-        <div class="risk-grid">
-            <div class="risk-card risk-low">
-                <div class="risk-icon">
-                    <i data-lucide="check-circle"></i>
-                </div>
-                <div class="risk-content">
-                    <span class="risk-count">{{ globalRiskAnalysis.lowRisk }}</span>
-                    <span class="risk-label">Risque Faible</span>
-                    <span class="risk-percent">{{ globalRiskAnalysis.lowRiskPercent }}%</span>
-                </div>
-            </div>
-
-            <div class="risk-card risk-medium">
-                <div class="risk-icon">
-                    <i data-lucide="alert-circle"></i>
-                </div>
-                <div class="risk-content">
-                    <span class="risk-count">{{ globalRiskAnalysis.mediumRisk }}</span>
-                    <span class="risk-label">Risque Moyen</span>
-                    <span class="risk-percent">{{ globalRiskAnalysis.mediumRiskPercent }}%</span>
-                </div>
-            </div>
-
-            <div class="risk-card risk-high">
-                <div class="risk-icon">
-                    <i data-lucide="alert-triangle"></i>
-                </div>
-                <div class="risk-content">
-                    <span class="risk-count">{{ globalRiskAnalysis.highRisk }}</span>
-                    <span class="risk-label">Risque Élevé</span>
-                    <span class="risk-percent">{{ globalRiskAnalysis.highRiskPercent }}%</span>
-                </div>
-            </div>
-        </div>
-
-        {% if globalRiskAnalysis.criticalProjectsCount > 0 %}
-        <div class="risk-alert">
-            <i data-lucide="alert-triangle"></i>
-            <strong>Attention :</strong> {{ globalRiskAnalysis.criticalProjectsCount }} projet(s) critique(s) nécessitent une action immédiate
-        </div>
-        {% endif %}
-    </section>
-
-    <!-- TENDANCES -->
-    <section class="trends-section">
-        <div class="section-header">
-            <h2 class="section-title">
-                <i data-lucide="trending-up"></i>
-                Tendances et Croissance
-            </h2>
-        </div>
-
-        <div class="trends-grid">
-            <div class="trend-card">
-                <div class="trend-header">
-                    <h4>Croissance des Projets</h4>
-                    <span class="trend-badge {{ trends.projectGrowth >= 0 ? 'trend-positive' : 'trend-negative' }}">
-                        {{ trends.projectGrowth >= 0 ? '+' : '' }}{{ trends.projectGrowth }}%
-                    </span>
-                </div>
-                <div class="trend-body">
-                    <div class="trend-comparison">
-                        <div class="trend-item">
-                            <span class="trend-year">{{ "now"|date("Y") }}</span>
-                            <span class="trend-value">{{ trends.currentYearProjects }} projets</span>
-                        </div>
-                        <div class="trend-item">
-                            <span class="trend-year">{{ ("now"|date("Y")) - 1 }}</span>
-                            <span class="trend-value">{{ trends.lastYearProjects }} projets</span>
+<!-- Content -->
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        
+        <!-- Main KPIs -->
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ kpis.totalProjects }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Total Projets</span>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="trend-card">
-                <div class="trend-header">
-                    <h4>Croissance du Budget</h4>
-                    <span class="trend-badge {{ trends.budgetGrowth >= 0 ? 'trend-positive' : 'trend-negative' }}">
-                        {{ trends.budgetGrowth >= 0 ? '+' : '' }}{{ trends.budgetGrowth }}%
-                    </span>
-                </div>
-                <div class="trend-body">
-                    <div class="trend-comparison">
-                        <div class="trend-item">
-                            <span class="trend-year">{{ "now"|date("Y") }}</span>
-                            <span class="trend-value">{{ (trends.currentYearBudget / 1000000000)|number_format(1, '.', ' ') }} Mds FCFA</span>
-                        </div>
-                        <div class="trend-item">
-                            <span class="trend-year">{{ ("now"|date("Y")) - 1 }}</span>
-                            <span class="trend-value">{{ (trends.lastYearBudget / 1000000000)|number_format(1, '.', ' ') }} Mds FCFA</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- GRAPHIQUES -->
-    <section class="charts-section">
-        <div class="charts-grid">
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3 class="chart-title">Répartition par Secteur</h3>
-                </div>
-                <div class="chart-body">
-                    <canvas id="sectorChart"></canvas>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3 class="chart-title">Sources de Financement</h3>
-                </div>
-                <div class="chart-body">
-                    <canvas id="financingChart"></canvas>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3 class="chart-title">Statuts des Projets</h3>
-                </div>
-                <div class="chart-body">
-                    <canvas id="statusChart"></canvas>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-header">
-                    <h3 class="chart-title">Évolution Mensuelle</h3>
-                </div>
-                <div class="chart-body">
-                    <canvas id="evolutionChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- TOP PROJETS -->
-    <section class="projects-section">
-        <div class="section-header">
-            <h2 class="section-title">
-                <i data-lucide="star"></i>
-                Top Projets par Budget
-            </h2>
-        </div>
-
-        <div class="table-container">
-            <table class="projects-table">
-                <thead>
-                    <tr>
-                        <th>Projet</th>
-                        <th>Secteur</th>
-                        <th>Budget</th>
-                        <th>Progression</th>
-                        <th>Statut</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for project in topProjects %}
-                    <tr>
-                        <td>
-                            <div class="project-name">
-                                {{ project.name }}
-                                <span class="project-code">{{ project.code }}</span>
+                    <div class="card-body d-flex align-items-end pt-0 pb-5">
+                        <div class="d-flex align-items-center flex-column mt-3 w-100">
+                            <div class="d-flex justify-content-between w-100 mt-auto mb-2">
+                                <span class="fw-semibold fs-7 text-gray-400">En cours / Terminés</span>
+                                <span class="fw-bold fs-7">{{ kpis.activeProjects }} / {{ kpis.completedProjects }}</span>
                             </div>
-                        </td>
-                        <td>
-                            <span class="sector-badge">{{ project.sector }}</span>
-                        </td>
-                        <td class="budget-cell">
-                            <span class="budget-amount">{{ (project.budgetTotal / 1000000)|number_format(1, '.', ' ') }} M</span>
-                            <span class="budget-currency">FCFA</span>
-                        </td>
-                        <td class="progress-cell">
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: {{ project.progress ?? 0 }}%; background: {% if project.progress >= 70 %}var(--success-500){% elseif project.progress >= 40 %}var(--gold-500){% else %}var(--red-500){% endif %};"></div>
-                            </div>
-                            <span class="progress-text">{{ project.progress ?? 0 }}% complété</span>
-                        </td>
-                        <td>
-                            <span class="status-badge status-{{ project.status }}">
-                                {{ project.status }}
-                            </span>
-                        </td>
-                        <td>
-                            <a href="{{ path('app_top_management_project_detail', {id: project.id}) }}" class="action-btn">
-                                <i data-lucide="eye"></i>
-                                Détails
-                            </a>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- PROJETS CRITIQUES -->
-    <section class="critical-section">
-        <div class="section-header">
-            <h2 class="section-title">
-                <i data-lucide="alert-circle"></i>
-                Projets Critiques
-            </h2>
-        </div>
-
-        <div class="critical-grid">
-            {% for project in criticalProjects|slice(0, 6) %}
-            <div class="critical-card">
-                <div class="critical-header">
-                    <span class="risk-badge risk-high">Risque Élevé</span>
-                </div>
-                <h4 class="critical-title">{{ project.name }}</h4>
-                <p class="critical-sector">{{ project.sector }}</p>
-                <div class="critical-stats">
-                    <div class="critical-stat">
-                        <span class="stat-label">Progression</span>
-                        <span class="stat-value">{{ project.progress ?? 0 }}%</span>
-                    </div>
-                    <div class="critical-stat">
-                        <span class="stat-label">Budget</span>
-                        <span class="stat-value">{{ (project.budgetTotal / 1000000)|number_format(0, '.', ' ') }}M</span>
+                        </div>
                     </div>
                 </div>
-                <a href="{{ path('app_top_management_project_detail', {id: project.id}) }}" class="critical-link">
-                    Voir les détails <i data-lucide="arrow-right"></i>
-                </a>
             </div>
-            {% endfor %}
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ (kpis.totalBudget / 1000000000)|number_format(1, ',', ' ') }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Budget Total (Mds FCFA)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ kpis.disbursementRate }}%</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Taux de Décaissement</span>
+                        </div>
+                    </div>
+                    <div class="card-body pt-2 pb-4 d-flex align-items-center">
+                        <div class="h-8px w-100 bg-light-success rounded">
+                            <div class="bg-success rounded h-8px" role="progressbar" style="width: {{ kpis.disbursementRate }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3">
+                <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ kpis.avgPhysicalProgress }}%</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Réalisation Physique Moyenne</span>
+                        </div>
+                    </div>
+                    <div class="card-body pt-2 pb-4 d-flex align-items-center">
+                        <div class="h-8px w-100 bg-light-primary rounded">
+                            <div class="bg-primary rounded h-8px" role="progressbar" style="width: {{ kpis.avgPhysicalProgress }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
 
+        <!-- Management Metrics & Risks -->
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <!-- Management Metrics -->
+            <div class="col-xl-8">
+                <div class="card card-flush h-xl-100">
+                    <div class="card-header pt-7">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Métriques de Performance</span>
+                        </h3>
+                    </div>
+                    <div class="card-body pt-5">
+                        <div class="row g-5">
+                            <div class="col-md-6">
+                                <div class="border border-dashed border-gray-300 rounded px-7 py-3 mb-5">
+                                    <div class="fs-6 text-gray-800 fw-bold">Valeur du Portefeuille</div>
+                                    <div class="fs-2 fw-bold text-primary">{{ (managementMetrics.portfolioValue / 1000000000)|number_format(1, ',', ' ') }} Mds FCFA</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="border border-dashed border-gray-300 rounded px-7 py-3 mb-5">
+                                    <div class="fs-6 text-gray-800 fw-bold">Efficacité du Financement</div>
+                                    <div class="fs-2 fw-bold text-success">{{ managementMetrics.fundingEfficiency }}%</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="border border-dashed border-gray-300 rounded px-7 py-3 mb-5">
+                                    <div class="fs-6 text-gray-800 fw-bold">Respect des Délais</div>
+                                    <div class="fs-2 fw-bold text-warning">{{ managementMetrics.onTimeRate }}%</div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="border border-dashed border-gray-300 rounded px-7 py-3 mb-5">
+                                    <div class="fs-6 text-gray-800 fw-bold">Projets par Institution</div>
+                                    <div class="fs-2 fw-bold text-info">{{ managementMetrics.projectsPerInstitution }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <!-- Risk Analysis -->
+            <div class="col-xl-4">
+                <div class="card card-flush h-xl-100">
+                    <div class="card-header pt-7">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Analyse des Risques</span>
+                        </h3>
+                    </div>
+                    <div class="card-body pt-5">
+                        <div class="d-flex flex-stack mb-5">
+                            <div class="d-flex align-items-center me-2">
+                                <div class="symbol symbol-35px symbol-circle me-3">
+                                    <span class="symbol-label bg-light-success">
+                                        <i class="fa fa-check text-success"></i>
+                                    </span>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <span class="text-dark fw-bold">Risque Faible</span>
+                                </div>
+                            </div>
+                            <span class="text-success fw-bold fs-6">{{ globalRiskAnalysis.lowRiskPercent }}%</span>
+                        </div>
+                        <div class="d-flex flex-stack mb-5">
+                            <div class="d-flex align-items-center me-2">
+                                <div class="symbol symbol-35px symbol-circle me-3">
+                                    <span class="symbol-label bg-light-warning">
+                                        <i class="fa fa-exclamation text-warning"></i>
+                                    </span>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <span class="text-dark fw-bold">Risque Moyen</span>
+                                </div>
+                            </div>
+                            <span class="text-warning fw-bold fs-6">{{ globalRiskAnalysis.mediumRiskPercent }}%</span>
+                        </div>
+                        <div class="d-flex flex-stack mb-5">
+                            <div class="d-flex align-items-center me-2">
+                                <div class="symbol symbol-35px symbol-circle me-3">
+                                    <span class="symbol-label bg-light-danger">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </span>
+                                </div>
+                                <div class="d-flex flex-column">
+                                    <span class="text-dark fw-bold">Risque Élevé</span>
+                                </div>
+                            </div>
+                            <span class="text-danger fw-bold fs-6">{{ globalRiskAnalysis.highRiskPercent }}%</span>
+                        </div>
+                        {% if globalRiskAnalysis.criticalProjectsCount > 0 %}
+                            <div class="notice d-flex bg-light-danger rounded border-danger border border-dashed p-6 mt-5">
+                                <i data-lucide="alert-triangle" class="text-danger me-4" style="width: 24px; height: 24px;"></i>
+                                <div class="d-flex flex-stack flex-grow-1">
+                                    <div class="fw-semibold">
+                                        <h4 class="text-gray-900 fw-bold">Alerte Critique</h4>
+                                        <div class="fs-6 text-gray-700">{{ globalRiskAnalysis.criticalProjectsCount }} projets nécessitent une attention immédiate.</div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Row -->
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <div class="col-xl-6">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Répartition par Secteur</span>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 300px;">
+                            <canvas id="sectorChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Statuts des Projets</span>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 300px;">
+                            <canvas id="statusChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Projects Table -->
+        <div class="card card-flush h-md-100 mb-5 mb-xl-10">
+            <div class="card-header pt-7">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold text-dark">Top Projets par Budget</span>
+                </h3>
+            </div>
+            <div class="card-body pt-2">
+                <div class="table-responsive">
+                    <table class="table align-middle table-row-dashed fs-6 gy-3">
+                        <thead>
+                            <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                                <th class="min-w-200px">Projet</th>
+                                <th class="min-w-100px text-end">Budget (M FCFA)</th>
+                                <th class="min-w-150px">Progression</th>
+                                <th class="min-w-100px text-end">Statut</th>
+                                <th class="min-w-100px text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="fw-semibold text-gray-600">
+                            {% for project in topProjects %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex flex-column">
+                                        <span class="text-dark fw-bold fs-6">{{ project.name }}</span>
+                                        <span class="text-muted fs-7">{{ project.code }}</span>
+                                    </div>
+                                </td>
+                                <td class="text-end fw-bold">{{ (project.budgetTotal / 1000000)|number_format(1, ',', ' ') }}</td>
+                                <td>
+                                    <div class="d-flex align-items-center w-100 flex-column mt-3">
+                                        <div class="d-flex justify-content-between w-100 mt-auto mb-2">
+                                            <span class="fw-bold fs-7">{{ project.progress ?? 0 }}%</span>
+                                        </div>
+                                        <div class="h-5px w-100 bg-light rounded">
+                                            <div class="bg-primary rounded h-5px" role="progressbar" style="width: {{ project.progress ?? 0 }}%;"></div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-end">
+                                    <span class="badge badge-light-primary">{{ project.status }}</span>
+                                </td>
+                                <td class="text-end">
+                                    <a href="{{ path('app_top_management_project_detail', {id: project.id}) }}" class="btn btn-sm btn-icon btn-light btn-active-light-primary">
+                                        <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        const chartColors = ['#004d99', '#daa520', '#10b981', '#f59e0b', '#ef4444', '#c41e3a'];
+
+        // Secteur Chart
+        if (document.getElementById('sectorChart')) {
+            new Chart(document.getElementById('sectorChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: [{% for sector, data in sectorStats %}'{{ sector }}',{% endfor %}],
+                    datasets: [{
+                        data: [{% for sector, data in sectorStats %}{{ data.count }},{% endfor %}],
+                        backgroundColor: chartColors
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, padding: 15 } } }
+                }
+            });
+        }
+
+        // Status Chart
+        if (document.getElementById('statusChart')) {
+            new Chart(document.getElementById('statusChart'), {
+                type: 'bar',
+                data: {
+                    labels: [{% for status, count in statusStats %}'{{ status }}',{% endfor %}],
+                    datasets: [{
+                        label: 'Projets',
+                        data: [{% for status, count in statusStats %}{{ count }},{% endfor %}],
+                        backgroundColor: '#004d99',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+    </script>
 {% endblock %}
 
 {% block javascripts %}

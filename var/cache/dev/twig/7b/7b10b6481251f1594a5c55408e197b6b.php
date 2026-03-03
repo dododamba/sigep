@@ -2988,6 +2988,6 @@ class __TwigTemplate_a582a65661f7bcaf3e2a343e2d22ed1d extends Template
          {% block javascripts %}{% endblock %}
 </body>
 </html>
-", "management.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\management.html.twig");
+", "management.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\management.html.twig");
     }
 }

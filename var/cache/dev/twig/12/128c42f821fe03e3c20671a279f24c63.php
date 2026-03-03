@@ -328,6 +328,6 @@ class __TwigTemplate_f7ac1bc569dc59c4200af83cf88fd8bb extends Template
         </table>
     {%- endfor -%}
 {%- endmacro -%}
-", "@JMSSerializer/Collector/events.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\events.html.twig");
+", "@JMSSerializer/Collector/events.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\events.html.twig");
     }
 }

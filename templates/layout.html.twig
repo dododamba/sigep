@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>
+			{% block title %}Dashboard
+			{% endblock %}
+		</title>
+
+		{# Stylesheets: copiez ici les <link> CSS de dist/index.html #}
+		{% block stylesheets %}
+			<!-- Example: <link rel="stylesheet" href="/assets/css/style.css"> -->
+		{% endblock %}
+
+		{% block head_extra %}{% endblock %}
+	</head>
+	<body
+		id="kt_app_body" class="app-default" {% block body_attrs %} {% endblock %}>
+		{# Header partial (navigation, topbar, etc.) #}
+		{% include 'layout/header.html.twig' %}
+
+		<div class="d-flex flex-column flex-root app-root" id="kt_app_root">
+			{% block body %}
+				<!-- Main content goes here (paste the content from dist/index.html inside the app wrapper) -->
+			{% endblock %}
+		</div>
+
+		{# Footer partial #}
+		{% include 'layout/footer.html.twig' %}
+
+		{# JavaScript: copiez ici les <script> de dist/index.html #}
+		{% block javascripts %}
+			<!-- Example: <script src="/assets/js/app.js"></script> -->
+		{% endblock %}
+	</body>
+</html>

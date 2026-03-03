@@ -130,6 +130,6 @@ class __TwigTemplate_bdffb0fa113d91f99333dd9fb7469421 extends Template
         {{ form_row(button_delete) }}
     {%- endif -%}
 {%- endblock live_collection_entry_row -%}
-", "@LiveComponent/form_theme.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\symfony\\ux-live-component\\templates\\form_theme.html.twig");
+", "@LiveComponent/form_theme.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\symfony\\ux-live-component\\templates\\form_theme.html.twig");
     }
 }

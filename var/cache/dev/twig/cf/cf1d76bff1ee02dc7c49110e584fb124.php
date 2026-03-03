@@ -284,6 +284,6 @@ class __TwigTemplate_47526ae1e2f6257a27d63c8622520b40 extends Template
         </tr>
     {%- endfor -%}
 </table>
-", "@JMSSerializer/Collector/metadata.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\metadata.html.twig");
+", "@JMSSerializer/Collector/metadata.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\metadata.html.twig");
     }
 }

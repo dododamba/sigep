@@ -275,6 +275,6 @@ class __TwigTemplate_d79b3ad0c845291eb52d6eb705b78f9f extends Template
     })(jQuery);
 </script>
 #}
-", "@DataTables/datatable_js.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\omines\\datatables-bundle\\src\\Resources\\views\\datatable_js.html.twig");
+", "@DataTables/datatable_js.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\omines\\datatables-bundle\\src\\Resources\\views\\datatable_js.html.twig");
     }
 }

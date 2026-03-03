@@ -613,6 +613,6 @@ class __TwigTemplate_c8d2eab014118381a83452bd11646c96 extends Template
         });
     </script>
 {% endblock %}
-", "role/edit.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\role\\edit.html.twig");
+", "role/edit.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\role\\edit.html.twig");
     }
 }

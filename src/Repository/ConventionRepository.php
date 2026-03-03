@@ -379,4 +379,20 @@ class ConventionRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * Trouve les conventions associées à un projet
+     */
+    public function findByProject(Project $project): array
+    {
+        return $this->createQueryBuilder('c')
+            ->leftJoin('c.financement', 'f')
+            ->leftJoin('f.projets', 'p')
+            ->addSelect('f', 'p')
+            ->andWhere('p = :project')
+            ->setParameter('project', $project)
+            ->orderBy('c.dateSignature', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
 }

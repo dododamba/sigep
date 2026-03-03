@@ -12,72 +12,93 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[ORM\Table(name: 'audits')]
 class Audit
 {
+    public const STATUT_PLANIFIE = 'planifie';
+    public const STATUT_EN_COURS = 'en_cours';
+    public const STATUT_TERMINE = 'termine';
+    public const STATUT_ANNULE = 'annule';
+
+    public const TYPE_FINANCIER = 'financier';
+    public const TYPE_TECHNIQUE = 'technique';
+    public const TYPE_CONFORMITE = 'conformite';
+    public const TYPE_ENVIRONNEMENTAL = 'environnemental';
+
+    public const NIVEAU_EXCELLENT = 'excellent';
+    public const NIVEAU_BON = 'bon';
+    public const NIVEAU_SATISFAISANT = 'satisfaisant';
+    public const NIVEAU_MOYEN = 'moyen';
+    public const NIVEAU_INSUFFISANT = 'insuffisant';
+    public const NIVEAU_CRITIQUE = 'critique';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(targetEntity: Project::class)]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Assert\NotNull(message: 'Le projet est obligatoire')]
-    private ?Project $projet = null;
-
     #[ORM\Column(length: 50, unique: true)]
     private ?string $reference = null;
 
-    #[ORM\Column(length: 100)]
-    #[Assert\NotBlank(message: 'Le type d\'audit est obligatoire')]
+    #[ORM\ManyToOne(targetEntity: Project::class, inversedBy: 'audits')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Assert\NotNull(message: 'Le projet est obligatoire')]
+    private ?Project $project = null;
+
+    #[ORM\Column(length: 50)]
     private ?string $type = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'Le titre est obligatoire')]
-    #[Assert\Length(max: 255)]
-    private ?string $titre = null;
+    #[Assert\NotBlank(message: 'Le titre de l\'audit est obligatoire')]
+    private ?string $title = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $startDate = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTimeInterface $endDate = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    #[Assert\NotNull(message: 'La date est obligatoire')]
     private ?\DateTimeInterface $dateAudit = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: 'L\'auditeur/contrôleur est obligatoire')]
     private ?string $auditeur = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $organisme = null;
 
-    #[ORM\Column(length: 50)]
-    private string $statut = 'planifie';
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $objectifs = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
+    private ?string $findings = null;
+
+    #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $resultat = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
-    private ?string $recommandations = null;
-
-    #[ORM\Column(length: 50, nullable: true)]
-    private ?string $niveau = null;
-
-    #[ORM\Column(type: Types::INTEGER, nullable: true)]
-    #[Assert\Range(min: 0, max: 100)]
-    private ?int $score = null;
-
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $documents = null;
-
-    #[ORM\Column(type: Types::JSON, nullable: true)]
-    private ?array $photos = null;
+    private ?string $recommendations = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $observations = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateDebut = null;
+    #[ORM\Column(length: 50)]
+    private string $statut = self::STATUT_PLANIFIE;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $dateFin = null;
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $niveau = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $score = null;
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private array $documents = [];
+
+    #[ORM\Column(type: Types::JSON, nullable: true)]
+    private array $photos = [];
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $auditReport = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -85,10 +106,10 @@ class Audit
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $updatedAt = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $createdBy = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $updatedBy = null;
 
     public function __construct()
@@ -100,47 +121,56 @@ class Audit
     }
 
     #[ORM\PrePersist]
-    public function setCreatedAtValue(): void
+    public function onPrePersist(): void
     {
-        if ($this->createdAt === null) {
-            $this->createdAt = new \DateTime();
-        }
+        $this->createdAt = new \DateTime();
         $this->updatedAt = new \DateTime();
-        
         if ($this->reference === null) {
-            $this->generateReference();
+            $this->reference = 'AUD-' . date('Ymd') . '-' . strtoupper(uniqid());
         }
     }
 
     #[ORM\PreUpdate]
-    public function setUpdatedAtValue(): void
+    public function onPreUpdate(): void
     {
         $this->updatedAt = new \DateTime();
     }
 
-    private function generateReference(): void
+    public static function getTypes(): array
     {
-        $year = date('Y');
-        $type = strtoupper(substr($this->type ?? 'AUD', 0, 3));
-        $this->reference = sprintf('%s-%s-%s', $type, $year, strtoupper(substr(uniqid(), -6)));
+        return [
+            'Audit Financier' => self::TYPE_FINANCIER,
+            'Audit Technique' => self::TYPE_TECHNIQUE,
+            'Audit de Conformité' => self::TYPE_CONFORMITE,
+            'Audit Environnemental' => self::TYPE_ENVIRONNEMENTAL,
+        ];
     }
 
-    // Getters et Setters
+    public static function getStatuts(): array
+    {
+        return [
+            'Planifié' => self::STATUT_PLANIFIE,
+            'En cours' => self::STATUT_EN_COURS,
+            'Terminé' => self::STATUT_TERMINE,
+            'Annulé' => self::STATUT_ANNULE,
+        ];
+    }
+
+    public static function getNiveaux(): array
+    {
+        return [
+            'Excellent' => self::NIVEAU_EXCELLENT,
+            'Bon' => self::NIVEAU_BON,
+            'Satisfaisant' => self::NIVEAU_SATISFAISANT,
+            'Moyen' => self::NIVEAU_MOYEN,
+            'Insuffisant' => self::NIVEAU_INSUFFISANT,
+            'Critique' => self::NIVEAU_CRITIQUE,
+        ];
+    }
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getProjet(): ?Project
-    {
-        return $this->projet;
-    }
-
-    public function setProjet(?Project $projet): static
-    {
-        $this->projet = $projet;
-        return $this;
     }
 
     public function getReference(): ?string
@@ -148,9 +178,31 @@ class Audit
         return $this->reference;
     }
 
-    public function setReference(string $reference): static
+    public function setReference(string $reference): self
     {
         $this->reference = $reference;
+        return $this;
+    }
+
+    public function getProject(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProject(?Project $project): static
+    {
+        $this->project = $project;
+        return $this;
+    }
+
+    public function getProjet(): ?Project
+    {
+        return $this->project;
+    }
+
+    public function setProjet(?Project $project): self
+    {
+        $this->project = $project;
         return $this;
     }
 
@@ -159,20 +211,64 @@ class Audit
         return $this->type;
     }
 
-    public function setType(string $type): static
+    public function setType(string $type): self
     {
         $this->type = $type;
         return $this;
     }
 
-    public function getTitre(): ?string
+    public function getTitle(): ?string
     {
-        return $this->titre;
+        return $this->title;
     }
 
-    public function setTitre(string $titre): static
+    public function setTitle(string $title): static
     {
-        $this->titre = $titre;
+        $this->title = $title;
+        return $this;
+    }
+
+    public function getStartDate(): ?\DateTimeInterface
+    {
+        return $this->startDate;
+    }
+
+    public function setStartDate(?\DateTimeInterface $startDate): static
+    {
+        $this->startDate = $startDate;
+        return $this;
+    }
+
+    public function getDateDebut(): ?\DateTimeInterface
+    {
+        return $this->startDate;
+    }
+
+    public function setDateDebut(?\DateTimeInterface $dateDebut): self
+    {
+        $this->startDate = $dateDebut;
+        return $this;
+    }
+
+    public function getEndDate(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setEndDate(?\DateTimeInterface $endDate): static
+    {
+        $this->endDate = $endDate;
+        return $this;
+    }
+
+    public function getDateFin(): ?\DateTimeInterface
+    {
+        return $this->endDate;
+    }
+
+    public function setDateFin(?\DateTimeInterface $dateFin): self
+    {
+        $this->endDate = $dateFin;
         return $this;
     }
 
@@ -181,7 +277,7 @@ class Audit
         return $this->dateAudit;
     }
 
-    public function setDateAudit(\DateTimeInterface $dateAudit): static
+    public function setDateAudit(\DateTimeInterface $dateAudit): self
     {
         $this->dateAudit = $dateAudit;
         return $this;
@@ -192,7 +288,7 @@ class Audit
         return $this->auditeur;
     }
 
-    public function setAuditeur(string $auditeur): static
+    public function setAuditeur(string $auditeur): self
     {
         $this->auditeur = $auditeur;
         return $this;
@@ -203,9 +299,75 @@ class Audit
         return $this->organisme;
     }
 
-    public function setOrganisme(?string $organisme): static
+    public function setOrganisme(?string $organisme): self
     {
         $this->organisme = $organisme;
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): static
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    public function getObjectifs(): ?string
+    {
+        return $this->objectifs;
+    }
+
+    public function setObjectifs(?string $objectifs): self
+    {
+        $this->objectifs = $objectifs;
+        return $this;
+    }
+
+    public function getFindings(): ?string
+    {
+        return $this->findings;
+    }
+
+    public function setFindings(?string $findings): static
+    {
+        $this->findings = $findings;
+        return $this;
+    }
+
+    public function getResultat(): ?string
+    {
+        return $this->resultat;
+    }
+
+    public function setResultat(?string $resultat): self
+    {
+        $this->resultat = $resultat;
+        return $this;
+    }
+
+    public function getRecommendations(): ?string
+    {
+        return $this->recommendations;
+    }
+
+    public function setRecommendations(?string $recommendations): static
+    {
+        $this->recommendations = $recommendations;
+        return $this;
+    }
+
+    public function getObservations(): ?string
+    {
+        return $this->observations;
+    }
+
+    public function setObservations(?string $observations): self
+    {
+        $this->observations = $observations;
         return $this;
     }
 
@@ -220,45 +382,12 @@ class Audit
         return $this;
     }
 
-    public function getObjectifs(): ?string
-    {
-        return $this->objectifs;
-    }
-
-    public function setObjectifs(?string $objectifs): static
-    {
-        $this->objectifs = $objectifs;
-        return $this;
-    }
-
-    public function getResultat(): ?string
-    {
-        return $this->resultat;
-    }
-
-    public function setResultat(?string $resultat): static
-    {
-        $this->resultat = $resultat;
-        return $this;
-    }
-
-    public function getRecommandations(): ?string
-    {
-        return $this->recommandations;
-    }
-
-    public function setRecommandations(?string $recommandations): static
-    {
-        $this->recommandations = $recommandations;
-        return $this;
-    }
-
     public function getNiveau(): ?string
     {
         return $this->niveau;
     }
 
-    public function setNiveau(?string $niveau): static
+    public function setNiveau(?string $niveau): self
     {
         $this->niveau = $niveau;
         return $this;
@@ -269,106 +398,42 @@ class Audit
         return $this->score;
     }
 
-    public function setScore(?int $score): static
+    public function setScore(?int $score): self
     {
         $this->score = $score;
         return $this;
     }
 
-    public function getDocuments(): ?array
+    public function getDocuments(): array
     {
-        return $this->documents ?? [];
+        return $this->documents;
     }
 
-    public function setDocuments(?array $documents): static
+    public function setDocuments(?array $documents): self
     {
-        $this->documents = $documents;
+        $this->documents = $documents ?? [];
         return $this;
     }
 
-    public function addDocument(string $document): static
+    public function getPhotos(): array
     {
-        $documents = $this->getDocuments();
-        if (!in_array($document, $documents)) {
-            $documents[] = $document;
-            $this->documents = $documents;
-        }
+        return $this->photos;
+    }
+
+    public function setPhotos(?array $photos): self
+    {
+        $this->photos = $photos ?? [];
         return $this;
     }
 
-    public function removeDocument(string $document): static
+    public function getAuditReport(): ?string
     {
-        $documents = $this->getDocuments();
-        $key = array_search($document, $documents);
-        if ($key !== false) {
-            unset($documents[$key]);
-            $this->documents = array_values($documents);
-        }
-        return $this;
+        return $this->auditReport;
     }
 
-    public function getPhotos(): ?array
+    public function setAuditReport(?string $auditReport): static
     {
-        return $this->photos ?? [];
-    }
-
-    public function setPhotos(?array $photos): static
-    {
-        $this->photos = $photos;
-        return $this;
-    }
-
-    public function addPhoto(string $photo): static
-    {
-        $photos = $this->getPhotos();
-        if (!in_array($photo, $photos)) {
-            $photos[] = $photo;
-            $this->photos = $photos;
-        }
-        return $this;
-    }
-
-    public function removePhoto(string $photo): static
-    {
-        $photos = $this->getPhotos();
-        $key = array_search($photo, $photos);
-        if ($key !== false) {
-            unset($photos[$key]);
-            $this->photos = array_values($photos);
-        }
-        return $this;
-    }
-
-    public function getObservations(): ?string
-    {
-        return $this->observations;
-    }
-
-    public function setObservations(?string $observations): static
-    {
-        $this->observations = $observations;
-        return $this;
-    }
-
-    public function getDateDebut(): ?\DateTimeInterface
-    {
-        return $this->dateDebut;
-    }
-
-    public function setDateDebut(?\DateTimeInterface $dateDebut): static
-    {
-        $this->dateDebut = $dateDebut;
-        return $this;
-    }
-
-    public function getDateFin(): ?\DateTimeInterface
-    {
-        return $this->dateFin;
-    }
-
-    public function setDateFin(?\DateTimeInterface $dateFin): static
-    {
-        $this->dateFin = $dateFin;
+        $this->auditReport = $auditReport;
         return $this;
     }
 
@@ -399,7 +464,7 @@ class Audit
         return $this->createdBy;
     }
 
-    public function setCreatedBy(?string $createdBy): static
+    public function setCreatedBy(?string $createdBy): self
     {
         $this->createdBy = $createdBy;
         return $this;
@@ -410,138 +475,59 @@ class Audit
         return $this->updatedBy;
     }
 
-    public function setUpdatedBy(?string $updatedBy): static
+    public function setUpdatedBy(?string $updatedBy): self
     {
         $this->updatedBy = $updatedBy;
         return $this;
     }
 
-    // Méthodes utilitaires
-
-    public function getTypeLabel(): string
-    {
-        return match($this->type) {
-            'audit_financier' => 'Audit Financier',
-            'audit_technique' => 'Audit Technique',
-            'audit_conformite' => 'Audit de Conformité',
-            'controle_qualite' => 'Contrôle Qualité',
-            'inspection' => 'Inspection',
-            'evaluation' => 'Évaluation',
-            'suivi' => 'Suivi',
-            default => ucfirst(str_replace('_', ' ', $this->type ?? ''))
-        };
-    }
-
     public function getStatutLabel(): string
     {
-        return match($this->statut) {
-            'planifie' => 'Planifié',
-            'en_cours' => 'En cours',
-            'termine' => 'Terminé',
-            'reporte' => 'Reporté',
-            'annule' => 'Annulé',
+        return match ($this->statut) {
+            self::STATUT_PLANIFIE => 'Planifié',
+            self::STATUT_EN_COURS => 'En cours',
+            self::STATUT_TERMINE => 'Terminé',
+            self::STATUT_ANNULE => 'Annulé',
             default => 'Inconnu'
         };
     }
 
     public function getStatutBadgeClass(): string
     {
-        return match($this->statut) {
-            'planifie' => 'warning',
-            'en_cours' => 'info',
-            'termine' => 'success',
-            'reporte' => 'secondary',
-            'annule' => 'danger',
+        return match ($this->statut) {
+            self::STATUT_PLANIFIE => 'info',
+            self::STATUT_EN_COURS => 'warning',
+            self::STATUT_TERMINE => 'success',
+            self::STATUT_ANNULE => 'danger',
             default => 'secondary'
         };
+    }
+
+    public function getTypeLabel(): string
+    {
+        $types = array_flip(self::getTypes());
+        return $types[$this->type] ?? $this->type;
     }
 
     public function getNiveauLabel(): string
     {
-        return match($this->niveau) {
-            'excellent' => 'Excellent',
-            'bon' => 'Bon',
-            'satisfaisant' => 'Satisfaisant',
-            'moyen' => 'Moyen',
-            'insuffisant' => 'Insuffisant',
-            'critique' => 'Critique',
-            default => 'Non évalué'
-        };
-    }
-
-    public function getNiveauBadgeClass(): string
-    {
-        return match($this->niveau) {
-            'excellent', 'bon' => 'success',
-            'satisfaisant', 'moyen' => 'warning',
-            'insuffisant', 'critique' => 'danger',
-            default => 'secondary'
-        };
-    }
-
-    public function getNombreDocuments(): int
-    {
-        return count($this->getDocuments());
-    }
-
-    public function getNombrePhotos(): int
-    {
-        return count($this->getPhotos());
+        $niveaux = array_flip(self::getNiveaux());
+        return $niveaux[$this->niveau] ?? $this->niveau;
     }
 
     public function isModifiable(): bool
     {
-        return in_array($this->statut, ['planifie', 'en_cours']);
+        return $this->statut !== self::STATUT_TERMINE && $this->statut !== self::STATUT_ANNULE;
     }
 
-    public function getDureeEnJours(): ?int
+    public function getNombreDocuments(): int
     {
-        if ($this->dateDebut === null || $this->dateFin === null) {
-            return null;
-        }
-
-        $diff = $this->dateDebut->diff($this->dateFin);
-        return $diff->days;
+        return count($this->documents);
     }
 
-    public static function getTypes(): array
+    public function getNombrePhotos(): int
     {
-        return [
-            'Audit Financier' => 'audit_financier',
-            'Audit Technique' => 'audit_technique',
-            'Audit de Conformité' => 'audit_conformite',
-            'Contrôle Qualité' => 'controle_qualite',
-            'Inspection' => 'inspection',
-            'Évaluation' => 'evaluation',
-            'Suivi' => 'suivi',
-        ];
+        return count($this->photos);
     }
 
-    public static function getStatuts(): array
-    {
-        return [
-            'Planifié' => 'planifie',
-            'En cours' => 'en_cours',
-            'Terminé' => 'termine',
-            'Reporté' => 'reporte',
-            'Annulé' => 'annule',
-        ];
-    }
-
-    public static function getNiveaux(): array
-    {
-        return [
-            'Excellent' => 'excellent',
-            'Bon' => 'bon',
-            'Satisfaisant' => 'satisfaisant',
-            'Moyen' => 'moyen',
-            'Insuffisant' => 'insuffisant',
-            'Critique' => 'critique',
-        ];
-    }
-
-    public function __toString(): string
-    {
-        return $this->reference ?? 'Nouvel audit';
-    }
 }

@@ -121,6 +121,6 @@ unset($context[$key]);
 <turbo-stream action=\"before\" targets=\"{{ target }}\" {{- attributes }}>
     <template>{% block content %}{% endblock %}</template>
 </turbo-stream>
-", "@Turbo/components/Stream/Before.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\symfony\\ux-turbo\\templates\\components\\Stream\\Before.html.twig");
+", "@Turbo/components/Stream/Before.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\symfony\\ux-turbo\\templates\\components\\Stream\\Before.html.twig");
     }
 }

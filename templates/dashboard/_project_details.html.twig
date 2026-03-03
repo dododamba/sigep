@@ -1,294 +1,278 @@
-{# Template de détail d'un projet - Dashboard Top Management #}
 {% extends 'base.html.twig' %}
 
 {% block title %}{{ project.titre }} - Détail Projet - SIGEP Tchad{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-{% endblock %}
-
 {% block body %}
-<div class="project-detail-container">
-    {# Header Projet #}
-    <div class="detail-header">
-        <div class="header-left">
-            <a href="{{ path('app_dashboard_index') }}" class="btn-back">
-                <i data-lucide="arrow-left"></i>
-                Retour au dashboard
-            </a>
-            <h1 class="project-title">{{ project.titre }}</h1>
-            <span class="project-code">{{ project.code }}</span>
+<!-- Toolbar -->
+<div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+    <div id="kt_app_toolbar_container" class="app-container container-xxl d-flex flex-stack">
+        <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+            <h1 class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">{{ project.titre }}</h1>
+            <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                <li class="breadcrumb-item text-muted">
+                    <a href="{{ path('app_dashboard') }}" class="text-muted text-hover-primary">Dashboard</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-muted">Projets</li>
+                <li class="breadcrumb-item">
+                    <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                </li>
+                <li class="breadcrumb-item text-dark">{{ project.code }}</li>
+            </ul>
         </div>
-        <div class="header-right">
-            <span class="badge badge-{{ project.statut }}">{{ project.statutLabel }}</span>
-            <span class="risk-badge risk-{{ metrics.riskLevel|lower }}">
-                Risque: {{ metrics.riskLevel }}
-            </span>
+        <div class="d-flex align-items-center gap-2 gap-lg-3">
+            <a href="{{ path('app_dashboard') }}" class="btn btn-sm btn-secondary">
+                <i data-lucide="arrow-left" class="me-1" style="width: 14px; height: 14px;"></i> Retour
+            </a>
+            <span class="badge badge-light-{{ project.statut|default('primary') }} fs-7 fw-bold">{{ project.statutLabel }}</span>
         </div>
     </div>
+</div>
 
-    {# Métriques Principales #}
-    <section class="metrics-grid">
-        <div class="metric-card">
-            <div class="metric-icon" style="background: var(--gold-100); color: var(--gold-600);">
-                <i data-lucide="banknote"></i>
-            </div>
-            <div class="metric-content">
-                <span class="metric-label">Budget Total</span>
-                <span class="metric-value">{{ metrics.totalBudget|number_format(0, ',', ' ') }} FCFA</span>
-            </div>
-        </div>
-
-        <div class="metric-card">
-            <div class="metric-icon" style="background: var(--success-100); color: var(--success-600);">
-                <i data-lucide="trending-up"></i>
-            </div>
-            <div class="metric-content">
-                <span class="metric-label">Décaissé</span>
-                <span class="metric-value">{{ metrics.totalDisbursed|number_format(0, ',', ' ') }} FCFA</span>
-                <span class="metric-sublabel">{{ metrics.disbursementRate }}% du budget</span>
-            </div>
-        </div>
-
-        <div class="metric-card">
-            <div class="metric-icon" style="background: var(--primary-100); color: var(--primary-600);">
-                <i data-lucide="activity"></i>
-            </div>
-            <div class="metric-content">
-                <span class="metric-label">Réalisation Physique</span>
-                <span class="metric-value">{{ metrics.physicalProgress }}%</span>
-                <div class="progress-bar-mini">
-                    <div class="progress-fill-mini" style="width: {{ metrics.physicalProgress }}%"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="metric-card">
-            <div class="metric-icon" style="background: {{ metrics.isDelayed ? 'var(--red-100)' : 'var(--success-100)' }}; color: {{ metrics.isDelayed ? 'var(--red-600)' : 'var(--success-600)' }};">
-                <i data-lucide="calendar"></i>
-            </div>
-            <div class="metric-content">
-                <span class="metric-label">Délai</span>
-                {% if metrics.daysRemaining is not null %}
-                    {% if metrics.daysRemaining >= 0 %}
-                        <span class="metric-value">{{ metrics.daysRemaining }} jours restants</span>
-                    {% else %}
-                        <span class="metric-value text-danger">{{ metrics.daysRemaining * -1 }} jours de retard</span>
-                    {% endif %}
-                {% else %}
-                    <span class="metric-value">Non défini</span>
-                {% endif %}
-            </div>
-        </div>
-    </section>
-
-    <div class="detail-grid">
-        {# Colonne Gauche #}
-        <div class="detail-column">
-            {# Informations Générales #}
-            <section class="info-card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i data-lucide="info"></i>
-                        Informations Générales
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="info-group">
-                        <label>Institution Responsable</label>
-                        <value>{{ project.institution ? project.institution.nom : 'Non définie' }}</value>
-                    </div>
-                    <div class="info-group">
-                        <label>Secteur</label>
-                        <value><span class="badge badge-sector">{{ project.secteur }}</span></value>
-                    </div>
-                    <div class="info-group">
-                        <label>Période</label>
-                        <value>
-                            Du {{ project.dateDebut ? project.dateDebut|date('d/m/Y') : 'N/A' }}
-                            au {{ project.dateFin ? project.dateFin|date('d/m/Y') : 'N/A' }}
-                        </value>
-                    </div>
-                    <div class="info-group">
-                        <label>Localisation</label>
-                        <value>{{ project.localisation ?? 'Non précisée' }}</value>
-                    </div>
-                    {% if project.description %}
-                    <div class="info-group">
-                        <label>Description</label>
-                        <value class="description-text">{{ project.description }}</value>
-                    </div>
-                    {% endif %}
-                </div>
-            </section>
-
-            {# Financements #}
-            <section class="info-card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i data-lucide="wallet"></i>
-                        Financements
-                    </h3>
-                </div>
-                <div class="card-body">
-                    {% if financingDetails is not empty %}
-                        <div class="financing-list">
-                            {% for financing in financingDetails %}
-                            <div class="financing-item">
-                                <div class="financing-header">
-                                    <strong>{{ financing.sourceFinancement }}</strong>
-                                    <span class="financing-amount">{{ financing.montantTotal|number_format(0, ',', ' ') }} FCFA</span>
-                                </div>
-                                <div class="financing-details">
-                                    <span class="financing-type">{{ financing.typeFinancement }}</span>
-                                    {% if financing.numeroConvention %}
-                                        <span class="financing-ref">Convention: {{ financing.numeroConvention }}</span>
-                                    {% endif %}
-                                </div>
-                                <a href="{{ path('app_dashboard_financing_detail', {id: financing.id}) }}" class="financing-link">
-                                    Voir détails
-                                    <i data-lucide="arrow-right"></i>
-                                </a>
-                            </div>
-                            {% endfor %}
+<!-- Content -->
+<div id="kt_app_content" class="app-content flex-column-fluid">
+    <div id="kt_app_content_container" class="app-container container-xxl">
+        
+        <!-- Metrics Row -->
+        <div class="row g-5 g-xl-10 mb-5 mb-xl-10">
+            <!-- Budget -->
+            <div class="col-md-3">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ metrics.totalBudget|number_format(0, ',', ' ') }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Budget Total (FCFA)</span>
                         </div>
-                    {% else %}
-                        <p class="empty-message">Aucun financement enregistré</p>
-                    {% endif %}
+                    </div>
                 </div>
-            </section>
+            </div>
 
-            {# Audits et Contrôles #}
-            {% if audits is not empty %}
-            <section class="info-card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i data-lucide="clipboard-check"></i>
-                        Audits et Contrôles
-                    </h3>
+            <!-- Disbursed -->
+            <div class="col-md-3">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ metrics.totalDisbursed|number_format(0, ',', ' ') }}</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Décaissé (FCFA)</span>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0 pb-5">
+                        <span class="badge badge-light-success fs-7 fw-bold">{{ metrics.disbursementRate }}% du budget</span>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <div class="audit-timeline">
-                        {% for audit in audits|slice(0, 5) %}
-                        <div class="audit-item">
-                            <div class="audit-date">{{ audit.dateAudit ? audit.dateAudit|date('d/m/Y') : 'N/A' }}</div>
-                            <div class="audit-content">
-                                <h5>{{ audit.typeAudit }}</h5>
-                                <p>{{ audit.conclusion|slice(0, 100) }}...</p>
-                                {% if audit.recommendations %}
-                                    <span class="audit-tag">{{ audit.recommendations|length }} recommandation(s)</span>
-                                {% endif %}
+            </div>
+
+            <!-- Progress -->
+            <div class="col-md-3">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">{{ metrics.physicalProgress }}%</span>
+                            <span class="text-gray-400 pt-1 fw-semibold fs-6">Réalisation Physique</span>
+                        </div>
+                    </div>
+                    <div class="card-body pt-0 pb-5">
+                        <div class="h-8px w-100 bg-light-primary rounded">
+                            <div class="bg-primary rounded h-8px" role="progressbar" style="width: {{ metrics.physicalProgress }}%"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Delay -->
+            <div class="col-md-3">
+                <div class="card card-flush h-md-100">
+                    <div class="card-header pt-5">
+                        <div class="card-title d-flex flex-column">
+                            {% if metrics.daysRemaining is not null %}
+                                <span class="fs-2hx fw-bold text-{{ metrics.daysRemaining >= 0 ? 'dark' : 'danger' }} me-2 lh-1 ls-n2">{{ metrics.daysRemaining|abs }}</span>
+                                <span class="text-gray-400 pt-1 fw-semibold fs-6">{{ metrics.daysRemaining >= 0 ? 'jours restants' : 'jours de retard' }}</span>
+                            {% else %}
+                                <span class="fs-2hx fw-bold text-dark me-2 lh-1 ls-n2">-</span>
+                                <span class="text-gray-400 pt-1 fw-semibold fs-6">Délai non défini</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-5 g-xl-10">
+            <!-- Left Column -->
+            <div class="col-xl-8">
+                <!-- Info Section -->
+                <div class="card card-flush mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Informations Générales</span>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-semibold text-muted">Institution Responsable</label>
+                            <div class="col-lg-8">
+                                <span class="fw-bold fs-6 text-gray-800">{{ project.institution ? project.institution.nom : 'Non définie' }}</span>
+                            </div>
+                        </div>
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-semibold text-muted">Secteur</label>
+                            <div class="col-lg-8">
+                                <span class="badge badge-light-primary fs-7 fw-bold">{{ project.secteur }}</span>
+                            </div>
+                        </div>
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-semibold text-muted">Période</label>
+                            <div class="col-lg-8">
+                                <span class="fw-bold fs-6 text-gray-800">Du {{ project.dateDebut ? project.dateDebut|date('d/m/Y') : 'N/A' }} au {{ project.dateFin ? project.dateFin|date('d/m/Y') : 'N/A' }}</span>
+                            </div>
+                        </div>
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-semibold text-muted">Localisation</label>
+                            <div class="col-lg-8">
+                                <span class="fw-bold fs-6 text-gray-800">{{ project.localisation ?? 'Non précisée' }}</span>
+                            </div>
+                        </div>
+                        {% if project.description %}
+                        <div class="row mb-7">
+                            <label class="col-lg-4 fw-semibold text-muted">Description</label>
+                            <div class="col-lg-8">
+                                <span class="fw-semibold fs-6 text-gray-800">{{ project.description }}</span>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Financing -->
+                <div class="card card-flush mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Financements</span>
+                        </h3>
+                    </div>
+                    <div class="card-body pt-0">
+                        <div class="table-responsive">
+                            <table class="table align-middle table-row-dashed fs-6 gy-3">
+                                <thead>
+                                    <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
+                                        <th class="min-w-150px">Source</th>
+                                        <th class="min-w-100px text-end">Montant</th>
+                                        <th class="min-w-100px text-end">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="fw-semibold text-gray-600">
+                                    {% for financing in financingDetails %}
+                                    <tr>
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <span class="text-dark fw-bold">{{ financing.sourceFinancement }}</span>
+                                                <span class="text-muted fs-7">{{ financing.typeFinancement }}</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-end fw-bold">{{ financing.montantTotal|number_format(0, ',', ' ') }} FCFA</td>
+                                        <td class="text-end">
+                                            <a href="{{ path('app_dashboard_financing_detail', {id: financing.id}) }}" class="btn btn-sm btn-light">Détails</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="col-xl-4">
+                <!-- Progress Chart -->
+                <div class="card card-flush mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Progression Mensuelle</span>
+                        </h3>
+                    </div>
+                    <div class="card-body">
+                        <div style="height: 250px;">
+                            <canvas id="progressChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Disbursements -->
+                <div class="card card-flush mb-5 mb-xl-10">
+                    <div class="card-header pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bold text-dark">Décaissements Récents</span>
+                        </h3>
+                    </div>
+                    <div class="card-body pt-0">
+                        {% for disbursement in disbursements|slice(0, 5) %}
+                        <div class="d-flex flex-stack mb-5 border-dashed p-3 rounded">
+                            <div class="d-flex flex-column">
+                                <span class="text-dark fw-bold fs-6">{{ disbursement.dateDecaissement ? disbursement.dateDecaissement|date('d/m/Y') : 'N/A' }}</span>
+                                <span class="text-muted fs-7">{{ disbursement.reference }}</span>
+                            </div>
+                            <div class="d-flex flex-column text-end">
+                                <span class="text-dark fw-bold">{{ disbursement.montant|number_format(0, ',', ' ') }} FCFA</span>
+                                <span class="badge badge-light-{{ disbursement.statut|default('primary') }} fs-8">{{ disbursement.statut }}</span>
                             </div>
                         </div>
                         {% endfor %}
                     </div>
                 </div>
-            </section>
-            {% endif %}
-        </div>
-
-        {# Colonne Droite #}
-        <div class="detail-column">
-            {# Graphique Progression Mensuelle #}
-            <section class="info-card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i data-lucide="trending-up"></i>
-                        Progression Mensuelle
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <canvas id="progressChart" height="250"></canvas>
-                </div>
-            </section>
-
-            {# Décaissements #}
-            <section class="info-card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i data-lucide="coins"></i>
-                        Décaissements
-                    </h3>
-                </div>
-                <div class="card-body">
-                    {% if disbursements is not empty %}
-                        <div class="disbursement-list">
-                            {% for disbursement in disbursements|slice(0, 10) %}
-                            <div class="disbursement-item">
-                                <div class="disbursement-header">
-                                    <span class="disbursement-date">{{ disbursement.dateDecaissement ? disbursement.dateDecaissement|date('d/m/Y') : 'N/A' }}</span>
-                                    <span class="disbursement-amount">{{ disbursement.montant|number_format(0, ',', ' ') }} FCFA</span>
-                                </div>
-                                <div class="disbursement-meta">
-                                    <span class="disbursement-status badge badge-{{ disbursement.statut }}">{{ disbursement.statut }}</span>
-                                    {% if disbursement.reference %}
-                                        <span class="disbursement-ref">Réf: {{ disbursement.reference }}</span>
-                                    {% endif %}
-                                </div>
-                            </div>
-                            {% endfor %}
-                        </div>
-
-                        {% if disbursements|length > 10 %}
-                        <div class="card-footer">
-                            <a href="{{ path('app_decaissement_index', {project: project.id}) }}" class="btn-link-full">
-                                Voir tous les décaissements ({{ disbursements|length }})
-                                <i data-lucide="arrow-right"></i>
-                            </a>
-                        </div>
-                        {% endif %}
-                    {% else %}
-                        <p class="empty-message">Aucun décaissement enregistré</p>
-                    {% endif %}
-                </div>
-            </section>
-
-            {# Indicateurs de Performance #}
-            <section class="info-card">
-                <div class="card-header">
-                    <h3 class="card-title">
-                        <i data-lucide="gauge"></i>
-                        Indicateurs de Performance
-                    </h3>
-                </div>
-                <div class="card-body">
-                    <div class="performance-indicators">
-                        <div class="indicator">
-                            <div class="indicator-label">Avancement Financier</div>
-                            <div class="indicator-value">{{ metrics.financialProgress }}%</div>
-                            <div class="indicator-bar">
-                                <div class="indicator-fill" style="width: {{ metrics.financialProgress }}%; background: var(--gold-500);"></div>
-                            </div>
-                        </div>
-
-                        <div class="indicator">
-                            <div class="indicator-label">Avancement Physique</div>
-                            <div class="indicator-value">{{ metrics.physicalProgress }}%</div>
-                            <div class="indicator-bar">
-                                <div class="indicator-fill" style="width: {{ metrics.physicalProgress }}%; background: var(--primary-500);"></div>
-                            </div>
-                        </div>
-
-                        <div class="indicator">
-                            <div class="indicator-label">Efficacité du Projet</div>
-                            <div class="indicator-value">
-                                {% set efficiency = metrics.physicalProgress > 0 and metrics.financialProgress > 0 
-                                    ? (metrics.physicalProgress / metrics.financialProgress * 100)|round(0) 
-                                    : 0 %}
-                                {{ efficiency }}%
-                            </div>
-                            <div class="indicator-bar">
-                                <div class="indicator-fill" style="width: {{ efficiency }}%; 
-                                     background: {{ efficiency > 90 ? 'var(--success-500)' : (efficiency > 70 ? 'var(--warning-500)' : 'var(--danger-500)') }};"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        // Initialiser Lucide Icons si disponibles
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        // Graphique Progression Mensuelle
+        const progressData = {{ monthlyProgress|json_encode|raw }};
+        
+        if (document.getElementById('progressChart')) {
+            new Chart(document.getElementById('progressChart'), {
+                type: 'line',
+                data: {
+                    labels: Object.keys(progressData),
+                    datasets: [{
+                        label: 'Décaissements (FCFA)',
+                        data: Object.values(progressData),
+                        borderColor: '#004d99',
+                        backgroundColor: 'rgba(0, 77, 153, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('fr-FR');
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
 {% endblock %}
 
 {% block javascripts %}

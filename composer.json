@@ -40,7 +40,7 @@
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/string-extra": "^3.22",
         "twig/twig": "^3.0",
-        "vich/uploader-bundle": "^2.4"
+        "vich/uploader-bundle": "*"
     },
     "config": {
         "allow-plugins": {
@@ -98,6 +98,7 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.1",
         "fakerphp/faker": "^1.24",
-        "symfony/maker-bundle": "*"
+        "symfony/maker-bundle": "*",
+        "symfony/test-pack": "*"
     }
 }

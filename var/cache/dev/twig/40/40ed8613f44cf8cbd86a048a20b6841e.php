@@ -290,6 +290,6 @@ class __TwigTemplate_164fc7fa8a5ae512f967ef463fbc529a extends Template
 
 </div>
 {% endblock %}
-", "security/register.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\security\\register.html.twig");
+", "security/register.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\security\\register.html.twig");
     }
 }

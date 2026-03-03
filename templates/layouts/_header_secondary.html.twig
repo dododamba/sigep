@@ -1,0 +1,197 @@
+<div class="app-header-secondary app-header-mobile-drawer" data-kt-drawer="true" data-kt-drawer-name="app-header-menu" data-kt-drawer-activate="{default: true, lg: false}" data-kt-drawer-overlay="true" data-kt-drawer-width="250px" data-kt-drawer-direction="start" data-kt-drawer-toggle="#kt_header_secondary_toggle" data-kt-sticky="true" data-kt-sticky-name="app-header-secondary-sticky" data-kt-sticky-offset="{default: 'false', lg: '300px'}" data-kt-swapper="true" data-kt-swapper-mode="append" data-kt-swapper-parent="{default: '#kt_app_body', lg: '#kt_app_header'}">
+	<!--begin::Header secondary container-->
+	<div class="app-container container-xxl app-container-fit-mobile d-flex align-items-stretch">
+		<!--begin::Menu wrapper-->
+		<div class="header-menu d-flex align-items-stretch w-100">
+			<!--begin::Menu-->
+			<div class="menu menu-lg-rounded menu-column menu-lg-row menu-state-bg menu-state-primary menu-title-gray-700 menu-arrow-gray-400 menu-bullet-gray-400 fw-semibold my-5 my-lg-0 align-items-stretch" id="#kt_header_menu" data-kt-menu="true">
+				
+				<!-- Tableau de bord -->
+				<div class="menu-item me-0 me-lg-2">
+					<a class="menu-link py-3 {{ currentRoute starts with 'app_dashboard' ? 'active' }}" href="{{ path('app_dashboard') }}">
+						<span class="menu-title">
+							<span class="menu-text">Tableau de bord</span>
+							<span class="menu-desc">Vue d'ensemble</span>
+						</span>
+					</a>
+				</div>
+
+				<!-- Navigation -->
+				<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+					<span class="menu-link py-3 {{ currentRoute starts with 'app_partners' or currentRoute starts with 'app_institutions' ? 'active' }}">
+						<span class="menu-title">
+							<span class="menu-text">Navigation</span>
+							<span class="menu-desc">Partenaires & Institutions</span>
+						</span>
+						<span class="menu-arrow d-lg-none"></span>
+					</span>
+					<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px">
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_partners' ? 'active' }}" href="{{ path('app_partners') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-people fs-2">
+										<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span>
+									</i>
+								</span>
+								<span class="menu-title">Partenaires</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_institutions' ? 'active' }}" href="{{ path('app_institutions') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-bank fs-2">
+										<span class="path1"></span><span class="path2"></span>
+									</i>
+								</span>
+								<span class="menu-title">Institutions</span>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Projets & Finances -->
+				<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+					<span class="menu-link py-3 {{ currentRoute starts with 'app_projects' or currentRoute starts with 'app_financements' or currentRoute starts with 'app_decaissement' or currentRoute starts with 'app_convention' or currentRoute starts with 'app_audit' ? 'active' }}">
+						<span class="menu-title">
+							<span class="menu-text">Projets & Finances</span>
+							<span class="menu-desc">Suivi & Exécution</span>
+						</span>
+						<span class="menu-arrow d-lg-none"></span>
+					</span>
+					<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-250px">
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_projects' ? 'active' }}" href="{{ path('app_projects') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-briefcase fs-2">
+										<span class="path1"></span><span class="path2"></span>
+									</i>
+								</span>
+								<span class="menu-title">Projets</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_financements' ? 'active' }}" href="{{ path('app_financements') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-wallet fs-2">
+										<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span>
+									</i>
+								</span>
+								<span class="menu-title">Financements</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_decaissement' ? 'active' }}" href="{{ path('app_decaissement_index') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-bill fs-2">
+										<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span><span class="path5"></span><span class="path6"></span>
+									</i>
+								</span>
+								<span class="menu-title">Décaissements</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_convention' ? 'active' }}" href="{{ path('app_convention_index') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-document fs-2">
+										<span class="path1"></span><span class="path2"></span>
+									</i>
+								</span>
+								<span class="menu-title">Conventions</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_audit' ? 'active' }}" href="{{ path('app_audit_index') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-search-list fs-2">
+										<span class="path1"></span><span class="path2"></span><span class="path3"></span>
+									</i>
+								</span>
+								<span class="menu-title">Audits</span>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Gestion des utilisateurs -->
+				<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+					<span class="menu-link py-3 {{ currentRoute starts with 'app_user' or currentRoute starts with 'app_roles' or currentRoute starts with 'app_activity' ? 'active' }}">
+						<span class="menu-title">
+							<span class="menu-text">Administration</span>
+							<span class="menu-desc">Utilisateurs & Rôles</span>
+						</span>
+						<span class="menu-arrow d-lg-none"></span>
+					</span>
+					<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-225px">
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_user' ? 'active' }}" href="{{ path('app_user_index') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-profile-user fs-2">
+										<span class="path1"></span><span class="path2"></span><span class="path3"></span><span class="path4"></span>
+									</i>
+								</span>
+								<span class="menu-title">Utilisateurs</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_roles' ? 'active' }}" href="{{ path('app_roles') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-shield-tick fs-2">
+										<span class="path1"></span><span class="path2"></span>
+									</i>
+								</span>
+								<span class="menu-title">Rôles & permissions</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_activity' ? 'active' }}" href="{{ path('app_activity_index') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-time fs-2">
+										<span class="path1"></span><span class="path2"></span>
+									</i>
+								</span>
+								<span class="menu-title">Historiques</span>
+							</a>
+						</div>
+					</div>
+				</div>
+
+				<!-- Compte -->
+				<div data-kt-menu-trigger="{default: 'click', lg: 'hover'}" data-kt-menu-placement="bottom-start" class="menu-item menu-lg-down-accordion menu-sub-lg-down-indention me-0 me-lg-2">
+					<span class="menu-link py-3 {{ currentRoute starts with 'app_profile' ? 'active' }}">
+						<span class="menu-title">
+							<span class="menu-text">Compte</span>
+							<span class="menu-desc">Paramètres & Profil</span>
+						</span>
+						<span class="menu-arrow d-lg-none"></span>
+					</span>
+					<div class="menu-sub menu-sub-lg-down-accordion menu-sub-lg-dropdown px-lg-2 py-lg-4 w-lg-200px">
+						<div class="menu-item">
+							<a class="menu-link py-3 {{ currentRoute starts with 'app_profile' ? 'active' }}" href="{{ path('app_profile') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-setting-2 fs-2">
+										<span class="path1"></span><span class="path2"></span>
+									</i>
+								</span>
+								<span class="menu-title">Mon profil</span>
+							</a>
+						</div>
+						<div class="menu-item">
+							<a class="menu-link py-3" href="{{ path('app_logout') }}">
+								<span class="menu-icon">
+									<i class="ki-duotone ki-exit-right fs-2">
+										<span class="path1"></span><span class="path2"></span>
+									</i>
+								</span>
+								<span class="menu-title">Se déconnecter</span>
+							</a>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<!--end::Menu-->
+		</div>
+		<!--end::Menu wrapper-->
+	</div>
+	<!--end::Header secondary container-->
+</div>

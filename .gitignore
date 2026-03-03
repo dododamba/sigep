@@ -1,2 +1,7 @@
 node_modules/
 vendor/
+_bmad
+_bmad-output
+.agent
+.gemini
+Nouveau dossier

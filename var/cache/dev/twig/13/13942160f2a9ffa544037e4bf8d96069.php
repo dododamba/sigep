@@ -1572,6 +1572,6 @@ lucide.createIcons();
 lucide.createIcons();
 </script>
 {% endblock %}
-", "audit/edit.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\audit\\edit.html.twig");
+", "audit/edit.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\audit\\edit.html.twig");
     }
 }

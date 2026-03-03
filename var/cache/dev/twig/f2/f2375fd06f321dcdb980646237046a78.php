@@ -1171,6 +1171,6 @@ $context["page"] >= ((isset($context["currentPage"]) || array_key_exists("curren
         lucide.createIcons();
     </script>
 {% endblock %}
-", "role/index.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\role\\index.html.twig");
+", "role/index.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\role\\index.html.twig");
     }
 }

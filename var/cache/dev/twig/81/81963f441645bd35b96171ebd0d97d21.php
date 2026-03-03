@@ -31,7 +31,6 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
 
         $this->blocks = [
             'title' => [$this, 'block_title'],
-            'stylesheets' => [$this, 'block_stylesheets'],
             'body' => [$this, 'block_body'],
             'javascripts' => [$this, 'block_javascripts'],
         ];
@@ -39,8 +38,8 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
 
     protected function doGetParent(array $context): bool|string|Template|TemplateWrapper
     {
-        // line 2
-        return "management.html.twig";
+        // line 1
+        return "base.html.twig";
     }
 
     protected function doDisplay(array $context, array $blocks = []): iterable
@@ -49,14 +48,14 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "template", "top_management/financing_details.html.twig"));
 
-        $this->parent = $this->load("management.html.twig", 2);
+        $this->parent = $this->load("base.html.twig", 1);
         yield from $this->parent->unwrap()->yield($context, array_merge($this->blocks, $blocks));
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
 
     }
 
-    // line 4
+    // line 3
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -66,7 +65,7 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "title"));
 
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 4, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 4), "html", null, true);
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 3, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 3), "html", null, true);
         yield " - Détail Financement - SIGEP Tchad";
         
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
@@ -74,32 +73,7 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
         yield from [];
     }
 
-    // line 6
-    /**
-     * @return iterable<null|scalar|\Stringable>
-     */
-    public function block_stylesheets(array $context, array $blocks = []): iterable
-    {
-        $macros = $this->macros;
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "stylesheets"));
-
-        // line 7
-        yield "    ";
-        yield from $this->yieldParentBlock("stylesheets", $context, $blocks);
-        yield "
-    <link rel=\"stylesheet\" href=\"";
-        // line 8
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\AssetExtension']->getAssetUrl("css/dashboard.css"), "html", null, true);
-        yield "\">
-";
-        
-        $__internal_6f47bbe9983af81f1e7450e9a3e3768f->leave($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof);
-
-        yield from [];
-    }
-
-    // line 11
+    // line 5
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -109,523 +83,254 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "body"));
 
-        // line 12
-        yield "<div class=\"financing-detail-container\">
-    ";
-        // line 14
-        yield "    <div class=\"detail-header\">
-        <div class=\"header-left\">
-            <a href=\"";
-        // line 16
-        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_top_management_dashboard");
-        yield "\" class=\"btn-back\">
-                <i data-lucide=\"arrow-left\"></i>
-                Retour au dashboard
-            </a>
-            <h1 class=\"financing-title\">";
-        // line 20
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 20, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 20), "html", null, true);
+        // line 6
+        yield "<!-- Toolbar -->
+<div id=\"kt_app_toolbar\" class=\"app-toolbar py-3 py-lg-6\">
+    <div id=\"kt_app_toolbar_container\" class=\"app-container container-xxl d-flex flex-stack\">
+        <div class=\"page-title d-flex flex-column justify-content-center flex-wrap me-3\">
+            <h1 class=\"page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0\">";
+        // line 10
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 10, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 10), "html", null, true);
         yield "</h1>
-            ";
-        // line 21
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 21, $this->source); })()), "numeroConvention", [], "any", false, false, false, 21)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 22
-            yield "                <span class=\"financing-code\">Convention: ";
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 22, $this->source); })()), "numeroConvention", [], "any", false, false, false, 22), "html", null, true);
-            yield "</span>
-            ";
-        }
-        // line 24
-        yield "        </div>
-        <div class=\"header-right\">
-            <span class=\"badge badge-";
-        // line 26
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::replace(Twig\Extension\CoreExtension::lower($this->env->getCharset(), CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 26, $this->source); })()), "typeFinancement", [], "any", false, false, false, 26)), [" " => "-"]), "html", null, true);
-        yield "\">
+            <ul class=\"breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1\">
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"";
+        // line 13
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_top_management_dashboard");
+        yield "\" class=\"text-muted text-hover-primary\">Management</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">Financements</li>
                 ";
-        // line 27
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 27, $this->source); })()), "typeFinancement", [], "any", false, false, false, 27), "html", null, true);
-        yield "
-            </span>
+        // line 19
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 19, $this->source); })()), "numeroConvention", [], "any", false, false, false, 19)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 20
+            yield "                    <li class=\"breadcrumb-item\">
+                        <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                    </li>
+                    <li class=\"breadcrumb-item text-dark\">";
+            // line 23
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 23, $this->source); })()), "numeroConvention", [], "any", false, false, false, 23), "html", null, true);
+            yield "</li>
+                ";
+        }
+        // line 25
+        yield "            </ul>
+        </div>
+        <div class=\"d-flex align-items-center gap-2 gap-lg-3\">
+            <a href=\"";
+        // line 28
+        yield $this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_top_management_dashboard");
+        yield "\" class=\"btn btn-sm btn-secondary\">
+                <i data-lucide=\"arrow-left\" class=\"me-1\" style=\"width: 14px; height: 14px;\"></i> Retour
+            </a>
+            <span class=\"badge badge-light-primary fs-7 fw-bold\">";
+        // line 31
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 31, $this->source); })()), "typeFinancement", [], "any", false, false, false, 31), "html", null, true);
+        yield "</span>
         </div>
     </div>
+</div>
 
-    ";
-        // line 33
-        yield "    <section class=\"metrics-grid\">
-        <div class=\"metric-card\">
-            <div class=\"metric-icon\" style=\"background: var(--gold-100); color: var(--gold-600);\">
-                <i data-lucide=\"banknote\"></i>
-            </div>
-            <div class=\"metric-content\">
-                <span class=\"metric-label\">Montant Total</span>
-                <span class=\"metric-value\">";
-        // line 40
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 40, $this->source); })()), "totalAmount", [], "any", false, false, false, 40), 0, ",", " "), "html", null, true);
-        yield " FCFA</span>
-            </div>
-        </div>
-
-        <div class=\"metric-card\">
-            <div class=\"metric-icon\" style=\"background: var(--success-100); color: var(--success-600);\">
-                <i data-lucide=\"trending-up\"></i>
-            </div>
-            <div class=\"metric-content\">
-                <span class=\"metric-label\">Montant Décaissé</span>
-                <span class=\"metric-value\">";
-        // line 50
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 50, $this->source); })()), "totalDisbursed", [], "any", false, false, false, 50), 0, ",", " "), "html", null, true);
-        yield " FCFA</span>
-                <span class=\"metric-sublabel\">";
-        // line 51
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 51, $this->source); })()), "disbursementRate", [], "any", false, false, false, 51), "html", null, true);
-        yield "% du total</span>
-            </div>
-        </div>
-
-        <div class=\"metric-card\">
-            <div class=\"metric-icon\" style=\"background: var(--primary-100); color: var(--primary-600);\">
-                <i data-lucide=\"wallet\"></i>
-            </div>
-            <div class=\"metric-content\">
-                <span class=\"metric-label\">Montant Restant</span>
-                <span class=\"metric-value\">";
-        // line 61
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 61, $this->source); })()), "remainingAmount", [], "any", false, false, false, 61), 0, ",", " "), "html", null, true);
-        yield " FCFA</span>
-            </div>
-        </div>
-
-        <div class=\"metric-card\">
-            <div class=\"metric-icon\" style=\"background: var(--warning-100); color: var(--warning-600);\">
-                <i data-lucide=\"folder-kanban\"></i>
-            </div>
-            <div class=\"metric-content\">
-                <span class=\"metric-label\">Projets Financés</span>
-                <span class=\"metric-value\">";
-        // line 71
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 71, $this->source); })()), "projectsCount", [], "any", false, false, false, 71), "html", null, true);
+<!-- Content -->
+<div id=\"kt_app_content\" class=\"app-content flex-column-fluid\">
+    <div id=\"kt_app_content_container\" class=\"app-container container-xxl\">
+        
+        <!-- Metrics -->
+        <div class=\"row g-5 g-xl-10 mb-5 mb-xl-10\">
+            <div class=\"col-md-3\">
+                <div class=\"card card-flush h-md-100\">
+                    <div class=\"card-header pt-5\">
+                        <div class=\"card-title d-flex flex-column\">
+                            <span class=\"fs-2hx fw-bold text-dark me-2 lh-1 ls-n2\">";
+        // line 46
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 46, $this->source); })()), "totalAmount", [], "any", false, false, false, 46), 0, ",", " "), "html", null, true);
         yield "</span>
-                <span class=\"metric-sublabel\">Taux de succès: ";
-        // line 72
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 72, $this->source); })()), "successRate", [], "any", false, false, false, 72), "html", null, true);
-        yield "%</span>
+                            <span class=\"text-gray-400 pt-1 fw-semibold fs-6\">Montant Total (FCFA)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=\"col-md-3\">
+                <div class=\"card card-flush h-md-100\">
+                    <div class=\"card-header pt-5\">
+                        <div class=\"card-title d-flex flex-column\">
+                            <span class=\"fs-2hx fw-bold text-dark me-2 lh-1 ls-n2\">";
+        // line 56
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 56, $this->source); })()), "totalDisbursed", [], "any", false, false, false, 56), 0, ",", " "), "html", null, true);
+        yield "</span>
+                            <span class=\"text-gray-400 pt-1 fw-semibold fs-6\">Total Décaissé</span>
+                        </div>
+                    </div>
+                    <div class=\"card-body pt-0 pb-5\">
+                        <span class=\"badge badge-light-success fs-7 fw-bold\">";
+        // line 61
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 61, $this->source); })()), "disbursementRate", [], "any", false, false, false, 61), "html", null, true);
+        yield "% décaissé</span>
+                    </div>
+                </div>
+            </div>
+            <div class=\"col-md-3\">
+                <div class=\"card card-flush h-md-100\">
+                    <div class=\"card-header pt-5\">
+                        <div class=\"card-title d-flex flex-column\">
+                            <span class=\"fs-2hx fw-bold text-dark me-2 lh-1 ls-n2\">";
+        // line 69
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 69, $this->source); })()), "remainingAmount", [], "any", false, false, false, 69), 0, ",", " "), "html", null, true);
+        yield "</span>
+                            <span class=\"text-gray-400 pt-1 fw-semibold fs-6\">Montant Restant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=\"col-md-3\">
+                <div class=\"card card-flush h-md-100\">
+                    <div class=\"card-header pt-5\">
+                        <div class=\"card-title d-flex flex-column\">
+                            <span class=\"fs-2hx fw-bold text-dark me-2 lh-1 ls-n2\">";
+        // line 79
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 79, $this->source); })()), "projectsCount", [], "any", false, false, false, 79), "html", null, true);
+        yield "</span>
+                            <span class=\"text-gray-400 pt-1 fw-semibold fs-6\">Projets Financés</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </section>
 
-    <div class=\"detail-grid\">
-        ";
-        // line 79
-        yield "        <div class=\"detail-column\">
-            ";
-        // line 81
-        yield "            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"file-text\"></i>
-                        Informations de la Convention
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    <div class=\"info-group\">
-                        <label>Source de Financement</label>
-                        <value>";
-        // line 91
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 91, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 91), "html", null, true);
-        yield "</value>
+        <div class=\"row g-5 g-xl-10\">
+            <div class=\"col-xl-6\">
+                <!-- Info Section -->
+                <div class=\"card card-flush mb-5 mb-xl-10\">
+                    <div class=\"card-header pt-5\">
+                        <h3 class=\"card-title fw-bold text-dark\">Informations de la Convention</h3>
                     </div>
-                    <div class=\"info-group\">
-                        <label>Type de Financement</label>
-                        <value><span class=\"badge badge-type\">";
-        // line 95
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 95, $this->source); })()), "typeFinancement", [], "any", false, false, false, 95), "html", null, true);
-        yield "</span></value>
-                    </div>
-                    ";
-        // line 97
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 97, $this->source); })()), "numeroConvention", [], "any", false, false, false, 97)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 98
-            yield "                    <div class=\"info-group\">
-                        <label>Numéro de Convention</label>
-                        <value>";
-            // line 100
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 100, $this->source); })()), "numeroConvention", [], "any", false, false, false, 100), "html", null, true);
-            yield "</value>
-                    </div>
-                    ";
-        }
-        // line 103
-        yield "                    ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 103, $this->source); })()), "dateSignature", [], "any", false, false, false, 103)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 104
-            yield "                    <div class=\"info-group\">
-                        <label>Date de Signature</label>
-                        <value>";
-            // line 106
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 106, $this->source); })()), "dateSignature", [], "any", false, false, false, 106), "d/m/Y"), "html", null, true);
-            yield "</value>
-                    </div>
-                    ";
-        }
-        // line 109
-        yield "                    ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 109, $this->source); })()), "dateEntreeVigueur", [], "any", false, false, false, 109)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 110
-            yield "                    <div class=\"info-group\">
-                        <label>Date d'Entrée en Vigueur</label>
-                        <value>";
-            // line 112
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 112, $this->source); })()), "dateEntreeVigueur", [], "any", false, false, false, 112), "d/m/Y"), "html", null, true);
-            yield "</value>
-                    </div>
-                    ";
+                    <div class=\"card-body\">
+                        <div class=\"row mb-7\">
+                            <label class=\"col-lg-5 fw-semibold text-muted\">Source de Financement</label>
+                            <div class=\"col-lg-7\">
+                                <span class=\"fw-bold fs-6 text-gray-800\">";
+        // line 98
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 98, $this->source); })()), "sourceFinancement", [], "any", false, false, false, 98), "html", null, true);
+        yield "</span>
+                            </div>
+                        </div>
+                        <div class=\"row mb-7\">
+                            <label class=\"col-lg-5 fw-semibold text-muted\">Type de Financement</label>
+                            <div class=\"col-lg-7\">
+                                <span class=\"badge badge-light-primary fs-7 fw-bold\">";
+        // line 104
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 104, $this->source); })()), "typeFinancement", [], "any", false, false, false, 104), "html", null, true);
+        yield "</span>
+                            </div>
+                        </div>
+                        ";
+        // line 107
+        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 107, $this->source); })()), "numeroConvention", [], "any", false, false, false, 107)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
+            // line 108
+            yield "                        <div class=\"row mb-7\">
+                            <label class=\"col-lg-5 fw-semibold text-muted\">Numéro de Convention</label>
+                            <div class=\"col-lg-7\">
+                                <span class=\"fw-bold fs-6 text-gray-800\">";
+            // line 111
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 111, $this->source); })()), "numeroConvention", [], "any", false, false, false, 111), "html", null, true);
+            yield "</span>
+                            </div>
+                        </div>
+                        ";
         }
         // line 115
-        yield "                    ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 115, $this->source); })()), "dateExpiration", [], "any", false, false, false, 115)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 116
-            yield "                    <div class=\"info-group\">
-                        <label>Date d'Expiration</label>
-                        <value>";
-            // line 118
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 118, $this->source); })()), "dateExpiration", [], "any", false, false, false, 118), "d/m/Y"), "html", null, true);
-            yield "</value>
-                    </div>
-                    ";
-        }
-        // line 121
-        yield "                    ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 121, $this->source); })()), "devise", [], "any", false, false, false, 121)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 122
-            yield "                    <div class=\"info-group\">
-                        <label>Devise</label>
-                        <value>";
-            // line 124
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 124, $this->source); })()), "devise", [], "any", false, false, false, 124), "html", null, true);
-            yield "</value>
-                    </div>
-                    ";
-        }
-        // line 127
-        yield "                    ";
-        if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 127, $this->source); })()), "tauxChange", [], "any", false, false, false, 127)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 128
-            yield "                    <div class=\"info-group\">
-                        <label>Taux de Change</label>
-                        <value>";
-            // line 130
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 130, $this->source); })()), "tauxChange", [], "any", false, false, false, 130), "html", null, true);
-            yield "</value>
-                    </div>
-                    ";
-        }
-        // line 133
-        yield "                </div>
-            </section>
-
-            ";
-        // line 137
-        yield "            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"pie-chart\"></i>
-                        Répartition Sectorielle
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    <canvas id=\"sectorDistributionChart\" height=\"250\"></canvas>
-                    <div class=\"sector-legend\">
-                        ";
-        // line 147
-        $context['_parent'] = $context;
-        $context['_seq'] = CoreExtension::ensureTraversable((isset($context["sectorDistribution"]) || array_key_exists("sectorDistribution", $context) ? $context["sectorDistribution"] : (function () { throw new RuntimeError('Variable "sectorDistribution" does not exist.', 147, $this->source); })()));
-        foreach ($context['_seq'] as $context["sector"] => $context["count"]) {
-            // line 148
-            yield "                        <div class=\"legend-item\">
-                            <span class=\"legend-dot\"></span>
-                            <span class=\"legend-label\">";
-            // line 150
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["sector"], "html", null, true);
-            yield "</span>
-                            <span class=\"legend-value\">";
-            // line 151
-            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($context["count"], "html", null, true);
-            yield " projet(s)</span>
-                        </div>
-                        ";
-        }
-        $_parent = $context['_parent'];
-        unset($context['_seq'], $context['sector'], $context['count'], $context['_parent']);
-        $context = array_intersect_key($context, $_parent) + $_parent;
-        // line 154
         yield "                    </div>
                 </div>
-            </section>
-        </div>
 
-        ";
-        // line 160
-        yield "        <div class=\"detail-column\">
-            ";
-        // line 162
-        yield "            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"folder\"></i>
-                        Projets Financés
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    ";
-        // line 170
-        if ((($tmp =  !Twig\Extension\CoreExtension::testEmpty((isset($context["fundedProjects"]) || array_key_exists("fundedProjects", $context) ? $context["fundedProjects"] : (function () { throw new RuntimeError('Variable "fundedProjects" does not exist.', 170, $this->source); })()))) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 171
-            yield "                        <div class=\"projects-list\">
-                            ";
-            // line 172
-            $context['_parent'] = $context;
-            $context['_seq'] = CoreExtension::ensureTraversable(Twig\Extension\CoreExtension::slice($this->env->getCharset(), (isset($context["fundedProjects"]) || array_key_exists("fundedProjects", $context) ? $context["fundedProjects"] : (function () { throw new RuntimeError('Variable "fundedProjects" does not exist.', 172, $this->source); })()), 0, 8));
-            foreach ($context['_seq'] as $context["_key"] => $context["project"]) {
-                // line 173
-                yield "                            <div class=\"project-item\">
-                                <div class=\"project-header\">
-                                    <strong>";
-                // line 175
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["project"], "titre", [], "any", false, false, false, 175), "html", null, true);
-                yield "</strong>
-                                    <span class=\"badge badge-";
-                // line 176
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["project"], "statut", [], "any", false, false, false, 176), "html", null, true);
-                yield "\">";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["project"], "statutLabel", [], "any", false, false, false, 176), "html", null, true);
-                yield "</span>
-                                </div>
-                                <div class=\"project-meta\">
-                                    <span class=\"project-sector\">";
-                // line 179
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["project"], "secteur", [], "any", false, false, false, 179), "html", null, true);
-                yield "</span>
-                                    <span class=\"project-institution\">";
-                // line 180
-                yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["project"], "institution", [], "any", false, false, false, 180)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, $context["project"], "institution", [], "any", false, false, false, 180), "nom", [], "any", false, false, false, 180), "html", null, true)) : ("N/A"));
-                yield "</span>
-                                </div>
-                                <div class=\"project-progress\">
-                                    <div class=\"progress-label\">
-                                        <span>Progression: ";
-                // line 184
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["project"], "tauxRealisation", [], "any", false, false, false, 184), "html", null, true);
-                yield "%</span>
-                                    </div>
-                                    <div class=\"progress-bar-mini\">
-                                        <div class=\"progress-fill-mini\" style=\"width: ";
-                // line 187
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["project"], "tauxRealisation", [], "any", false, false, false, 187), "html", null, true);
-                yield "%\"></div>
-                                    </div>
-                                </div>
-                                <a href=\"";
-                // line 190
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_top_management_project_detail", ["id" => CoreExtension::getAttribute($this->env, $this->source, $context["project"], "id", [], "any", false, false, false, 190)]), "html", null, true);
-                yield "\" class=\"project-link\">
-                                    Voir détails
-                                    <i data-lucide=\"arrow-right\"></i>
-                                </a>
-                            </div>
-                            ";
-            }
-            $_parent = $context['_parent'];
-            unset($context['_seq'], $context['_key'], $context['project'], $context['_parent']);
-            $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 196
-            yield "                        </div>
-
-                        ";
-            // line 198
-            if ((Twig\Extension\CoreExtension::length($this->env->getCharset(), (isset($context["fundedProjects"]) || array_key_exists("fundedProjects", $context) ? $context["fundedProjects"] : (function () { throw new RuntimeError('Variable "fundedProjects" does not exist.', 198, $this->source); })())) > 8)) {
-                // line 199
-                yield "                        <div class=\"card-footer\">
-                            <a href=\"";
-                // line 200
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_project_index", ["financing" => CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 200, $this->source); })()), "id", [], "any", false, false, false, 200)]), "html", null, true);
-                yield "\" class=\"btn-link-full\">
-                                Voir tous les projets (";
-                // line 201
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::length($this->env->getCharset(), (isset($context["fundedProjects"]) || array_key_exists("fundedProjects", $context) ? $context["fundedProjects"] : (function () { throw new RuntimeError('Variable "fundedProjects" does not exist.', 201, $this->source); })())), "html", null, true);
-                yield ")
-                                <i data-lucide=\"arrow-right\"></i>
-                            </a>
-                        </div>
-                        ";
-            }
-            // line 206
-            yield "                    ";
-        } else {
-            // line 207
-            yield "                        <p class=\"empty-message\">Aucun projet financé</p>
-                    ";
-        }
-        // line 209
-        yield "                </div>
-            </section>
-
-            ";
-        // line 213
-        yield "            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"trending-up\"></i>
-                        Évolution des Décaissements
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    <canvas id=\"disbursementEvolutionChart\" height=\"250\"></canvas>
-                </div>
-            </section>
-
-            ";
-        // line 226
-        yield "            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"coins\"></i>
-                        Décaissements Récents
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    ";
-        // line 234
-        if ((($tmp =  !Twig\Extension\CoreExtension::testEmpty((isset($context["disbursements"]) || array_key_exists("disbursements", $context) ? $context["disbursements"] : (function () { throw new RuntimeError('Variable "disbursements" does not exist.', 234, $this->source); })()))) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-            // line 235
-            yield "                        <div class=\"disbursement-list\">
-                            ";
-            // line 236
-            $context['_parent'] = $context;
-            $context['_seq'] = CoreExtension::ensureTraversable(Twig\Extension\CoreExtension::slice($this->env->getCharset(), (isset($context["disbursements"]) || array_key_exists("disbursements", $context) ? $context["disbursements"] : (function () { throw new RuntimeError('Variable "disbursements" does not exist.', 236, $this->source); })()), 0, 10));
-            foreach ($context['_seq'] as $context["_key"] => $context["disbursement"]) {
-                // line 237
-                yield "                            <div class=\"disbursement-item\">
-                                <div class=\"disbursement-header\">
-                                    <span class=\"disbursement-date\">";
-                // line 239
-                yield (((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "dateDecaissement", [], "any", false, false, false, 239)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) ? ($this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatDate(CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "dateDecaissement", [], "any", false, false, false, 239), "d/m/Y"), "html", null, true)) : ("N/A"));
-                yield "</span>
-                                    <span class=\"disbursement-amount\">";
-                // line 240
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "montant", [], "any", false, false, false, 240), 0, ",", " "), "html", null, true);
-                yield " FCFA</span>
-                                </div>
-                                <div class=\"disbursement-meta\">
-                                    <span class=\"disbursement-status badge badge-";
-                // line 243
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "statut", [], "any", false, false, false, 243), "html", null, true);
-                yield "\">";
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "statut", [], "any", false, false, false, 243), "html", null, true);
-                yield "</span>
-                                    ";
-                // line 244
-                if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "reference", [], "any", false, false, false, 244)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-                    // line 245
-                    yield "                                        <span class=\"disbursement-ref\">Réf: ";
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "reference", [], "any", false, false, false, 245), "html", null, true);
-                    yield "</span>
-                                    ";
-                }
-                // line 247
-                yield "                                </div>
-                                ";
-                // line 248
-                if ((($tmp = CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "projet", [], "any", false, false, false, 248)) && $tmp instanceof Markup ? (string) $tmp : $tmp)) {
-                    // line 249
-                    yield "                                <div class=\"disbursement-project\">
-                                    <small>Projet: ";
-                    // line 250
-                    yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, CoreExtension::getAttribute($this->env, $this->source, $context["disbursement"], "projet", [], "any", false, false, false, 250), "titre", [], "any", false, false, false, 250), "html", null, true);
-                    yield "</small>
-                                </div>
-                                ";
-                }
-                // line 253
-                yield "                            </div>
-                            ";
-            }
-            $_parent = $context['_parent'];
-            unset($context['_seq'], $context['_key'], $context['disbursement'], $context['_parent']);
-            $context = array_intersect_key($context, $_parent) + $_parent;
-            // line 255
-            yield "                        </div>
-
-                        ";
-            // line 257
-            if ((Twig\Extension\CoreExtension::length($this->env->getCharset(), (isset($context["disbursements"]) || array_key_exists("disbursements", $context) ? $context["disbursements"] : (function () { throw new RuntimeError('Variable "disbursements" does not exist.', 257, $this->source); })())) > 10)) {
-                // line 258
-                yield "                        <div class=\"card-footer\">
-                            <a href=\"";
-                // line 259
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_decaissement_index", ["financing" => CoreExtension::getAttribute($this->env, $this->source, (isset($context["financing"]) || array_key_exists("financing", $context) ? $context["financing"] : (function () { throw new RuntimeError('Variable "financing" does not exist.', 259, $this->source); })()), "id", [], "any", false, false, false, 259)]), "html", null, true);
-                yield "\" class=\"btn-link-full\">
-                                Voir tous les décaissements (";
-                // line 260
-                yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(Twig\Extension\CoreExtension::length($this->env->getCharset(), (isset($context["disbursements"]) || array_key_exists("disbursements", $context) ? $context["disbursements"] : (function () { throw new RuntimeError('Variable "disbursements" does not exist.', 260, $this->source); })())), "html", null, true);
-                yield ")
-                                <i data-lucide=\"arrow-right\"></i>
-                            </a>
-                        </div>
-                        ";
-            }
-            // line 265
-            yield "                    ";
-        } else {
-            // line 266
-            yield "                        <p class=\"empty-message\">Aucun décaissement enregistré</p>
-                    ";
-        }
-        // line 268
-        yield "                </div>
-            </section>
-
-            ";
-        // line 272
-        yield "            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"bar-chart-3\"></i>
-                        Statistiques
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    <div class=\"stats-grid\">
-                        <div class=\"stat-item\">
-                            <div class=\"stat-label\">Taille Moyenne des Projets</div>
-                            <div class=\"stat-value\">";
-        // line 283
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 283, $this->source); })()), "averageProjectSize", [], "any", false, false, false, 283), 0, ",", " "), "html", null, true);
-        yield " FCFA</div>
-                        </div>
-                        <div class=\"stat-item\">
-                            <div class=\"stat-label\">Taux de Succès</div>
-                            <div class=\"stat-value\">";
-        // line 287
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 287, $this->source); })()), "successRate", [], "any", false, false, false, 287), "html", null, true);
-        yield "%</div>
-                        </div>
-                        <div class=\"stat-item\">
-                            <div class=\"stat-label\">Taux de Décaissement</div>
-                            <div class=\"stat-value\">";
-        // line 291
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 291, $this->source); })()), "disbursementRate", [], "any", false, false, false, 291), "html", null, true);
-        yield "%</div>
-                            <div class=\"stat-bar\">
-                                <div class=\"stat-fill\" style=\"width: ";
-        // line 293
-        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 293, $this->source); })()), "disbursementRate", [], "any", false, false, false, 293), "html", null, true);
-        yield "%\"></div>
-                            </div>
+                <!-- Disbursement Evolution Chart -->
+                <div class=\"card card-flush mb-5 mb-xl-10\">
+                    <div class=\"card-header pt-5\">
+                        <h3 class=\"card-title fw-bold text-dark\">Évolution des Décaissements</h3>
+                    </div>
+                    <div class=\"card-body\">
+                        <div style=\"height: 250px;\">
+                            <canvas id=\"disbursementEvolutionChart\"></canvas>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+
+            <div class=\"col-xl-6\">
+                <!-- Funded Projects Table -->
+                <div class=\"card card-flush mb-5 mb-xl-10\">
+                    <div class=\"card-header pt-5\">
+                        <h3 class=\"card-title fw-bold text-dark\">Projets Financés</h3>
+                    </div>
+                    <div class=\"card-body pt-0\">
+                        <div class=\"table-responsive\">
+                            <table class=\"table align-middle table-row-dashed fs-6 gy-3\">
+                                <thead>
+                                    <tr class=\"text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0\">
+                                        <th>Projet</th>
+                                        <th class=\"text-end\">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody class=\"fw-semibold text-gray-600\">
+                                    ";
+        // line 147
+        $context['_parent'] = $context;
+        $context['_seq'] = CoreExtension::ensureTraversable((isset($context["fundedProjects"]) || array_key_exists("fundedProjects", $context) ? $context["fundedProjects"] : (function () { throw new RuntimeError('Variable "fundedProjects" does not exist.', 147, $this->source); })()));
+        foreach ($context['_seq'] as $context["_key"] => $context["project"]) {
+            // line 148
+            yield "                                    <tr>
+                                        <td>
+                                            <a href=\"";
+            // line 150
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Symfony\Bridge\Twig\Extension\RoutingExtension']->getPath("app_top_management_project_detail", ["id" => CoreExtension::getAttribute($this->env, $this->source, $context["project"], "id", [], "any", false, false, false, 150)]), "html", null, true);
+            yield "\" class=\"text-dark fw-bold text-hover-primary\">";
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["project"], "titre", [], "any", false, false, false, 150), "html", null, true);
+            yield "</a>
+                                        </td>
+                                        <td class=\"text-end\">
+                                            <span class=\"badge badge-light-primary\">";
+            // line 153
+            yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(CoreExtension::getAttribute($this->env, $this->source, $context["project"], "statutLabel", [], "any", false, false, false, 153), "html", null, true);
+            yield "</span>
+                                        </td>
+                                    </tr>
+                                    ";
+        }
+        $_parent = $context['_parent'];
+        unset($context['_seq'], $context['_key'], $context['project'], $context['_parent']);
+        $context = array_intersect_key($context, $_parent) + $_parent;
+        // line 157
+        yield "                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class=\"card card-flush mb-5 mb-xl-10\">
+                    <div class=\"card-header pt-5\">
+                        <h3 class=\"card-title fw-bold text-dark\">Statistiques</h3>
+                    </div>
+                    <div class=\"card-body\">
+                        <div class=\"d-flex flex-stack mb-5\">
+                            <span class=\"text-gray-400 fw-bold\">Taille Moyenne des Projets</span>
+                            <span class=\"text-gray-800 fw-bold fs-6\">";
+        // line 171
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape($this->extensions['Twig\Extension\CoreExtension']->formatNumber(((CoreExtension::getAttribute($this->env, $this->source, ($context["metrics"] ?? null), "averageProjectSize", [], "any", true, true, false, 171)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 171, $this->source); })()), "averageProjectSize", [], "any", false, false, false, 171), 0)) : (0)), 0, ",", " "), "html", null, true);
+        yield " FCFA</span>
+                        </div>
+                        <div class=\"d-flex flex-stack mb-5\">
+                            <span class=\"text-gray-400 fw-bold\">Taux de Succès</span>
+                            <span class=\"text-gray-800 fw-bold fs-6\">";
+        // line 175
+        yield $this->env->getRuntime('Twig\Runtime\EscaperRuntime')->escape(((CoreExtension::getAttribute($this->env, $this->source, ($context["metrics"] ?? null), "successRate", [], "any", true, true, false, 175)) ? (Twig\Extension\CoreExtension::default(CoreExtension::getAttribute($this->env, $this->source, (isset($context["metrics"]) || array_key_exists("metrics", $context) ? $context["metrics"] : (function () { throw new RuntimeError('Variable "metrics" does not exist.', 175, $this->source); })()), "successRate", [], "any", false, false, false, 175), 0)) : (0)), "html", null, true);
+        yield "%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -636,7 +341,7 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
         yield from [];
     }
 
-    // line 304
+    // line 185
     /**
      * @return iterable<null|scalar|\Stringable>
      */
@@ -646,52 +351,17 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f = $this->extensions["Symfony\\Bridge\\Twig\\Extension\\ProfilerExtension"];
         $__internal_6f47bbe9983af81f1e7450e9a3e3768f->enter($__internal_6f47bbe9983af81f1e7450e9a3e3768f_prof = new \Twig\Profiler\Profile($this->getTemplateName(), "block", "javascripts"));
 
-        // line 305
-        yield "    ";
-        yield from $this->yieldParentBlock("javascripts", $context, $blocks);
-        yield "
-    <script src=\"https://unpkg.com/lucide@latest\"></script>
-    <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>
+        // line 186
+        yield "    <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>
     <script>
-        lucide.createIcons();
-
-        // Données
-        const sectorData = ";
-        // line 312
-        yield json_encode((isset($context["sectorDistribution"]) || array_key_exists("sectorDistribution", $context) ? $context["sectorDistribution"] : (function () { throw new RuntimeError('Variable "sectorDistribution" does not exist.', 312, $this->source); })()));
-        yield ";
-        const evolutionData = ";
-        // line 313
-        yield json_encode((isset($context["disbursementEvolution"]) || array_key_exists("disbursementEvolution", $context) ? $context["disbursementEvolution"] : (function () { throw new RuntimeError('Variable "disbursementEvolution" does not exist.', 313, $this->source); })()));
-        yield ";
-
-        // Graphique Répartition Sectorielle
-        if (document.getElementById('sectorDistributionChart')) {
-            new Chart(document.getElementById('sectorDistributionChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(sectorData),
-                    datasets: [{
-                        data: Object.values(sectorData),
-                        backgroundColor: [
-                            '#004d99', '#daa520', '#c41e3a', '#10b981', 
-                            '#f59e0b', '#6366f1', '#ec4899', '#14b8a6'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
         }
 
-        // Graphique Évolution Décaissements
+        const evolutionData = ";
+        // line 192
+        yield json_encode((isset($context["disbursementEvolution"]) || array_key_exists("disbursementEvolution", $context) ? $context["disbursementEvolution"] : (function () { throw new RuntimeError('Variable "disbursementEvolution" does not exist.', 192, $this->source); })()));
+        yield ";
         if (document.getElementById('disbursementEvolutionChart')) {
             new Chart(document.getElementById('disbursementEvolutionChart'), {
                 type: 'bar',
@@ -707,18 +377,12 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString('fr-FR');
-                                }
+                                callback: function(value) { return value.toLocaleString('fr-FR'); }
                             }
                         }
                     }
@@ -754,352 +418,203 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
      */
     public function getDebugInfo(): array
     {
-        return array (  665 => 313,  661 => 312,  650 => 305,  640 => 304,  622 => 293,  617 => 291,  610 => 287,  603 => 283,  590 => 272,  585 => 268,  581 => 266,  578 => 265,  570 => 260,  566 => 259,  563 => 258,  561 => 257,  557 => 255,  550 => 253,  544 => 250,  541 => 249,  539 => 248,  536 => 247,  530 => 245,  528 => 244,  522 => 243,  516 => 240,  512 => 239,  508 => 237,  504 => 236,  501 => 235,  499 => 234,  489 => 226,  475 => 213,  470 => 209,  466 => 207,  463 => 206,  455 => 201,  451 => 200,  448 => 199,  446 => 198,  442 => 196,  430 => 190,  424 => 187,  418 => 184,  411 => 180,  407 => 179,  399 => 176,  395 => 175,  391 => 173,  387 => 172,  384 => 171,  382 => 170,  372 => 162,  369 => 160,  362 => 154,  353 => 151,  349 => 150,  345 => 148,  341 => 147,  329 => 137,  324 => 133,  318 => 130,  314 => 128,  311 => 127,  305 => 124,  301 => 122,  298 => 121,  292 => 118,  288 => 116,  285 => 115,  279 => 112,  275 => 110,  272 => 109,  266 => 106,  262 => 104,  259 => 103,  253 => 100,  249 => 98,  247 => 97,  242 => 95,  235 => 91,  223 => 81,  220 => 79,  211 => 72,  207 => 71,  194 => 61,  181 => 51,  177 => 50,  164 => 40,  155 => 33,  147 => 27,  143 => 26,  139 => 24,  133 => 22,  131 => 21,  127 => 20,  120 => 16,  116 => 14,  113 => 12,  103 => 11,  93 => 8,  88 => 7,  78 => 6,  60 => 4,  43 => 2,);
+        return array (  363 => 192,  355 => 186,  345 => 185,  328 => 175,  321 => 171,  305 => 157,  295 => 153,  287 => 150,  283 => 148,  279 => 147,  245 => 115,  238 => 111,  233 => 108,  231 => 107,  225 => 104,  216 => 98,  194 => 79,  181 => 69,  170 => 61,  162 => 56,  149 => 46,  131 => 31,  125 => 28,  120 => 25,  115 => 23,  110 => 20,  108 => 19,  99 => 13,  93 => 10,  87 => 6,  77 => 5,  59 => 3,  42 => 1,);
     }
 
     public function getSourceContext(): Source
     {
-        return new Source("{# Template de détail d'un financement - Dashboard Top Management #}
-{% extends 'management.html.twig' %}
+        return new Source("{% extends 'base.html.twig' %}
 
 {% block title %}{{ financing.sourceFinancement }} - Détail Financement - SIGEP Tchad{% endblock %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    <link rel=\"stylesheet\" href=\"{{ asset('css/dashboard.css') }}\">
-{% endblock %}
-
 {% block body %}
-<div class=\"financing-detail-container\">
-    {# Header Financement #}
-    <div class=\"detail-header\">
-        <div class=\"header-left\">
-            <a href=\"{{ path('app_top_management_dashboard') }}\" class=\"btn-back\">
-                <i data-lucide=\"arrow-left\"></i>
-                Retour au dashboard
-            </a>
-            <h1 class=\"financing-title\">{{ financing.sourceFinancement }}</h1>
-            {% if financing.numeroConvention %}
-                <span class=\"financing-code\">Convention: {{ financing.numeroConvention }}</span>
-            {% endif %}
+<!-- Toolbar -->
+<div id=\"kt_app_toolbar\" class=\"app-toolbar py-3 py-lg-6\">
+    <div id=\"kt_app_toolbar_container\" class=\"app-container container-xxl d-flex flex-stack\">
+        <div class=\"page-title d-flex flex-column justify-content-center flex-wrap me-3\">
+            <h1 class=\"page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0\">{{ financing.sourceFinancement }}</h1>
+            <ul class=\"breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1\">
+                <li class=\"breadcrumb-item text-muted\">
+                    <a href=\"{{ path('app_top_management_dashboard') }}\" class=\"text-muted text-hover-primary\">Management</a>
+                </li>
+                <li class=\"breadcrumb-item\">
+                    <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                </li>
+                <li class=\"breadcrumb-item text-muted\">Financements</li>
+                {% if financing.numeroConvention %}
+                    <li class=\"breadcrumb-item\">
+                        <span class=\"bullet bg-gray-400 w-5px h-2px\"></span>
+                    </li>
+                    <li class=\"breadcrumb-item text-dark\">{{ financing.numeroConvention }}</li>
+                {% endif %}
+            </ul>
         </div>
-        <div class=\"header-right\">
-            <span class=\"badge badge-{{ financing.typeFinancement|lower|replace({' ': '-'}) }}\">
-                {{ financing.typeFinancement }}
-            </span>
+        <div class=\"d-flex align-items-center gap-2 gap-lg-3\">
+            <a href=\"{{ path('app_top_management_dashboard') }}\" class=\"btn btn-sm btn-secondary\">
+                <i data-lucide=\"arrow-left\" class=\"me-1\" style=\"width: 14px; height: 14px;\"></i> Retour
+            </a>
+            <span class=\"badge badge-light-primary fs-7 fw-bold\">{{ financing.typeFinancement }}</span>
         </div>
     </div>
+</div>
 
-    {# Métriques Principales #}
-    <section class=\"metrics-grid\">
-        <div class=\"metric-card\">
-            <div class=\"metric-icon\" style=\"background: var(--gold-100); color: var(--gold-600);\">
-                <i data-lucide=\"banknote\"></i>
-            </div>
-            <div class=\"metric-content\">
-                <span class=\"metric-label\">Montant Total</span>
-                <span class=\"metric-value\">{{ metrics.totalAmount|number_format(0, ',', ' ') }} FCFA</span>
-            </div>
-        </div>
-
-        <div class=\"metric-card\">
-            <div class=\"metric-icon\" style=\"background: var(--success-100); color: var(--success-600);\">
-                <i data-lucide=\"trending-up\"></i>
-            </div>
-            <div class=\"metric-content\">
-                <span class=\"metric-label\">Montant Décaissé</span>
-                <span class=\"metric-value\">{{ metrics.totalDisbursed|number_format(0, ',', ' ') }} FCFA</span>
-                <span class=\"metric-sublabel\">{{ metrics.disbursementRate }}% du total</span>
-            </div>
-        </div>
-
-        <div class=\"metric-card\">
-            <div class=\"metric-icon\" style=\"background: var(--primary-100); color: var(--primary-600);\">
-                <i data-lucide=\"wallet\"></i>
-            </div>
-            <div class=\"metric-content\">
-                <span class=\"metric-label\">Montant Restant</span>
-                <span class=\"metric-value\">{{ metrics.remainingAmount|number_format(0, ',', ' ') }} FCFA</span>
-            </div>
-        </div>
-
-        <div class=\"metric-card\">
-            <div class=\"metric-icon\" style=\"background: var(--warning-100); color: var(--warning-600);\">
-                <i data-lucide=\"folder-kanban\"></i>
-            </div>
-            <div class=\"metric-content\">
-                <span class=\"metric-label\">Projets Financés</span>
-                <span class=\"metric-value\">{{ metrics.projectsCount }}</span>
-                <span class=\"metric-sublabel\">Taux de succès: {{ metrics.successRate }}%</span>
-            </div>
-        </div>
-    </section>
-
-    <div class=\"detail-grid\">
-        {# Colonne Gauche #}
-        <div class=\"detail-column\">
-            {# Informations Convention #}
-            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"file-text\"></i>
-                        Informations de la Convention
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    <div class=\"info-group\">
-                        <label>Source de Financement</label>
-                        <value>{{ financing.sourceFinancement }}</value>
-                    </div>
-                    <div class=\"info-group\">
-                        <label>Type de Financement</label>
-                        <value><span class=\"badge badge-type\">{{ financing.typeFinancement }}</span></value>
-                    </div>
-                    {% if financing.numeroConvention %}
-                    <div class=\"info-group\">
-                        <label>Numéro de Convention</label>
-                        <value>{{ financing.numeroConvention }}</value>
-                    </div>
-                    {% endif %}
-                    {% if financing.dateSignature %}
-                    <div class=\"info-group\">
-                        <label>Date de Signature</label>
-                        <value>{{ financing.dateSignature|date('d/m/Y') }}</value>
-                    </div>
-                    {% endif %}
-                    {% if financing.dateEntreeVigueur %}
-                    <div class=\"info-group\">
-                        <label>Date d'Entrée en Vigueur</label>
-                        <value>{{ financing.dateEntreeVigueur|date('d/m/Y') }}</value>
-                    </div>
-                    {% endif %}
-                    {% if financing.dateExpiration %}
-                    <div class=\"info-group\">
-                        <label>Date d'Expiration</label>
-                        <value>{{ financing.dateExpiration|date('d/m/Y') }}</value>
-                    </div>
-                    {% endif %}
-                    {% if financing.devise %}
-                    <div class=\"info-group\">
-                        <label>Devise</label>
-                        <value>{{ financing.devise }}</value>
-                    </div>
-                    {% endif %}
-                    {% if financing.tauxChange %}
-                    <div class=\"info-group\">
-                        <label>Taux de Change</label>
-                        <value>{{ financing.tauxChange }}</value>
-                    </div>
-                    {% endif %}
-                </div>
-            </section>
-
-            {# Répartition Sectorielle #}
-            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"pie-chart\"></i>
-                        Répartition Sectorielle
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    <canvas id=\"sectorDistributionChart\" height=\"250\"></canvas>
-                    <div class=\"sector-legend\">
-                        {% for sector, count in sectorDistribution %}
-                        <div class=\"legend-item\">
-                            <span class=\"legend-dot\"></span>
-                            <span class=\"legend-label\">{{ sector }}</span>
-                            <span class=\"legend-value\">{{ count }} projet(s)</span>
+<!-- Content -->
+<div id=\"kt_app_content\" class=\"app-content flex-column-fluid\">
+    <div id=\"kt_app_content_container\" class=\"app-container container-xxl\">
+        
+        <!-- Metrics -->
+        <div class=\"row g-5 g-xl-10 mb-5 mb-xl-10\">
+            <div class=\"col-md-3\">
+                <div class=\"card card-flush h-md-100\">
+                    <div class=\"card-header pt-5\">
+                        <div class=\"card-title d-flex flex-column\">
+                            <span class=\"fs-2hx fw-bold text-dark me-2 lh-1 ls-n2\">{{ metrics.totalAmount|number_format(0, ',', ' ') }}</span>
+                            <span class=\"text-gray-400 pt-1 fw-semibold fs-6\">Montant Total (FCFA)</span>
                         </div>
-                        {% endfor %}
                     </div>
                 </div>
-            </section>
+            </div>
+            <div class=\"col-md-3\">
+                <div class=\"card card-flush h-md-100\">
+                    <div class=\"card-header pt-5\">
+                        <div class=\"card-title d-flex flex-column\">
+                            <span class=\"fs-2hx fw-bold text-dark me-2 lh-1 ls-n2\">{{ metrics.totalDisbursed|number_format(0, ',', ' ') }}</span>
+                            <span class=\"text-gray-400 pt-1 fw-semibold fs-6\">Total Décaissé</span>
+                        </div>
+                    </div>
+                    <div class=\"card-body pt-0 pb-5\">
+                        <span class=\"badge badge-light-success fs-7 fw-bold\">{{ metrics.disbursementRate }}% décaissé</span>
+                    </div>
+                </div>
+            </div>
+            <div class=\"col-md-3\">
+                <div class=\"card card-flush h-md-100\">
+                    <div class=\"card-header pt-5\">
+                        <div class=\"card-title d-flex flex-column\">
+                            <span class=\"fs-2hx fw-bold text-dark me-2 lh-1 ls-n2\">{{ metrics.remainingAmount|number_format(0, ',', ' ') }}</span>
+                            <span class=\"text-gray-400 pt-1 fw-semibold fs-6\">Montant Restant</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class=\"col-md-3\">
+                <div class=\"card card-flush h-md-100\">
+                    <div class=\"card-header pt-5\">
+                        <div class=\"card-title d-flex flex-column\">
+                            <span class=\"fs-2hx fw-bold text-dark me-2 lh-1 ls-n2\">{{ metrics.projectsCount }}</span>
+                            <span class=\"text-gray-400 pt-1 fw-semibold fs-6\">Projets Financés</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        {# Colonne Droite #}
-        <div class=\"detail-column\">
-            {# Projets Financés #}
-            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"folder\"></i>
-                        Projets Financés
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    {% if fundedProjects is not empty %}
-                        <div class=\"projects-list\">
-                            {% for project in fundedProjects|slice(0, 8) %}
-                            <div class=\"project-item\">
-                                <div class=\"project-header\">
-                                    <strong>{{ project.titre }}</strong>
-                                    <span class=\"badge badge-{{ project.statut }}\">{{ project.statutLabel }}</span>
-                                </div>
-                                <div class=\"project-meta\">
-                                    <span class=\"project-sector\">{{ project.secteur }}</span>
-                                    <span class=\"project-institution\">{{ project.institution ? project.institution.nom : 'N/A' }}</span>
-                                </div>
-                                <div class=\"project-progress\">
-                                    <div class=\"progress-label\">
-                                        <span>Progression: {{ project.tauxRealisation }}%</span>
-                                    </div>
-                                    <div class=\"progress-bar-mini\">
-                                        <div class=\"progress-fill-mini\" style=\"width: {{ project.tauxRealisation }}%\"></div>
-                                    </div>
-                                </div>
-                                <a href=\"{{ path('app_top_management_project_detail', {id: project.id}) }}\" class=\"project-link\">
-                                    Voir détails
-                                    <i data-lucide=\"arrow-right\"></i>
-                                </a>
+        <div class=\"row g-5 g-xl-10\">
+            <div class=\"col-xl-6\">
+                <!-- Info Section -->
+                <div class=\"card card-flush mb-5 mb-xl-10\">
+                    <div class=\"card-header pt-5\">
+                        <h3 class=\"card-title fw-bold text-dark\">Informations de la Convention</h3>
+                    </div>
+                    <div class=\"card-body\">
+                        <div class=\"row mb-7\">
+                            <label class=\"col-lg-5 fw-semibold text-muted\">Source de Financement</label>
+                            <div class=\"col-lg-7\">
+                                <span class=\"fw-bold fs-6 text-gray-800\">{{ financing.sourceFinancement }}</span>
                             </div>
-                            {% endfor %}
                         </div>
-
-                        {% if fundedProjects|length > 8 %}
-                        <div class=\"card-footer\">
-                            <a href=\"{{ path('app_project_index', {financing: financing.id}) }}\" class=\"btn-link-full\">
-                                Voir tous les projets ({{ fundedProjects|length }})
-                                <i data-lucide=\"arrow-right\"></i>
-                            </a>
+                        <div class=\"row mb-7\">
+                            <label class=\"col-lg-5 fw-semibold text-muted\">Type de Financement</label>
+                            <div class=\"col-lg-7\">
+                                <span class=\"badge badge-light-primary fs-7 fw-bold\">{{ financing.typeFinancement }}</span>
+                            </div>
+                        </div>
+                        {% if financing.numeroConvention %}
+                        <div class=\"row mb-7\">
+                            <label class=\"col-lg-5 fw-semibold text-muted\">Numéro de Convention</label>
+                            <div class=\"col-lg-7\">
+                                <span class=\"fw-bold fs-6 text-gray-800\">{{ financing.numeroConvention }}</span>
+                            </div>
                         </div>
                         {% endif %}
-                    {% else %}
-                        <p class=\"empty-message\">Aucun projet financé</p>
-                    {% endif %}
+                    </div>
                 </div>
-            </section>
 
-            {# Évolution des Décaissements #}
-            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"trending-up\"></i>
-                        Évolution des Décaissements
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    <canvas id=\"disbursementEvolutionChart\" height=\"250\"></canvas>
-                </div>
-            </section>
-
-            {# Décaissements Récents #}
-            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"coins\"></i>
-                        Décaissements Récents
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    {% if disbursements is not empty %}
-                        <div class=\"disbursement-list\">
-                            {% for disbursement in disbursements|slice(0, 10) %}
-                            <div class=\"disbursement-item\">
-                                <div class=\"disbursement-header\">
-                                    <span class=\"disbursement-date\">{{ disbursement.dateDecaissement ? disbursement.dateDecaissement|date('d/m/Y') : 'N/A' }}</span>
-                                    <span class=\"disbursement-amount\">{{ disbursement.montant|number_format(0, ',', ' ') }} FCFA</span>
-                                </div>
-                                <div class=\"disbursement-meta\">
-                                    <span class=\"disbursement-status badge badge-{{ disbursement.statut }}\">{{ disbursement.statut }}</span>
-                                    {% if disbursement.reference %}
-                                        <span class=\"disbursement-ref\">Réf: {{ disbursement.reference }}</span>
-                                    {% endif %}
-                                </div>
-                                {% if disbursement.projet %}
-                                <div class=\"disbursement-project\">
-                                    <small>Projet: {{ disbursement.projet.titre }}</small>
-                                </div>
-                                {% endif %}
-                            </div>
-                            {% endfor %}
-                        </div>
-
-                        {% if disbursements|length > 10 %}
-                        <div class=\"card-footer\">
-                            <a href=\"{{ path('app_decaissement_index', {financing: financing.id}) }}\" class=\"btn-link-full\">
-                                Voir tous les décaissements ({{ disbursements|length }})
-                                <i data-lucide=\"arrow-right\"></i>
-                            </a>
-                        </div>
-                        {% endif %}
-                    {% else %}
-                        <p class=\"empty-message\">Aucun décaissement enregistré</p>
-                    {% endif %}
-                </div>
-            </section>
-
-            {# Statistiques #}
-            <section class=\"info-card\">
-                <div class=\"card-header\">
-                    <h3 class=\"card-title\">
-                        <i data-lucide=\"bar-chart-3\"></i>
-                        Statistiques
-                    </h3>
-                </div>
-                <div class=\"card-body\">
-                    <div class=\"stats-grid\">
-                        <div class=\"stat-item\">
-                            <div class=\"stat-label\">Taille Moyenne des Projets</div>
-                            <div class=\"stat-value\">{{ metrics.averageProjectSize|number_format(0, ',', ' ') }} FCFA</div>
-                        </div>
-                        <div class=\"stat-item\">
-                            <div class=\"stat-label\">Taux de Succès</div>
-                            <div class=\"stat-value\">{{ metrics.successRate }}%</div>
-                        </div>
-                        <div class=\"stat-item\">
-                            <div class=\"stat-label\">Taux de Décaissement</div>
-                            <div class=\"stat-value\">{{ metrics.disbursementRate }}%</div>
-                            <div class=\"stat-bar\">
-                                <div class=\"stat-fill\" style=\"width: {{ metrics.disbursementRate }}%\"></div>
-                            </div>
+                <!-- Disbursement Evolution Chart -->
+                <div class=\"card card-flush mb-5 mb-xl-10\">
+                    <div class=\"card-header pt-5\">
+                        <h3 class=\"card-title fw-bold text-dark\">Évolution des Décaissements</h3>
+                    </div>
+                    <div class=\"card-body\">
+                        <div style=\"height: 250px;\">
+                            <canvas id=\"disbursementEvolutionChart\"></canvas>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+
+            <div class=\"col-xl-6\">
+                <!-- Funded Projects Table -->
+                <div class=\"card card-flush mb-5 mb-xl-10\">
+                    <div class=\"card-header pt-5\">
+                        <h3 class=\"card-title fw-bold text-dark\">Projets Financés</h3>
+                    </div>
+                    <div class=\"card-body pt-0\">
+                        <div class=\"table-responsive\">
+                            <table class=\"table align-middle table-row-dashed fs-6 gy-3\">
+                                <thead>
+                                    <tr class=\"text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0\">
+                                        <th>Projet</th>
+                                        <th class=\"text-end\">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody class=\"fw-semibold text-gray-600\">
+                                    {% for project in fundedProjects %}
+                                    <tr>
+                                        <td>
+                                            <a href=\"{{ path('app_top_management_project_detail', {id: project.id}) }}\" class=\"text-dark fw-bold text-hover-primary\">{{ project.titre }}</a>
+                                        </td>
+                                        <td class=\"text-end\">
+                                            <span class=\"badge badge-light-primary\">{{ project.statutLabel }}</span>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistics -->
+                <div class=\"card card-flush mb-5 mb-xl-10\">
+                    <div class=\"card-header pt-5\">
+                        <h3 class=\"card-title fw-bold text-dark\">Statistiques</h3>
+                    </div>
+                    <div class=\"card-body\">
+                        <div class=\"d-flex flex-stack mb-5\">
+                            <span class=\"text-gray-400 fw-bold\">Taille Moyenne des Projets</span>
+                            <span class=\"text-gray-800 fw-bold fs-6\">{{ metrics.averageProjectSize|default(0)|number_format(0, ',', ' ') }} FCFA</span>
+                        </div>
+                        <div class=\"d-flex flex-stack mb-5\">
+                            <span class=\"text-gray-400 fw-bold\">Taux de Succès</span>
+                            <span class=\"text-gray-800 fw-bold fs-6\">{{ metrics.successRate|default(0) }}%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block javascripts %}
-    {{ parent() }}
-    <script src=\"https://unpkg.com/lucide@latest\"></script>
     <script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>
     <script>
-        lucide.createIcons();
-
-        // Données
-        const sectorData = {{ sectorDistribution|json_encode|raw }};
-        const evolutionData = {{ disbursementEvolution|json_encode|raw }};
-
-        // Graphique Répartition Sectorielle
-        if (document.getElementById('sectorDistributionChart')) {
-            new Chart(document.getElementById('sectorDistributionChart'), {
-                type: 'doughnut',
-                data: {
-                    labels: Object.keys(sectorData),
-                    datasets: [{
-                        data: Object.values(sectorData),
-                        backgroundColor: [
-                            '#004d99', '#daa520', '#c41e3a', '#10b981', 
-                            '#f59e0b', '#6366f1', '#ec4899', '#14b8a6'
-                        ]
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    }
-                }
-            });
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
         }
 
-        // Graphique Évolution Décaissements
+        const evolutionData = {{ disbursementEvolution|json_encode|raw }};
         if (document.getElementById('disbursementEvolutionChart')) {
             new Chart(document.getElementById('disbursementEvolutionChart'), {
                 type: 'bar',
@@ -1115,18 +630,12 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: {
-                            display: false
-                        }
-                    },
+                    plugins: { legend: { display: false } },
                     scales: {
                         y: {
                             beginAtZero: true,
                             ticks: {
-                                callback: function(value) {
-                                    return value.toLocaleString('fr-FR');
-                                }
+                                callback: function(value) { return value.toLocaleString('fr-FR'); }
                             }
                         }
                     }
@@ -1135,6 +644,6 @@ class __TwigTemplate_d3ef1b6ae67ce175be6a8ecfdd759dca extends Template
         }
     </script>
 {% endblock %}
-", "top_management/financing_details.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\top_management\\financing_details.html.twig");
+", "top_management/financing_details.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\top_management\\financing_details.html.twig");
     }
 }

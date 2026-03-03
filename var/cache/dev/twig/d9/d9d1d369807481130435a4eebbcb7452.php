@@ -1550,6 +1550,6 @@ class __TwigTemplate_80710f604b1268ce67405964ba51720c extends Template
         lucide.createIcons();
     </script>
 {% endblock %}
-", "user/show.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\templates\\user\\show.html.twig");
+", "user/show.html.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\templates\\user\\show.html.twig");
     }
 }

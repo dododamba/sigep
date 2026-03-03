@@ -121,6 +121,6 @@ document.addEventListener(\"DOMContentLoaded\", function () {
        });
     });
 })
-", "@JMSSerializer/Collector/script/jms.js.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\SIGEP\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\script\\jms.js.twig");
+", "@JMSSerializer/Collector/script/jms.js.twig", "C:\\Users\\LENOVO\\Documents\\Dominique\\Projects\\bmad-sigep\\vendor\\jms\\serializer-bundle\\Resources\\views\\Collector\\script\\jms.js.twig");
     }
 }
